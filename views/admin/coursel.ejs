@@ -1,0 +1,88 @@
+<%- include('../shared/asideBar') %>
+
+
+<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Update Carousel</h1>
+
+    <!-- Unified Form: Image Upload and Context Input -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Manage Carousel</h2>
+      <form id="carousel-form" enctype="multipart/form-data">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div>
+            <label class="block text-lg font-semibold mb-2">Image 1</label>
+            <input type="file" name="image1" class="image-upload border p-2 w-full" accept="image/*"
+              onchange="previewImage(event, 0)" />
+            <textarea name="bold-text-1"
+              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
+              rows="2" placeholder="Bold Context for Image 1"
+              oninput="updateContext(0, 'bold', this.value)"></textarea>
+            <textarea name="normal-text-1"
+              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
+              rows="2" placeholder="Normal Context for Image 1"
+              oninput="updateContext(0, 'normal', this.value)"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-lg font-semibold mb-2">Image 2</label>
+            <input type="file" name="image2" class="image-upload border p-2 w-full" accept="image/*"
+              onchange="previewImage(event, 1)" />
+            <textarea name="bold-text-2"
+              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
+              rows="2" placeholder="Bold Context for Image 2"
+              oninput="updateContext(1, 'bold', this.value)"></textarea>
+            <textarea name="normal-text-2"
+              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
+              rows="2" placeholder="Normal Context for Image 2"
+              oninput="updateContext(1, 'normal', this.value)"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-lg font-semibold mb-2">Image 3</label>
+            <input type="file" name="image3" class="image-upload border p-2 w-full" accept="image/*"
+              onchange="previewImage(event, 2)" />
+            <textarea name="bold-text-3"
+              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
+              rows="2" placeholder="Bold Context for Image 3"
+              oninput="updateContext(2, 'bold', this.value)"></textarea>
+            <textarea name="normal-text-3"
+              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
+              rows="2" placeholder="Normal Context for Image 3"
+              oninput="updateContext(2, 'normal', this.value)"></textarea>
+          </div>
+        </div>
+        <button type="button" onclick="uploadSlider()"
+          class="px-6 py-2 bg-[#DB4444]  hover:bg-[#de2d2d]  transition text-white rounded">
+          Upload Slider
+        </button>
+      </form>
+    </section>
+
+    <!-- Stack Slider Section -->
+    <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Image Slider</h2>
+      <div id="carousel" class="relative overflow-hidden">
+        <div class="slider-container flex justify-center items-center relative">
+          <div id="slider" class="flex gap-6 transition-transform duration-500 ease-in-out">
+            <!-- Dynamically added images will appear here -->
+          </div>
+        </div>
+        <!-- Previous and Next Buttons -->
+        <div class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 p-2 cursor-pointer"
+          onclick="prevSlide()">
+          <i class="bi bi-chevron-left text-white text-2xl"></i>
+        </div>
+        <div class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 p-2 cursor-pointer"
+          onclick="nextSlide()">
+          <i class="bi bi-chevron-right text-white text-2xl"></i>
+        </div>
+      </div>
+    </section>
+  </main>
+
+</div>
+     <!-- Link the JavaScript file -->
+     <script src="/js/darkMode.js"></script>
+</body>
+
+</html>

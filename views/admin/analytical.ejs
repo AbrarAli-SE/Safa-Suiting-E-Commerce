@@ -1,0 +1,60 @@
+<%- include('../shared/asideBar') %>
+
+
+<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Analytical Dashboard</h1>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div class="bg-blue-500 text-white p-4 rounded-lg shadow-md dark:bg-blue-700">
+        <h2 class="text-lg font-semibold">Total Revenue</h2>
+        <p class="text-3xl font-bold">$45,000</p>
+      </div>
+      <div class="bg-green-500 text-white p-4 rounded-lg shadow-md dark:bg-green-700">
+        <h2 class="text-lg font-semibold">Total Orders</h2>
+        <p class="text-3xl font-bold">1,200</p>
+      </div>
+      <div class="bg-yellow-500 text-white p-4 rounded-lg shadow-md dark:bg-yellow-700">
+        <h2 class="text-lg font-semibold">New Customers</h2>
+        <p class="text-3xl font-bold">300</p>
+      </div>
+      <div class="bg-red-500 text-white p-4 rounded-lg shadow-md dark:bg-red-700">
+        <h2 class="text-lg font-semibold">Products Sold</h2>
+        <p class="text-3xl font-bold">2,450</p>
+      </div>
+    </div>
+
+
+    <!-- Grid Layout for Charts (2x2 for larger screens) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
+      <!-- Order Analytics -->
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4">Order Analytics</h2>
+        <canvas id="orderChart"></canvas>
+      </div>
+
+      <!-- Revenue Analytics -->
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4">Revenue Analytics</h2>
+        <canvas id="revenueChart"></canvas>
+      </div>
+
+      <!-- Product Categories -->
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4">Product Categories</h2>
+        <canvas id="categoryChart"></canvas>
+      </div>
+
+      <!-- New Chart (e.g., Customer Growth) -->
+      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+        <h2 class="text-xl font-semibold mb-4">Customer Growth</h2>
+        <canvas id="growthChart"></canvas>
+      </div>
+    </div>
+
+  </main>
+</div>
+     <!-- Link the JavaScript file -->
+     <script src="/js/darkMode.js"></script>
+</body>
+
+</html>

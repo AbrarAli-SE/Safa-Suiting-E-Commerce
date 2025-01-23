@@ -1,0 +1,112 @@
+<%- include('../shared/asideBar') %>
+
+
+<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Add Product</h1>
+    <form class="space-y-4 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Left Side: Product Details Section -->
+        <div class="space-y-4">
+          <h2 class="text-2xl font-semibold mb-4">Product Details</h2>
+  
+          <!-- Category and Brand in one line -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label for="category" class="block text-gray-700 dark:text-gray-300 font-medium">Category</label>
+              <select id="category" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+                <option>Flash Sales</option>
+                <option>New Arrival</option>
+                <option>Explore our Products</option>
+                <option>Best Selling Products</option>
+              </select>
+            </div>
+  
+            <div class="space-y-2">
+              <label for="brandName" class="block text-gray-700 dark:text-gray-300 font-medium">Brand Name</label>
+              <input type="text" id="brandName" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+            </div>
+          </div>
+  
+          <div class="space-y-2">
+            <label for="productName" class="block text-gray-700 dark:text-gray-300 font-medium">Product Name</label>
+            <input type="text" id="productName" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+          </div>
+  
+          <div class="space-y-2">
+            <label for="price" class="block text-gray-700 dark:text-gray-300 font-medium">Price</label>
+            <input type="number" id="price" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+          </div>
+  
+          <div class="space-y-2">
+            <label for="description" class="block text-gray-700 dark:text-gray-300 font-medium">Description</label>
+            <textarea id="description" rows="7" class="w-full p-3 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"></textarea>
+          </div>
+        </div>
+  
+        <!-- Right Side: Upload & Offers Section -->
+        <div class="space-y-4">
+          <h2 class="text-2xl font-semibold mb-4">Additional Details</h2>
+  
+          <!-- Photo Upload Section -->
+          <div class="space-y-2">
+            <label for="uploadPhoto" class="block text-gray-700 dark:text-gray-300 font-medium">Upload Product Photo</label>
+  
+            <!-- Photo Preview & Upload Section -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="border-2 border-gray-300 dark:border-gray-600 p-6 rounded-lg text-center">
+                <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                  <p class="text-center">Preview</p>
+                </div>
+              </div>
+  
+              <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 p-6 rounded-lg text-center flex flex-col items-center justify-center">
+                <!-- Upload Icon -->
+                <i class="bi bi-cloud-upload  text-gray-500 dark:text-gray-300 mb-4"></i>
+              
+                <!-- Text and Link -->
+                <p class="text-gray-500 dark:text-gray-300 mb-4">
+                  Drop your images here or
+                  <a href="#" class="text-blue-500 hover:text-blue-600">click to browse</a>
+                </p>
+              
+                <!-- Hidden File Input -->
+                <input type="file" id="uploadPhoto" class="hidden">
+              </div>
+              
+            </div>
+          </div>
+            <!-- Discount & Offers in one lin and Quantity -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div class="space-y-2">
+                <label for="Quantity" class="block text-gray-700 dark:text-gray-300 font-medium">Quantity</label>
+                <input type="text" id="discount" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+              </div>
+              <div class="space-y-2">
+                <label for="discount" class="block text-gray-700 dark:text-gray-300 font-medium">Discount</label>
+                <input type="text" id="discount" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+              </div>
+    
+              <div class="space-y-2">
+                <label for="offers" class="block text-gray-700 dark:text-gray-300 font-medium">Offers</label>
+                <input type="text" id="offers" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focs:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+              </div>
+            </div>
+
+          <div class="space-y-2">
+            <label for="addDate" class="block text-gray-700 dark:text-gray-300 font-medium">Add Product Date</label>
+            <input type="date" id="addDate" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+          </div>
+  
+          <button type="submit" class="w-full px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d]  transition">
+            Add Product
+          </button>
+        </div>
+      </div>
+    </form>
+  </main>
+</div>
+  <!-- Link the JavaScript file -->
+  <script src="/js/darkMode.js"></script>
+</body>
+
+</html>

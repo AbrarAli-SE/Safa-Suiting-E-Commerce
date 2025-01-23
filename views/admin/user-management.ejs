@@ -1,0 +1,76 @@
+<%- include('../shared/asideBar') %>
+
+
+<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Manage Users</h1>
+  
+    <!-- Filter, Search Bar, and Entries Per Page -->
+    <div class="mb-4 flex justify-between items-center flex-wrap">
+      <!-- Filter -->
+      <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
+        <select id="userFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full  sm:mb-2 sm:w-auto
+                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+          <option value="all">All</option>
+          <option value="user">Users</option>
+          <option value="admin">Admins</option>
+        </select>
+      </div>
+  
+      <!-- Search Bar -->
+      <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
+        <input type="text" id="searchName" placeholder="Search by Name" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+        <input type="text" id="searchEmail" placeholder="Search by Email" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+        <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition mt-2 sm:mt-0"
+          onclick="searchUsers()">
+          Search
+        </button>
+      </div>
+    </div>
+  
+    <!-- User Table (Responsive) -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <div class="overflow-x-auto">
+        <table class="min-w-full table-fixed" id="userTable">
+          <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <tr>
+              <th class="px-4 py-2 text-left w-1/6">Name</th>
+              <th class="px-4 py-2 text-left w-1/6">Email</th>
+              <th class="px-4 py-2 text-left w-1/6">Role</th>
+              <th class="px-4 py-2 text-left w-1/6">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700 dark:text-gray-300" id="userList">
+            <!-- Example Row -->
+            <tr class="border-t border-gray-200 dark:border-gray-600">
+              <td class="px-4 py-2">John Doe</td>
+              <td class="px-4 py-2">johndoe@example.com</td>
+              <td class="px-4 py-2">
+                <select class="px-2 py-1 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none
+                             dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+                  <option value="user" selected>User</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </td>
+              <td class="pr-5 py-2">
+                <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition"
+                  onclick="updateUserRole('1')">
+                  Update
+                </button>
+              </td>
+            </tr>
+            <!-- Add more rows dynamically here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+     <!-- Link the JavaScript file -->
+     <script src="/js/darkMode.js"></script>
+</body>
+
+</html>

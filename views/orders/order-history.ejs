@@ -1,0 +1,60 @@
+<%- include('../shared/asideBar') %>
+
+
+<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Canceled Orders</h1>
+
+
+    <!-- Canceled Orders Table -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <div class="overflow-x-auto">
+        <table class="min-w-full table-fixed" id="canceledOrdersTable">
+          <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <tr>
+              <th class="px-4 py-2 text-left w-1/6">Order ID</th>
+              <th class="px-4 py-2 text-left w-1/6">Customer Name</th>
+              <th class="px-4 py-2 text-left w-1/6">Amount</th>
+              <th class="px-4 py-2 text-left w-1/6">Cancellation Reason</th>
+              <th class="px-4 py-2 text-left w-1/6">Action</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700 dark:text-gray-300" id="canceledOrdersList">
+            <!-- Example Row -->
+            <tr class="border-t border-gray-200 dark:border-gray-600" data-order-id="101">
+              <td class="px-4 py-2">101</td>
+              <td class="px-4 py-2">John Doe</td>
+              <td class="px-4 py-2">$299.99</td>
+              <td class="px-4 py-2">Customer changed mind</td>
+              <td class="px-4 py-2">
+                <button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition"
+                  onclick="deleteOrder(101)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <tr class="border-t border-gray-200 dark:border-gray-600" data-order-id="102">
+              <td class="px-4 py-2">102</td>
+              <td class="px-4 py-2">Jane Smith</td>
+              <td class="px-4 py-2">$150.00</td>
+              <td class="px-4 py-2">Order was delayed</td>
+              <td class="px-4 py-2">
+                <button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition"
+                  onclick="deleteOrder(102)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+            <!-- Add more rows dynamically here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+     <!-- Link the JavaScript file -->
+     <script src="/js/darkMode.js"></script>
+</body>
+
+</html>

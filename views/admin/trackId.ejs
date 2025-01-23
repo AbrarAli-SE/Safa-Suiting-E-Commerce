@@ -1,0 +1,83 @@
+<%- include('../shared/asideBar') %>
+
+
+<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Order Tracking</h1>
+  
+    <!-- Search and Status Filter Section -->
+    <div class="mb-4 flex flex-col sm:flex-row items-center sm:items-center space-y-4 sm:space-y-0">
+      <!-- Search Input -->
+      <div class="flex items-center space-x-4 w-full sm:w-auto">
+        <input type="text" id="searchOrderId" placeholder="Search by Order ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+        <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition" onclick="searchOrder()">
+          Search
+        </button>
+      </div>
+  
+      <!-- Status Filter Dropdown -->
+      <div class="flex items-center space-x-4 w-full sm:w-auto">
+        <select id="statusFilter" class="px-4 py-2 sm:ml-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400" onchange="filterByStatus()">
+          <option value="">Filter by Status</option>
+          <option value="Pending">Pending</option>
+          <option value="Shipped">Shipped</option>
+        </select>
+      </div>
+    </div>
+  
+    <!-- Order Tracking Section -->
+    <div class="mb-4 flex flex-col sm:flex-row items-center sm:items-center">
+      <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
+        <input type="text" id="orderId" placeholder="Enter Order ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+        <input type="text" id="trackingId" placeholder="Enter Tracking ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+        <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition sm:mt-0" onclick="assignTrackingId()">
+          Assign Tracking ID
+        </button>
+      </div>
+    </div>
+  
+    <!-- Orders Table -->
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <div class="overflow-x-auto">
+        <table class="min-w-full table-fixed" id="ordersTable">
+          <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+            <tr>
+              <th class="px-4 py-2 text-left w-1/6">Order ID</th>
+              <th class="px-4 py-2 text-left w-1/6">Customer Name</th>
+              <th class="px-4 py-2 text-left w-1/6">Total Price</th>
+              <th class="px-4 py-2 text-left w-1/6">Tracking ID</th>
+              <th class="px-4 py-2 text-left w-1/6">Status</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700 dark:text-gray-300" id="ordersList">
+            <!-- Example Row -->
+            <tr class="border-t border-gray-200 dark:border-gray-600" data-order-id="1" data-status="Pending">
+              <td class="px-4 py-2">1</td>
+              <td class="px-4 py-2">Jane Doe</td>
+              <td class="px-4 py-2">$199.99</td>
+              <td class="px-4 py-2">None</td>
+              <td class="px-4 py-2 text-yellow-500">Pending</td>
+            </tr>
+            <tr class="border-t border-gray-200 dark:border-gray-600" data-order-id="2" data-status="Shipped">
+              <td class="px-4 py-2">2</td>
+              <td class="px-4 py-2">John Smith</td>
+              <td class="px-4 py-2">$99.99</td>
+              <td class="px-4 py-2">123ABC</td>
+              <td class="px-4 py-2 text-green-500">Shipped</td>
+            </tr>
+            <!-- Add more rows dynamically here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+</div>
+     <!-- Link the JavaScript file -->
+     <script src="/js/darkMode.js"></script>
+</body>
+
+</html>

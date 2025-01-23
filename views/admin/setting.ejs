@@ -1,0 +1,68 @@
+<%- include('../shared/asideBar') %>
+
+<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Profile Settings</h1>
+    <form class="space-y-4 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Left Side: Personal Information Section -->
+        <div class="space-y-4">
+          <h2 class="text-2xl font-semibold mb-4">Personal Information</h2>
+  
+          <!-- Full Name -->
+          <div class="space-y-2">
+            <label for="name" class="block text-gray-700 dark:text-gray-300 font-medium">Full Name</label>
+            <input type="text" id="name" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" placeholder="Enter your full name">
+          </div>
+  
+          <!-- Email -->
+          <div class="space-y-2">
+            <label for="email" class="block text-gray-700 dark:text-gray-300 font-medium">Email Address</label>
+            <input type="email" id="email" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" placeholder="Enter your email address">
+          </div>
+  
+          <!-- Password -->
+          <div class="space-y-2">
+            <label for="password" class="block text-gray-700 dark:text-gray-300 font-medium">New Password</label>
+            <input type="password" id="password" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" placeholder="Enter your new password">
+          </div>
+        </div>
+  
+        <!-- Right Side: Profile Picture Section -->
+        <div class="space-y-4">
+          <h2 class="text-2xl font-semibold mb-4">Profile Picture</h2>
+  
+          <!-- Profile Picture Upload -->
+          <div class="space-y-2">
+            <label for="profilePicture" class="block text-gray-700 dark:text-gray-300 font-medium">Upload Profile Picture</label>
+            
+            <!-- Image Preview & Upload -->
+            <div class="border-2 border-gray-300 dark:border-gray-600 p-6 rounded-lg text-center flex flex-col items-center justify-center">
+              <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 mb-4">
+                <p>Preview</p>
+              </div>
+              <label class="text-blue-500 cursor-pointer hover:text-blue-600 mb-4">
+                <i class="bi bi-cloud-upload text-gray-500 dark:text-gray-300"></i> 
+                Upload your profile picture
+              </label>
+              <input type="file" id="profilePicture" class="hidden" accept="image/*">
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="flex items-center justify-between mt-8">
+        <button type="submit" class="w-full px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition">
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </main>
+  
+
+</div>
+
+     <!-- Link the JavaScript file -->
+     <script src="/js/darkMode.js"></script>
+</body>
+
+</html>
