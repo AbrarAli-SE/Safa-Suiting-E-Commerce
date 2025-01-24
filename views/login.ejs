@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - Login</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <link rel="stylesheet" href="/styles/global.css">
+</head>
+
+<body class="bg-gray-50 dark:bg-gray-900 dark:text-white overflow-hidden">
+  <div class="flex min-h-screen">
+    <!-- Left Side: Image -->
+    <div class="w-1/2 hidden lg:block bg-blue-50 items-center justify-center">
+      <img src="/assests/login.jpeg" alt="Shopping" class="w-full h-full">
+    </div>
+    
+    <!-- Right Side: Form -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center bg-white dark:bg-gray-800 p-8 lg:px-12">
+      <div class="w-full max-w-md lg:mb-40">
+        <h1 class="text-2xl font-semibold text-gray-800 dark:text-white text-center mb-4">Login to your account</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-300 text-center mb-6">Enter your credentials below</p>
+        <form class="space-y-4">
+          <!-- Email -->
+          <div>
+            <label for="email" class="sr-only">Email</label>
+            <input id="email" type="email" placeholder="Email" class="w-full px-4 py-2 border-b border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
+          </div>
+          <!-- Password -->
+          <div class="relative">
+            <label for="password" class="sr-only">Password</label>
+            <input id="password" type="password" placeholder="Password" class="w-full px-4 py-2 border-b border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
+            <!-- Toggle Password Visibility Icon -->
+            <i id="togglePassword" class="bi bi-eye-slash absolute right-3 top-3 text-gray-500 dark:text-gray-300 cursor-pointer"></i>
+          </div>
+          <!-- Login Button -->
+          <div>
+            <button type="submit" class="w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-600 dark:hover:bg-red-700">
+              Login
+            </button>
+          </div>
+        </form>
+        <!-- Forgot Password -->
+        <div class="text-center mt-4">
+          <a href="/forgot.html" class="text-red-500 font-medium hover:underline dark:text-red-400">Forgot Password?</a>
+        </div>
+        <!-- Sign-Up Link -->
+        <p class="text-sm text-center text-gray-500 dark:text-gray-300 mt-6">
+          Don't have an account? 
+          <a href="/index.html" class="text-red-500 font-medium hover:underline dark:text-red-400">Create one</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle Password Visibility
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.type === 'password' ? 'text' : 'password';
+      passwordInput.type = type;
+
+      // Toggle icon class
+      togglePassword.classList.toggle('bi-eye');
+      togglePassword.classList.toggle('bi-eye-slash');
+    });
+  </script>
+</body>
+
+</html>

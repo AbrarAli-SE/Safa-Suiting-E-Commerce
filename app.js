@@ -19,6 +19,18 @@ app.get('/', (req, res, next) => {
   res.render("admin/intro");
 });
 
+app.get('/create.html', (req, res, next) => {
+  res.render("create");
+}); 
+
+app.get('/login.html', (req, res, next) => {
+  res.render("login");
+}); 
+
+app.get('/forgot.html', (req, res, next) => {
+  res.render("forgot");
+});
+
 app.get('/analytical.html', (req, res, next) => {
   res.render("admin/analytical");
 });
