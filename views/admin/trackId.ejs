@@ -5,43 +5,44 @@
     <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Order Tracking</h1>
   
     <!-- Search and Status Filter Section -->
-    <div class="mb-4 flex flex-col sm:flex-row items-center sm:items-center space-y-4 sm:space-y-0">
-      <!-- Search Input -->
-      <div class="flex items-center space-x-4 w-full sm:w-auto">
-        <input type="text" id="searchOrderId" placeholder="Search by Order ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-        <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition" onclick="searchOrder()">
-          Search
-        </button>
-      </div>
-  
-      <!-- Status Filter Dropdown -->
-      <div class="flex items-center space-x-4 w-full sm:w-auto">
-        <select id="statusFilter" class="px-4 py-2 sm:ml-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400" onchange="filterByStatus()">
-          <option value="">Filter by Status</option>
-          <option value="Pending">Pending</option>
-          <option value="Shipped">Shipped</option>
-        </select>
-      </div>
-    </div>
-  
-    <!-- Order Tracking Section -->
-    <div class="mb-4 flex flex-col sm:flex-row items-center sm:items-center">
-      <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
-        <input type="text" id="orderId" placeholder="Enter Order ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-        <input type="text" id="trackingId" placeholder="Enter Tracking ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-                   dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-        <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition sm:mt-0" onclick="assignTrackingId()">
-          Assign Tracking ID
-        </button>
-      </div>
-    </div>
+<div class="mb-4 flex flex-col sm:flex-row items-center sm:items-center space-y-4 sm:space-y-0">
+  <!-- Search Input -->
+  <div class="flex items-center space-x-4 w-full sm:w-auto">
+    <input type="text" id="searchOrderId" placeholder="Search by Order ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+               dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+    <button id="orderSearchBtn" class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition">
+      Search
+    </button>
+  </div>
+
+  <!-- Status Filter Dropdown -->
+  <div class="flex items-center space-x-4 w-full sm:w-auto">
+    <select id="statusFilter" class="px-4 py-2 sm:ml-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+               dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+      <option value="">Filter by Status</option>
+      <option value="Pending">Pending</option>
+      <option value="Shipped">Shipped</option>
+    </select>
+  </div>
+</div>
+
+<!-- Order Tracking Section -->
+<div class="mb-4 flex flex-col sm:flex-row items-center sm:items-center">
+  <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
+    <input type="text" id="orderId" placeholder="Enter Order ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+               dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+    <input type="text" id="trackingId" placeholder="Enter Tracking ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
+               dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+    <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition sm:mt-0">
+      Assign Tracking ID
+    </button>
+  </div>
+</div>
+
   
     <!-- Orders Table -->
     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
         <table class="min-w-full table-fixed" id="ordersTable">
           <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
             <tr>
@@ -77,7 +78,7 @@
 
 </div>
      <!-- Link the JavaScript file -->
-     <script src="/js/darkMode.js"></script>
+     <script src="/js/main.js"></script>
 </body>
 
 </html>

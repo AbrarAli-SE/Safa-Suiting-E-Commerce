@@ -1,0 +1,8 @@
+This txt file for this whole project reporting system
+
+How can start this project 
+
+1. First check the cd directory of folder 
+2. Enter the command npm run dev
+
+The js file is only fornted only not the backend and this server only forntend for admin panel 

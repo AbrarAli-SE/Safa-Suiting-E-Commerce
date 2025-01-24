@@ -6,20 +6,21 @@
   "scripts": {
     "build:css": "npx tailwindcss -i ./public/styles/tailwind.css -o ./public/styles/global.css --watch",
     "dev": "concurrently \"npm run build:css\" \"nodemon app.js\""
-},
-"keywords": [],
-"author": "",
-"license": "ISC",
-"devDependencies": {
-  "autoprefixer": "^10.4.20",
-  "concurrently": "^9.1.2",
-  "nodemon": "^3.1.9",
-  "postcss": "^8.5.1",
-  "tailwindcss": "^3.4.17",
-  "vite": "^6.0.7"
-},
-"dependencies": {
-  "ejs": "^3.1.10",
-  "express": "^4.21.2"
-}
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9",
+    "postcss": "^8.5.1",
+    "tailwindcss": "^3.4.17",
+    "vite": "^6.0.7"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.2",
+    "tailwind-scrollbar": "^3.1.0"
+  }
 }

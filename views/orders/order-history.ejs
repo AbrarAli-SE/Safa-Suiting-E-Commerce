@@ -7,7 +7,7 @@
 
     <!-- Canceled Orders Table -->
     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
         <table class="min-w-full table-fixed" id="canceledOrdersTable">
           <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
             <tr>
@@ -26,8 +26,7 @@
               <td class="px-4 py-2">$299.99</td>
               <td class="px-4 py-2">Customer changed mind</td>
               <td class="px-4 py-2">
-                <button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition"
-                  onclick="deleteOrder(101)">
+                <button id="deleteOrder101" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition">
                   Delete
                 </button>
               </td>
@@ -38,12 +37,12 @@
               <td class="px-4 py-2">$150.00</td>
               <td class="px-4 py-2">Order was delayed</td>
               <td class="px-4 py-2">
-                <button class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition"
-                  onclick="deleteOrder(102)">
+                <button id="deleteOrder102" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition">
                   Delete
                 </button>
               </td>
             </tr>
+            
             <!-- Add more rows dynamically here -->
           </tbody>
         </table>
@@ -54,7 +53,7 @@
 </div>
 
      <!-- Link the JavaScript file -->
-     <script src="/js/darkMode.js"></script>
+     <script src="/js/main.js"></script>
 </body>
 
 </html>

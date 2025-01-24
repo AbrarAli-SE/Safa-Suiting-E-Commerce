@@ -3,24 +3,22 @@
 <main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
     <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Products List</h1>
 
-    <!-- Search Bar and Entries Per Page -->
     <div class="mb-4 flex justify-between items-center flex-wrap">
       <!-- Search Bar -->
       <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
         <input type="text" id="search" placeholder="Search Products..." class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto 
                    dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-        <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition mt-2 sm:mt-0"
-          onclick="searchProducts()">
+        <button id="search-btn" class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition mt-2 sm:mt-0">
           Search
         </button>
       </div>
 
 
-      <!-- Entries Per Page (Hidden on small screens) -->
+      <!-- Add new product -->
       <div class="hidden sm:block">
         <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition flex items-center space-x-2">
           <i class="bi bi-plus-circle"></i>
-          <a href="#" class="focus:outline-none">
+          <a href="/manage.html" class="focus:outline-none">
             Add New Product
           </a>
         </button>
@@ -29,7 +27,7 @@
 
     <!-- Product Table (Responsive) -->
     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <div class="overflow-x-auto">
+      <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
         <table class="min-w-full table-fixed" id="productTable">
           <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
             <tr>
@@ -134,7 +132,7 @@
   </main>
 </div>
   <!-- Link the JavaScript file -->
-  <script src="/js/darkMode.js"></script>
+  <script src="/js/main.js"></script>
 </body>
 
 </html>
