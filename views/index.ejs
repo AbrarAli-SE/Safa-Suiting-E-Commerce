@@ -3,18 +3,177 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= title %></title>
-  <link rel="stylesheet" href="/styles/styles.css">
+  <title>Footer</title>
+  <link rel="stylesheet" href="/styles/global.css">
 </head>
+<style>
+  /* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f7fafc;
+  color: #2d3748;
+  margin: 0;
+  padding: 0;
+}
+
+.footer {
+  background-color: #1a202c;
+  color: #fff;
+  padding: 3rem 1rem;
+}
+
+.footer-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .footer-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-container {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.footer-column {
+  padding: 0 1rem;
+}
+
+.footer-column h3 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.footer-column ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.footer-column li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-link {
+  color: #e2e8f0;
+  text-decoration: none;
+}
+
+.footer-link:hover {
+  color: #edf2f7;
+}
+
+.email-input {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.5rem;
+  width: 80%;
+  color: #fff;
+  border-radius: 0.375rem 0 0 0.375rem;
+}
+
+.subscribe-btn {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.5rem;
+  color: #fff;
+  border-radius: 0 0.375rem 0.375rem 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.subscribe-btn:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.qr-code {
+  width: 6rem;
+  height: 6rem;
+}
+
+.app-store-img {
+  height: 2.5rem;
+}
+
+</style>
 <body class="bg-gray-100 text-gray-900">
-  <header class="p-4 bg-blue-500 text-white">
-    <h1 class="text-2xl font-bold"><%= title %></h1>
-  </header>
 
   <main class="p-6">
     <p class="text-lg">
       Welcome to your Node.js app with Tailwind CSS and Nodemon integration!
     </p>
   </main>
+
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-column">
+        <h3>Exclusive</h3>
+        <div class="space-y-2">
+          <p>Subscribe</p>
+          <p>Get 10% off your first order</p>
+          <div class="flex">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              class="email-input"
+            />
+            <button class="subscribe-btn">
+              →
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3>Support</h3>
+        <div class="space-y-2">
+          <p>111 Bijoy sarani, Dhaka,</p>
+          <p>DH 1515, Bangladesh.</p>
+          <p>exclusive@gmail.com</p>
+          <p>+88015-88888-9999</p>
+        </div>
+      </div>
+
+      <div class="footer-column">
+        <h3>Account</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="footer-link">My Account</a></li>
+          <li><a href="#" class="footer-link">Login / Register</a></li>
+          <li><a href="#" class="footer-link">Cart</a></li>
+          <li><a href="#" class="footer-link">Wishlist</a></li>
+          <li><a href="#" class="footer-link">Shop</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Quick Link</h3>
+        <ul class="space-y-2">
+          <li><a href="#" class="footer-link">Privacy Policy</a></li>
+          <li><a href="#" class="footer-link">Terms Of Use</a></li>
+          <li><a href="#" class="footer-link">FAQ</a></li>
+          <li><a href="#" class="footer-link">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-column">
+        <h3>Download App</h3>
+        <p class="text-sm text-gray-400">Save $3 with App New User Only</p>
+        <div class="flex space-x-4">
+          <img src="..." alt="QR Code for App" class="qr-code" />
+          <div class="space-y-2">
+            <img src="..." alt="Google Play" class="app-store-img" />
+            <img src="..." alt="App Store" class="app-store-img" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
 </body>
 </html>

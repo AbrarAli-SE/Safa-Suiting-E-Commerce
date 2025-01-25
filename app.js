@@ -16,7 +16,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 app.get('/', (req, res, next) => {
-  res.render("admin/intro");
+  res.render("index");
 });
 
 app.get('/create.html', (req, res, next) => {

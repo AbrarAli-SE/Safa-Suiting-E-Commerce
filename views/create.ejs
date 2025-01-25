@@ -9,61 +9,131 @@
   <link rel="stylesheet" href="/styles/global.css">
 </head>
 
-<body class="bg-gray-50 dark:bg-gray-900 dark:text-white overflow-hidden">
+<body class="transition-all duration-300 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 overflow-hidden">
   <div class="flex min-h-screen">
+    <button id="darkModeToggle" class="fixed top-4 right-4 z-50 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-gray-700 transition">
+      Dark Mode
+    </button>
+    
     <!-- Left Side: Image -->
     <div class="w-1/2 hidden lg:block bg-blue-50 items-center justify-center">
       <img src="/assests/login.jpeg" alt="Shopping" class="w-full h-full ">
     </div>
-    
-       <!-- Right Side: Form -->
-       <div class="w-full lg:w-1/2 flex items-center justify-center bg-white dark:bg-gray-800 p-8 lg:px-12">
-        <div class="w-full max-w-md lg:mb-40">
-          <h1 class="text-2xl font-semibold text-gray-800 dark:text-white text-center mb-4">Create an account</h1>
-          <p class="text-sm text-gray-500 dark:text-gray-300 text-center mb-6">Enter your details below</p>
-          <form class="space-y-4">
-            
-            <!-- Email  -->
-            <div>
-              <label for="email" class="sr-only">Email</label>
-              <input id="email" type="email" placeholder="Email or Phone Number" class="w-full px-4 py-2 border-b border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
-            </div>
-            <!-- Password -->
-            <div class="relative">
-              <label for="password" class="sr-only">Password</label>
-              <input id="password" type="password" placeholder="Password" class="w-full px-4 py-2 border-b border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
-              <!-- Toggle Password Visibility Icon -->
-              <i id="togglePassword" class="bi bi-eye-slash absolute right-3 top-3 text-gray-500 dark:text-gray-300 cursor-pointer"></i>
-            </div>
-            <!-- Create Account Button -->
-            <div>
-              <button type="submit" class="w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-600 dark:hover:bg-red-700">
-                Create Account
-              </button>
-            </div>
-          </form>
-          <!-- Google Sign-Up -->
-          <div class="flex items-center justify-center mt-4">
-            <button class="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 font-semibold rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
-              <i class="bi bi-google"></i>
-              Sign up with Google
+
+    <!-- Right Side: Form -->
+    <div class="w-full lg:w-1/2 flex items-center justify-center bg-white dark:bg-gray-800 p-8 lg:px-12">
+      <div class="w-full max-w-md lg:mb-44">
+        <h1 class="text-2xl font-semibold text-gray-800 dark:text-white text-center mb-4">Create an account</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-300 text-center mb-6">Enter your details below</p>
+        <form id="signupForm" class="space-y-4">
+          <!-- Error Field -->
+          <div id="errorField" class="hidden text-red-500 text-center font-medium mb-4"></div>
+
+          <!-- Email  -->
+          <div id="emailField" class="relative">
+            <label for="email" class="sr-only">Email</label>
+            <input id="email" type="email" placeholder="Email or Phone Number"
+              class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400  dark:bg-gray-700 text-gray-900 dark:text-gray-300" />
+            <div id="emailError" class="hidden text-red-500 text-sm mt-1"></div>
+          </div>
+          <!-- Password -->
+          <div id="passwordField" class="relative">
+            <label for="password" class="sr-only">Password</label>
+            <input id="password" type="password" placeholder="Password"
+              class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400  dark:bg-gray-700 text-gray-900 dark:text-gray-300" />
+            <!-- Toggle Password Visibility Icon -->
+            <i id="togglePassword"
+              class="bi bi-eye-slash absolute right-3 top-3 text-gray-500 dark:text-gray-300 cursor-pointer"></i>
+            <div id="passwordError" class="hidden text-red-500 text-sm mt-1"></div>
+          </div>
+          <!-- Create Account Button -->
+          <div id="submitField">
+            <button type="button"
+              class=" w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-600 dark:hover:bg-red-700" id="submitBtn">
+              Create Account
             </button>
           </div>
-          <!-- Login -->
-          <p class="text-sm text-center text-gray-500 dark:text-gray-300 mt-6">
-            Already have an account? 
-            <a href="/login.html" class="text-red-500 font-medium hover:underline dark:text-red-400">Log in</a>
-          </p>
+
+          <!-- OTP Section (Initially Hidden) -->
+          <div id="otpSection" class="hidden">
+            <!-- OTP -->
+            <div>
+              <label for="otp" class="sr-only">OTP</label>
+              <input id="otp" type="text" placeholder="Enter OTP"
+                class="w-full px-4 py-2 mb-3 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400"
+                required />
+            </div>
+            <!-- Verify Button -->
+            <div>
+              <button type="submit"
+                class="w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-600 dark:hover:bg-red-700">
+                Verify OTP
+              </button>
+            </div>
+            <!-- Back to Sign In Link -->
+            <p class="text-sm text-center text-gray-500 dark:text-gray-300 mt-6">
+              <a id="backToSignIn" href="#" class="text-red-500 font-medium hover:underline dark:text-red-400">Back to
+                Sign In</a>
+            </p>
+          </div>
+        </form>
+        <!-- Google Sign-Up -->
+        <div class="flex items-center justify-center mt-4">
+          <button
+            class="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 font-semibold rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+            <img src="/assests/googleIcon.png" alt="Google Icon" class="h-5 w-5 object-contain">
+            Sign up with Google
+          </button>
         </div>
+        
+        <!-- Login -->
+        <p class="text-sm text-center text-gray-500 dark:text-gray-300 mt-6">
+          Already have an account?
+          <a href="/login.html" class="text-red-500 font-medium hover:underline dark:text-red-400">Log in</a>
+        </p>
       </div>
     </div>
+  </div>
 
-  <script>
-    // Toggle Password Visibility
-    const togglePassword = document.getElementById('togglePassword');
-    const passwordInput = document.getElementById('password');
+  
+<script>
 
-    togglePassword.addEventListener('click', () => {
+function toggleDarkMode() {
+  document.documentElement.classList.toggle('dark');
+  const isDarkMode = document.documentElement.classList.contains('dark');
+  localStorage.setItem('dark-mode', isDarkMode ? 'enabled' : 'disabled');
+}
+
+const applySavedDarkMode = () => {
+  const savedMode = localStorage.getItem('dark-mode');
+  if (savedMode === 'enabled') {
+    document.documentElement.classList.add('dark');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  applySavedDarkMode();
+
+  const darkModeToggle = document.getElementById('darkModeToggle');
+  darkModeToggle.addEventListener('click', toggleDarkMode);
+});
+
+   // Toggle Password Visibility
+   const togglePassword = document.getElementById('togglePassword');
+  // Handle Submit Button Click
+  const submitBtn = document.getElementById('submitBtn');
+  const emailField = document.getElementById('emailField');
+  const passwordField = document.getElementById('passwordField');
+  const otpSection = document.getElementById('otpSection');
+  const errorField = document.getElementById('errorField');
+  const emailError = document.getElementById('emailError');
+  const passwordError = document.getElementById('passwordError');
+  const otpInput = document.getElementById('otp'); // OTP input field
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+
+  
+  togglePassword.addEventListener('click', () => {
       const type = passwordInput.type === 'password' ? 'text' : 'password';
       passwordInput.type = type;
 
@@ -71,7 +141,92 @@
       togglePassword.classList.toggle('bi-eye');
       togglePassword.classList.toggle('bi-eye-slash');
     });
-  </script>
+  
+  submitBtn.addEventListener('click', async () => {
+    const email = emailInput.value.trim();
+    const password = passwordInput.value.trim();
+  
+    // Reset Errors
+    emailError.classList.add('hidden');
+    passwordError.classList.add('hidden');
+    errorField.classList.add('hidden');
+  
+    // Validate Email
+    if (!validateEmail(email)) {
+      emailError.textContent = 'Please enter a valid email address.';
+      emailError.classList.remove('hidden');
+      return;
+    }
+  
+    // Validate Password
+    if (!validatePassword(password)) {
+      passwordError.textContent = 'Password must be at least 6 characters long.';
+      passwordError.classList.remove('hidden');
+      return;
+    }
+  
+    try {
+      // Send Request to Backend
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      const result = await response.json();
+  
+      if (response.ok) {
+        // Show OTP Section
+        emailField.classList.add('hidden');
+        passwordField.classList.add('hidden');
+        submitBtn.parentElement.classList.add('hidden');
+        otpSection.classList.remove('hidden');
+      } else {
+        // Display Backend Errors
+        if (result.errorField === 'email') {
+          emailError.textContent = result.error || 'Invalid email address.';
+          emailError.classList.remove('hidden');
+        } else if (result.errorField === 'password') {
+          passwordError.textContent = result.error || 'Invalid password.';
+          passwordError.classList.remove('hidden');
+        } else {
+          errorField.textContent = result.error || 'An error occurred. Please try again.';
+          errorField.classList.remove('hidden');
+        }
+      }
+    } catch (error) {
+      errorField.textContent = 'Failed to connect to the server. Please try again later.';
+      errorField.classList.remove('hidden');
+    }
+  });
+  
+  // Simple Email Validation
+  function validateEmail(email) {
+    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    return re.test(email);
+  }
+  
+  // Simple Password Validation
+  function validatePassword(password) {
+    return password.length >= 6;
+  }
+  
+  // Hide Errors on Input
+  emailInput.addEventListener('input', () => {
+    emailError.classList.add('hidden');
+    errorField.classList.add('hidden');
+  });
+  passwordInput.addEventListener('input', () => {
+    passwordError.classList.add('hidden');
+    errorField.classList.add('hidden');
+  });
+  otpInput.addEventListener('input', () => {
+    errorField.classList.add('hidden');
+  });
+  
+  
+</script>  
+  
 </body>
 
 </html>

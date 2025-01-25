@@ -21,19 +21,30 @@
       <div class="w-full max-w-md lg:mb-40">
         <h1 class="text-2xl font-semibold text-gray-800 dark:text-white text-center mb-4">Login to your account</h1>
         <p class="text-sm text-gray-500 dark:text-gray-300 text-center mb-6">Enter your credentials below</p>
-        <form class="space-y-4">
+
+        <!-- General Error Message Display -->
+        <div id="generalError" class="hidden text-red-500 text-center font-medium mb-4"></div>
+
+        <form id="loginForm" class="space-y-4">
           <!-- Email -->
           <div>
             <label for="email" class="sr-only">Email</label>
-            <input id="email" type="email" placeholder="Email" class="w-full px-4 py-2 border-b border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
+            <input id="email" type="email" placeholder="Email" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
+            <!-- Error Message for Email -->
+            <div id="emailError" class="hidden text-red-500 text-sm mt-1"></div>
+            
           </div>
+
           <!-- Password -->
-          <div class="relative">
+          <div id="passwordField" class="relative">
             <label for="password" class="sr-only">Password</label>
-            <input id="password" type="password" placeholder="Password" class="w-full px-4 py-2 border-b border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
+            <input id="password" type="password" placeholder="Password" class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
             <!-- Toggle Password Visibility Icon -->
             <i id="togglePassword" class="bi bi-eye-slash absolute right-3 top-3 text-gray-500 dark:text-gray-300 cursor-pointer"></i>
+            <!-- Error Message for Password -->
+            <div id="passwordError" class="hidden text-red-500 text-sm mt-1"></div>
           </div>
+
           <!-- Login Button -->
           <div>
             <button type="submit" class="w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-600 dark:hover:bg-red-700">
@@ -41,14 +52,16 @@
             </button>
           </div>
         </form>
+
         <!-- Forgot Password -->
         <div class="text-center mt-4">
           <a href="/forgot.html" class="text-red-500 font-medium hover:underline dark:text-red-400">Forgot Password?</a>
         </div>
+
         <!-- Sign-Up Link -->
         <p class="text-sm text-center text-gray-500 dark:text-gray-300 mt-6">
           Don't have an account? 
-          <a href="/index.html" class="text-red-500 font-medium hover:underline dark:text-red-400">Create one</a>
+          <a href="/create.html" class="text-red-500 font-medium hover:underline dark:text-red-400">Create one</a>
         </p>
       </div>
     </div>
@@ -57,6 +70,12 @@
   <script>
     // Toggle Password Visibility
     const togglePassword = document.getElementById('togglePassword');
+    const passwordField = document.getElementById('passwordField');
+    const form = document.getElementById('loginForm');
+    const emailError = document.getElementById('emailError');
+    const passwordError = document.getElementById('passwordError');
+    const generalError = document.getElementById('generalError');
+    const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
 
     togglePassword.addEventListener('click', () => {
@@ -67,6 +86,82 @@
       togglePassword.classList.toggle('bi-eye');
       togglePassword.classList.toggle('bi-eye-slash');
     });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault(); // Prevent form from submitting
+
+      // Clear previous errors
+      generalError.classList.add('hidden');
+      generalError.textContent = '';
+      emailError.classList.add('hidden');
+      emailError.textContent = '';
+      passwordError.classList.add('hidden');
+      passwordError.textContent = '';
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+
+      // Validate Email
+      if (!validateEmail(email)) {
+        emailError.textContent = 'Please enter a valid email address.';
+        emailError.classList.remove('hidden');
+        return;
+      }
+
+      // Validate Password
+      if (!validatePassword(password)) {
+        passwordError.textContent = 'Password must be at least 6 characters long.';
+        passwordError.classList.remove('hidden');
+        return;
+      }
+
+      // Simulate form submission and backend validation
+      try {
+        const response = await fetch('/api/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // Redirect on successful login
+          window.location.href = '/admin/dashboard'; // Example redirect
+        } else {
+          // Show backend error
+          generalError.textContent = result.error || 'Invalid credentials.';
+          generalError.classList.remove('hidden');
+        }
+      } catch (error) {
+        // Show general error
+        generalError.textContent = 'An error occurred. Please try again later.';
+        generalError.classList.remove('hidden');
+      }
+    });
+
+    // Email validation function
+    function validateEmail(email) {
+      const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+      return re.test(email);
+    }
+
+    // Password validation function
+    function validatePassword(password) {
+      return password.length >= 6;
+    }// Event listener to hide email error when typing
+    emailInput.addEventListener('input', () => {
+      emailError.classList.add('hidden');
+      errorField.classList.add('hidden');
+    });
+  
+    // Event listener to hide password error when typing
+    passwordInput.addEventListener('input', () => {
+      passwordError.classList.add('hidden');
+      errorField.classList.add('hidden');
+    });
+
+
   </script>
 </body>
 
