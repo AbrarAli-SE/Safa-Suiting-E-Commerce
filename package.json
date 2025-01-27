@@ -7,7 +7,7 @@
     "build:css": "npx tailwindcss -i ./public/styles/tailwind.css -o ./public/styles/global.css --watch",
     "dev": "concurrently \"npm run build:css\" \"nodemon app.js\""
   },
-  "keywords": [],
+  "keywords": ["e-commerce", "suiting", "nodejs", "tailwindcss", "vite", "express"],
   "author": "",
   "license": "ISC",
   "devDependencies": {
@@ -19,6 +19,7 @@
     "vite": "^6.0.7"
   },
   "dependencies": {
+    "@splidejs/splide": "^4.1.4",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
     "tailwind-scrollbar": "^3.1.0"

@@ -7,270 +7,149 @@
   <title>Header</title>
   <link rel="stylesheet" href="/styles/global.css">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <style>
+    body {
+      cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zY3JlZW4xMiIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KPHBhdGggZD0iTTEwMCAwIEwgMCAxMDAgTCAxMDAgMSBNIDAgMCBMIDAgMTAwIFoiIHN0eWxlPSJmaWxsOiMwMDAwMDAiIHN0cm9rZT0ibm9uZSIvPjwvc3ZnPg==') !important;
+    }
+  </style>
 </head>
 
 <body class="transition-all duration-300 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-  <header class="border-b bg-white text-black dark:bg-gray-900 dark:text-gray-100 border-gray-200 dark:border-gray-700">
-    <!-- Top Bar -->
-    <div class="bg-black text-white text-sm py-2 px-4 flex justify-center items-center dark:bg-gray-800">
-      <span class="mr-2">Unleash the Summer Vibes: Dive into Style with Our Hot Deals and Free Delivery!</span>
-      <a href="#" class="underline">ShopNow</a>
-    </div>
+  <%- include('./shared/header') %>
+
+   
+  <div class="flex flex-row items-start p-4 px-24 mt-6">
+    <!-- Sidebar -->
+    <aside class="w-full md:w-1/6 hidden md:block py-2 border-r border-gray-400 relative">
+      <ul class="space-y-3">
+        <li class="text-nowrap">
+          <a href="#" class="hover:text-red-500">Woman's Fashion</a>
+        </li>
+        <li class="text-nowrap">
+          <a href="#" class="hover:text-red-500">Men's Fashion</a>
+        </li>
+        <li class="text-nowrap">
+          <a href="#" class="hover:text-red-500">Electronics</a>
+        </li>
+        <li class="text-nowrap">
+          <a href="#" class="hover:text-red-500">Home & Lifestyle</a>
+        </li>
+        <li class="text-nowrap">
+          <a href="#" class="hover:text-red-500">Medicine</a>
+        </li>
+        <li class="text-nowrap">
+          <a href="#" class="hover:text-red-500">Sports & Outdoor</a>
+        </li>
+        <li class="text-nowrap">
+          <a href="#" class="hover:text-red-500">Baby's & Toys</a>
+        </li>
+        <li class="text-nowrap">
+          <a href="#" class="hover:text-red-500">Groceries & Pets</a>
+        </li>
+        <li class="text-nowrap">
+          <a href="#" class="text-nowrap hover:text-red-500">Health & Beauty</a>
+        </li>
+      </ul>
+    </aside>
   
-    <!-- Main Navigation -->
-    <div class="flex justify-between items-center py-4 px-4 lg:px-24 md:px-8">
-      <!-- Logo -->
-      <div class="sm:text-2xl text-xl font-bold">Safa Suiting</div>
-      
-       <!-- Dark Mode Toggle -->
-       <button id="darkModeToggle" class="p-2 bg-gray-200 dark:bg-gray-700 rounded-md text-black dark:text-white">
-        Toggle Dark Mode
-      </button>
-      <!-- Navigation Links -->
-      <nav class="hidden md:flex space-x-8 md:text-sm lg:text-base">
-        <a href="#" class="hover:underline">Home</a>
-        <a href="#" class="hover:underline">Contact</a>
-        <a href="#" class="hover:underline">About</a>
-        <a href="#" class="hover:underline">Sign Up</a>
-      </nav>
-  
-      <!-- Search and Icons -->
-      <div class="flex items-center space-x-4">
-        <!-- Search Button for Small Screens -->
-        <button class="text-black text-2xl md:hidden dark:text-white" id="searchIcon">
-          <i class="bi bi-search"></i>
-        </button>
-  
-        <!-- Search Bar for Medium and Large Screens -->
-        <div class="relative group hidden md:block lg:block">
-          <input
-            type="text"
-            id="desktopSearchInput"
-            placeholder="Search..."
-            class="block p-2 w-48 z-20 text-sm text-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:focus:ring-gray-500"
-          >
-          <button class="absolute top-0 right-0 p-2 text-sm font-medium h-full text-black dark:text-white">
-            <i class="bi bi-search"></i>
-          </button>
-          <div
-            id="desktopSearchResults"
-            class="hidden mt-2 bg-white border border-gray-300 rounded-md shadow-lg absolute z-30 w-48  dark:bg-gray-800 dark:border-gray-600"
-          >
-            <!-- Search results will appear here -->
+    <!-- Main Content -->
+    <div class="ml-9 w-full h-96 border border-red-950">
+      <!-- Tailwind CSS Carousel -->
+      <div class="relative">
+        <div class="overflow-hidden">
+          <div class="flex transition-transform duration-500" id="carousel-items">
+            <div class="w-full flex-shrink-0 relative">
+              <img src="/assests/image.png" alt="Image 1" class="w-full h-96">
+              <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <p class="text-white text-2xl">Context for Image 1: Woman's Fashion</p>
+              </div>
+            </div>
+            <div class="w-full flex-shrink-0 relative">
+              <img src="/assests/image.png" alt="Image 2" class="w-full h-96">
+              <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <p class="text-white text-2xl">Context for Image 2: Men's Fashion</p>
+              </div>
+            </div>
+            <div class="w-full flex-shrink-0 relative">
+              <img src="/assests/image.png" alt="Image 3" class="w-full h-96">
+              <div class="absolute inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <p class="text-white text-2xl">Context for Image 3: Electronics</p>
+              </div>
+            </div>
+            <!-- Add more slides if needed -->
           </div>
         </div>
   
-        <a class="relative hidden md:block cursor-pointer" id="wishlist">
-          <i class="bi bi-heart text-2xl dark:text-white"></i>
-          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">3</span>
-        </a>
+        <!-- Carousel Controls -->
+        <button class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
+          id="prev-btn">
+          &#10094;
+        </button>
+        <button class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-700 text-white p-2 rounded-full"
+          id="next-btn">
+          &#10095;
+        </button>
   
-        <a class="relative hidden md:block cursor-pointer" id="cart">
-          <i class="bi bi-cart3 text-2xl dark:text-white"></i>
-          <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">5</span>
-        </a>
-  
-        <!-- Account Icon -->
-        <a class="relative hidden md:block cursor-pointer" id="accountIcon">
-          <i class="bi bi-person text-3xl text-black dark:text-white"></i>
-        </a>
-  
-        <!-- Account Dropdown Menu -->
-        <div
-          id="accountMenu"
-          class="hidden absolute right-11 mt-72 min-w-56 bg-white shadow-lg rounded-md text-black w-48 dark:bg-gray-800 dark:text-white dark:shadow-gray-700"
-        >
-          <ul>
-            <li>
-              <a href="/manage-account" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <i class="bi bi-person mr-2"></i> Manage My Account
-              </a>
-            </li>
-            <li>
-              <a href="/my-orders" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <i class="bi bi-bag mr-2"></i> My Order
-              </a>
-            </li>
-            <li>
-              <a href="/my-cancellations" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <i class="bi bi-x-circle mr-2"></i> My Cancellations
-              </a>
-            </li>
-            <li>
-              <a href="/my-reviews" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <i class="bi bi-star mr-2"></i> My Reviews
-              </a>
-            </li>
-            <li>
-              <a href="/logout" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <i class="bi bi-box-arrow-right mr-2"></i> Logout
-              </a>
-            </li>
-          </ul>
-        </div>
       </div>
     </div>
+  </div>
   
-    <!-- Hidden Search Bar for Small Screens -->
-    <div id="mobileSearch" class="hidden p-4 bg-gray-100 border-t dark:bg-gray-800 dark:border-gray-600 fixed  w-full z-40">
-      <input
-        type="text"
-        id="mobileSearchInput"
-        placeholder="Search..."
-        class="block p-2.5 w-full text-sm text-black border-2 border-black bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-gray-500"
-      >
-      <div id="mobileSearchResults" class="hidden mt-2 bg-white border  border-gray-300 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-600">
-        <!-- Search results will appear here -->
-      </div>
-    </div>
-  
-    <!-- Bottom Navigation for Small Screens -->
-    <div class="border-t fixed bottom-0 left-0 w-full z-20 bg-white shadow-md md:hidden flex justify-around py-2 dark:bg-gray-900 dark:border-gray-700">
-      <a href="#" class="flex flex-col items-center text-black dark:text-white">
-        <i class="bi bi-house text-xl"></i>
-        <span class="text-xs">Home</span>
-      </a>
-      <button class="relative flex flex-col items-center text-black dark:text-white">
-        <i class="bi bi-heart text-xl"></i>
-        <span class="absolute -top-1 right-1 bg-red-500 text-white text-xs rounded-full px-1">3</span>
-        <span class="text-xs">Wishlist</span>
-      </button>
-      <button class="relative flex flex-col items-center text-black dark:text-white">
-        <i class="bi bi-cart3 text-xl"></i>
-        <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1">5</span>
-        <span class="text-xs">Cart</span>
-      </button>
-      <a href="#" class="flex flex-col items-center text-black dark:text-white">
-        <i class="bi bi-person text-xl"></i>
-        <span class="text-xs">Sign Up</span>
-      </a>
-    </div>
-  </header>
-  
-  
-
+  <!-- Custom JavaScript -->
   <script>
-     const darkModeToggle = document.getElementById('darkModeToggle');
-    const body = document.body;
-
-    // Check user's saved preference
-    if (localStorage.getItem('darkMode') === 'enabled') {
-      body.classList.add('dark');
+    let currentIndex = 0;
+    const carouselItems = document.getElementById('carousel-items');
+    const totalItems = document.querySelectorAll('#carousel-items .flex-shrink-0').length;
+  
+    const prevButton = document.getElementById('prev-btn');
+    const nextButton = document.getElementById('next-btn');
+  
+    prevButton.addEventListener('click', () => {
+      currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+      updateCarousel();
+    });
+  
+    nextButton.addEventListener('click', () => {
+      currentIndex = (currentIndex + 1) % totalItems;
+      updateCarousel();
+    });
+  
+    function updateCarousel() {
+      carouselItems.style.transform = `translateX(-${currentIndex * 100}%)`;
     }
-
-    // Toggle dark mode
-    darkModeToggle.addEventListener('click', () => {
-      body.classList.toggle('dark');
-
-      // Save user preference
-      if (body.classList.contains('dark')) {
-        localStorage.setItem('darkMode', 'enabled');
-      } else {
-        localStorage.setItem('darkMode', 'disabled');
-      }
-    });
-
-    const accountIcon = document.getElementById('accountIcon');
-    const accountMenu = document.getElementById('accountMenu');
-
-    accountIcon.addEventListener('click', () => {
-      accountMenu.classList.toggle('hidden');
-    });
-
-    // Optional: Close menu if user clicks outside
-    document.addEventListener('click', (e) => {
-      if (!accountIcon.contains(e.target) && !accountMenu.contains(e.target)) {
-        accountMenu.classList.add('hidden');
-      }
-    });
-
-    const searchIcon = document.getElementById('searchIcon');
-    const mobileSearch = document.getElementById('mobileSearch');
-    const mobileSearchInput = document.getElementById('mobileSearchInput');
-    const mobileSearchResults = document.getElementById('mobileSearchResults');
-    const desktopSearchInput = document.getElementById('desktopSearchInput');
-    const desktopSearchResults = document.getElementById('desktopSearchResults');
-
-    // Dummy data for search
-    const dummyResults = [
-      'Summer Collection 2023',
-      'Men’s Formal Suits',
-      'Casual Wear for Women',
-      'Trending Accessories',
-      'New Arrivals: Kids Wear',
-      'Top Picks for Winter'
-    ];
-
-    // Toggle mobile search visibility
-    searchIcon.addEventListener('click', () => {
-      mobileSearch.classList.toggle('hidden');
-    });
-
-    // Function to handle search input and display results
-    function handleSearch(input, resultsContainer) {
-      const query = input.value.toLowerCase();
-      resultsContainer.innerHTML = ''; // Clear previous results
-
-      if (query) {
-        const filteredResults = dummyResults.filter(item =>
-          item.toLowerCase().includes(query)
-        );
-        if (filteredResults.length > 0) {
-          filteredResults.forEach(result => {
-            const resultItem = document.createElement('div');
-            resultItem.textContent = result;
-            resultItem.className = 'p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer';
-            resultsContainer.appendChild(resultItem);
-          });
-        } else {
-          const noResult = document.createElement('div');
-          noResult.textContent = 'No results found';
-          noResult.className = 'p-2 text-gray-500';
-          resultsContainer.appendChild(noResult);
-        }
-        resultsContainer.classList.remove('hidden');
-      } else {
-        resultsContainer.classList.add('hidden');
-      }
-    }
-
-    // Event listeners for mobile and desktop search inputs
-    mobileSearchInput.addEventListener('input', () =>
-      handleSearch(mobileSearchInput, mobileSearchResults)
-    );
-
-    desktopSearchInput.addEventListener('input', () =>
-      handleSearch(desktopSearchInput, desktopSearchResults)
-    );
-
-    // Hide results when clicking outside
-    document.addEventListener('click', (e) => {
-      // Close mobile search results
-      if (
-        !mobileSearch.contains(e.target) &&
-        !mobileSearchResults.contains(e.target) &&
-        e.target !== searchIcon
-      ) {
-        mobileSearchResults.classList.add('hidden');
-      }
-
-      // Close desktop search results
-      if (
-        !desktopSearchInput.contains(e.target) &&
-        !desktopSearchResults.contains(e.target)
-      ) {
-        desktopSearchResults.classList.add('hidden');
-      }
-    });
-
-    // Ensure mobile search is hidden on larger screens
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768) { // Tailwind `md` breakpoint is 768px
-        mobileSearch.classList.add('hidden'); // Hide the mobile search bar
-        mobileSearchResults.classList.add('hidden'); // Hide mobile search results
-      }
-    });
   </script>
+  
+  <!-- Custom CSS for Dark Cursor Effect -->
+  <style>
+    body {
+      cursor: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zY3JlZW4xMiIgdmlld0JveD0iMCAwIDEwMCAxMDAiIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj4KPHBhdGggZD0iTTEwMCAwIEwgMCAxMDAgTCAxMDAgMSBNIDAgMCBMIDAgMTAwIFoiIHN0eWxlPSJmaWxsOiMwMDAwMDAiIHN0cm9rZT0ibm9uZSIvPjwvc3ZnPg==') !important;
+    }
+  </style>
+  
+
+
+
+      <!-- Hero Section -->
+      <!-- <div class="w-full md:w-3/4 flex flex-col items-center justify-center bg-black text-white p-6 rou">
+      <div class="text-center">
+        <p class="text-xl font-bold">iPhone 14 Series</p>
+        <h1 class="text-4xl font-bold mt-2 sm:text-5xl">
+          Up to 10% off Voucher
+        </h1>
+        <button class="mt-4 px-6 py-2 bg-white text-black  rounded-full sh hover:bg-gray-200">
+          Shop Now
+        </button>
+      </div>
+      <div class="mt-6 w-full">
+        <img
+          src="https://via.placeholder.com/800x400"
+          alt="iPhone 14"
+          class="rou w-full sm:h-auto"
+        />
+      </div>
+    </div>
+    
+  </div> -->
+
 </body>
 
 </html>
