@@ -5,7 +5,16 @@ module.exports = {
   ],
   darkMode: 'class', // Enable class-based dark mode
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'xlg': '1050px', // Custom breakpoint for 1050px
+        'smd': '685px',
+      }
+    },
   },
   plugins: [require('tailwind-scrollbar')],
 };
+
+
+
+
