@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 /* Custom Classes */
 @layer components {
 
@@ -68,4 +80,21 @@
   .nav-link.active::after {
     width: 100%;
   }
+
+  .swiper-button-prev::after,
+.swiper-button-next::after {
+  content: none !important; /* Removes default Swiper arrows */
+}
+
+.swiper {
+  border-radius: 20px; /* Adjust as needed */
+  overflow: hidden; /* Prevent content from breaking the rounded corners */
+}
+
+
+.swiper-pagination .swiper-pagination-bullet-active {
+  background-color: red !important;
+}
+
+
 }

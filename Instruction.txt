@@ -10,3 +10,6 @@ Heade and Footer maake correctly with Dark mode also
 The Hero Section mAke it Some Errors and Also include Slider 
 
 The Falsh Sales Section Start but with some errors Make it like that They fetch data for backend 
+
+Usr index page is complete only quick view page left 
+

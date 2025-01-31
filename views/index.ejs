@@ -1,199 +1,107 @@
 <%- include('./shared/header') %>
 
-  <div class="flex flex-row items-start p-4 md:px-20 mt-6">
+
+
+
+  <section class="flex flex-row items-start p-4 md:px-20 mt-28">
     <aside class="w-72 h-[21.8125rem] border-r border-gray-500 hidden xlg:block mr-3  dark:border-gray-600">
       <!-- Content for the aside section -->
       <ul class="space-y-3 mt-5 px-4">
         <li class="text-nowrap">
-          <a href="#" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Woman's Fashion</a>
+          <a href="#flash-sales" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Flash Sales</a>
         </li>
         <li class="text-nowrap">
-          <a href="#" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Men's Fashion</a>
+          <a href="#best-products" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Best Selling Products</a>
         </li>
         <li class="text-nowrap">
-          <a href="#" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Electronics</a>
+          <a href="#explore-products" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Explore Products</a>
         </li>
         <li class="text-nowrap">
-          <a href="#" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Home & Lifestyle</a>
-        </li>
-        <li class="text-nowrap">
-          <a href="#" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Medicine</a>
-        </li>
-        <li class="text-nowrap">
-          <a href="#" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Sports & Outdoor</a>
-        </li>
-        <li class="text-nowrap">
-          <a href="#" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Baby's & Toys</a>
-        </li>
-        <li class="text-nowrap">
-          <a href="#" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Groceries & Pets</a>
-        </li>
-        <li class="text-nowrap">
-          <a href="#" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Health & Beauty</a>
+          <a href="#new-arrival" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">New Arrival</a>
         </li>
       </ul>
     </aside>
 
-    <div class="w-full xlg:w-[calc(100%-18rem)] h-[21.8125rem] xlg:ml-3 dark:bg-gray-900">
-      <!-- Tailwind CSS Carousel -->
-      <div class="relative">
-        <div class="overflow-hidden">
-          <div class="flex transition-transform duration-500" id="carousel-items">
-            <!-- Image 1 -->
-            <div class="w-full flex-shrink-0 relative">
-              <img src="/assests/image.png" class="w-full h-[21.8125rem] lg:object-fill object-cover">
+    <div class="w-full xlg:w-[calc(100%-18rem)] h-[21.8125rem] xlg:ml-3 dark:bg-gray-900 ">
+       <!--HTML CODE-->
+    <div class="w-full relative ">
+      <div class="swiper default-carousel swiper-container">
+      <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <div class=" isolate  flex-col rounded-2xl h-[24rem] flex justify-center items-center overflow-hidden">
+          <!-- <span class="text-3xl font-semibold text-indigo-600">Slide 1 </span> -->
+          <img src="/assests/image.png" class="w-full h-full lg:object-fill  object-cover">
 
-              <!-- Overlay with context and button -->
-              <div class="absolute inset-0 bg-gray-900 bg-opacity-60 flex flex-col justify-end items-start p-4">
-
-                <!-- Left side: Context text at the bottom -->
-                <div class="flex justify-start w-full">
-                  <p class="text-white text-2xl">Context for Image 1: Woman's Fashion</p>
-                </div>
-
-                <!-- Button below the context -->
-                <div class="flex justify-start w-full mt-2">
-                  <button class="text-white px-4 py-2 rounded-lg bg-[#DB4444] hover:bg-[#de2d2d] transition">Shop
-                    Now</button>
-                </div>
-
-              </div>
-            </div>
-            <!-- Image 2 -->
-            <div class="w-full flex-shrink-0 relative">
-              <img src="/assests/image.png" class="w-full h-[21.8125rem] lg:object-fill  object-cover">
-              <!-- Overlay with context and button -->
-              <div class="absolute inset-0 bg-gray-900 bg-opacity-60 flex flex-col justify-end items-start p-4">
-
-                <!-- Left side: Context text at the bottom -->
-                <div class="flex justify-start w-full">
-                  <p class="text-white text-2xl">Context for Image 2: Men's Collection</p>
-                </div>
-
-                <!-- Button below the context -->
-                <div class="flex justify-start w-full mt-2">
-                  <button class="text-white px-4 py-2 rounded-lg bg-[#DB4444] hover:bg-[#de2d2d] transition">Shop
-                    Now</button>
-                </div>
-
-              </div>
-            </div>
-            <!-- Image 3 -->
-            <div class="w-full flex-shrink-0 relative">
-              <img src="/assests/image.png" class="w-full h-[21.8125rem] lg:object-fill  object-cover">
-              <div class="absolute inset-0 bg-gray-900 bg-opacity-60 flex flex-col justify-end items-start p-4">
-
-                <!-- Left side: Context text at the bottom -->
-                <div class="flex justify-start w-full">
-                  <p class="text-white text-2xl">Context for Image 3: Kid's Wear</p>
-                </div>
-
-                <!-- Button below the context -->
-                <div class="flex justify-start w-full mt-2">
-                  <button class="text-white px-4 py-2 rounded-lg bg-[#DB4444] hover:bg-[#de2d2d] transition">Shop
-                    Now</button>
-                </div>
-
-              </div>
-            </div>
-            <!-- Image 4 -->
-            <div class="w-full flex-shrink-0 relative">
-              <img src="/assests/image.png" class="w-full h-[21.8125rem] lg:object-fill  object-cover">
-              <div class="absolute inset-0 bg-gray-900 bg-opacity-60 flex flex-col justify-end items-start p-4">
-
-                <!-- Left side: Context text at the bottom -->
-                <div class="flex justify-start w-full">
-                  <p class="text-white text-2xl">Context for Image 2: Men's Collection</p>
-                </div>
-
-                <!-- Button below the context -->
-                <div class="flex justify-start w-full mt-2">
-                  <button class="text-white px-4 py-2 rounded-lg bg-[#DB4444] hover:bg-[#de2d2d] transition">Shop
-                    Now</button>
-                </div>
-
-              </div>
-            </div>
-            <!-- Image 5 -->
-            <div class="w-full flex-shrink-0 relative">
-              <img src="/assests/image.png" class="w-full h-[21.8125rem] lg:object-fill  object-cover">
-              <div class="absolute inset-0 bg-gray-900 bg-opacity-60 flex flex-col justify-end items-start p-4">
-
-                <!-- Left side: Context text at the bottom -->
-                <div class="flex justify-start w-full">
-                  <p class="text-white text-2xl">Context for Image 5: Shoes</p>
-                </div>
-
-                <!-- Button below the context -->
-                <div class="flex justify-start w-full mt-2">
-                  <button class="text-white px-4 py-2 rounded-lg bg-[#DB4444] hover:bg-[#de2d2d] transition">Shop
-                    Now</button>
-                </div>
-
-              </div>
-            </div>
-            <!-- Image 6 -->
-            <div class="w-full flex-shrink-0 relative">
-              <img src="/assests/image.png" class="w-full h-[21.8125rem] lg:object-fill  object-cover">
-              <div class="absolute inset-0 bg-gray-900 bg-opacity-60 flex flex-col justify-end items-start p-4">
-
-                <!-- Left side: Context text at the bottom -->
-                <div class="flex justify-start w-full">
-                  <p class="text-white text-2xl">Context for Image 6: Sportswear</p>
-                </div>
-
-                <!-- Button below the context -->
-                <div class="flex justify-start w-full mt-2">
-                  <button class="text-white px-4 py-2 rounded-lg bg-[#DB4444] hover:bg-[#de2d2d] transition">Shop
-                    Now</button>
-                </div>
-
-              </div>
-
-            </div>
+          <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40">
+            <!-- Button below the context -->
+              <button class="z-10 mt-80 ml-[21px] text-2xl hover:underline text-white">Shop Now</button>
           </div>
         </div>
+      </div>
+      <div class="swiper-slide">
+        <div class=" isolate  flex-col rounded-2xl h-[24rem] flex justify-center items-center overflow-hidden">
+          <!-- <span class="text-3xl font-semibold text-indigo-600">Slide 1 </span> -->
+          <img src="/assests/image.png" class="w-full h-full lg:object-fill  object-cover">
 
-        <!-- Navigation Buttons -->
-        <div class="absolute top-1/2 transform -translate-y-1/2 left-4 z-10">
-          <button id="prev" class="text-2xl text-white p-2 rounded-full">
-            <i class="bi bi-arrow-left-circle" id="prev-icon"></i>
-          </button>
+          <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40">
+            <!-- Button below the context -->
+              <button class="z-10 mt-80 ml-[21px] text-2xl hover:underline text-white">Shop Now</button>
+          </div>
         </div>
-        <div class="absolute top-1/2 transform -translate-y-1/2 right-4 z-10">
-          <button id="next" class="text-2xl text-white p-2 rounded-full ">
-            <i class="bi bi-arrow-right-circle" id="next-icon"></i>
-          </button>
+      </div>
+      <div class="swiper-slide">
+        <div class=" isolate  flex-col rounded-2xl h-[24rem] flex justify-center items-center overflow-hidden">
+          <!-- <span class="text-3xl font-semibold text-indigo-600">Slide 1 </span> -->
+          <img src="/assests/image.png" class="w-full h-full lg:object-fill  object-cover">
+
+          <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40">
+            <!-- Button below the context -->
+              <button class="z-10 mt-80 ml-[21px] text-2xl hover:underline  text-white">Shop Now</button>
+          </div>
         </div>
+      </div>
+      </div>
+      <div class="flex items-center gap-8 lg:justify-start justify-center">
+      <button id="slider-button-left" class="swiper-button-prev group !p-2 flex justify-center items-center border border-solid border-red-600 !w-12 !h-12 transition-all duration-500 rounded-full !top-[245px] !-translate-y-8 !left-5 hover:bg-red-500 " data-carousel-prev>
+        <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M10.0002 11.9999L6 7.99971L10.0025 3.99719" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      <button id="slider-button-right" class="swiper-button-next group !p-2 flex justify-center items-center border border-solid border-red-600 !w-12 !h-12 transition-all duration-500 rounded-full !top-[245px] !-translate-y-8  !right-5 hover:bg-red-500" data-carousel-next>
+        <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M5.99984 4.00012L10 8.00029L5.99748 12.0028" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </button>
+      </div>
+      <div class="swiper-pagination "></div>
 
       </div>
-
+      </div>
+  
     </div>
-
+    
+    
+    
     <!-- Dark Mode Toggle Button -->
-    <div class="absolute top-4 right-4 z-20">
+    <div class="absolute top-12 right-4 z-50">
       <button id="darkModeToggle" class="bg-gray-800 text-white px-4 py-2 rounded-full">
         Toggle Dark Mode
       </button>
     </div>
-  </div>
+  </section>
+
 
   <!-- Flash Sales Section -->
-  <section class="items-start p-4 md:px-20 mt-6">
+  <section id="flash-sales" class="items-start p-4 md:px-16 mt-8">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="w-2 h-6 bg-red-500 rounded"></div>
         <p class="text-red-500 font-semibold">Today's</p>
       </div>
     </div>
-    <div class="flex items-center justify-between">
-      <h2 class="text-3xl font-bold">Flash Sales</h2>
-      <div class="flex space-x-6 text-center">
-        <div>
-          <span class="text-2xl font-bold">03</span>
-          <p class="text-gray-500 text-sm">Days</p>
-        </div>
-        <span class="text-red-500 text-2xl">:</span>
+    <div class="flex items-center justify-between flex-col md:flex-row">
+      <h2 class="text-3xl font-bold text-center md:text-left">Flash Sales</h2>
+      <div class="flex space-x-6 text-center mt-4 md:mt-0">
         <div>
           <span class="text-2xl font-bold">23</span>
           <p class="text-gray-500 text-sm">Hours</p>
@@ -205,124 +113,1227 @@
         </div>
         <span class="text-red-500 text-2xl">:</span>
         <div>
-          <span class="text-2xl font-bold">56</span>
-          <p class="text-gray-500 text-sm">Seconds</p>
+          <span class="text-2xl text-red-500 font-bold">56</span>
+          <p class="text-red-500 text-sm">Seconds</p>
+        </div>
+      </div>
+
+      <div class="flex md:justify-end justify-center items-center mt-4 space-x-4 mr-4">
+        <button class="slider-button left-button  bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left text-red-600" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+          </svg>
+        </button>
+
+        <button class="slider-button right-button bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right text-red-600" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards Slider Container -->
+    <div class="relative border-b border-gray-500">
+      <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
+
+        <!-- Repeat the card 10 times -->
+        <div class=" bg-[#F5F5F5] text-black p-4 h-96  md:w-80 w-72 flex-shrink-0 transition-colors relative group">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+          <h3 class="font-bold mb-2">Gaming Keyboard</h3>
+          <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-black ">$129.00</span>
+              <span class="text-sm text-black line-through ml-2">$129.00</span>
+
+            </div>
+            <button class="bg-black text-white px-4 py-2 text-sm">Add
+              to Cart</button>
+          </div>
+
+          <!-- Hover Buttons in Top Right Corner -->
+          <div
+            class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-heart"></i>
+              <span
+                class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+            </button>
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye"></i>
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+                View</span>
+            </button>
+            
+          </div>
+        </div>
+        <!-- Repeat more cards as needed -->
+        <div class=" bg-[#F5F5F5] text-black p-4 h-96  md:w-80 w-72 flex-shrink-0 transition-colors relative group">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+          <h3 class="font-bold mb-2">Gaming Keyboard</h3>
+          <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-black ">$129.00</span>
+              <span class="text-sm text-black line-through ml-2">$129.00</span>
+
+            </div>
+            <button class="bg-black text-white px-4 py-2 text-sm">Add
+              to Cart</button>
+          </div>
+
+          <!-- Hover Buttons in Top Right Corner -->
+          <div
+            class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-heart"></i>
+              <span
+                class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+            </button>
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye"></i>
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+                View</span>
+            </button>
+            
+          </div>
+        </div>
+
+        <div class=" bg-[#F5F5F5] text-black p-4 h-96  md:w-80 w-72 flex-shrink-0 transition-colors relative group">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+          <h3 class="font-bold mb-2">Gaming Keyboard</h3>
+          <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-black ">$129.00</span>
+              <span class="text-sm text-black line-through ml-2">$129.00</span>
+
+            </div>
+            <button class="bg-black text-white px-4 py-2 text-sm">Add
+              to Cart</button>
+          </div>
+
+          <!-- Hover Buttons in Top Right Corner -->
+          <div
+            class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-heart"></i>
+              <span
+                class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+            </button>
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye"></i>
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+                View</span>
+            </button>
+            
+          </div>
+        </div>
+
+
+        <div class=" bg-[#F5F5F5] text-black p-4 h-96  md:w-80 w-72 flex-shrink-0 transition-colors relative group">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+          <h3 class="font-bold mb-2">Gaming Keyboard</h3>
+          <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-black ">$129.00</span>
+              <span class="text-sm text-black line-through ml-2">$129.00</span>
+
+            </div>
+            <button class="bg-black text-white px-4 py-2 text-sm">Add
+              to Cart</button>
+          </div>
+
+          <!-- Hover Buttons in Top Right Corner -->
+          <div
+            class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-heart"></i>
+              <span
+                class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+            </button>
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye"></i>
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+                View</span>
+            </button>
+            
+          </div>
+        </div>
+
+
+        <div class=" bg-[#F5F5F5] text-black p-4 h-96  md:w-80 w-72 flex-shrink-0 transition-colors relative group">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+          <h3 class="font-bold mb-2">Gaming Keyboard</h3>
+          <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-black ">$129.00</span>
+              <span class="text-sm text-black line-through ml-2">$129.00</span>
+
+            </div>
+            <button class="bg-black text-white px-4 py-2 text-sm">Add
+              to Cart</button>
+          </div>
+
+          <!-- Hover Buttons in Top Right Corner -->
+          <div
+            class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-heart"></i>
+              <span
+                class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+            </button>
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye"></i>
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+                View</span>
+            </button>
+            
+          </div>
+        </div>
+
+
+        <div class=" bg-[#F5F5F5] text-black p-4 h-96  md:w-80 w-72 flex-shrink-0 transition-colors relative group">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+          <h3 class="font-bold mb-2">Gaming Keyboard</h3>
+          <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-black ">$129.00</span>
+              <span class="text-sm text-black line-through ml-2">$129.00</span>
+
+            </div>
+            <button class="bg-black text-white px-4 py-2 text-sm">Add
+              to Cart</button>
+          </div>
+
+          <!-- Hover Buttons in Top Right Corner -->
+          <div
+            class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-heart"></i>
+              <span
+                class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+            </button>
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye"></i>
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+                View</span>
+            </button>
+            
+          </div>
+        </div>
+
+
+        <div class=" bg-[#F5F5F5] text-black p-4 h-96  md:w-80 w-72 flex-shrink-0 transition-colors relative group">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+          <h3 class="font-bold mb-2">Gaming Keyboard</h3>
+          <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-black ">$129.00</span>
+              <span class="text-sm text-black line-through ml-2">$129.00</span>
+
+            </div>
+            <button class="bg-black text-white px-4 py-2 text-sm">Add
+              to Cart</button>
+          </div>
+
+          <!-- Hover Buttons in Top Right Corner -->
+          <div
+            class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-heart"></i>
+              <span
+                class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+            </button>
+            <button
+              class="p-2 bg-gray-200 rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye"></i>
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+                View</span>
+            </button>
+            
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+  </section>
+
+
+  <!--  Best Selling Products -->
+  <section id="best-products" class="items-start p-4 md:px-16 mt-8">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-6 bg-red-500 rounded"></div>
+        <p class="text-red-500 font-semibold">New Products</p>
+      </div>
+    </div>
+    <div class="flex items-center justify-between flex-col md:flex-row">
+      <h2 class="text-3xl font-bold text-center md:text-left">Best Selling Products</h2>
+      
+
+      <div class="flex md:justify-end justify-center items-center mt-4 space-x-4 mr-4">
+        <button class="slider-button left-button bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left text-red-600" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+          </svg>
+        </button>
+
+        <button class="slider-button right-button bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right text-red-600" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Cards Slider Container -->
+    <div class="relative border-b border-gray-500">
+      <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
+
+        <!-- Repeat the card 10 times -->
+          <div
+          class="bg-[#F5F5F5]  h-96  md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-transform duration-300">
+          <img src="/assests/pics (3).jpeg" alt="Product"
+            class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+      
+          <!-- Hover Buttons in Top Right Corner -->
+          <div
+            class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button
+              class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+              <i class="bi bi-heart"></i> <!-- Wishlist Icon -->
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+            </button>
+            <button
+              class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+              <i class="bi bi-eye"></i> <!-- Quick View Icon -->
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+                View</span>
+            </button>
+            <button
+              class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+              <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+              <span
+                class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white  text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Add
+                to Cart</span>
+            </button>
+          </div>
+      
+          <!-- Product Info -->
+          <div
+            class="absolute bottom-0 left-0 right-0 bg-white/90 dark:text-black p-4 translate-y-20 group-hover:translate-y-0 transition-all duration-300">
+            <h3 class="font-bold mb-2">Designer Chair</h3>
+            <div class="flex justify-between items-center">
+              <div>
+                <span class="font-bold">$599.00</span>
+                <span class=" text-sm line-through ml-2">$599.00</span>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+        class="bg-[#F5F5F5]  h-96  md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-transform duration-300">
+        <img src="/assests/pics (3).jpeg" alt="Product"
+          class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+    
+        <!-- Hover Buttons in Top Right Corner -->
+        <div
+          class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+            <i class="bi bi-heart"></i> <!-- Wishlist Icon -->
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+          </button>
+          <button
+            class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+            <i class="bi bi-eye"></i> <!-- Quick View Icon -->
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+              View</span>
+          </button>
+          <button
+            class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+            <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white  text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Add
+              to Cart</span>
+          </button>
+        </div>
+    
+        <!-- Product Info -->
+        <div
+          class="absolute bottom-0 left-0 right-0 bg-white/90 dark:text-black p-4 translate-y-20 group-hover:translate-y-0 transition-all duration-300">
+          <h3 class="font-bold mb-2">Designer Chair</h3>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold">$599.00</span>
+              <span class=" text-sm line-through ml-2">$599.00</span>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+      class="bg-[#F5F5F5]  h-96  md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-transform duration-300">
+      <img src="/assests/pics (3).jpeg" alt="Product"
+        class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+  
+      <!-- Hover Buttons in Top Right Corner -->
+      <div
+        class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <button
+          class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+          <i class="bi bi-heart"></i> <!-- Wishlist Icon -->
+          <span
+            class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+        </button>
+        <button
+          class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+          <i class="bi bi-eye"></i> <!-- Quick View Icon -->
+          <span
+            class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+            View</span>
+        </button>
+        <button
+          class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+          <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+          <span
+            class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white  text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Add
+            to Cart</span>
+        </button>
+      </div>
+  
+      <!-- Product Info -->
+      <div
+        class="absolute bottom-0 left-0 right-0 bg-white/90 dark:text-black p-4 translate-y-20 group-hover:translate-y-0 transition-all duration-300">
+        <h3 class="font-bold mb-2">Designer Chair</h3>
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-bold">$599.00</span>
+            <span class=" text-sm line-through ml-2">$599.00</span>
+
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Product Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mt-6">
-      <!-- Product Card -->
-      <div class="border rounded-lg p-4 relative">
-        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">-40%</span>
-        <img src="/assests/pics (1).jpeg" class="mx-auto">
-        <h3 class="mt-4 font-semibold">HAVIT HV-G92 Gamepad</h3>
-        <p class="text-red-500 text-lg font-bold">$120 <span class="text-gray-400 line-through">$160</span></p>
-        <p class="text-yellow-500">⭐⭐⭐⭐⭐ (88)</p>
-      </div>
+    <div
+    class="bg-[#F5F5F5]  h-96  md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-transform duration-300">
+    <img src="/assests/pics (3).jpeg" alt="Product"
+      class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
 
-      <!-- Product Card -->
-      <div class="border rounded-lg p-4 relative">
-        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">-35%</span>
-        <img src="/assests/pics (2).jpeg" class="mx-auto">
-        <h3 class="mt-4 font-semibold">AK-900 Wired Keyboard</h3>
-        <p class="text-red-500 text-lg font-bold">$960 <span class="text-gray-400 line-through">$1160</span></p>
-        <p class="text-yellow-500">⭐⭐⭐⭐ (75)</p>
-        <button class="bg-black text-white py-2 mt-2 w-full">Add To Cart</button>
-      </div>
+    <!-- Hover Buttons in Top Right Corner -->
+    <div
+      class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <button
+        class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+        <i class="bi bi-heart"></i> <!-- Wishlist Icon -->
+        <span
+          class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+      </button>
+      <button
+        class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+        <i class="bi bi-eye"></i> <!-- Quick View Icon -->
+        <span
+          class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+          View</span>
+      </button>
+      <button
+        class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+        <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+        <span
+          class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white  text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Add
+          to Cart</span>
+      </button>
+    </div>
 
-      <!-- Product Card -->
-      <div class="border rounded-lg p-4 relative">
-        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">-30%</span>
-        <img src="/assests/pics (3).jpeg" class="mx-auto">
-        <h3 class="mt-4 font-semibold">IPS LCD Gaming Monitor</h3>
-        <p class="text-red-500 text-lg font-bold">$370 <span class="text-gray-400 line-through">$400</span></p>
-        <p class="text-yellow-500">⭐⭐⭐⭐⭐ (99)</p>
-      </div>
+    <!-- Product Info -->
+    <div
+      class="absolute bottom-0 left-0 right-0 bg-white/90 dark:text-black p-4 translate-y-20 group-hover:translate-y-0 transition-all duration-300">
+      <h3 class="font-bold mb-2">Designer Chair</h3>
+      <div class="flex justify-between items-center">
+        <div>
+          <span class="font-bold">$599.00</span>
+          <span class=" text-sm line-through ml-2">$599.00</span>
 
-      <!-- Product Card -->
-      <div class="border rounded-lg p-4 relative">
-        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">-25%</span>
-        <img src="/assests/pics (4).jpeg" class="mx-auto">
-        <h3 class="mt-4 font-semibold">S-Series Comfort Chair</h3>
-        <p class="text-red-500 text-lg font-bold">$375 <span class="text-gray-400 line-through">$400</span></p>
-        <p class="text-yellow-500">⭐⭐⭐⭐ (99)</p>
+        </div>
       </div>
+    </div>
+  </div>
 
-      <div class="border rounded-lg p-4 relative">
-        <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded">-25%</span>
-        <img src="/assests/pics (5).jpeg" class="mx-auto">
-        <h3 class="mt-4 font-semibold">S-Series Comfort Chair</h3>
-        <p class="text-red-500 text-lg font-bold">$375 <span class="text-gray-400 line-through">$400</span></p>
-        <p class="text-yellow-500">⭐⭐⭐⭐ (99)</p>
+  <div
+  class="bg-[#F5F5F5]  h-96  md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-transform duration-300">
+  <img src="/assests/pics (3).jpeg" alt="Product"
+    class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+
+  <!-- Hover Buttons in Top Right Corner -->
+  <div
+    class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    <button
+      class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+      <i class="bi bi-heart"></i> <!-- Wishlist Icon -->
+      <span
+        class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+    </button>
+    <button
+      class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+      <i class="bi bi-eye"></i> <!-- Quick View Icon -->
+      <span
+        class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+        View</span>
+    </button>
+    <button
+      class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+      <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+      <span
+        class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white  text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Add
+        to Cart</span>
+    </button>
+  </div>
+
+  <!-- Product Info -->
+  <div
+    class="absolute bottom-0 left-0 right-0 bg-white/90 dark:text-black p-4 translate-y-20 group-hover:translate-y-0 transition-all duration-300">
+    <h3 class="font-bold mb-2">Designer Chair</h3>
+    <div class="flex justify-between items-center">
+      <div>
+        <span class="font-bold">$599.00</span>
+        <span class=" text-sm line-through ml-2">$599.00</span>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div
+class="bg-[#F5F5F5]  h-96  md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-transform duration-300">
+<img src="/assests/pics (3).jpeg" alt="Product"
+  class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+
+<!-- Hover Buttons in Top Right Corner -->
+<div
+  class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+  <button
+    class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+    <i class="bi bi-heart"></i> <!-- Wishlist Icon -->
+    <span
+      class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+  </button>
+  <button
+    class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+    <i class="bi bi-eye"></i> <!-- Quick View Icon -->
+    <span
+      class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+      View</span>
+  </button>
+  <button
+    class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+    <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+    <span
+      class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white  text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Add
+      to Cart</span>
+  </button>
+</div>
+
+<!-- Product Info -->
+<div
+  class="absolute bottom-0 left-0 right-0 bg-white/90 dark:text-black p-4 translate-y-20 group-hover:translate-y-0 transition-all duration-300">
+  <h3 class="font-bold mb-2">Designer Chair</h3>
+  <div class="flex justify-between items-center">
+    <div>
+      <span class="font-bold">$599.00</span>
+      <span class=" text-sm line-through ml-2">$599.00</span>
+
+    </div>
+  </div>
+</div>
+</div>
+
       </div>
     </div>
 
-    <!-- View All Products Button -->
-    <div class="text-center mt-8">
-      <button class="bg-red-500 text-white px-6 py-3 rounded">View All Products</button>
-    </div>
   </section>
 
+
+  <!--  Our Products -->
+
+  <section id="explore-products" class="items-start p-4 md:px-16 mt-8">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-6 bg-red-500 rounded"></div>
+        <p class="text-red-500 font-semibold">Our Products</p>
+      </div>
+    </div>
+    <div class="flex items-center justify-between flex-col md:flex-row">
+      <h2 class="text-3xl font-bold text-center md:text-left">Explore Our Products</h2>
+      
+
+      <div class="flex md:justify-end justify-center items-center mt-4 space-x-4 mr-4">
+        <button class="slider-button left-button bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left text-red-600" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
+          </svg>
+        </button>
+
+        <button class="slider-button right-button bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right text-red-600" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Left and Right Arrow Buttons below the Timer -->
+
+
+    <!-- Cards Slider Container -->
+    <div class="relative border-b border-gray-500">
+      <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
+
+        <!-- Repeat the card 10 times -->
+        <div class="bg-[#F5F5F5] dark:bg-white/20 h-96  md:w-80 w-72 flex-shrink-0 backdrop-blur-lg rounded-xl p-4 shadow-lg border border-white/20 group relative">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4 rounded-lg">
+          <h3 class="font-bold mb-2 text-gray-800 dark:text-white">Wireless Mouse</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Ergonomic design</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-lg text-gray-800 dark:text-white">$39.99</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 line-through ml-2">$49.99</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="p-2 hover:bg-white/30 dark:hover:bg-white/40 rounded-full" title="wishlist">
+                <i class="bi bi-heart text-gray-800 dark:text-white"></i>
+              </button>
+              <button class="px-4 py-2 bg-black/30 text-white rounded-full hover:bg-black/40 dark:bg-white/30 dark:text-black dark:hover:bg-white/40">Add to Cart</button>
+            </div>
+          </div>
+        
+          <!-- Quick View Icon on Hover -->
+          <div class="absolute top-4 left-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button class="p-2 bg-gray-200  text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye text-gray-800"></i>
+              <span class="absolute left-[2.5rem] text-nowrap top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-700 dark:bg-gray-300 text-white dark:text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                Quick View
+              </span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-[#F5F5F5] dark:bg-white/20 h-96  md:w-80 w-72 flex-shrink-0 backdrop-blur-lg rounded-xl p-4 shadow-lg border border-white/20 group relative">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4 rounded-lg">
+          <h3 class="font-bold mb-2 text-gray-800 dark:text-white">Wireless Mouse</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Ergonomic design</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-lg text-gray-800 dark:text-white">$39.99</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 line-through ml-2">$49.99</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="p-2 hover:bg-white/30 dark:hover:bg-white/40 rounded-full" title="wishlist">
+                <i class="bi bi-heart text-gray-800 dark:text-white"></i>
+              </button>
+              <button class="px-4 py-2 bg-black/30 text-white rounded-full hover:bg-black/40 dark:bg-white/30 dark:text-black dark:hover:bg-white/40">Add to Cart</button>
+            </div>
+          </div>
+        
+          <!-- Quick View Icon on Hover -->
+          <div class="absolute top-4 left-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button class="p-2 bg-gray-200  text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye text-gray-800"></i>
+              <span class="absolute left-[2.5rem] text-nowrap top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-700 dark:bg-gray-300 text-white dark:text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                Quick View
+              </span>
+            </button>
+          </div>
+        </div>
+
+
+        <div class="bg-[#F5F5F5] dark:bg-white/20 h-96  md:w-80 w-72 flex-shrink-0 backdrop-blur-lg rounded-xl p-4 shadow-lg border border-white/20 group relative">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4 rounded-lg">
+          <h3 class="font-bold mb-2 text-gray-800 dark:text-white">Wireless Mouse</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Ergonomic design</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-lg text-gray-800 dark:text-white">$39.99</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 line-through ml-2">$49.99</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="p-2 hover:bg-white/30 dark:hover:bg-white/40 rounded-full" title="wishlist">
+                <i class="bi bi-heart text-gray-800 dark:text-white"></i>
+              </button>
+              <button class="px-4 py-2 bg-black/30 text-white rounded-full hover:bg-black/40 dark:bg-white/30 dark:text-black dark:hover:bg-white/40">Add to Cart</button>
+            </div>
+          </div>
+        
+          <!-- Quick View Icon on Hover -->
+          <div class="absolute top-4 left-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button class="p-2 bg-gray-200  text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye text-gray-800"></i>
+              <span class="absolute left-[2.5rem] text-nowrap top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-700 dark:bg-gray-300 text-white dark:text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                Quick View
+              </span>
+            </button>
+          </div>
+        </div>
+
+
+
+        <div class="bg-[#F5F5F5] dark:bg-white/20 h-96  md:w-80 w-72 flex-shrink-0 backdrop-blur-lg rounded-xl p-4 shadow-lg border border-white/20 group relative">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4 rounded-lg">
+          <h3 class="font-bold mb-2 text-gray-800 dark:text-white">Wireless Mouse</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Ergonomic design</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-lg text-gray-800 dark:text-white">$39.99</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 line-through ml-2">$49.99</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="p-2 hover:bg-white/30 dark:hover:bg-white/40 rounded-full" title="wishlist">
+                <i class="bi bi-heart text-gray-800 dark:text-white"></i>
+              </button>
+              <button class="px-4 py-2 bg-black/30 text-white rounded-full hover:bg-black/40 dark:bg-white/30 dark:text-black dark:hover:bg-white/40">Add to Cart</button>
+            </div>
+          </div>
+        
+          <!-- Quick View Icon on Hover -->
+          <div class="absolute top-4 left-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button class="p-2 bg-gray-200  text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye text-gray-800"></i>
+              <span class="absolute left-[2.5rem] text-nowrap top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-700 dark:bg-gray-300 text-white dark:text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                Quick View
+              </span>
+            </button>
+          </div>
+        </div>
+
+
+
+        <div class="bg-[#F5F5F5] dark:bg-white/20 h-96  md:w-80 w-72 flex-shrink-0 backdrop-blur-lg rounded-xl p-4 shadow-lg border border-white/20 group relative">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4 rounded-lg">
+          <h3 class="font-bold mb-2 text-gray-800 dark:text-white">Wireless Mouse</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Ergonomic design</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-lg text-gray-800 dark:text-white">$39.99</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 line-through ml-2">$49.99</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="p-2 hover:bg-white/30 dark:hover:bg-white/40 rounded-full" title="wishlist">
+                <i class="bi bi-heart text-gray-800 dark:text-white"></i>
+              </button>
+              <button class="px-4 py-2 bg-black/30 text-white rounded-full hover:bg-black/40 dark:bg-white/30 dark:text-black dark:hover:bg-white/40">Add to Cart</button>
+            </div>
+          </div>
+        
+          <!-- Quick View Icon on Hover -->
+          <div class="absolute top-4 left-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button class="p-2 bg-gray-200  text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye text-gray-800"></i>
+              <span class="absolute left-[2.5rem] text-nowrap top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-700 dark:bg-gray-300 text-white dark:text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                Quick View
+              </span>
+            </button>
+          </div>
+        </div>
+
+
+
+
+        <div class="bg-[#F5F5F5] dark:bg-white/20 h-96  md:w-80 w-72 flex-shrink-0 backdrop-blur-lg rounded-xl p-4 shadow-lg border border-white/20 group relative">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4 rounded-lg">
+          <h3 class="font-bold mb-2 text-gray-800 dark:text-white">Wireless Mouse</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Ergonomic design</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-lg text-gray-800 dark:text-white">$39.99</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 line-through ml-2">$49.99</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="p-2 hover:bg-white/30 dark:hover:bg-white/40 rounded-full" title="wishlist">
+                <i class="bi bi-heart text-gray-800 dark:text-white"></i>
+              </button>
+              <button class="px-4 py-2 bg-black/30 text-white rounded-full hover:bg-black/40 dark:bg-white/30 dark:text-black dark:hover:bg-white/40">Add to Cart</button>
+            </div>
+          </div>
+        
+          <!-- Quick View Icon on Hover -->
+          <div class="absolute top-4 left-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button class="p-2 bg-gray-200  text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye text-gray-800"></i>
+              <span class="absolute left-[2.5rem] text-nowrap top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-700 dark:bg-gray-300 text-white dark:text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                Quick View
+              </span>
+            </button>
+          </div>
+        </div>
+
+
+        <div class="bg-[#F5F5F5] dark:bg-white/20 h-96  md:w-80 w-72 flex-shrink-0 backdrop-blur-lg rounded-xl p-4 shadow-lg border border-white/20 group relative">
+          <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4 rounded-lg">
+          <h3 class="font-bold mb-2 text-gray-800 dark:text-white">Wireless Mouse</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">Ergonomic design</p>
+          <div class="flex justify-between items-center">
+            <div>
+              <span class="font-bold text-lg text-gray-800 dark:text-white">$39.99</span>
+              <span class="text-sm text-gray-500 dark:text-gray-400 line-through ml-2">$49.99</span>
+            </div>
+            <div class="flex gap-2">
+              <button class="p-2 hover:bg-white/30 dark:hover:bg-white/40 rounded-full" title="wishlist">
+                <i class="bi bi-heart text-gray-800 dark:text-white"></i>
+              </button>
+              <button class="px-4 py-2 bg-black/30 text-white rounded-full hover:bg-black/40 dark:bg-white/30 dark:text-black dark:hover:bg-white/40">Add to Cart</button>
+            </div>
+          </div>
+        
+          <!-- Quick View Icon on Hover -->
+          <div class="absolute top-4 left-5 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            <button class="p-2 bg-gray-200  text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+              <i class="bi bi-eye text-gray-800"></i>
+              <span class="absolute left-[2.5rem] text-nowrap top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-700 dark:bg-gray-300 text-white dark:text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                Quick View
+              </span>
+            </button>
+          </div>
+        </div>
+          
+
+      </div>
+    </div>
+
+  </section>
+
+
+
+  <!--  New Arrival -->
+  
+  
+<section id="new-arrival" class="items-start p-4 md:px-16 mt-8">
+  <div class="flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <div class="w-2 h-6 bg-red-500 rounded"></div>
+      <p class="text-red-500 font-semibold">Up Cooming</p>
+    </div>
+  </div>
+  <div class="flex items-center justify-between flex-col md:flex-row">
+    <h2 class="text-3xl font-bold text-center md:text-left">New Arrival</h2>
+
+
+    <!-- View All Products Button -->
+  <div class="text-center mt-8 mr-4">
+    <button id="toggle-view-button" class="bg-red-500 text-white px-6 py-3 rounded hidden lg:block">View All Products</button>
+  </div>
+    
+  </div>
+
+  <!-- Cards Container (this will be toggled between slider and grid) -->
+  <div id="product-container" class="relative">
+    <div id="slider-container" class="flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
+      
+      <div class="bg-[#F5F5F5] dark:bg-gray-900 text-white p-4 h-96  md:w-80 w-72 flex-shrink-0 dark:hover:bg-gray-800 transition-colors relative group rounded-lg">
+        <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+        <h3 class="font-bold mb-2 text-black dark:text-white">Gaming Keyboard</h3>
+        <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-bold text-red-400">$19.00</span>
+            <span class="text-sm text-red-400 line-through ml-2">$129.00</span>
+  
+          </div>
+          <button class="bg-red-600 text-white px-4 py-2 text-sm rounded-full hover:bg-red-700">Add to Cart</button>
+        </div>
+    
+        <!-- Hover Buttons in Top Right Corner -->
+        <div
+          class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-heart"></i>
+            <span
+              class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+          </button>
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-eye"></i>
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+              View</span>
+          </button>
+          
+        </div>
+      </div>
+
+      <div class="bg-[#F5F5F5] dark:bg-gray-900 text-white p-4 h-96  md:w-80 w-72 flex-shrink-0 dark:hover:bg-gray-800 transition-colors relative group rounded-lg">
+        <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+        <h3 class="font-bold mb-2 text-black dark:text-white">Gaming Keyboard</h3>
+        <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-bold text-red-400">$19.00</span>
+            <span class="text-sm text-red-400 line-through ml-2">$129.00</span>
+  
+          </div>
+          <button class="bg-red-600 text-white px-4 py-2 text-sm rounded-full hover:bg-red-700">Add to Cart</button>
+        </div>
+    
+        <!-- Hover Buttons in Top Right Corner -->
+        <div
+          class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-heart"></i>
+            <span
+              class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+          </button>
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-eye"></i>
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+              View</span>
+          </button>
+          
+        </div>
+      </div>
+
+
+      <div class="bg-[#F5F5F5] dark:bg-gray-900 text-white p-4 h-96  md:w-80 w-72 flex-shrink-0 dark:hover:bg-gray-800 transition-colors relative group rounded-lg">
+        <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+        <h3 class="font-bold mb-2 text-black dark:text-white">Gaming Keyboard</h3>
+        <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-bold text-red-400">$19.00</span>
+            <span class="text-sm text-red-400 line-through ml-2">$129.00</span>
+  
+          </div>
+          <button class="bg-red-600 text-white px-4 py-2 text-sm rounded-full hover:bg-red-700">Add to Cart</button>
+        </div>
+    
+        <!-- Hover Buttons in Top Right Corner -->
+        <div
+          class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-heart"></i>
+            <span
+              class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+          </button>
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-eye"></i>
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+              View</span>
+          </button>
+          
+        </div>
+      </div>
+
+
+      <div class="bg-[#F5F5F5] dark:bg-gray-900 text-white p-4 h-96  md:w-80 w-72 flex-shrink-0 dark:hover:bg-gray-800 transition-colors relative group rounded-lg">
+        <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+        <h3 class="font-bold mb-2 text-black dark:text-white">Gaming Keyboard</h3>
+        <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-bold text-red-400">$19.00</span>
+            <span class="text-sm text-red-400 line-through ml-2">$129.00</span>
+  
+          </div>
+          <button class="bg-red-600 text-white px-4 py-2 text-sm rounded-full hover:bg-red-700">Add to Cart</button>
+        </div>
+    
+        <!-- Hover Buttons in Top Right Corner -->
+        <div
+          class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-heart"></i>
+            <span
+              class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+          </button>
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-eye"></i>
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+              View</span>
+          </button>
+          
+        </div>
+      </div>
+
+
+      <div class="bg-[#F5F5F5] dark:bg-gray-900 text-white p-4 h-96  md:w-80 w-72 flex-shrink-0 dark:hover:bg-gray-800 transition-colors relative group rounded-lg">
+        <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+        <h3 class="font-bold mb-2 text-black dark:text-white">Gaming Keyboard</h3>
+        <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-bold text-red-400">$19.00</span>
+            <span class="text-sm text-red-400 line-through ml-2">$129.00</span>
+  
+          </div>
+          <button class="bg-red-600 text-white px-4 py-2 text-sm rounded-full hover:bg-red-700">Add to Cart</button>
+        </div>
+    
+        <!-- Hover Buttons in Top Right Corner -->
+        <div
+          class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-heart"></i>
+            <span
+              class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+          </button>
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-eye"></i>
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+              View</span>
+          </button>
+          
+        </div>
+      </div>
+
+
+      <div class="bg-[#F5F5F5] dark:bg-gray-900 text-white p-4 h-96  md:w-80 w-72 flex-shrink-0 dark:hover:bg-gray-800 transition-colors relative group rounded-lg">
+        <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+        <h3 class="font-bold mb-2 text-black dark:text-white">Gaming Keyboard</h3>
+        <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-bold text-red-400">$19.00</span>
+            <span class="text-sm text-red-400 line-through ml-2">$129.00</span>
+  
+          </div>
+          <button class="bg-red-600 text-white px-4 py-2 text-sm rounded-full hover:bg-red-700">Add to Cart</button>
+        </div>
+    
+        <!-- Hover Buttons in Top Right Corner -->
+        <div
+          class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-heart"></i>
+            <span
+              class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+          </button>
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-eye"></i>
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+              View</span>
+          </button>
+          
+        </div>
+      </div>
+
+      <div class="bg-[#F5F5F5] dark:bg-gray-900 text-white p-4 h-96  md:w-80 w-72 flex-shrink-0 dark:hover:bg-gray-800 transition-colors relative group rounded-lg">
+        <img src="/assests/pics (3).jpeg" alt="Product" class="h-48 w-full object-cover mb-4">
+        <h3 class="font-bold mb-2 text-black dark:text-white">Gaming Keyboard</h3>
+        <p class="text-gray-400 text-sm mb-4">RGB Mechanical</p>
+        <div class="flex justify-between items-center">
+          <div>
+            <span class="font-bold text-red-400">$19.00</span>
+            <span class="text-sm text-red-400 line-through ml-2">$129.00</span>
+  
+          </div>
+          <button class="bg-red-600 text-white px-4 py-2 text-sm rounded-full hover:bg-red-700">Add to Cart</button>
+        </div>
+    
+        <!-- Hover Buttons in Top Right Corner -->
+        <div
+          class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-heart"></i>
+            <span
+              class="absolute left-[-70px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
+          </button>
+          <button
+            class="p-2 bg-gray-200 text-black rounded-full shadow hover:bg-gray-300 transition duration-300 relative group/button">
+            <i class="bi bi-eye"></i>
+            <span
+              class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-300 text-black text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick
+              View</span>
+          </button>
+          
+        </div>
+      </div>
+      <!-- Repeat product cards as needed -->
+    </div>
+  </div>
+
+  
+</section>
+
+
+
+
+  
+  <%- include('./shared/footer') %>
+
+  
+
   <script>
-
-    // Check if dark mode preference is saved in localStorage
-    if (localStorage.getItem('darkMode') === 'true') {
-      document.documentElement.classList.add('dark');
-    }
-
-    // Function to toggle dark mode
-    const darkModeToggle = document.getElementById('darkModeToggle');
-    darkModeToggle.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      // Save dark mode preference in localStorage
-      if (document.documentElement.classList.contains('dark')) {
-        localStorage.setItem('darkMode', 'true');
+    // Get references to elements
+    const toggleViewButton = document.getElementById('toggle-view-button');
+    const sliderContainer = document.getElementById('slider-container');
+    
+    // Initialize state (slider view by default)
+    let isSliderView = true;
+  
+    // Toggle view function
+    toggleViewButton.addEventListener('click', () => {
+      if (isSliderView) {
+        // Switch to grid layout
+        sliderContainer.classList.remove('flex', 'overflow-x-scroll', 'space-x-6'); // Remove slider styles
+        sliderContainer.classList.add('grid', 'grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4', 'gap-6'); // Add grid styles
+        toggleViewButton.textContent = 'Back to Slider';  // Change button text
       } else {
-        localStorage.setItem('darkMode', 'false');
+        // Switch back to slider layout
+        sliderContainer.classList.add('flex', 'overflow-x-scroll', 'space-x-6'); // Add slider styles back
+        sliderContainer.classList.remove('grid', 'grid-cols-1', 'sm:grid-cols-2', 'md:grid-cols-3', 'lg:grid-cols-4', 'gap-6'); // Remove grid styles
+        toggleViewButton.textContent = 'View All Products';  // Reset button text
       }
+  
+      // Toggle state
+      isSliderView = !isSliderView;
     });
-
-    let currentIndex = 0;
-    const carouselItems = document.getElementById('carousel-items');
-    const totalItems = document.querySelectorAll('#carousel-items .flex-shrink-0').length;
-    // Get the icon elements
-    const prevIcon = document.getElementById('prev-icon');
-    const nextIcon = document.getElementById('next-icon');
-
-    // Add event listeners for hover
-    prevIcon.addEventListener('mouseenter', () => {
-      prevIcon.classList.remove('bi-arrow-left-circle');
-      prevIcon.classList.add('bi-arrow-left-circle-fill');
-    });
-
-    prevIcon.addEventListener('mouseleave', () => {
-      prevIcon.classList.remove('bi-arrow-left-circle-fill');
-      prevIcon.classList.add('bi-arrow-left-circle');
-    });
-
-    nextIcon.addEventListener('mouseenter', () => {
-      nextIcon.classList.remove('bi-arrow-right-circle');
-      nextIcon.classList.add('bi-arrow-right-circle-fill');
-    });
-
-    nextIcon.addEventListener('mouseleave', () => {
-      nextIcon.classList.remove('bi-arrow-right-circle-fill');
-      nextIcon.classList.add('bi-arrow-right-circle');
-    });
-
-    prevIcon.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-      updateCarousel();
-    });
-
-    nextIcon.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % totalItems;
-      updateCarousel();
-    });
-
-    function updateCarousel() {
-      carouselItems.style.transform = `translateX(-${currentIndex * 100}%)`;
-    }
   </script>
+
+
+    <script>
+
+
+
+      // Select all left and right buttons
+const leftButtons = document.querySelectorAll('.left-button');
+const rightButtons = document.querySelectorAll('.right-button');
+const sliders = document.querySelectorAll('.slider-container');
+
+// Loop through all left and right buttons and add event listeners
+leftButtons.forEach((button, index) => {
+  button.addEventListener('click', function () {
+    sliders[index].scrollBy({ left: -300, behavior: 'smooth' });
+  });
+});
+
+rightButtons.forEach((button, index) => {
+  button.addEventListener('click', function () {
+    sliders[index].scrollBy({ left: 300, behavior: 'smooth' });
+  });
+});
+
+      // Check if dark mode preference is saved in localStorage
+      if (localStorage.getItem('darkMode') === 'true') {
+        document.documentElement.classList.add('dark');
+      }
+
+      // Function to toggle dark mode
+      const darkModeToggle = document.getElementById('darkModeToggle');
+      darkModeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        // Save dark mode preference in localStorage
+        if (document.documentElement.classList.contains('dark')) {
+          localStorage.setItem('darkMode', 'true');
+        } else {
+          localStorage.setItem('darkMode', 'false');
+        }
+      });
+
+    
+      let swiper = new Swiper(".default-carousel", {
+        loop: true,
+        slidesPerView: 1,
+        spaceBetween: 20,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+        navigation: {
+          nextEl: ".swiper-button-next",
+          prevEl: ".swiper-button-prev",
+        },
+      });
+    
+
+      // let currentIndex = 0;
+      // const carouselItems = document.getElementById('carousel-items');
+      // const totalItems = document.querySelectorAll('#carousel-items .flex-shrink-0').length;
+      // // Get the icon elements
+      // const prevIcon = document.getElementById('prev-icon');
+      // const nextIcon = document.getElementById('next-icon');
+
+      // // Add event listeners for hover
+      // prevIcon.addEventListener('mouseenter', () => {
+      //   prevIcon.classList.remove('bi-arrow-left-circle');
+      //   prevIcon.classList.add('bi-arrow-left-circle-fill');
+      // });
+
+      // prevIcon.addEventListener('mouseleave', () => {
+      //   prevIcon.classList.remove('bi-arrow-left-circle-fill');
+      //   prevIcon.classList.add('bi-arrow-left-circle');
+      // });
+
+      // nextIcon.addEventListener('mouseenter', () => {
+      //   nextIcon.classList.remove('bi-arrow-right-circle');
+      //   nextIcon.classList.add('bi-arrow-right-circle-fill');
+      // });
+
+      // nextIcon.addEventListener('mouseleave', () => {
+      //   nextIcon.classList.remove('bi-arrow-right-circle-fill');
+      //   nextIcon.classList.add('bi-arrow-right-circle');
+      // });
+
+      // prevIcon.addEventListener('click', () => {
+      //   currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+      //   updateCarousel();
+      // });
+
+      // nextIcon.addEventListener('click', () => {
+      //   currentIndex = (currentIndex + 1) % totalItems;
+      //   updateCarousel();
+      // });
+
+      // function updateCarousel() {
+      //   carouselItems.style.transform = `translateX(-${currentIndex * 100}%)`;
+      // }
+    </script>
