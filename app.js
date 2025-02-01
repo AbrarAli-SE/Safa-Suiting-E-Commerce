@@ -67,6 +67,10 @@ app.get('/manageuser.html', (req, res, next) => {
   res.render("admin/user-management");
 });
 
+app.get('/user-details.html', (req, res, next) => {
+  res.render("admin/user-detail");
+});
+
 app.get('/profile.html', (req, res, next) => {
   res.render("admin/setting");
 });

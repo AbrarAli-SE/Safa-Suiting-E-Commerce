@@ -445,7 +445,11 @@ document.addEventListener('DOMContentLoaded', () => {
             </select>
           </td>
           <td class="pr-5 py-2">
-            <button id="updateRoleButton" data-user-id="${user.email}" class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition">
+            <a href="user-details.html?userId=${user.email}"
+                class="viewButton px-4 py-2 text-blue-500">
+                View
+            </a>
+            <button id="updateRoleButton" data-user-id="${user.email}" class="px-4 py-2 text-red-500">
               Update
             </button>
           </td>
@@ -481,6 +485,67 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error("Error in managing users:", error);
   }
 });
+                                        
+
+document.addEventListener("DOMContentLoaded", function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const userEmail = urlParams.get("userId"); // Treat it as an email, not an ID
+  console.log("Extracted userEmail:", userEmail);
+
+  if (!userEmail) {
+      console.error("Invalid User Email");
+      document.getElementById("userDetails").innerHTML = `<p class="text-red-500">Invalid User Email</p>`;
+      return;
+  }
+
+  async function fetchUserData(email) {
+      const userData = {
+          "johndoe@example.com": {
+              name: "John Doe",
+              email: "johndoe@example.com",
+              role: "User",
+              order: "Order #12345",
+              payment: "$100",
+              cancelOrder: "No",
+              personalDetails: "123 Main St, City, Country",
+          },
+          "itmesaad@gmail.com": {
+              name: "Saad Ali",
+              email: "itmesaad@gmail.com",
+              role: "Admin",
+              order: "Order #67890",
+              payment: "$200",
+              cancelOrder: "Yes",
+              personalDetails: "456 Elm St, City, Country",
+          }
+      };
+
+      return userData[email] || null;
+  }
+
+  async function displayUserDetails() {
+      const userDetailsDiv = document.getElementById("userDetails");
+      const userData = await fetchUserData(userEmail);
+
+      if (!userData) {
+          userDetailsDiv.innerHTML = `<p class="text-red-500">User not found</p>`;
+          return;
+      }
+
+      userDetailsDiv.innerHTML = `
+          <p><strong>Name:</strong> ${userData.name}</p>
+          <p><strong>Email:</strong> ${userData.email}</p>
+          <p><strong>Role:</strong> ${userData.role}</p>
+          <p><strong>Order:</strong> ${userData.order}</p>
+          <p><strong>Payment:</strong> ${userData.payment}</p>
+          <p><strong>Cancel Order:</strong> ${userData.cancelOrder}</p>
+          <p><strong>Personal Details:</strong> ${userData.personalDetails}</p>
+      `;
+  }
+
+  displayUserDetails();
+});
+
 
 
 document.addEventListener('DOMContentLoaded', () => {
