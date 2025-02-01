@@ -110,6 +110,10 @@ app.get('/profile.html', (req, res, next) => {
 app.get('/logout', (req, res, next) => {
   res.render("admin/intro");
 });
+
+app.get('/error', (req, res, next) => {
+  res.render("404-Error");
+});
 app.listen(3000, () => {
   console.log('Server is running on http://localhost:3000');
 });

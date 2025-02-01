@@ -1,12 +1,14 @@
 <%- include('./shared/header') %>
 
-  <main class="container mx-auto px-4 py-12 mt-14">
+  <main class="container mx-auto lg:px-16 px-4 py-12 mt-14 ">
     <!-- Breadcrumb -->
-    <nav class="text-sm text-gray-700 m-10 mr-3">
-      <span><a class="px-3 py-2" href="/">Home</a></span>
-      <span class="mx-2">/</span>
-      <span class="font-semibold text-black">Contact</span>
-    </nav>
+    <div class="text-sm text-gray-700 m-10 mr-3">
+        <nav class="flex space-x-2 text-sm text-gray-500">
+            <a href="/" class="hover:text-gray-900">Home</a>
+            <span>/</span>
+            <span class="text-gray-900">Contact</span>
+        </nav>
+    </div>
 
     <div class="flex flex-col md:flex-row gap-8">
         <!-- Left Column -->
@@ -43,18 +45,113 @@
         <div class="w-full md:w-2/3 p-6 shadow-lg rounded-lg bg-white">
             <form class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <input type="text" placeholder="Your Name *" class="w-full p-3 bg-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-red-600" required>
-                    <input type="email" placeholder="Your Email *" class="w-full p-3 bg-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-red-600" required>
-                    <input type="tel" placeholder="Your Phone *" class="w-full p-3 bg-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                    <div>
+                        <input type="text" id="name" placeholder="Your Name *" class="w-full p-3 bg-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                        <div id="nameError" class="hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+                    <div>
+                        <input type="email" id="email" placeholder="Your Email *" class="w-full p-3 bg-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                        <div id="emailError" class="hidden text-red-500 text-sm mt-1"></div>
+                    </div>
+                    <div>
+                        <input type="tel" id="phone" placeholder="Your Phone *" class="w-full p-3 bg-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-red-600" required>
+                        <div id="phoneError" class="hidden text-red-500 text-sm mt-1"></div>
+                    </div>
                 </div>
-                <textarea placeholder="Your Message" rows="6" class="w-full p-3 bg-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-red-600 resize-none"></textarea>
+                <div>
+                    <textarea id="message" placeholder="Your Message" rows="6" class="w-full p-3 bg-gray-50 rounded focus:outline-none focus:ring-2 focus:ring-red-600 resize-none"></textarea>
+                    <div id="messageError" class="hidden text-red-500 text-sm mt-1"></div>
+                </div>
                 <div class="flex justify-end">
                     <button type="submit" class="bg-red-600 text-white px-8 py-3 rounded hover:bg-red-500 transition-colors">
                         Send Message
                     </button>
                 </div>
             </form>
+            
         </div>
     </div>
   </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+
+        // Get form elements
+        const name = document.getElementById("name");
+        const email = document.getElementById("email");
+        const phone = document.getElementById("phone");
+        const message = document.getElementById("message");
+
+        // Get error message divs
+        const nameError = document.getElementById("nameError");
+        const emailError = document.getElementById("emailError");
+        const phoneError = document.getElementById("phoneError");
+        const messageError = document.getElementById("messageError");
+
+        // Function to hide errors when user starts typing
+        const hideErrorOnInput = (input, errorField) => {
+            input.addEventListener("input", () => {
+                errorField.classList.add("hidden");
+                errorField.textContent = "";
+            });
+        };
+
+        // Attach event listeners to hide error messages when typing
+        hideErrorOnInput(name, nameError);
+        hideErrorOnInput(email, emailError);
+        hideErrorOnInput(phone, phoneError);
+        hideErrorOnInput(message, messageError);
+
+        // Form validation on submit
+        form.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent form submission
+
+            let isValid = true;
+
+            // Clear previous errors
+            nameError.classList.add("hidden");
+            emailError.classList.add("hidden");
+            phoneError.classList.add("hidden");
+            messageError.classList.add("hidden");
+
+            // Name validation
+            if (name.value.trim() === "") {
+                nameError.textContent = "Name is required.";
+                nameError.classList.remove("hidden");
+                isValid = false;
+            }
+
+            // Email validation
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
+            if (!email.value.match(emailPattern)) {
+                emailError.textContent = "Enter a valid email address.";
+                emailError.classList.remove("hidden");
+                isValid = false;
+            }
+
+            // Phone validation
+            const phonePattern = /^[0-9]{10}$/;
+            if (!phone.value.match(phonePattern)) {
+                phoneError.textContent = "Enter a valid 10-digit phone number.";
+                phoneError.classList.remove("hidden");
+                isValid = false;
+            }
+
+            // Message validation (optional)
+            if (message.value.trim().length < 10) {
+                messageError.textContent = "Message should be at least 10 characters long.";
+                messageError.classList.remove("hidden");
+                isValid = false;
+            }
+
+            // If all fields are valid, submit the form (replace with actual submission logic)
+            if (isValid) {
+                alert("Form submitted successfully!");
+                // form.submit(); // Uncomment to allow actual form submission
+            }
+        });
+    });
+</script>
+
+
   <%- include('./shared/footer') %>
