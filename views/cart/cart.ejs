@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shopping Cart</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+  <div class="max-w-7xl mx-auto p-6 space-y-8">
+    <!-- Header -->
+    <div class="grid grid-cols-4 gap-4 pb-4 border-b">
+      <div class="text-gray-800 font-medium">Product</div>
+      <div class="text-gray-800 font-medium">Price</div>
+      <div class="text-gray-800 font-medium">Quantity</div>
+      <div class="text-gray-800 font-medium">Subtotal</div>
+    </div>
+
+    <!-- Cart Items -->
+    <div class="space-y-6">
+      <!-- LCD Monitor -->
+      <div class="grid grid-cols-4 gap-4 items-center py-6 border-b">
+        <div class="flex items-center gap-4">
+          <button class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50">✕</button>
+          <div class="flex items-center gap-3">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-nGWzNo8yn7Oivb0Q4uGzk0o011QAXh.png" alt="LCD Monitor" class="w-20 h-16 object-cover">
+            <span class="font-medium">LCD Monitor</span>
+          </div>
+        </div>
+        <div class="font-medium">$650</div>
+        <div>
+          <div class="inline-flex items-center border rounded">
+            <input type="number" value="01" class="w-16 px-3 py-2 text-center border-0 focus:ring-0 focus:outline-none">
+            <div class="flex flex-col border-l">
+              <button class="px-2 py-1 hover:bg-gray-50 border-b text-xs">▲</button>
+              <button class="px-2 py-1 hover:bg-gray-50 text-xs">▼</button>
+            </div>
+          </div>
+        </div>
+        <div class="font-medium">$650</div>
+      </div>
+
+      <!-- H1 Gamepad -->
+      <div class="grid grid-cols-4 gap-4 items-center py-6 border-b">
+        <div class="flex items-center gap-4">
+          <button class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50">✕</button>
+          <div class="flex items-center gap-3">
+            <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-nGWzNo8yn7Oivb0Q4uGzk0o011QAXh.png" alt="H1 Gamepad" class="w-20 h-16 object-cover">
+            <span class="font-medium">H1 Gamepad</span>
+          </div>
+        </div>
+        <div class="font-medium">$550</div>
+        <div>
+          <div class="inline-flex items-center border rounded">
+            <input type="number" value="02" class="w-16 px-3 py-2 text-center border-0 focus:ring-0 focus:outline-none">
+            <div class="flex flex-col border-l">
+              <button class="px-2 py-1 hover:bg-gray-50 border-b text-xs">▲</button>
+              <button class="px-2 py-1 hover:bg-gray-50 text-xs">▼</button>
+            </div>
+          </div>
+        </div>
+        <div class="font-medium">$1100</div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="flex justify-between pt-4">
+      <button class="px-6 py-2.5 border rounded hover:bg-gray-50">Return To Shop</button>
+      <button class="px-6 py-2.5 border rounded hover:bg-gray-50">Update Cart</button>
+    </div>
+
+    <!-- Coupon and Total -->
+    <div class="grid md:grid-cols-2 gap-8 pt-8">
+      <div class="flex gap-4">
+        <input type="text" placeholder="Coupon Code" class="flex-1 px-4 py-2.5 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
+        <button class="px-6 py-2.5 bg-red-500 text-white rounded hover:bg-red-600">Apply Coupon</button>
+      </div>
+      <div class="border rounded p-6">
+        <h2 class="text-xl font-semibold mb-6">Cart Total</h2>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center py-3 border-t">
+            <span class="text-gray-600">Subtotal:</span>
+            <span class="font-medium">$1750</span>
+          </div>
+          <div class="flex justify-between items-center py-3 border-t">
+            <span class="text-gray-600">Shipping:</span>
+            <span class="font-medium">Free</span>
+          </div>
+          <div class="flex justify-between items-center py-3 border-t">
+            <span class="text-gray-600">Total:</span>
+            <span class="font-medium">$1750</span>
+          </div>
+          <button class="w-full px-6 py-2.5 mt-4 bg-red-500 text-white rounded hover:bg-red-600">
+            Proceed to checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

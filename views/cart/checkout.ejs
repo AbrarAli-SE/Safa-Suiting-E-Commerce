@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout Page</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+
+  <div class="max-w-7xl mx-auto p-6">
+    <div class="grid lg:grid-cols-2 gap-12">
+      <!-- Billing Details Form -->
+      <div>
+        <h1 class="text-2xl font-bold mb-8">Billing Details</h1>
+        <form class="space-y-6">
+          <div>
+            <label class="block text-sm text-gray-600 mb-2">First Name<span class="text-red-500">*</span></label>
+            <input type="text" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-600 mb-2">Company Name</label>
+            <input type="text" class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-600 mb-2">Street Address<span class="text-red-500">*</span></label>
+            <input type="text" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-600 mb-2">Apartment, floor, etc. (optional)</label>
+            <input type="text" class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-600 mb-2">Town/City<span class="text-red-500">*</span></label>
+            <input type="text" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-600 mb-2">Phone Number<span class="text-red-500">*</span></label>
+            <input type="tel" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
+          </div>
+
+          <div>
+            <label class="block text-sm text-gray-600 mb-2">Email Address<span class="text-red-500">*</span></label>
+            <input type="email" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
+          </div>
+
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="save-info" class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500">
+            <label for="save-info" class="text-sm text-gray-600">Save this information for faster check-out next time</label>
+          </div>
+        </form>
+      </div>
+
+      <!-- Order Summary -->
+      <div>
+        <div class="bg-gray-50 p-6 rounded">
+          <div class="space-y-4">
+            <!-- Products -->
+            <div class="flex items-center justify-between py-4 border-b">
+              <div class="flex items-center gap-4">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Vouv2Vgw6AMU15loYgXHV29P9BNAJe.png" alt="LCD Monitor" class="w-12 h-12 object-cover">
+                <span>LCD Monitor</span>
+              </div>
+              <span class="font-medium">$650</span>
+            </div>
+
+            <div class="flex items-center justify-between py-4 border-b">
+              <div class="flex items-center gap-4">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Vouv2Vgw6AMU15loYgXHV29P9BNAJe.png" alt="H1 Gamepad" class="w-12 h-12 object-cover">
+                <span>H1 Gamepad</span>
+              </div>
+              <span class="font-medium">$1100</span>
+            </div>
+
+            <!-- Totals -->
+            <div class="space-y-3 py-4">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Subtotal:</span>
+                <span class="font-medium">$1750</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Shipping:</span>
+                <span class="font-medium">Free</span>
+              </div>
+              <div class="flex justify-between pt-3 border-t">
+                <span class="text-gray-600">Total:</span>
+                <span class="font-medium">$1750</span>
+              </div>
+            </div>
+
+            <!-- Payment Methods -->
+            <div class="space-y-4 py-4 border-t">
+              <div class="flex items-center gap-3">
+                <input type="radio" id="bank" name="payment" class="w-4 h-4 text-red-500 border-gray-300 focus:ring-red-500">
+                <label for="bank" class="flex items-center gap-2">
+                  Bank
+                  <div class="flex gap-2">
+                    <img src="/visa.png" alt="Visa" class="h-6">
+                    <img src="/mastercard.png" alt="Mastercard" class="h-6">
+                    <img src="/bkash.png" alt="bKash" class="h-6">
+                  </div>
+                </label>
+              </div>
+
+              <div class="flex items-center gap-3">
+                <input type="radio" id="cash" name="payment" class="w-4 h-4 text-red-500 border-gray-300 focus:ring-red-500">
+                <label for="cash">Cash on delivery</label>
+              </div>
+            </div>
+
+            <!-- Coupon -->
+            <div class="flex gap-4 py-4">
+              <input type="text" placeholder="Coupon Code" class="flex-1 p-3 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
+              <button class="px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600">Apply Coupon</button>
+            </div>
+
+            <!-- Place Order Button -->
+            <button class="w-full px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600">Place Order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

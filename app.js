@@ -35,6 +35,22 @@ app.get('/wishlist.html', (req, res, next) => {
   res.render("wishlist");
 });
 
+app.get('/my-orders', (req, res, next) => {
+  res.render("orders/order-summary");
+});
+
+app.get('/my-cancellations', (req, res, next) => {
+  res.render("orders/order-cancel");
+});
+
+app.get('/my-cart', (req, res, next) => {
+  res.render("cart/cart");
+});
+
+app.get('/checkout', (req, res, next) => {
+  res.render("cart/checkout");
+});
+
 app.get('/create.html', (req, res, next) => {
   res.render("auth/register");
 }); 
