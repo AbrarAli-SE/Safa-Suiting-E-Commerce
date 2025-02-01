@@ -751,6 +751,14 @@ video {
   border-width: 0;
 }
 
+.pointer-events-none {
+  pointer-events: none;
+}
+
+.pointer-events-auto {
+  pointer-events: auto;
+}
+
 .fixed {
   position: fixed;
 }
@@ -1082,6 +1090,10 @@ video {
   height: 100vh;
 }
 
+.h-60 {
+  height: 15rem;
+}
+
 .max-h-48 {
   max-height: 12rem;
 }
@@ -1132,6 +1144,10 @@ video {
 
 .w-full {
   width: 100%;
+}
+
+.w-96 {
+  width: 24rem;
 }
 
 .min-w-56 {
