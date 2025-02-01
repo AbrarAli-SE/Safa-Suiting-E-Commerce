@@ -1,0 +1,124 @@
+<%- include('./shared/header') %> 
+<main class="container mx-auto px-4 py-12 mt-14">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Breadcrumb & Welcome -->
+        <div class="flex justify-between items-center mb-8">
+            <nav class="flex space-x-2 text-sm text-gray-500">
+                <a href="/" class="hover:text-gray-900">Home</a>
+                <span>/</span>
+                <span class="text-gray-900">My Account</span>
+            </nav>
+            <div class="text-sm">
+                Welcome! <span class="text-red-500">Md Rimel</span>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <!-- Sidebar Navigation -->
+            <aside class="space-y-6">
+                <div class="space-y-2">
+                    <h2 class="font-semibold text-lg">Manage My Account</h2>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-red-500">My Profile</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-gray-900">Address Book</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-gray-900">My Payment Options</a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-2">
+                    <h2 class="font-semibold text-lg">My Orders</h2>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-600 hover:text-gray-900">My Returns</a></li>
+                        <li><a href="#" class="text-gray-600 hover:text-gray-900">My Cancellations</a></li>
+                    </ul>
+                </div>
+
+                <div class="space-y-2">
+                    <h2 class="font-semibold text-lg">My Wishlist</h2>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="md:col-span-3">
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <h1 class="text-2xl font-semibold text-red-500 mb-6">Edit Your Profile</h1>
+                    
+                    <form class="space-y-6">
+                        <!-- Name Fields -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">First Name</label>
+                                <input 
+                                    type="text" 
+                                    value="Md" 
+                                    class="w-full p-2 border rounded-md bg-gray-50"
+                                >
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">Last Name</label>
+                                <input 
+                                    type="text" 
+                                    value="Rimel" 
+                                    class="w-full p-2 border rounded-md bg-gray-50"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Email & Address -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">Email</label>
+                                <input 
+                                    type="email" 
+                                    value="rimel1111@gmail.com" 
+                                    class="w-full p-2 border rounded-md bg-gray-50"
+                                >
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block text-sm font-medium text-gray-700">Address</label>
+                                <input 
+                                    type="text" 
+                                    value="Kingston, 5236, United State" 
+                                    class="w-full p-2 border rounded-md bg-gray-50"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Password Changes -->
+                        <div class="space-y-4">
+                            <h2 class="font-medium">Password Changes</h2>
+                            <div class="space-y-4">
+                                <input 
+                                    type="password" 
+                                    placeholder="Current Password" 
+                                    class="w-full p-2 border rounded-md bg-gray-50"
+                                >
+                                <input 
+                                    type="password" 
+                                    placeholder="New Password" 
+                                    class="w-full p-2 border rounded-md bg-gray-50"
+                                >
+                                <input 
+                                    type="password" 
+                                    placeholder="Confirm New Password" 
+                                    class="w-full p-2 border rounded-md bg-gray-50"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex justify-end space-x-4">
+                            <button type="button" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+                                Cancel
+                            </button>
+                            <button type="submit" class="px-4 py-2 text-sm text-white bg-red-500 rounded-md hover:bg-red-600">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </main>
+        </div>
+    </div>
+</main>
+    <%- include('./shared/footer') %> 

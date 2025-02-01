@@ -19,16 +19,32 @@ app.get('/', (req, res, next) => {
   res.render("index");
 });
 
+app.get('/contact.html', (req, res, next) => {
+  res.render("contact");
+});
+
+app.get('/about.html', (req, res, next) => {
+  res.render("about");
+});
+
+app.get('/account.html', (req, res, next) => {
+  res.render("account");
+});
+
+app.get('/wishlist.html', (req, res, next) => {
+  res.render("wishlist");
+});
+
 app.get('/create.html', (req, res, next) => {
-  res.render("create");
+  res.render("auth/register");
 }); 
 
 app.get('/login.html', (req, res, next) => {
-  res.render("login");
+  res.render("auth/login");
 }); 
 
 app.get('/forgot.html', (req, res, next) => {
-  res.render("forgot");
+  res.render("auth/forgot-password");
 });
 
 app.get('/analytical.html', (req, res, next) => {

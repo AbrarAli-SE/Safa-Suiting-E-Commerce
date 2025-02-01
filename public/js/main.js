@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+
                               // This is humburger when toggle then sidebar show and hide only in small screens
 
 document.getElementById('hamburgerMenu').addEventListener('click', function () {
