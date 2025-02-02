@@ -3,7 +3,6 @@
   const morgan = require('morgan');
   const createHttpErrors = require('http-errors');
   const dbConfig = require('./config/dbConfig');
-  const transporter = require('./config/emailConfig');
   const authRoutes = require('./routes/auth');
   const userRoutes = require('./routes/user');
   const path = require('path');

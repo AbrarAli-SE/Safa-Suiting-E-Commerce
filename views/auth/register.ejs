@@ -11,7 +11,7 @@
 
 <body class="transition-all duration-300 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 overflow-hidden">
   <div class="flex min-h-screen">
-    
+
     <!-- Left Side: Image -->
     <div class="w-1/2 hidden lg:block bg-blue-50 items-center justify-center">
       <img src="/assests/login.jpeg" alt="Shopping" class="w-full h-full ">
@@ -45,8 +45,8 @@
           </div>
           <!-- Create Account Button -->
           <div id="submitField">
-            <button type="button"
-              class=" w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-600 dark:hover:bg-red-700" id="submitBtn">
+            <button type="button" id="submitBtn"
+              class=" w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-600 dark:hover:bg-red-700">
               Create Account
             </button>
           </div>
@@ -59,6 +59,7 @@
               <input id="otp" type="text" placeholder="Enter OTP"
                 class="w-full px-4 py-2 mb-3 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400"
                 required />
+              <div id="otpError" class="hidden text-red-500 text-sm mt-1"></div>
             </div>
             <!-- Verify Button -->
             <div>
@@ -82,7 +83,7 @@
             Sign up with Google
           </button>
         </div>
-        
+
         <!-- Login -->
         <p class="text-sm text-center text-gray-500 dark:text-gray-300 mt-6">
           Already have an account?
@@ -92,123 +93,215 @@
     </div>
   </div>
 
-  
-<script>
-   // Toggle Password Visibility
-   const togglePassword = document.getElementById('togglePassword');
-  // Handle Submit Button Click
-  const submitBtn = document.getElementById('submitBtn');
-  const emailField = document.getElementById('emailField');
-  const passwordField = document.getElementById('passwordField');
-  const otpSection = document.getElementById('otpSection');
-  const errorField = document.getElementById('errorField');
-  const emailError = document.getElementById('emailError');
-  const passwordError = document.getElementById('passwordError');
-  const otpInput = document.getElementById('otp'); // OTP input field
-  const emailInput = document.getElementById('email');
-  const passwordInput = document.getElementById('password');
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const emailInput = document.getElementById("email");
+      const passwordInput = document.getElementById("password");
+      const submitBtn = document.getElementById("submitBtn");
+      const otpSection = document.getElementById("otpSection");
+      const signupForm = document.getElementById("signupForm");
+      const errorField = document.getElementById("errorField");
+      const emailError = document.getElementById("emailError");
+      const passwordError = document.getElementById("passwordError");
+      const togglePassword = document.getElementById("togglePassword");
+      const backToSignIn = document.getElementById("backToSignIn");
+      const otpInput = document.getElementById("otp");
+      const otpError = document.getElementById("otpError");
+      const verifyOtpBtn = otpSection.querySelector("button[type='submit']");
+      let userEmail = "";
 
-  
-  togglePassword.addEventListener('click', () => {
-      const type = passwordInput.type === 'password' ? 'text' : 'password';
-      passwordInput.type = type;
-
-      // Toggle icon class
-      togglePassword.classList.toggle('bi-eye');
-      togglePassword.classList.toggle('bi-eye-slash');
-    });
-  
-  submitBtn.addEventListener('click', async () => {
-    const email = emailInput.value.trim();
-    const password = passwordInput.value.trim();
-  
-    // Reset Errors
-    emailError.classList.add('hidden');
-    passwordError.classList.add('hidden');
-    errorField.classList.add('hidden');
-  
-    // Validate Email
-    if (!validateEmail(email)) {
-      emailError.textContent = 'Please enter a valid email address.';
-      emailError.classList.remove('hidden');
-      return;
-    }
-  
-    // Validate Password
-    if (!validatePassword(password)) {
-      passwordError.textContent = 'Password must be at least 6 characters long.';
-      passwordError.classList.remove('hidden');
-      return;
-    }
-  
-    try {
-      // Send Request to Backend
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
-  
-      const result = await response.json();
-  
-      if (response.ok) {
-        // Show OTP Section
-        emailField.classList.add('hidden');
-        passwordField.classList.add('hidden');
-        submitBtn.parentElement.classList.add('hidden');
-        otpSection.classList.remove('hidden');
-      } else {
-        // Display Backend Errors
-        if (result.errorField === 'email') {
-          emailError.textContent = result.error || 'Invalid email address.';
-          emailError.classList.remove('hidden');
-        } else if (result.errorField === 'password') {
-          passwordError.textContent = result.error || 'Invalid password.';
-          passwordError.classList.remove('hidden');
-        } else {
-          errorField.textContent = result.error || 'An error occurred. Please try again.';
-          errorField.classList.remove('hidden');
-        }
+      function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
       }
-    } catch (error) {
-      errorField.textContent = 'Failed to connect to the server. Please try again later.';
-      errorField.classList.remove('hidden');
+
+      function validatePassword(password) {
+        return password.length >= 6;
+      }
+
+      togglePassword.addEventListener("click", function () {
+        if (passwordInput.type === "password") {
+          passwordInput.type = "text";
+          togglePassword.classList.replace("bi-eye-slash", "bi-eye");
+        } else {
+          passwordInput.type = "password";
+          togglePassword.classList.replace("bi-eye", "bi-eye-slash");
+        }
+      });
+
+      submitBtn.addEventListener("click", async function (e) {
+        e.preventDefault();
+
+        if (otpSection.classList.contains("hidden")) {
+          const email = emailInput.value.trim();
+          const password = passwordInput.value.trim();
+          emailError.classList.add("hidden");
+          passwordError.classList.add("hidden");
+          errorField.classList.add("hidden");
+
+          if (!validateEmail(email)) {
+            emailError.textContent = "Please enter a valid email address.";
+            emailError.classList.remove("hidden");
+            return;
+          }
+
+          if (!validatePassword(password)) {
+            passwordError.textContent = "Password must be at least 6 characters long.";
+            passwordError.classList.remove("hidden");
+            return;
+          }
+
+          try {
+            const response = await fetch("/auth/register", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+              userEmail = email;
+              signupForm.querySelectorAll("#emailField, #passwordField, #submitField").forEach(el => el.classList.add("hidden"));
+              otpSection.classList.remove("hidden");
+              emailInput.disabled = true;
+              passwordInput.disabled = true;
+              submitBtn.textContent = "Verify OTP";
+            } else {
+              errorField.textContent = data.error || "Registration failed.";
+              errorField.classList.remove("hidden");
+            }
+          } catch (err) {
+            errorField.textContent = "Server error. Please try again later.";
+            errorField.classList.remove("hidden");
+          }
+        } else {
+          const otp = otpInput.value.trim();
+          otpError.textContent = "";
+
+          if (!otp) {
+            otpError.textContent = "Please enter the OTP.";
+            return;
+          }
+
+          try {
+            const response = await fetch("/auth/verify-otp", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email: userEmail, otp }),
+            });
+
+            const data = await response.json();
+            if (response.ok) {
+              console.log("OTP Verified, redirecting...", data);
+              window.location.href = "/auth/login";
+            } else {
+              console.log("Error:", data);
+              otpError.textContent = data.error || "Invalid OTP. Please try again.";
+            }
+
+          } catch (err) {
+            otpError.textContent = "Server error. Please try again later.";
+          }
+        }
+      });
+
+      backToSignIn.addEventListener("click", function (e) {
+        e.preventDefault();
+        signupForm.querySelectorAll("#emailField, #passwordField, #submitField").forEach(el => el.classList.remove("hidden"));
+        otpSection.classList.add("hidden");
+        otpError.classList.add("hidden");
+      });
+    });
+
+  </script>
+  <!-- <script>
+
+document.addEventListener("DOMContentLoaded", function () {
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const submitBtn = document.getElementById("submitBtn");
+    const otpSection = document.getElementById("otpSection");
+    const signupForm = document.getElementById("signupForm");
+    const errorField = document.getElementById("errorField");
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+    const togglePassword = document.getElementById("togglePassword");
+    const backToSignIn = document.getElementById("backToSignIn");
+    const otpInput = document.getElementById("otp");
+    const otpError = document.getElementById("otpError");
+    const verifyOtpBtn = otpSection.querySelector("button[type='submit']");
+    
+    function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
     }
-  });
-  
-  // Simple Email Validation
-  function validateEmail(email) {
-    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    return re.test(email);
-  }
-  
-  // Simple Password Validation
-  function validatePassword(password) {
-    return password.length >= 6;
-  }
-  
-  // Hide Errors on Input
-  emailInput.addEventListener('input', () => {
-    emailError.classList.add('hidden');
-    errorField.classList.add('hidden');
-  });
-  passwordInput.addEventListener('input', () => {
-    passwordError.classList.add('hidden');
-    errorField.classList.add('hidden');
-  });
-  otpInput.addEventListener('input', () => {
-    errorField.classList.add('hidden');
-  });
-  
-  
-</script>  
-  
+    
+    function validatePassword(password) {
+        return password.length >= 6;
+    }
+    
+    togglePassword.addEventListener("click", function () {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            togglePassword.classList.replace("bi-eye-slash", "bi-eye");
+        } else {
+            passwordInput.type = "password";
+            togglePassword.classList.replace("bi-eye", "bi-eye-slash");
+        }
+    });
+    
+    submitBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        
+        const emailValue = emailInput.value.trim();
+        const passwordValue = passwordInput.value.trim();
+        let isValid = true;
+        
+        emailError.classList.add("hidden");
+        passwordError.classList.add("hidden");
+        errorField.classList.add("hidden");
+        
+        if (!validateEmail(emailValue)) {
+            emailError.textContent = "Please enter a valid email address.";
+            emailError.classList.remove("hidden");
+            isValid = false;
+        }
+        
+        if (!validatePassword(passwordValue)) {
+            passwordError.textContent = "Password must be at least 6 characters long.";
+            passwordError.classList.remove("hidden");
+            isValid = false;
+        }
+        
+        if (isValid) {
+            // Hide email and password fields, show OTP section
+            signupForm.querySelectorAll("#emailField, #passwordField, #submitField").forEach(el => el.classList.add("hidden"));
+            otpSection.classList.remove("hidden");
+        }
+    });
+    
+    backToSignIn.addEventListener("click", function (e) {
+        e.preventDefault();
+        signupForm.querySelectorAll("#emailField, #passwordField, #submitField").forEach(el => el.classList.remove("hidden"));
+        otpSection.classList.add("hidden");
+        otpError.classList.add("hidden");
+    });
+    
+    verifyOtpBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        
+        const otpValue = otpInput.value.trim();
+        if (otpValue !== "123456") { // Example OTP validation
+            otpError.textContent = "Invalid OTP. Please try again.";
+            otpError.classList.remove("hidden");
+        } else {
+            otpError.classList.add("hidden");
+            alert("OTP Verified Successfully!");
+            // Proceed with further actions, e.g., redirecting user
+        }
+    });
+});
+
+</script>  -->
+
 </body>
 
 </html>
-
-
-
-
-
-
