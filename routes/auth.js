@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const User = require('../models/User');
 const transporter = require('../config/emailConfig');
+
 const router = express.Router();
 
 
@@ -14,11 +15,16 @@ function generateOTP() {
 
 // Serve Register and Login Pages
 router.get('/register', (req, res) => {
-    res.render('auth/register');
-  });
+  res.render('auth/register');
+});
+
   
 router.get('/login', (req, res) => {
     res.render('auth/login');
+  });
+  
+router.get('/forgot-password', (req, res) => {
+    res.render('auth/forgot-password');
   });
 
 router.post('/register', async (req, res) => {

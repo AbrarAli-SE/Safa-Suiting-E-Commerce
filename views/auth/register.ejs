@@ -11,9 +11,6 @@
 
 <body class="transition-all duration-300 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100 overflow-hidden">
   <div class="flex min-h-screen">
-    <button id="darkModeToggle" class="fixed top-4 right-4 z-50 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg hover:bg-gray-700 transition">
-      Dark Mode
-    </button>
     
     <!-- Left Side: Image -->
     <div class="w-1/2 hidden lg:block bg-blue-50 items-center justify-center">
@@ -89,7 +86,7 @@
         <!-- Login -->
         <p class="text-sm text-center text-gray-500 dark:text-gray-300 mt-6">
           Already have an account?
-          <a href="/login.html" class="text-red-500 font-medium hover:underline dark:text-red-400">Log in</a>
+          <a href="/auth/login" class="text-red-500 font-medium hover:underline dark:text-red-400">Log in</a>
         </p>
       </div>
     </div>
@@ -97,27 +94,6 @@
 
   
 <script>
-
-function toggleDarkMode() {
-  document.documentElement.classList.toggle('dark');
-  const isDarkMode = document.documentElement.classList.contains('dark');
-  localStorage.setItem('dark-mode', isDarkMode ? 'enabled' : 'disabled');
-}
-
-const applySavedDarkMode = () => {
-  const savedMode = localStorage.getItem('dark-mode');
-  if (savedMode === 'enabled') {
-    document.documentElement.classList.add('dark');
-  }
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-  applySavedDarkMode();
-
-  const darkModeToggle = document.getElementById('darkModeToggle');
-  darkModeToggle.addEventListener('click', toggleDarkMode);
-});
-
    // Toggle Password Visibility
    const togglePassword = document.getElementById('togglePassword');
   // Handle Submit Button Click

@@ -1084,14 +1084,6 @@ video {
   margin-top: auto;
 }
 
-.mt-36 {
-  margin-top: 9rem;
-}
-
-.mb-10 {
-  margin-bottom: 2.5rem;
-}
-
 .block {
   display: block;
 }
@@ -2733,8 +2725,8 @@ video {
 }
 
 @media (min-width: 1024px) {
-  .lg\:mb-20 {
-    margin-bottom: 5rem;
+  .lg\:mb-16 {
+    margin-bottom: 4rem;
   }
 
   .lg\:mb-40 {
@@ -2759,14 +2751,6 @@ video {
 
   .lg\:mt-32 {
     margin-top: 8rem;
-  }
-
-  .lg\:mb-16 {
-    margin-bottom: 4rem;
-  }
-
-  .lg\:mt-20 {
-    margin-top: 5rem;
   }
 
   .lg\:block {
