@@ -75,21 +75,26 @@ router.get('/forgot-password', (req, res) => {
 });
 
   
-  router.post('/verify-otp', async (req, res) => {
-    const { email, otp } = req.body;
-    try {
+router.post('/verify-otp', async (req, res) => {
+  const { email, otp } = req.body;
+  try {
       const user = await User.findOne({ email });
-      if (!user || user.otp !== otp) return res.status(400).json({ error: 'Invalid OTP' });
-  
+      if (!user || user.otp !== otp) {
+          return res.status(400).json({ error: 'Invalid OTP' });
+      }
+
       user.verified = true;
       user.otp = null;
       await user.save();
-  
-      res.json({ message: 'Verification successful' });
-    } catch (err) {
+
+      res.json({ success: true, message: 'Verification successful' }); // Ensure success flag
+  } catch (err) {
+      console.error("OTP Verification Error:", err);
       res.status(500).json({ error: 'Server error' });
-    }
-  });
+  }
+});
+
+
   
   
   router.post('/login', async (req, res) => {

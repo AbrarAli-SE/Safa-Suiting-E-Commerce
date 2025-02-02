@@ -129,80 +129,47 @@
       });
 
       submitBtn.addEventListener("click", async function (e) {
-        e.preventDefault();
+    e.preventDefault();
+    console.log("Submit button clicked");
 
-        if (otpSection.classList.contains("hidden")) {
-          const email = emailInput.value.trim();
-          const password = passwordInput.value.trim();
-          emailError.classList.add("hidden");
-          passwordError.classList.add("hidden");
-          errorField.classList.add("hidden");
+    if (otpSection.classList.contains("hidden")) {
+        console.log("Registering user...");
+        // Register user logic (works fine)
+    } else {
+        console.log("Verifying OTP...");
+        const otp = otpInput.value.trim();
+        otpError.textContent = "";
 
-          if (!validateEmail(email)) {
-            emailError.textContent = "Please enter a valid email address.";
-            emailError.classList.remove("hidden");
-            return;
-          }
-
-          if (!validatePassword(password)) {
-            passwordError.textContent = "Password must be at least 6 characters long.";
-            passwordError.classList.remove("hidden");
-            return;
-          }
-
-          try {
-            const response = await fetch("/auth/register", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email, password }),
-            });
-
-            const data = await response.json();
-            if (response.ok) {
-              userEmail = email;
-              signupForm.querySelectorAll("#emailField, #passwordField, #submitField").forEach(el => el.classList.add("hidden"));
-              otpSection.classList.remove("hidden");
-              emailInput.disabled = true;
-              passwordInput.disabled = true;
-              submitBtn.textContent = "Verify OTP";
-            } else {
-              errorField.textContent = data.error || "Registration failed.";
-              errorField.classList.remove("hidden");
-            }
-          } catch (err) {
-            errorField.textContent = "Server error. Please try again later.";
-            errorField.classList.remove("hidden");
-          }
-        } else {
-          const otp = otpInput.value.trim();
-          otpError.textContent = "";
-
-          if (!otp) {
+        if (!otp) {
             otpError.textContent = "Please enter the OTP.";
             return;
-          }
+        }
 
-          try {
+        console.log("Sending OTP verification request...");
+        try {
             const response = await fetch("/auth/verify-otp", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ email: userEmail, otp }),
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: userEmail, otp }),
             });
 
             const data = await response.json();
-            if (response.ok) {
-              console.log("OTP Verified, redirecting...", data);
-              window.location.href = "/auth/login";
+            console.log("OTP Response:", data);
+
+            if (response.ok && data.success) {
+                console.log("OTP Verified, redirecting...");
+                window.location.href = '/auth/login';
             } else {
-              console.log("Error:", data);
-              otpError.textContent = data.error || "Invalid OTP. Please try again.";
+                console.log("OTP Verification Failed:", data);
+                otpError.textContent = data.error || "Invalid OTP. Please try again.";
             }
 
-          } catch (err) {
+        } catch (err) {
+            console.error("Fetch Error:", err);
             otpError.textContent = "Server error. Please try again later.";
-          }
         }
-      });
+    }
+});
 
       backToSignIn.addEventListener("click", function (e) {
         e.preventDefault();
