@@ -26,9 +26,21 @@
     "vite": "^6.0.7"
   },
   "dependencies": {
-    "@splidejs/splide": "^4.1.4",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
+    "crypto": "^1.0.1",
+    "dotenv": "^16.4.7",
+    "express-session": "^1.18.1",
+    "express-validator": "^7.2.1",
+    "http-errors": "^2.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.5",
+    "nodemailer": "^6.9.16",
+    "passport": "^0.7.0",
+    "passport-google-oauth20": "^2.0.0",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
+    "morgan": "^1.10.0",
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss-animate": "^1.0.7"
   }
