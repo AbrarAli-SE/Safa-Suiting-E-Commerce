@@ -1,13 +1,17 @@
 require('dotenv').config();
-// Import necessary modules
 const express = require('express');
 const morgan = require('morgan');
-const mongoose = require('mongoose');
-const path = require('path');
 const createHttpErrors = require('http-errors');
+const dbConfig = require('./config/dbConfig');
+const transporter = require('./config/emailConfig');
+const authRoutes = require('./routes/auth');
+const path = require('path');
 
-// Create an instance of the express app
 const app = express();
+app.use(express.json());
+
+// Database Connection
+dbConfig();
 
 app.use(morgan('dev'));
 // Set the view engine to EJS
@@ -22,10 +26,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res, next) => {
-  res.render("index");
-});
 
+// Routes
+app.use('/api', authRoutes);
 
 // 404 error handling
 app.use((req, res, next) => {
@@ -39,7 +42,4 @@ app.use((error, req, res, next) => {
   res.render('404-Error', { error });
 });
 
-
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
-});
+app.listen(3000, () => console.log('Server running on port 3000'));
