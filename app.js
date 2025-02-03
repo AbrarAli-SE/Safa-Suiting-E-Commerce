@@ -1,14 +1,17 @@
   require('dotenv').config();
   const express = require('express');
+  const cookieParser = require("cookie-parser");
   const morgan = require('morgan');
   const createHttpErrors = require('http-errors');
   const dbConfig = require('./config/dbConfig');
   const authRoutes = require('./routes/auth');
   const userRoutes = require('./routes/user');
+  const verifyToken = require("./middleware/authMiddleware");
   const path = require('path');
 
   const app = express();
   app.use(express.json());
+  app.use(cookieParser());  // ✅ Enable Cookie Parser
 
   // Database Connection
   dbConfig();
@@ -27,16 +30,24 @@
   app.use(express.urlencoded({ extended: false }));
 
 
-  // Serve Index Page
-  app.get('/', (req, res) => {
-    console.log('Index route accessed');
-    res.render('index');
-  });
-  
+// ✅ Public Index Page
+app.get("/", (req, res) => {
+    const token = req.cookies.authToken;
+    if (!token) return res.render("index");
+    return res.redirect("/dashboard");
+});
 
+// ✅ Protected Dashboard Route
+app.get("/dashboard", verifyToken, (req, res) => {
+  res.render("dashboard", { user: req.user });
+});
+
+app.get("/admin", verifyToken, (req, res) => {
+  res.render("admin/intro");
+});
 
   // Routes
-  app.use('/api', authRoutes);
+  // app.use('/api', authRoutes);
   app.use('/auth', authRoutes);
   app.use('/user', userRoutes);
 

@@ -6,16 +6,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      trim: true,
-      lowercase: true,
     },
-    username: {
+    name: {
       type: String,
       required: true,
-      trim: true,
-      default: function () {
-        return this.email.split('@')[0]; // Extracts username from email
-      },
     },
     password: {
       type: String,
@@ -38,6 +32,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    tokens: [{ token: { type: String } }]  // ✅ Store active JWTs
   },
   { timestamps: true } // Adds createdAt & updatedAt
 );
