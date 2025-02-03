@@ -11,7 +11,7 @@
   app.use(express.json());
 
   // Database Connection
-  // dbConfig();
+  dbConfig();
 
   app.use(morgan('dev'));
   // Set the view engine to EJS
