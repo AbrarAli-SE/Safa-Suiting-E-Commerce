@@ -3,84 +3,61 @@
 
 
 
-  <section class="flex flex-row items-start p-4 md:px-20 mt-28">
-    <aside class="w-72 h-[21.8125rem] border-r border-gray-500 hidden xlg:block mr-3  dark:border-gray-600 opacity-0 translate-y-10 transition-all duration-500" data-scroll>
-      <!-- Content for the aside section -->
-      <ul class="space-y-3 mt-14 px-4">
-        <li class="text-nowrap">
-          <a href="#flash-sales" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Flash Sales</a>
-        </li>
-        <li class="text-nowrap">
-          <a href="#best-products" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Best Selling Products</a>
-        </li>
-        <li class="text-nowrap">
-          <a href="#explore-products" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">Explore Products</a>
-        </li>
-        <li class="text-nowrap">
-          <a href="#new-arrival" class="hover:text-[#DB4444] dark:hover:text-[#de2d2d]">New Arrival</a>
-        </li>
-      </ul>
-    </aside>
-
-    <div class="w-full xlg:w-[calc(100%-18rem)] h-[21.8125rem] xlg:ml-3 dark:bg-gray-900 opacity-0 translate-y-10 transition-all duration-500" data-scroll>
-       <!--HTML CODE-->
-    <div class="w-full relative ">
-      <div class="swiper default-carousel swiper-container">
-      <div class="swiper-wrapper">
-      <div class="swiper-slide">
-        <div class=" isolate  flex-col rounded-2xl h-[24rem] flex justify-center items-center overflow-hidden opacity-0 translate-y-10 transition-all duration-700" data-scroll>
-          <!-- <span class="text-3xl font-semibold text-indigo-600">Slide 1 </span> -->
-          <img src="/assests/image.png" class="w-full h-full lg:object-fill  object-cover">
-
-          <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40">
-            <!-- Button below the context -->
-              <button class="z-10 mt-80 ml-[21px] text-2xl hover:underline text-white p-2">Shop Now</button>
+  <section class="flex flex-row items-start p-4  mt-[7rem] w-full h-[75vh]">
+    <div class="w-full xlg:ml-3 opacity-0 translate-y-10 transition-all duration-500" data-scroll>
+      <div class="w-full relative">
+        <div class="swiper default-carousel swiper-container">
+          <div class="swiper-wrapper">
+            <div class="swiper-slide">
+              <div
+                class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden opacity-100 transition-all duration-700">
+                <img src="/assests/image.png" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
+                  <button class="z-10 text-2xl hover:underline text-white p-2">Shop Now</button>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div
+                class="flex-col rounded-2xl h-[30rem] flex justify-center items-center overflow-hidden opacity-100 transition-all duration-700">
+                <img src="/assests/image.png" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
+                  <button class="z-10 text-2xl hover:underline text-white p-2">Shop Now</button>
+                </div>
+              </div>
+            </div>
+            <div class="swiper-slide">
+              <div
+                class="flex-col rounded-2xl h-[30rem] flex justify-center items-center overflow-hidden opacity-100 transition-all duration-700">
+                <img src="/assests/image.png" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
+                  <button class="z-10 text-2xl hover:underline text-white p-2">Shop Now</button>
+                </div>
+              </div>
+            </div>
           </div>
+          <button id="slider-button-left"
+            class="swiper-button-prev group p-2 flex justify-center items-center border border-solid border-red-600 w-12 h-12 transition-all duration-500 rounded-full left-5 hover:bg-red-500">
+            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16" fill="none">
+              <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button id="slider-button-right"
+            class="swiper-button-next group p-2 flex justify-center items-center border border-solid border-red-600 w-12 h-12 transition-all duration-500 rounded-full right-5 hover:bg-red-500">
+            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16" fill="none">
+              <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div class="swiper-pagination"></div>
         </div>
       </div>
-      <div class="swiper-slide">
-        <div class=" isolate  flex-col rounded-2xl h-[24rem] flex justify-center items-center overflow-hidden opacity-0 translate-y-10 transition-all duration-700" data-scroll>
-          <!-- <span class="text-3xl font-semibold text-indigo-600">Slide 1 </span> -->
-          <img src="/assests/image.png" class="w-full h-full lg:object-fill  object-cover">
-
-          <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40">
-            <!-- Button below the context -->
-              <button class="z-10 mt-80 ml-[21px] text-2xl hover:underline text-white p-2">Shop Now</button>
-          </div>
-        </div>
-      </div>
-      <div class="swiper-slide">
-        <div class=" isolate  flex-col rounded-2xl h-[24rem] flex justify-center items-center overflow-hidden opacity-0 translate-y-10 transition-all duration-700" data-scroll>
-          <!-- <span class="text-3xl font-semibold text-indigo-600">Slide 1 </span> -->
-          <img src="/assests/image.png" class="w-full h-full lg:object-fill  object-cover">
-
-          <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40">
-            <!-- Button below the context -->
-              <button class="z-10 mt-80 ml-[21px] text-2xl hover:underline  text-white p-2">Shop Now</button>
-          </div>
-        </div>
-      </div>
-      </div>
-      <div class="flex items-center gap-8 lg:justify-start justify-center">
-      <button id="slider-button-left" class="swiper-button-prev group !p-2 flex justify-center items-center border border-solid border-red-600 !w-12 !h-12 transition-all duration-500 rounded-full !top-[245px] !-translate-y-8 !left-5 hover:bg-red-500 " data-carousel-prev>
-        <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M10.0002 11.9999L6 7.99971L10.0025 3.99719" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
-      <button id="slider-button-right" class="swiper-button-next group !p-2 flex justify-center items-center border border-solid border-red-600 !w-12 !h-12 transition-all duration-500 rounded-full !top-[245px] !-translate-y-8  !right-5 hover:bg-red-500" data-carousel-next>
-        <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M5.99984 4.00012L10 8.00029L5.99748 12.0028" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </button>
-      </div>
-      <div class="swiper-pagination "></div>
-
-      </div>
-      </div>
-  
     </div>
- 
   </section>
+
 
 
   <!-- Flash Sales Section -->
