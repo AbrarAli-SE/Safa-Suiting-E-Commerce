@@ -71,40 +71,39 @@ exports.login = async (req, res) => {
 };
 
 
-
 // ✅ Register User & Send OTP
 exports.register = async (req, res) => {
     const { name, email, password } = req.body;
     try {
         const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ error: "User already exists." });
+        if (existingUser) {
+            return res.status(400).json({ error: "User already exists." });
+        }
 
         const otp = generateOTP();
-        const otpExpires = new Date(Date.now() + 5 * 60 * 1000); // ✅ Expires in 5 minutes
-
+        const otpExpires = new Date(Date.now() + 5 * 60 * 1000); // ✅ OTP expires in 5 minutes
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // ✅ Get admin emails from .env
-        const adminEmails = process.env.ADMIN_EMAILS.split(","); // Convert to array
+        const adminEmails = process.env.ADMIN_EMAILS.split(",");
         const role = adminEmails.includes(email) ? "admin" : "user"; // ✅ Assign role dynamically
 
         const newUser = new User({ name, email, password: hashedPassword, otp, otpExpires, role });
         await newUser.save();
 
-        // ✅ Send OTP via Email (implement sendOtpEmail function)
-        // await sendOtpEmail(email, otp);
-
-        // Send OTP email
+        // ✅ Send OTP email
         try {
-            const html = `<p>Your OTP is: ${otp}</p>`;
-            await sendEmail(email, 'Verify Your OTP', html);
+            const html = `<p>Your OTP is: <strong>${otp}</strong></p>`;
+            await sendEmail(email, "Verify Your OTP", html);
         } catch (emailError) {
             console.error("Email sending failed:", emailError);
-            return res.status(500).json({ error: 'Failed to send OTP. Please try again later.' });
+            return res.status(500).json({ error: "Failed to send OTP. Please try again later." });
         }
 
         res.status(200).json({ success: true, message: "User registered. OTP sent to email." });
+
     } catch (error) {
+        console.error("Register Error:", error);
         res.status(500).json({ error: "Server error." });
     }
 };
@@ -114,8 +113,17 @@ exports.verifyOTP = async (req, res) => {
     const { email, otp } = req.body;
     try {
         const user = await User.findOne({ email });
-        if (!user || user.otp !== otp || user.otpExpires < Date.now()) {
-            return res.status(400).json({ error: "Invalid or expired OTP" });
+
+        if (!user) {
+            return res.status(400).json({ error: "User not found." });
+        }
+
+        // ✅ Check if OTP is correct & not expired
+        if (user.otp !== otp) {
+            return res.status(400).json({ error: "Invalid OTP. Please try again." });
+        }
+        if (user.otpExpires < Date.now()) {
+            return res.status(400).json({ error: "OTP expired. Please request a new one." });
         }
 
         user.verified = true;
@@ -123,17 +131,127 @@ exports.verifyOTP = async (req, res) => {
         user.otpExpires = null;
 
         // ✅ Generate JWT Token
-        const token = jwt.sign({ userId: user._id, name: user.name, email: user.email, role: user.role }, secretKey, { expiresIn });
+        const token = jwt.sign(
+            { userId: user._id, name: user.name, email: user.email, role: user.role },
+            secretKey,
+            { expiresIn }
+        );
 
         user.tokens.push({ token });
         await user.save();
 
-        res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 }); // ✅ Store JWT in cookies
-        res.json({ success: true, message: "Verification successful", token , role: user.role });
+        res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
+
+        res.json({ success: true, message: "Verification successful", token, role: user.role });
+
     } catch (err) {
+        console.error("OTP Verification Error:", err);
         res.status(500).json({ error: "Server error." });
     }
 };
+
+// ✅ Resend OTP Function
+exports.resendOTP = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({ error: "User not found." });
+        }
+
+        // ✅ If the user is already verified, no need to resend OTP
+        if (user.verified) {
+            return res.status(400).json({ error: "User is already verified. Please login." });
+        }
+
+        // ✅ Generate a new OTP
+        const newOtp = generateOTP();
+        user.otp = newOtp;
+        user.otpExpires = new Date(Date.now() + 5 * 60 * 1000); // OTP valid for 5 minutes
+        await user.save();
+
+        // ✅ Send OTP email
+        try {
+            const html = `<p>Your new OTP is: <strong>${newOtp}</strong></p>`;
+            await sendEmail(email, "Your New OTP", html);
+        } catch (emailError) {
+            console.error("Email sending failed:", emailError);
+            return res.status(500).json({ error: "Failed to send new OTP. Please try again later." });
+        }
+
+        res.status(200).json({ success: true, message: "A new OTP has been sent to your email." });
+
+    } catch (error) {
+        console.error("Resend OTP Error:", error);
+        res.status(500).json({ error: "Server error." });
+    }
+};
+
+
+// // ✅ Register User & Send OTP
+// exports.register = async (req, res) => {
+//     const { name, email, password } = req.body;
+//     try {
+//         const existingUser = await User.findOne({ email });
+//         if (existingUser) return res.status(400).json({ error: "User already exists." });
+
+//         const otp = generateOTP();
+//         const otpExpires = new Date(Date.now() + 5 * 60 * 1000); // ✅ Expires in 5 minutes
+
+//         const hashedPassword = await bcrypt.hash(password, 10);
+
+//         // ✅ Get admin emails from .env
+//         const adminEmails = process.env.ADMIN_EMAILS.split(","); // Convert to array
+//         const role = adminEmails.includes(email) ? "admin" : "user"; // ✅ Assign role dynamically
+
+//         const newUser = new User({ name, email, password: hashedPassword, otp, otpExpires, role });
+//         await newUser.save();
+
+//         // ✅ Send OTP via Email (implement sendOtpEmail function)
+//         // await sendOtpEmail(email, otp);
+
+//         // Send OTP email
+//         try {
+//             const html = `<p>Your OTP is: ${otp}</p>`;
+//             await sendEmail(email, 'Verify Your OTP', html);
+//         } catch (emailError) {
+//             console.error("Email sending failed:", emailError);
+//             return res.status(500).json({ error: 'Failed to send OTP. Please try again later.' });
+//         }
+
+//         res.status(200).json({ success: true, message: "User registered. OTP sent to email." });
+//     } catch (error) {
+//         res.status(500).json({ error: "Server error." });
+//     }
+// };
+
+// // ✅ Verify OTP & Generate JWT
+// exports.verifyOTP = async (req, res) => {
+//     const { email, otp } = req.body;
+//     try {
+//         const user = await User.findOne({ email });
+//         if (!user || user.otp !== otp || user.otpExpires < Date.now()) {
+//             return res.status(400).json({ error: "Invalid or expired OTP" });
+//         }
+
+//         user.verified = true;
+//         user.otp = null;
+//         user.otpExpires = null;
+
+//         // ✅ Generate JWT Token
+//         const token = jwt.sign({ userId: user._id, name: user.name, email: user.email, role: user.role }, secretKey, { expiresIn });
+
+//         user.tokens.push({ token });
+//         await user.save();
+
+//         res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 }); // ✅ Store JWT in cookies
+//         res.json({ success: true, message: "Verification successful", token , role: user.role });
+//     } catch (err) {
+//         res.status(500).json({ error: "Server error." });
+//     }
+// };
 
 // ✅ Logout (Remove JWT)
 exports.logout = async (req, res) => {
