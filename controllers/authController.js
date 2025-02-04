@@ -7,6 +7,32 @@ const { secretKey, expiresIn } = require("../config/jwtConfig");
 // Generate OTP Function
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
+// ✅ Function to Generate Secure Random Password
+const generateRandomPassword = () => {
+    const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowercase = "abcdefghijklmnopqrstuvwxyz";
+    const numbers = "0123456789";
+    const specialChars = "!@#$%^&*()-_=+<>?";
+    
+    const allCharacters = uppercase + lowercase + numbers + specialChars;
+    let password = "";
+
+    // ✅ Ensure at least one character from each category
+    password += uppercase[Math.floor(Math.random() * uppercase.length)];
+    password += lowercase[Math.floor(Math.random() * lowercase.length)];
+    password += numbers[Math.floor(Math.random() * numbers.length)];
+    password += specialChars[Math.floor(Math.random() * specialChars.length)];
+
+    // ✅ Fill remaining characters randomly (length 10)
+    for (let i = 4; i < 10; i++) { 
+        password += allCharacters[Math.floor(Math.random() * allCharacters.length)];
+    }
+
+    // ✅ Shuffle the password to avoid predictable patterns
+    return password.split("").sort(() => 0.5 - Math.random()).join("");
+};
+
+
 
 exports.renderRegisterPage = (req, res) => {
     res.render("auth/register");
@@ -189,70 +215,6 @@ exports.resendOTP = async (req, res) => {
     }
 };
 
-
-// // ✅ Register User & Send OTP
-// exports.register = async (req, res) => {
-//     const { name, email, password } = req.body;
-//     try {
-//         const existingUser = await User.findOne({ email });
-//         if (existingUser) return res.status(400).json({ error: "User already exists." });
-
-//         const otp = generateOTP();
-//         const otpExpires = new Date(Date.now() + 5 * 60 * 1000); // ✅ Expires in 5 minutes
-
-//         const hashedPassword = await bcrypt.hash(password, 10);
-
-//         // ✅ Get admin emails from .env
-//         const adminEmails = process.env.ADMIN_EMAILS.split(","); // Convert to array
-//         const role = adminEmails.includes(email) ? "admin" : "user"; // ✅ Assign role dynamically
-
-//         const newUser = new User({ name, email, password: hashedPassword, otp, otpExpires, role });
-//         await newUser.save();
-
-//         // ✅ Send OTP via Email (implement sendOtpEmail function)
-//         // await sendOtpEmail(email, otp);
-
-//         // Send OTP email
-//         try {
-//             const html = `<p>Your OTP is: ${otp}</p>`;
-//             await sendEmail(email, 'Verify Your OTP', html);
-//         } catch (emailError) {
-//             console.error("Email sending failed:", emailError);
-//             return res.status(500).json({ error: 'Failed to send OTP. Please try again later.' });
-//         }
-
-//         res.status(200).json({ success: true, message: "User registered. OTP sent to email." });
-//     } catch (error) {
-//         res.status(500).json({ error: "Server error." });
-//     }
-// };
-
-// // ✅ Verify OTP & Generate JWT
-// exports.verifyOTP = async (req, res) => {
-//     const { email, otp } = req.body;
-//     try {
-//         const user = await User.findOne({ email });
-//         if (!user || user.otp !== otp || user.otpExpires < Date.now()) {
-//             return res.status(400).json({ error: "Invalid or expired OTP" });
-//         }
-
-//         user.verified = true;
-//         user.otp = null;
-//         user.otpExpires = null;
-
-//         // ✅ Generate JWT Token
-//         const token = jwt.sign({ userId: user._id, name: user.name, email: user.email, role: user.role }, secretKey, { expiresIn });
-
-//         user.tokens.push({ token });
-//         await user.save();
-
-//         res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 }); // ✅ Store JWT in cookies
-//         res.json({ success: true, message: "Verification successful", token , role: user.role });
-//     } catch (err) {
-//         res.status(500).json({ error: "Server error." });
-//     }
-// };
-
 // ✅ Logout (Remove JWT)
 exports.logout = async (req, res) => {
     try {
@@ -266,5 +228,40 @@ exports.logout = async (req, res) => {
         res.json({ success: true, message: "Logged out successfully" });
     } catch (err) {
         res.status(500).json({ error: "Server error." });
+    }
+};
+
+
+
+// ✅ Forgot Password Controller
+exports.forgotPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ error: "User not found" });
+        }
+
+        // ✅ Generate New Secure Password
+        const newPassword = generateRandomPassword();
+        const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+        user.password = hashedPassword;
+        await user.save();
+
+        // ✅ Send Email with New Password
+        try {
+            const html = `<p>Your new password is: <strong>${newPassword}</strong></p>`;
+            await sendEmail(email, "Password Reset", html);
+        } catch (emailError) {
+            console.error("Email sending failed:", emailError);
+            return res.status(500).json({ error: "Failed to send email. Please try again later." });
+        }
+
+        res.json({ success: true, message: "New password sent to email" });
+    } catch (err) {
+        console.error("Forgot Password Error:", err);
+        res.status(500).json({ error: "Server error" });
     }
 };

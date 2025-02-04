@@ -46,6 +46,8 @@ app.get("/admin", verifyToken, (req, res) => {
   res.render("admin/intro");
 });
 
+
+
   // Routes
   // app.use('/api', authRoutes);
   app.use('/auth', authRoutes);

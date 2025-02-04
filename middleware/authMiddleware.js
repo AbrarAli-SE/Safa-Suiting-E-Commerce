@@ -7,7 +7,7 @@ const verifyToken = async (req, res, next) => {
         const token = req.cookies.authToken || req.headers.authorization?.split(" ")[1];
 
         if (!token) {
-            return res.redirect("/auth/login"); // ✅ Redirect to Login if No Token Found
+            return res.redirect("/"); // ✅ Redirect to Login if No Token Found
         }
 
         const decoded = jwt.verify(token, secretKey);
