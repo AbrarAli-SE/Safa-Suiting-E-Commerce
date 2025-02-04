@@ -236,7 +236,8 @@ router.post("/resend-otp", authController.resendOTP); // ✅ Resend OTP API
 router.post("/forgot-password", authController.forgotPassword);
 // ✅ Process Login Request
 router.post("/login", authController.login);
-router.post("/logout", authController.logout);
+// ✅ Ensure Logout Route Exists
+router.get("/logout", authController.logout);
 
 module.exports = router;
 

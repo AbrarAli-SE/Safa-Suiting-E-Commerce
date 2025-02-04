@@ -215,21 +215,39 @@ exports.resendOTP = async (req, res) => {
     }
 };
 
-// ✅ Logout (Remove JWT)
+// ✅ Logout (Remove JWT & Redirect)
 exports.logout = async (req, res) => {
     try {
         const token = req.cookies.authToken || req.headers.authorization?.split(" ")[1];
-        if (!token) return res.status(401).json({ error: "Unauthorized: No token provided" });
 
-        const user = await User.findOneAndUpdate({ "tokens.token": token }, { $pull: { tokens: { token } } }, { new: true });
-        if (!user) return res.status(401).json({ error: "Invalid session" });
+        if (!token) {
+            // ✅ If it's a direct link logout, redirect immediately
+            return res.clearCookie("authToken").redirect("/");
+        }
+
+        const user = await User.findOneAndUpdate(
+            { "tokens.token": token },
+            { $pull: { tokens: { token } } },
+            { new: true }
+        );
+
+        if (!user) {
+            return res.status(401).json({ error: "Invalid session" });
+        }
 
         res.clearCookie("authToken");
-        res.json({ success: true, message: "Logged out successfully" });
+
+        // ✅ Handle Logout for Direct Requests vs AJAX Calls
+        if (req.headers.accept && req.headers.accept.includes("application/json")) {
+            res.json({ success: true, message: "Logged out successfully" });
+        } else {
+            res.redirect("/");
+        }
     } catch (err) {
         res.status(500).json({ error: "Server error." });
     }
 };
+
 
 
 

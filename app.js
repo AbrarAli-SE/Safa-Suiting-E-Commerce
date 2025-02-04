@@ -49,8 +49,7 @@ app.get("/admin", verifyToken, (req, res) => {
 
 
   // Routes
-  // app.use('/api', authRoutes);
-  app.use('/auth', authRoutes);
+  app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
   app.use('/user', userRoutes);
 
 
