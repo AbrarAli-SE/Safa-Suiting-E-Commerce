@@ -224,6 +224,12 @@ const express = require("express");
 const authController = require("../controllers/authController"); // ✅ Import authController
 
 const router = express.Router();
+const passport = require("passport");
+
+
+// ✅ Google OAuth Routes
+router.get("/google", authController.googleAuth);
+router.get("/google/callback", authController.googleAuthCallback);
 
 // ✅ Serve Register, Login, and Forgot Password Pages
 router.get("/register", authController.renderRegisterPage);

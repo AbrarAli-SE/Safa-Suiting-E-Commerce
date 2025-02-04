@@ -1,10 +1,11 @@
   require('dotenv').config();
   const express = require('express');
+  const session = require("express-session");
   const cookieParser = require("cookie-parser");
+  const passport = require("./config/passport"); // ✅ Import configured passport
   const morgan = require('morgan');
   const createHttpErrors = require('http-errors');
   const dbConfig = require('./config/dbConfig');
-  const authRoutes = require('./routes/auth');
   const userRoutes = require('./routes/user');
   const verifyToken = require("./middleware/authMiddleware");
   const path = require('path');
@@ -13,10 +14,30 @@
   app.use(express.json());
   app.use(cookieParser());  // ✅ Enable Cookie Parser
 
+  // ✅ Enable session
+  app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false, // ✅ Avoid saving empty sessions
+    })
+  );
+  
+  // ✅ Initialize Passport.js
+  app.use(passport.initialize());
+  app.use(passport.session());
+
   // Database Connection
   dbConfig();
-
+  
   app.use(morgan('dev'));
+  
+  
+  app.use(passport.initialize());
+  app.use(passport.session());
+  
+  const authRoutes = require('./routes/auth');
+
   // Set the view engine to EJS
   app.set('view engine', 'ejs');
 
@@ -65,4 +86,4 @@ app.get("/admin", verifyToken, (req, res) => {
     res.render('404-Error', { error });
   });
 
-  app.listen(3000, () => console.log('Server running on port 3000'));
+  app.listen(3000, () => console.log('🚀 Server running on port 3000'));

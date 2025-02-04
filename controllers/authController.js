@@ -1,3 +1,4 @@
+const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
@@ -45,6 +46,41 @@ exports.renderLoginPage = (req, res) => {
 exports.renderForgotPasswordPage = (req, res) => {
     res.render("auth/forgot-password");
 };
+
+
+
+
+
+// ✅ Google Authentication Route
+exports.googleAuth = passport.authenticate("google", { scope: ["profile", "email"] });
+
+// ✅ Google Authentication Callback
+exports.googleAuthCallback = (req, res, next) => {
+    passport.authenticate("google", { failureRedirect: "/auth/login" }, async (err, user) => {
+        if (err || !user) {
+            console.error("Google Authentication Failed:", err);
+            return res.redirect("/auth/login");
+        }
+
+        try {
+            // ✅ Set cookie for session (Ensure token is correctly assigned)
+            res.cookie("authToken", user.token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
+
+            console.log("✅ Google Authentication Successful! User:", user);
+
+            // ✅ Redirect user based on role
+            if (user.role === "admin") {
+                res.redirect("/admin");
+            } else {
+                res.redirect("/dashboard");
+            }
+        } catch (error) {
+            console.error("Error during authentication:", error);
+            res.redirect("/auth/login");
+        }
+    })(req, res, next);
+};
+
 
 exports.login = async (req, res) => {
     const { email, password } = req.body;
