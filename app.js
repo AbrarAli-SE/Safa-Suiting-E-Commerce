@@ -68,6 +68,8 @@
 app.use('/', indexRoutes)
 app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
 app.use('/user', userRoutes);
+// ✅ Ensures `/pages/contact` and `/pages/about` are accessible for all users
+app.use("/pages", pageRoutes);
 // app.use('/user', adminRoutes);
 // ✅ Routes
 

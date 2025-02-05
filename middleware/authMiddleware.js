@@ -1,3 +1,4 @@
+// 
 const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { secretKey } = require("../config/jwtConfig");
@@ -7,23 +8,25 @@ const verifyToken = async (req, res, next) => {
         const token = req.cookies.authToken || req.headers.authorization?.split(" ")[1];
 
         if (!token) {
-            return res.redirect("/"); // ✅ Redirect to Login if No Token Found
+            req.user = null; // ✅ No user if no token
+            return next();
         }
 
         const decoded = jwt.verify(token, secretKey);
         const user = await User.findOne({ _id: decoded.userId, "tokens.token": token });
 
         if (!user) {
-            res.clearCookie("authToken"); // ✅ Remove invalid token from cookies
-            return res.redirect("/auth/login"); // ✅ Redirect to login if user is deleted
+            res.clearCookie("authToken");
+            req.user = null;
+            return next();
         }
 
-        // req.user = decoded;
-        req.user = user; // ✅ Attach full user object instead of just `decoded`
+        req.user = user;
         next();
     } catch (err) {
-        res.clearCookie("authToken"); // ✅ Remove invalid token from cookies
-        return res.redirect("/auth/login"); // ✅ Redirect to Login if Token is Invalid
+        res.clearCookie("authToken");
+        req.user = null;
+        next();
     }
 };
 
