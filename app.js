@@ -7,6 +7,7 @@
   const createHttpErrors = require('http-errors');
   const dbConfig = require('./config/dbConfig');
   const userRoutes = require('./routes/user');
+  const indexRoutes = require('./routes/index')
   const pageRoutes = require("./routes/page");
   const verifyToken = require("./middleware/authMiddleware");
   const path = require('path');
@@ -57,26 +58,23 @@
 });
 
 
-// ✅ Public Index Page
-app.get("/", (req, res) => {
-    const token = req.cookies.authToken;
-    if (!token) return res.render("index");
-    return res.redirect("/dashboard");
-});
 
+
+
+
+
+
+// Routes
+app.use('/', indexRoutes)
+app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
+app.use('/user', userRoutes);
+// app.use('/user', adminRoutes);
+// ✅ Routes
 
 
 app.get("/admin", verifyToken, (req, res) => {
   res.render("admin/intro");
 });
-
-
-
-  // Routes
-  app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
-  app.use('/user', userRoutes);
-  // ✅ Routes
-  app.use("/", pageRoutes);
 
   // 404 error handling
   app.use((req, res, next) => {
