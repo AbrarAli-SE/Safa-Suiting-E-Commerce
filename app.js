@@ -51,6 +51,11 @@
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
+  app.use((req, res, next) => {
+    res.locals.user = req.user || null; // ✅ Set `user` globally for EJS views
+    next();
+});
+
 
 // ✅ Public Index Page
 app.get("/", (req, res) => {

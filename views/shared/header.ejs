@@ -20,102 +20,104 @@
 <body class="transition-all duration-300 bg-[#FFFFFF] text-gray-900 dark:bg-gray-900 dark:text-gray-100 !scroll-smooth">
   
  
-  
   <header
-    class=" border-b border-gray-500 bg-[#FFFFFF] text-black dark:bg-gray-900 dark:text-gray-100  dark:border-gray-700 fixed top-0 left-0 w-full z-50 ">
+    class="border-b border-gray-500 bg-[#FFFFFF] text-black dark:bg-gray-900 dark:text-gray-100  dark:border-gray-700 fixed top-0 left-0 w-full z-50">
+    
     <!-- Top Bar -->
     <div class="bg-black text-white text-sm py-2 px-4 flex justify-center items-center dark:bg-gray-800">
-      <span class="mr-2">Unleash the Summer Vibes: Dive into Style with Our Hot Deals and Free Delivery!</span>
-      <a href="#" class="underline">ShopNow</a>
+        <span class="mr-2">Unleash the Summer Vibes: Dive into Style with Our Hot Deals and Free Delivery!</span>
+        <a href="#" class="underline">ShopNow</a>
     </div>
 
     <!-- Main Navigation -->
     <div class="flex justify-between items-center py-5 px-4 lg:px-24 md:px-8">
-      <!-- Logo -->
-      <!-- <div class="lg:text-2xl text-xl font-bold">Safa Suiting</div> -->
-        <img src="/assests/safaLogo.png" alt="Safa Suiting" class="w-12 h-8 dark:brightness-0 dark:invert">
-      
+        <!-- Logo -->
+         <a href="/">
+           <img src="/assests/safaLogo.png" alt="Safa Suiting" class="w-12 h-8 dark:brightness-0 dark:invert">
+         </a>
 
+        <!-- Navigation Links -->
+        <nav class="hidden md:flex md:space-x-6 text-base tracking-wide">
+            <a href="/" class="nav-link active">Home</a>
+            <a href="/contact" class="nav-link">Contact</a>
+            <a href="/about" class="nav-link">About</a>
+            <% if (!user) { %> 
+                <a href="/auth/register" class="nav-link">Sign Up</a>
+            <% } %>
+        </nav>
 
-      <!-- Navigation Links -->
-      <nav class="hidden md:flex md:space-x-6 text-base tracking-wide">
-        <a href="/wishlist.html" class="nav-link active">Home</a>
-        <a href="/contact" class="nav-link">Contact</a>
-        <a href="/about" class="nav-link">About</a>
-        <a href="/auth/register" class="nav-link">Sign Up</a>
-      </nav>
+        <!-- Search and Icons -->
+        <div class="flex items-center space-x-4">
+            <!-- Search Button for Small Screens -->
+            <button class="text-black text-2xl  md:hidden dark:text-white" id="searchIcon">
+                <i class="bi bi-search"></i>
+            </button>
 
+            <!-- Search Bar for Medium and Large Screens -->
+            <div class="relative group hidden md:block lg:block">
+                <input type="text" id="desktopSearchInput" placeholder="Search..."
+                    class="block p-2 w-48 z-20 text-sm border border-slate-400 text-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:focus:ring-gray-500 rounded-md">
+                <button class="absolute top-0 right-0 p-2 text-sm font-medium h-full text-black dark:text-white">
+                    <i class="bi bi-search"></i>
+                </button>
+                <div id="desktopSearchResults"
+                    class="hidden mt-2 bg-white border border-gray-300 rounded-md shadow-lg absolute z-30 w-48 dark:bg-gray-800 dark:border-gray-600">
+                </div>
+            </div>
 
-      <!-- Search and Icons -->
-      <div class="flex items-center space-x-4">
-        <!-- Search Button for Small Screens -->
-        <button class="text-black text-2xl -mr-8 md:hidden dark:text-white" id="searchIcon">
-          <i class="bi bi-search"></i>
-        </button>
+            <!-- ✅ Show Cart, Wishlist, and Account Only If Logged In -->
+            <% if (user) { %>
+                <button>
+                    <a href="/wishlist" class="relative hidden md:block cursor-pointer" id="wishlist">
+                        <i class="bi bi-heart text-2xl dark:text-white"></i>
+                        <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
+                    </a>
+                </button>
 
-        <!-- Search Bar for Medium and Large Screens -->
-        <div class="relative group hidden md:block lg:block">
-          <input type="text" id="desktopSearchInput" placeholder="Search..."
-            class="block p-2 w-48 z-20 text-sm border border-slate-400 text-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:focus:ring-gray-500 rounded-md">
-          <button class="absolute top-0 right-0 p-2 text-sm font-medium h-full text-black dark:text-white">
-            <i class="bi bi-search"></i>
-          </button>
-          <div id="desktopSearchResults"
-            class="hidden mt-2 bg-white border border-gray-300 rounded-md shadow-lg absolute z-30 w-48  dark:bg-gray-800 dark:border-gray-600">
-            <!-- Search results will appear here -->
-          </div>
+                <button>
+                    <a href="/my-cart" class="relative hidden md:block cursor-pointer" id="cart">
+                        <i class="bi bi-cart3 text-2xl dark:text-white"></i>
+                        <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
+                    </a>
+                </button>
+
+                <!-- Account Icon -->
+                <button>
+                    <a class="relative hidden md:block cursor-pointer" id="accountIcon">
+                        <i class="bi bi-person text-3xl text-black dark:text-white"></i>
+                    </a>
+                </button>
+
+                <!-- Account Dropdown Menu -->
+                <div id="accountMenu"
+                    class="hidden absolute right-11 mt-72 min-w-56 bg-white shadow-lg rounded-md text-black w-48 dark:bg-gray-800 dark:text-white dark:shadow-gray-700">
+                    <ul>
+                        <li>
+                            <a href="/user/dashboard" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="bi bi-person mr-2"></i> Manage My Account
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/my-orders" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="bi bi-bag mr-2"></i> My Orders
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/my-cancellations" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="bi bi-x-circle mr-2"></i> My Cancellations
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/auth/logout" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                                <i class="bi bi-box-arrow-right mr-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            <% } %>
         </div>
-
-        <button>
-          <a href="/wishlist.html" class="relative hidden md:block cursor-pointer" id="wishlist">
-            <i class="bi bi-heart text-2xl dark:text-white"></i>
-            <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
-          </a>
-        </button>
-
-        <button>
-          <a href="/my-cart" class="relative hidden md:block cursor-pointer" id="cart">
-            <i class="bi bi-cart3 text-2xl dark:text-white"></i>
-            <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
-          </a>
-        </button>
-
-        <!-- Account Icon -->
-        <button>
-          <a class="relative hidden md:block cursor-pointer" id="accountIcon">
-            <i class="bi bi-person text-3xl text-black dark:text-white"></i>
-          </a>
-        </button>
-
-        <!-- Account Dropdown Menu -->
-        <div id="accountMenu"
-          class="hidden absolute right-11 mt-72 min-w-56 bg-white shadow-lg rounded-md text-black w-48 dark:bg-gray-800 dark:text-white dark:shadow-gray-700">
-          <ul>
-            <li>
-              <a href="/account.html" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <i class="bi bi-person mr-2"></i> Manage My Account
-              </a>
-            </li>
-            <li>
-              <a href="/my-orders" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <i class="bi bi-bag mr-2"></i> My Order
-              </a>
-            </li>
-            <li>
-              <a href="/my-cancellations" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <i class="bi bi-x-circle mr-2"></i> My Cancellations
-              </a>
-            </li>
-
-            <li>
-              <a href="/logout" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                <i class="bi bi-box-arrow-right mr-2"></i> Logout
-              </a>
-            </li>
-          </ul>
-        </div>
-      </div>
     </div>
+
 
     <!-- Hidden Search Bar for Small Screens -->
     <div id="mobileSearch"
@@ -128,29 +130,46 @@
       </div>
     </div>
 
-    <!-- Bottom Navigation for Small Screens -->
+    <!-- ✅ Bottom Navigation for Small Screens -->
     <div
-      class="border-t fixed bottom-0 left-0 w-full z-20 bg-white shadow-md md:hidden flex justify-around py-2 dark:bg-gray-900 dark:border-gray-700">
-      <a href="/" class="flex flex-col items-center text-black dark:text-white">
-        <i class="bi bi-house text-xl"></i>
-        <span class="text-xs">Home</span>
-      </a>
-      <a href="/wishlist.html" class="relative flex flex-col items-center text-black dark:text-white">
-        <i class="bi bi-heart text-xl"></i>
-        <span class="absolute -top-1 right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
-        <span class="text-xs">Wishlist</span>
-      </a>
-      <a href="/my-cart" class="px-3 relative flex flex-col items-center text-black dark:text-white">
-        <i class="bi bi-cart3 text-xl"></i>
-        <span class="absolute -top-1 right-2 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
-        <span class="text-xs">Cart</span>
+        class="border-t fixed bottom-0 left-0 w-full z-20 bg-white shadow-md md:hidden flex justify-around py-2 dark:bg-gray-900 dark:border-gray-700">
+        
+        <!-- Home Link -->
+        <a href="/" class="flex flex-col items-center text-black dark:text-white">
+            <i class="bi bi-house text-xl"></i>
+            <span class="text-xs">Home</span>
+        </a>
 
-      </a>
-      <a href="/auth/register" class="flex flex-col items-center text-black dark:text-white">
-        <i class="bi bi-person text-xl"></i>
-        <span class="text-xs">Sign Up</span>
-      </a>
+        <% if (user) { %>
+            <!-- Wishlist (Only if Logged In) -->
+            <a href="/wishlist" class="relative flex flex-col items-center text-black dark:text-white">
+                <i class="bi bi-heart text-xl"></i>
+                <span class="absolute -top-1 right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
+                <span class="text-xs">Wishlist</span>
+            </a>
+
+            <!-- Cart (Only if Logged In) -->
+            <a href="/my-cart" class="px-3 relative flex flex-col items-center text-black dark:text-white">
+                <i class="bi bi-cart3 text-xl"></i>
+                <span class="absolute -top-1 right-2 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
+                <span class="text-xs">Cart</span>
+            </a>
+
+            <!-- Account (Only if Logged In) -->
+            <a href="/user/dashboard" class="flex flex-col items-center text-black dark:text-white">
+                <i class="bi bi-person text-xl"></i>
+                <span class="text-xs">Account</span>
+            </a>
+        <% } else { %>
+            <!-- Sign Up (Only if Not Logged In) -->
+            <a href="/auth/register" class="flex flex-col items-center text-black dark:text-white">
+                <i class="bi bi-person text-xl"></i>
+                <span class="text-xs">Sign Up</span>
+            </a>
+        <% } %>
+
     </div>
+
   </header>
 
 
@@ -158,19 +177,40 @@
   <script>
 
 
-    const accountIcon = document.getElementById('accountIcon');
-    const accountMenu = document.getElementById('accountMenu');
+  try {
+      const accountIcon = document.getElementById('accountIcon');
+      const accountMenu = document.getElementById('accountMenu');
 
-    accountIcon.addEventListener('click', () => {
-      accountMenu.classList.toggle('hidden');
-    });
+      if (accountIcon && accountMenu) {
+          // ✅ Show menu on hover
+          accountIcon.addEventListener('mouseenter', () => {
+              accountMenu.classList.remove('hidden');
+          });
 
-    // Optional: Close menu if user clicks outside
-    document.addEventListener('click', (e) => {
-      if (!accountIcon.contains(e.target) && !accountMenu.contains(e.target)) {
-        accountMenu.classList.add('hidden');
+          accountMenu.addEventListener('mouseenter', () => {
+              accountMenu.classList.remove('hidden');
+          });
+
+          // ✅ Hide menu when mouse leaves
+          accountMenu.addEventListener('mouseleave', () => {
+              accountMenu.classList.add('hidden');
+          });
+
+          accountIcon.addEventListener('mouseleave', () => {
+              // Give a small delay before hiding (to allow smooth transition)
+              setTimeout(() => {
+                  if (!accountMenu.matches(':hover')) {
+                      accountMenu.classList.add('hidden');
+                  }
+              }, 200); 
+          });
+      } else {
+          console.error("❌ accountIcon or accountMenu not found in the DOM.");
       }
-    });
+  } catch (error) {
+      console.error("❌ Error in handling account menu visibility:", error);
+  }
+
 
     const searchIcon = document.getElementById('searchIcon');
     const mobileSearch = document.getElementById('mobileSearch');

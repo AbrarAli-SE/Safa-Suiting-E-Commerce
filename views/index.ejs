@@ -1055,21 +1055,21 @@ rightButtons.forEach((button, index) => {
 });
 
       // Check if dark mode preference is saved in localStorage
-      if (localStorage.getItem('darkMode') === 'true') {
-        document.documentElement.classList.add('dark');
-      }
+      // if (localStorage.getItem('darkMode') === 'true') {
+      //   document.documentElement.classList.add('dark');
+      // }
 
-      // Function to toggle dark mode
-      const darkModeToggle = document.getElementById('darkModeToggle');
-      darkModeToggle.addEventListener('click', () => {
-        document.documentElement.classList.toggle('dark');
-        // Save dark mode preference in localStorage
-        if (document.documentElement.classList.contains('dark')) {
-          localStorage.setItem('darkMode', 'true');
-        } else {
-          localStorage.setItem('darkMode', 'false');
-        }
-      });
+      // // Function to toggle dark mode
+      // const darkModeToggle = document.getElementById('darkModeToggle');
+      // darkModeToggle.addEventListener('click', () => {
+      //   document.documentElement.classList.toggle('dark');
+      //   // Save dark mode preference in localStorage
+      //   if (document.documentElement.classList.contains('dark')) {
+      //     localStorage.setItem('darkMode', 'true');
+      //   } else {
+      //     localStorage.setItem('darkMode', 'false');
+      //   }
+      // });
 
     
      
