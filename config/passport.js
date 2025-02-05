@@ -8,8 +8,8 @@ const { secretKey } = require("../config/jwtConfig");
 passport.use(
     new GoogleStrategy(
         {
-            clientID: process.env.GOOGLE_CLIENT_ID,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+            clientID: process.env.GOOGLE_CLIENT_ID || '419808766606-rgltcnck0caaubpmd1kghjopmvtubo9e.apps.googleusercontent.com',
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET || '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',
             callbackURL: "/auth/google/callback",
             passReqToCallback: true, // ✅ Required to pass request
         },
