@@ -18,7 +18,8 @@ const verifyToken = async (req, res, next) => {
             return res.redirect("/auth/login"); // ✅ Redirect to login if user is deleted
         }
 
-        req.user = decoded;
+        // req.user = decoded;
+        req.user = user; // ✅ Attach full user object instead of just `decoded`
         next();
     } catch (err) {
         res.clearCookie("authToken"); // ✅ Remove invalid token from cookies

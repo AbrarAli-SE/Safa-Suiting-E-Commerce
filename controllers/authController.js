@@ -82,7 +82,7 @@ exports.googleAuthCallback = (req, res, next) => {
             if (user.role === "admin") {
                 res.redirect("/admin");
             } else {
-                res.redirect("/dashboard");
+                res.redirect("/user/dashboard");
             }
         } catch (error) {
             console.error("Error during authentication:", error);
@@ -133,7 +133,7 @@ exports.login = async (req, res) => {
         });
 
         // ✅ Redirect user based on role
-        return res.redirect(user.role === "admin" ? "/admin" : "/dashboard");
+        return res.redirect(user.role === "admin" ? "/admin" : "/user/dashboard");
 
     } catch (err) {
         console.error("❌ Login Error:", err);
@@ -223,7 +223,7 @@ exports.verifyOTP = async (req, res) => {
         res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
 
         // ✅ Redirect user to respective dashboard
-        return res.redirect(user.role === "admin" ? "/admin" : "/dashboard");
+        return res.redirect(user.role === "admin" ? "/admin" : "/user/dashboard");
 
     } catch (err) {
         console.error("❌ OTP Verification Error:", err);

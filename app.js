@@ -58,10 +58,7 @@ app.get("/", (req, res) => {
     return res.redirect("/dashboard");
 });
 
-// ✅ Protected Dashboard Route
-app.get("/dashboard", verifyToken, (req, res) => {
-  res.render("dashboard", { user: req.user });
-});
+
 
 app.get("/admin", verifyToken, (req, res) => {
   res.render("admin/intro");
