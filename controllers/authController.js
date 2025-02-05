@@ -14,7 +14,7 @@ const generateRandomPassword = () => {
     const lowercase = "abcdefghijklmnopqrstuvwxyz";
     const numbers = "0123456789";
     const specialChars = "!@#$%^&*()-_=+<>?";
-    
+
     const allCharacters = uppercase + lowercase + numbers + specialChars;
     let password = "";
 
@@ -25,7 +25,7 @@ const generateRandomPassword = () => {
     password += specialChars[Math.floor(Math.random() * specialChars.length)];
 
     // ✅ Fill remaining characters randomly (length 10)
-    for (let i = 4; i < 10; i++) { 
+    for (let i = 4; i < 10; i++) {
         password += allCharacters[Math.floor(Math.random() * allCharacters.length)];
     }
 
@@ -35,18 +35,28 @@ const generateRandomPassword = () => {
 
 
 
+// ✅ Render Register Page
 exports.renderRegisterPage = (req, res) => {
-    res.render("auth/register");
+    res.render("auth/register"); // ✅ Corrected Syntax
 };
 
+
+// ✅ Render OTP Verification Page
+exports.renderOtpPage = (req, res) => {
+    const email = req.query.email || ""; // ✅ Ensure email is passed correctly
+    res.render("auth/verify-otp", { email, error: null });
+};
+
+
+// ✅ Render Login Page
 exports.renderLoginPage = (req, res) => {
-    res.render("auth/login");
+    res.render("auth/login", { error: null });
 };
 
+// ✅ Render Forgot Password Page
 exports.renderForgotPasswordPage = (req, res) => {
-    res.render("auth/forgot-password");
+    res.render("auth/forgot-password", { error: null, success: null });
 };
-
 
 
 
@@ -82,6 +92,7 @@ exports.googleAuthCallback = (req, res, next) => {
 };
 
 
+// ✅ Process Login Request
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -89,18 +100,18 @@ exports.login = async (req, res) => {
         // ✅ Check if the user exists
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ error: "Invalid email or password." });
+            return res.render("auth/login", { error: "Invalid email or password." });
         }
 
         // ✅ Check if password is correct
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json({ error: "Invalid email or password." });
+            return res.render("auth/login", { error: "Invalid email or password." });
         }
 
         // ✅ Check if the user is verified
         if (!user.verified) {
-            return res.status(400).json({ error: "Account not verified. Please verify your email with OTP." });
+            return res.render("auth/login", { error: "Account not verified. Please verify your email with OTP." });
         }
 
         // ✅ Generate JWT Token
@@ -122,72 +133,78 @@ exports.login = async (req, res) => {
         });
 
         // ✅ Redirect user based on role
-        const redirectRoute = user.role === "admin" ? "/admin" : "/dashboard";
-
-        res.json({ success: true, message: "Login successful", token, redirectRoute });
+        return res.redirect(user.role === "admin" ? "/admin" : "/dashboard");
 
     } catch (err) {
-        console.error("Login Error:", err);
-        res.status(500).json({ error: "Server error." });
+        console.error("❌ Login Error:", err);
+        res.render("auth/login", { error: "Server error. Please try again later." });
     }
 };
 
 
-// ✅ Register User & Send OTP
+// ✅ Register User & Redirect to OTP Page
 exports.register = async (req, res) => {
     const { name, email, password } = req.body;
     try {
+        console.log("🔹 Registering user:", { name, email });
+
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ error: "User already exists." });
+            return res.render("auth/register", { error: "User already exists." });
         }
 
         const otp = generateOTP();
-        const otpExpires = new Date(Date.now() + 5 * 60 * 1000); // ✅ OTP expires in 5 minutes
+        const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // ✅ Get admin emails from .env
-        const adminEmails = process.env.ADMIN_EMAILS.split(",");
-        const role = adminEmails.includes(email) ? "admin" : "user"; // ✅ Assign role dynamically
+        const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
+        const role = adminEmails.includes(email) ? "admin" : "user";
 
         const newUser = new User({ name, email, password: hashedPassword, otp, otpExpires, role });
         await newUser.save();
 
-        // ✅ Send OTP email
+        console.log("✅ User saved. Sending OTP email...");
+
+        // ✅ Send OTP Email
         try {
             const html = `<p>Your OTP is: <strong>${otp}</strong></p>`;
             await sendEmail(email, "Verify Your OTP", html);
         } catch (emailError) {
-            console.error("Email sending failed:", emailError);
-            return res.status(500).json({ error: "Failed to send OTP. Please try again later." });
+            console.error("❌ Email sending failed:", emailError);
+            return res.render("auth/register", { error: "Failed to send OTP. Please try again later." });
         }
 
-        res.status(200).json({ success: true, message: "User registered. OTP sent to email." });
+        console.log("✅ Redirecting to OTP page for:", email);
+        return res.redirect(`/auth/verify-otp?email=${email}`); // ✅ Use Redirect
 
     } catch (error) {
-        console.error("Register Error:", error);
-        res.status(500).json({ error: "Server error." });
+        console.error("❌ Register Error:", error);
+        return res.render("auth/register", { error: "Server error. Please try again." });
     }
 };
+
+
 
 // ✅ Verify OTP & Generate JWT
 exports.verifyOTP = async (req, res) => {
     const { email, otp } = req.body;
+
     try {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({ error: "User not found." });
+            return res.render("auth/verify-otp", { email, error: "User not found." });
         }
 
-        // ✅ Check if OTP is correct & not expired
+        // ✅ Validate OTP
         if (user.otp !== otp) {
-            return res.status(400).json({ error: "Invalid OTP. Please try again." });
+            return res.render("auth/verify-otp", { email, error: "Invalid OTP. Please try again." });
         }
         if (user.otpExpires < Date.now()) {
-            return res.status(400).json({ error: "OTP expired. Please request a new one." });
+            return res.render("auth/verify-otp", { email, error: "OTP expired. Please request a new one." });
         }
 
+        // ✅ Mark user as verified
         user.verified = true;
         user.otp = null;
         user.otpExpires = null;
@@ -202,17 +219,20 @@ exports.verifyOTP = async (req, res) => {
         user.tokens.push({ token });
         await user.save();
 
+        // ✅ Set JWT in cookies
         res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
 
-        res.json({ success: true, message: "Verification successful", token, role: user.role });
+        // ✅ Redirect user to respective dashboard
+        return res.redirect(user.role === "admin" ? "/admin" : "/dashboard");
 
     } catch (err) {
-        console.error("OTP Verification Error:", err);
-        res.status(500).json({ error: "Server error." });
+        console.error("❌ OTP Verification Error:", err);
+        return res.render("auth/verify-otp", { email, error: "Server error. Please try again later." });
     }
 };
 
-// ✅ Resend OTP Function
+
+// ✅ Resend OTP
 exports.resendOTP = async (req, res) => {
     const { email } = req.body;
 
@@ -220,16 +240,16 @@ exports.resendOTP = async (req, res) => {
         const user = await User.findOne({ email });
 
         if (!user) {
-            return res.status(400).json({ error: "User not found." });
+            return res.render("auth/verify-otp", { email, error: "User not found." });
         }
 
-        // ✅ If the user is already verified, no need to resend OTP
+        // ✅ If user is already verified, redirect to login
         if (user.verified) {
-            return res.status(400).json({ error: "User is already verified. Please login." });
+            return res.redirect("/auth/login");
         }
 
         // ✅ Generate a new OTP
-        const newOtp = generateOTP();
+        const newOtp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
         user.otp = newOtp;
         user.otpExpires = new Date(Date.now() + 5 * 60 * 1000); // OTP valid for 5 minutes
         await user.save();
@@ -239,15 +259,15 @@ exports.resendOTP = async (req, res) => {
             const html = `<p>Your new OTP is: <strong>${newOtp}</strong></p>`;
             await sendEmail(email, "Your New OTP", html);
         } catch (emailError) {
-            console.error("Email sending failed:", emailError);
-            return res.status(500).json({ error: "Failed to send new OTP. Please try again later." });
+            console.error("❌ Email sending failed:", emailError);
+            return res.render("auth/verify-otp", { email, error: "Failed to send new OTP. Please try again later." });
         }
 
-        res.status(200).json({ success: true, message: "A new OTP has been sent to your email." });
+        return res.render("auth/verify-otp", { email, success: "A new OTP has been sent to your email." });
 
     } catch (error) {
-        console.error("Resend OTP Error:", error);
-        res.status(500).json({ error: "Server error." });
+        console.error("❌ Resend OTP Error:", error);
+        return res.render("auth/verify-otp", { email, error: "Server error. Please try again later." });
     }
 };
 
@@ -285,16 +305,14 @@ exports.logout = async (req, res) => {
 };
 
 
-
-
-// ✅ Forgot Password Controller
+// ✅ Process Forgot Password Request
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
 
     try {
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(400).json({ error: "User not found" });
+            return res.render("auth/forgot-password", { error: "User not found.", success: null });
         }
 
         // ✅ Generate New Secure Password
@@ -309,13 +327,15 @@ exports.forgotPassword = async (req, res) => {
             const html = `<p>Your new password is: <strong>${newPassword}</strong></p>`;
             await sendEmail(email, "Password Reset", html);
         } catch (emailError) {
-            console.error("Email sending failed:", emailError);
-            return res.status(500).json({ error: "Failed to send email. Please try again later." });
+            console.error("❌ Email sending failed:", emailError);
+            return res.render("auth/forgot-password", { error: "Failed to send email. Please try again later.", success: null });
         }
 
-        res.json({ success: true, message: "New password sent to email" });
+        // ✅ Show Success Message
+        res.render("auth/forgot-password", { success: "A new password has been sent to your email.", error: null });
+
     } catch (err) {
-        console.error("Forgot Password Error:", err);
-        res.status(500).json({ error: "Server error" });
+        console.error("❌ Forgot Password Error:", err);
+        res.render("auth/forgot-password", { error: "Server error. Please try again later.", success: null });
     }
 };
