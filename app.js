@@ -7,9 +7,10 @@
   const createHttpErrors = require('http-errors');
   const dbConfig = require('./config/dbConfig');
   const userRoutes = require('./routes/user');
-  const indexRoutes = require('./routes/index')
+  const indexRoutes = require('./routes/index');
+  const adminRoutes = require('./routes/admin');
   const pageRoutes = require("./routes/page");
-  const verifyToken = require("./middleware/authMiddleware");
+  // const verifyToken = require("./middleware/authMiddleware");
   const path = require('path');
 
   const app = express();
@@ -70,13 +71,13 @@ app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
 app.use('/user', userRoutes);
 // ✅ Ensures `/pages/contact` and `/pages/about` are accessible for all users
 app.use("/pages", pageRoutes);
-// app.use('/user', adminRoutes);
+app.use('/admin', adminRoutes);
 // ✅ Routes
 
 
-app.get("/admin", verifyToken, (req, res) => {
-  res.render("admin/intro");
-});
+// app.get("/admin", verifyToken, (req, res) => {
+//   res.render("admin/intro");
+// });
 
   // 404 error handling
   app.use((req, res, next) => {
