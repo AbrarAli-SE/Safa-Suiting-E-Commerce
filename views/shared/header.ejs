@@ -49,20 +49,33 @@
 
     <!-- Search and Icons -->
     <div class="flex items-center space-x-4">
-      <!-- Search Button for Small Screens -->
-      <button class="text-black text-2xl -mr-8 md:hidden dark:text-white" id="searchIcon">
-        <i class="bi bi-search"></i>
-      </button>
 
       <!-- Search Bar for Medium and Large Screens -->
-      <div class="relative group hidden md:block lg:block">
+      <div class="relative group">
         <input type="text" id="desktopSearchInput" placeholder="Search..."
-          class="block p-2 w-48 z-20 text-sm border border-slate-400 text-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:focus:ring-gray-500 rounded-md">
-        <button class="absolute top-0 right-0 p-2 text-sm font-medium h-full text-black dark:text-white">
+          class="block p-2 w-48 z-20 border border-slate-400 text-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:focus:ring-gray-500 rounded-md ">
+        <button id="desktopSearchIcon" class="absolute top-0 right-0 p-2 text-sm font-medium h-full text-black dark:text-white">
           <i class="bi bi-search"></i>
         </button>
-        <div id="desktopSearchResults"
-          class="hidden mt-2 bg-white border border-gray-300 rounded-md shadow-lg absolute z-30 w-48  dark:bg-gray-800 dark:border-gray-600">
+      </div>
+
+      <!-- Expanded Search Bar (Hidden by Default) -->
+      <div id="expandedSearchBar"
+        class="hidden p-4 bg-gray-100 border-b border-gray-300 dark:bg-gray-800 dark:border-gray-600 fixed top-8 right-0 w-full z-40">
+        <div class="flex items-center space-x-2">
+          <div class="relative w-full">
+            <input type="text" id="expandedSearchInput" placeholder="Search..."
+              class="block p-2.5 w-full text-black border-2 border-black bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-gray-500 rounded-md pl-2 pr-8">
+
+            <!-- Close Button inside the input -->
+            <button id="closeSearch" class="absolute top-1/2 right-2 transform -translate-y-1/2 text-black dark:text-white text-2xl">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+
+        <div id="expandedSearchResults"
+          class="hidden mt-2 bg-white border border-gray-300 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-600">
           <!-- Search results will appear here -->
         </div>
       </div>
@@ -118,16 +131,7 @@
     </div>
   </div>
 
-  <!-- Hidden Search Bar for Small Screens -->
-  <div id="mobileSearch"
-    class="hidden p-4 bg-gray-100 border-t dark:bg-gray-800 dark:border-gray-600 fixed  w-full z-40">
-    <input type="text" id="mobileSearchInput" placeholder="Search..."
-      class="block p-2.5 w-full text-sm text-black border-2 border-black bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-gray-500">
-    <div id="mobileSearchResults"
-      class="hidden mt-2 bg-white border  border-gray-300 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-600">
-      <!-- Search results will appear here -->
-    </div>
-  </div>
+  
 
   <!-- Bottom Navigation for Small Screens -->
   <div
@@ -154,6 +158,94 @@
   </div>
 </header>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const searchInput = document.getElementById("desktopSearchInput");
+  const searchIcon = document.getElementById("desktopSearchIcon");
+  const expandedSearchBar = document.getElementById("expandedSearchBar");
+  const closeSearch = document.getElementById("closeSearch");
+  const expandedSearchInput = document.getElementById('expandedSearchInput'); // Expanded search input field
+
+  // Function to show expanded search bar
+  function showExpandedSearch() {
+    expandedSearchBar.classList.remove("hidden");
+    searchInput.parentElement.classList.add("hidden"); // Hide default search
+    expandedSearchInput.focus(); // Focus on the input when expanded
+  }
+
+  // Function to hide expanded search bar
+  function hideExpandedSearch() {
+    expandedSearchBar.classList.add("hidden");
+    searchInput.parentElement.classList.remove("hidden"); // Show default search
+  }
+
+  // Click event to show search bar
+  searchInput.addEventListener("click", showExpandedSearch);
+  searchIcon.addEventListener("click", showExpandedSearch);
+
+  // Click event to close search bar
+  closeSearch.addEventListener("click", hideExpandedSearch);
+
+  // Dummy data for search
+  const dummyResults = [
+    'Summer Collection 2023',
+    'Men’s Formal Suits',
+    'Casual Wear for Women',
+    'Trending Accessories',
+    'New Arrivals: Kids Wear',
+    'Top Picks for Winter'
+  ];
+
+  // Function to handle search input and display results
+  function handleSearch(input, resultsContainer) {
+    const query = input.value.toLowerCase();
+    resultsContainer.innerHTML = ''; // Clear previous results
+
+    if (query) {
+      const filteredResults = dummyResults.filter(item =>
+        item.toLowerCase().includes(query)
+      );
+      if (filteredResults.length > 0) {
+        filteredResults.forEach(result => {
+          const resultItem = document.createElement('div');
+          resultItem.textContent = result;
+          resultItem.className = 'p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer';
+          resultsContainer.appendChild(resultItem);
+        });
+      } else {
+        const noResult = document.createElement('div');
+        noResult.textContent = 'No results found';
+        noResult.className = 'p-2 text-gray-500';
+        resultsContainer.appendChild(noResult);
+      }
+      resultsContainer.classList.remove('hidden');
+    } else {
+      resultsContainer.classList.add('hidden');
+    }
+  }
+
+  // Event listener for the expanded search input
+  const expandedSearchResults = document.getElementById('expandedSearchResults');
+  expandedSearchInput.addEventListener('input', () =>
+    handleSearch(expandedSearchInput, expandedSearchResults)
+  );
+
+  // Hide results when clicking outside
+  document.addEventListener('click', (e) => {
+    // Close expanded search results
+    if (
+      !expandedSearchBar.contains(e.target) &&
+      !expandedSearchResults.contains(e.target)
+    ) {
+      expandedSearchResults.classList.add('hidden');
+    }
+  });
+
+});
+
+
+</script>
 
 
   <script>
@@ -194,92 +286,7 @@
   }
 
 
-    const searchIcon = document.getElementById('searchIcon');
-    const mobileSearch = document.getElementById('mobileSearch');
-    const mobileSearchInput = document.getElementById('mobileSearchInput');
-    const mobileSearchResults = document.getElementById('mobileSearchResults');
-    const desktopSearchInput = document.getElementById('desktopSearchInput');
-    const desktopSearchResults = document.getElementById('desktopSearchResults');
-
-    // Dummy data for search
-    const dummyResults = [
-      'Summer Collection 2023',
-      'Men’s Formal Suits',
-      'Casual Wear for Women',
-      'Trending Accessories',
-      'New Arrivals: Kids Wear',
-      'Top Picks for Winter'
-    ];
-
-    // Toggle mobile search visibility
-    searchIcon.addEventListener('click', () => {
-      mobileSearch.classList.toggle('hidden');
-    });
-
-    // Function to handle search input and display results
-    function handleSearch(input, resultsContainer) {
-      const query = input.value.toLowerCase();
-      resultsContainer.innerHTML = ''; // Clear previous results
-
-      if (query) {
-        const filteredResults = dummyResults.filter(item =>
-          item.toLowerCase().includes(query)
-        );
-        if (filteredResults.length > 0) {
-          filteredResults.forEach(result => {
-            const resultItem = document.createElement('div');
-            resultItem.textContent = result;
-            resultItem.className = 'p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer';
-            resultsContainer.appendChild(resultItem);
-          });
-        } else {
-          const noResult = document.createElement('div');
-          noResult.textContent = 'No results found';
-          noResult.className = 'p-2 text-gray-500';
-          resultsContainer.appendChild(noResult);
-        }
-        resultsContainer.classList.remove('hidden');
-      } else {
-        resultsContainer.classList.add('hidden');
-      }
-    }
-
-    // Event listeners for mobile and desktop search inputs
-    mobileSearchInput.addEventListener('input', () =>
-      handleSearch(mobileSearchInput, mobileSearchResults)
-    );
-
-    desktopSearchInput.addEventListener('input', () =>
-      handleSearch(desktopSearchInput, desktopSearchResults)
-    );
-
-    // Hide results when clicking outside
-    document.addEventListener('click', (e) => {
-      // Close mobile search results
-      if (
-        !mobileSearch.contains(e.target) &&
-        !mobileSearchResults.contains(e.target) &&
-        e.target !== searchIcon
-      ) {
-        mobileSearchResults.classList.add('hidden');
-      }
-
-      // Close desktop search results
-      if (
-        !desktopSearchInput.contains(e.target) &&
-        !desktopSearchResults.contains(e.target)
-      ) {
-        desktopSearchResults.classList.add('hidden');
-      }
-    });
-
-    // Ensure mobile search is hidden on larger screens
-    window.addEventListener('resize', () => {
-      if (window.innerWidth >= 768) { // Tailwind `md` breakpoint is 768px
-        mobileSearch.classList.add('hidden'); // Hide the mobile search bar
-        mobileSearchResults.classList.add('hidden'); // Hide mobile search results
-      }
-    });
+    
 
     document.querySelectorAll('.nav-link').forEach(link => {
       link.addEventListener('click', () => {

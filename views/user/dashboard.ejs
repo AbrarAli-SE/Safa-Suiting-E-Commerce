@@ -134,15 +134,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     darkModeToggle.addEventListener("click", function () {
-        if (document.documentElement.classList.contains("dark")) {
-            document.documentElement.classList.remove("dark");
-            darkModeIcon.classList.replace("bi-sun", "bi-moon");
-            localStorage.setItem("darkMode", "disabled");
-        } else {
-            document.documentElement.classList.add("dark");
-            darkModeIcon.classList.replace("bi-moon", "bi-sun");
-            localStorage.setItem("darkMode", "enabled");
-        }
+        const isDarkMode = document.documentElement.classList.toggle("dark");
+        darkModeIcon.classList.replace(isDarkMode ? "bi-moon" : "bi-sun", isDarkMode ? "bi-sun" : "bi-moon");
+        localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
     });
 
     // ✅ Profile Form Validation
@@ -152,93 +146,99 @@ document.addEventListener("DOMContentLoaded", function () {
     const nameError = document.getElementById("nameError");
     const emailError = document.getElementById("emailError");
 
-    nameInput.addEventListener("input", function () {
-        if (nameInput.value.trim().length < 3) {
+    function validateName() {
+        const nameValue = nameInput.value.trim();
+        if (nameValue.length === 0) {
+            nameError.classList.add("hidden");
+            return false;
+        }
+        if (nameValue.length < 3) {
             nameError.textContent = "Name must be at least 3 characters long.";
             nameError.classList.remove("hidden");
-        } else {
-            nameError.classList.add("hidden");
+            return false;
         }
-    });
+        nameError.classList.add("hidden");
+        return true;
+    }
 
-    emailInput.addEventListener("input", function () {
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(emailInput.value.trim())) {
+    function validateEmail() {
+        const emailValue = emailInput.value.trim();
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+        
+        if (emailValue.length === 0) {
+            emailError.classList.add("hidden");
+            return false;
+        }
+        if (!emailPattern.test(emailValue)) {
             emailError.textContent = "Enter a valid email address.";
             emailError.classList.remove("hidden");
-        } else {
-            emailError.classList.add("hidden");
+            return false;
         }
-    });
+        emailError.classList.add("hidden");
+        return true;
+    }
+
+    nameInput.addEventListener("input", validateName);
+    emailInput.addEventListener("input", validateEmail);
 
     profileForm.addEventListener("submit", function (event) {
-        let isValid = true;
-
-        if (nameInput.value.trim().length < 3) {
-            nameError.textContent = "Name must be at least 3 characters long.";
-            nameError.classList.remove("hidden");
-            isValid = false;
-        }
-
-        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailPattern.test(emailInput.value.trim())) {
-            emailError.textContent = "Enter a valid email address.";
-            emailError.classList.remove("hidden");
-            isValid = false;
-        }
-
-        if (!isValid) {
-            event.preventDefault(); // Prevent form submission if there are errors
+        if (!validateName() || !validateEmail()) {
+            event.preventDefault();
         }
     });
 
     // ✅ Password Form Validation
     const passwordForm = document.getElementById("passwordForm");
-    const currentPassword = document.getElementById("currentPassword");
     const newPassword = document.getElementById("newPassword");
     const confirmPassword = document.getElementById("confirmPassword");
     const newPasswordError = document.getElementById("newPasswordError");
     const confirmPasswordError = document.getElementById("confirmPasswordError");
 
-    newPassword.addEventListener("input", function () {
-            if (newPassword.value.trim().length < 6) {
-                newPasswordError.textContent = "Password must be at least 6 characters long.";
-                newPasswordError.classList.remove("hidden");
-            } else {
-                newPasswordError.classList.add("hidden");
-            }
-        });
-
-    confirmPassword.addEventListener("input", function () {
-        if (confirmPassword.value.trim().length < 6) {
-            confirmPasswordError.textContent = "Password must be at least 6 characters long.";
-            confirmPasswordError.classList.remove("hidden");
-        } else {
-            confirmPasswordError.classList.add("hidden");
+    function validatePassword() {
+        const passwordValue = newPassword.value.trim();
+        if (passwordValue.length === 0) {
+            newPasswordError.classList.add("hidden");
+            return false;
         }
-    });
-        
-
-    passwordForm.addEventListener("submit", function (event) {
-        let isValid = true;
-
-        if (newPassword.value.length < 6) {
+        if (passwordValue.length < 6) {
             newPasswordError.textContent = "Password must be at least 6 characters long.";
             newPasswordError.classList.remove("hidden");
-            isValid = false;
+            return false;
         }
+        newPasswordError.classList.add("hidden");
+        return true;
+    }
 
+    function validateConfirmPassword() {
+        const confirmPasswordValue = confirmPassword.value.trim();
+        if (confirmPasswordValue.length === 0) {
+            confirmPasswordError.classList.add("hidden");
+            return false;
+        }
+        if (confirmPasswordValue.length < 6) {
+            confirmPasswordError.textContent = "Password must be at least 6 characters long.";
+            confirmPasswordError.classList.remove("hidden");
+            return false;
+        }
         if (newPassword.value !== confirmPassword.value) {
             confirmPasswordError.textContent = "Passwords do not match.";
             confirmPasswordError.classList.remove("hidden");
-            isValid = false;
+            return false;
         }
+        confirmPasswordError.classList.add("hidden");
+        return true;
+    }
 
-        if (!isValid) {
-            event.preventDefault(); 
+    newPassword.addEventListener("input", validatePassword);
+    confirmPassword.addEventListener("input", validateConfirmPassword);
+
+    passwordForm.addEventListener("submit", function (event) {
+        if (!validatePassword() || !validateConfirmPassword()) {
+            event.preventDefault();
         }
     });
 });
+
 </script>
 
 <%- include('../shared/footer') %> 

@@ -29,11 +29,12 @@
                     </button>
                 </form>
     
-                <!-- Resend OTP Button -->
+                <!-- Resend OTP Section -->
                 <div class="mt-3 text-center">
-                    <a href="/auth/resend-otp" class="text-sm text-red-500 font-medium hover:underline dark:text-red-400">
+                    <button id="resendOtpBtn" class="text-sm text-red-500 font-medium hover:underline dark:text-red-400">
                         Resend OTP
-                    </a>
+                    </button>
+                    <p id="timerText" class="hidden text-sm text-gray-500 mt-2"></p>
                 </div>
     
                 <!-- Back to Sign In -->
@@ -43,46 +44,77 @@
             </div>
         </div>
     </div>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const resendOtpBtn = document.getElementById("resendOtpBtn");
+        const timerText = document.getElementById("timerText");
+        let countdown = 60; // 60 seconds timer
+        let timer;
+
+        resendOtpBtn.addEventListener("click", function () {
+            resendOtpBtn.disabled = true; // Disable the button
+            resendOtpBtn.style.opacity = "0.5"; // Reduce opacity to indicate disabled state
+            timerText.classList.remove("hidden"); // Show timer text
+            
+            // Start Countdown
+            timer = setInterval(() => {
+                timerText.textContent = `Resend OTP in ${countdown} sec`;
+                countdown--;
+
+                if (countdown < 0) {
+                    clearInterval(timer); // Stop countdown
+                    timerText.classList.add("hidden"); // Hide timer text
+                    resendOtpBtn.disabled = false; // Enable button
+                    resendOtpBtn.style.opacity = "1"; // Restore opacity
+                    countdown = 60; // Reset timer
+                }
+            }, 1000);
+            
+            // Simulate sending OTP request (Replace with actual API call if needed)
+            fetch("/auth/resend-otp") // Adjust the URL as needed
+                .then(response => response.json())
+                .then(data => console.log("OTP Resent:", data))
+                .catch(error => console.error("Error:", error));
+        });
+    });
+</script>
     
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const otpInput = document.getElementById("otp");
-            const otpError = document.getElementById("otpError");
-            const otpForm = document.getElementById("otpForm");
-    
-            // ✅ Validate OTP on input
-            otpInput.addEventListener("input", function () {
-                otpError.classList.add("hidden");
-            });
+    document.addEventListener("DOMContentLoaded", function () {
+    const otpInput = document.getElementById("otp");
+    const otpError = document.getElementById("otpError");
+    const otpForm = document.getElementById("otpForm");
 
-            otpInput.addEventListener("input", function () {
-                if(otpInput.value.trim().length < 6) {
-                    otpError.textContent = "Enter a valid 6-digit OTP.";
-                    otpError.classList.remove("hidden");
-                }
-                else
-                {
-                    otpError.classList.add("hidden");
-                }
-            });
+    function validateOTP() {
+        const otpValue = otpInput.value.trim();
 
-            // ✅ Validate OTP on form submission
-            otpForm.addEventListener("submit", function (event) {
-                let isValid = true;
-                const otpValue = otpInput.value.trim();
-    
-                if (otpValue === "" || otpValue.length !== 6 || isNaN(otpValue)) {
-                    otpError.textContent = "Enter a valid 6-digit OTP.";
-                    otpError.classList.remove("hidden");
-                    isValid = false;
-                }
-    
-                if (!isValid) {
-                    event.preventDefault(); // Prevent form submission if validation fails
-                }
-            });
-        });
-    </script>
+        if (otpValue.length === 0) {
+            otpError.classList.add("hidden"); // Hide error when empty
+            return false;
+        }
+        if (!/^\d{6}$/.test(otpValue)) {
+            otpError.textContent = "Enter a valid 6-digit OTP.";
+            otpError.classList.remove("hidden");
+            return false;
+        }
+        otpError.classList.add("hidden");
+        return true;
+    }
+
+    // ✅ Live Validation
+    otpInput.addEventListener("input", validateOTP);
+
+    // ✅ Final Validation on Form Submission
+    otpForm.addEventListener("submit", function (event) {
+        if (!validateOTP()) {
+            event.preventDefault(); // Prevent form submission if OTP is invalid
+        }
+    });
+});
+
+  </script>
         
 </body>
 <%- include('../shared/footer') %>
