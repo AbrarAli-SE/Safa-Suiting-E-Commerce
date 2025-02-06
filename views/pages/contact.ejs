@@ -43,6 +43,18 @@
 
         <!-- Right Column - Form -->
         <div class="w-full md:w-2/3 p-6 shadow-lg rounded-lg bg-white">
+            <!-- ✅ Success & Error Messages -->
+            <% if (successMessage) { %>
+                <div class="text-green-500 text-center font-medium mb-4 bg-green-100 p-2 rounded-md">
+                    <%= successMessage %>
+                </div>
+            <% } %>
+
+            <% if (errorMessage) { %>
+                <div class="text-red-500 text-center font-medium mb-4 bg-red-100 p-2 rounded-md">
+                    <%= errorMessage %>
+                </div>
+            <% } %>
             <form action="/pages/contact" method="POST" class="space-y-4">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div>

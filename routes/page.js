@@ -1,28 +1,14 @@
-// const express = require("express");
-// const pageController = require("../controllers/pageController");
-
-// const router = express.Router();
-
-// // ✅ Serve About & Contact Pages
-// router.get("/about", pageController.renderAboutPage);
-// router.get("/contact", pageController.renderContactPage);
-
-// // ✅ Handle Contact Form Submission
-// router.post("/contact", pageController.handleContactForm);
-
-// module.exports = router;
-
 const express = require("express");
-const pageController = require("../controllers/pageController");
 const verifyToken = require("../middleware/authMiddleware"); // ✅ Ensure user authentication is checked
+const pageController = require("../controllers/pageController");
 
 const router = express.Router();
 
 // ✅ Serve About & Contact Pages for Logged-in Users
-router.get("/about", pageController.renderAboutPage);
-router.get("/contact", pageController.renderContactPage);
+router.get("/about",verifyToken, pageController.renderAboutPage);
+router.get("/contact",verifyToken, pageController.renderContactPage);
 
 // ✅ Handle Contact Form Submission
-router.post("/contact", pageController.handleContactForm);
+router.post("/contact",verifyToken ,pageController.handleContactForm);
 
 module.exports = router;

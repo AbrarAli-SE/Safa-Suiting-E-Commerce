@@ -1,52 +1,45 @@
-// // ✅ Render About Page
-// exports.renderAboutPage = (req, res) => {
-//     res.render("pages/about");
-// };
-
-// // ✅ Render Contact Page
-// exports.renderContactPage = (req, res) => {
-//     res.render("pages/contact", { successMessage: null, errorMessage: null });
-// };
-
-// // ✅ Handle Contact Form Submission
-// exports.handleContactForm = async (req, res) => {
-//     try {
-//         const { name, email, message } = req.body;
-
-//         // Simulate sending an email (You can integrate Nodemailer here)
-//         console.log(`📧 Contact Form Submitted: \nName: ${name}\nEmail: ${email}\nMessage: ${message}`);
-
-//         // Render page with success message
-//         res.render("pages/contact", { successMessage: "Your message has been sent successfully!", errorMessage: null });
-
-//     } catch (error) {
-//         console.error("❌ Contact Form Error:", error);
-//         res.render("pages/contact", { successMessage: null, errorMessage: "An error occurred. Please try again." });
-//     }
-// };
+const Contact = require("../models/Contact");
 
 // ✅ Render About Page
 exports.renderAboutPage = (req, res) => {
-    res.render("pages/about", { user: req.user || null }); // ✅ Pass user to EJS
+    try
+    {
+        res.render("pages/about", { user: req.user || null }); // ✅ Pass user to EJS
+    }
+    catch(error)
+    {
+        console.error("❌ About Page Error:", error);
+        res.status(500).send("Server error");
+    }
 };
 
 // ✅ Render Contact Page
 exports.renderContactPage = (req, res) => {
-    res.render("pages/contact", { user: req.user || null, successMessage: null, errorMessage: null });
+    try
+    {
+        res.render("pages/contact", { user: req.user || null, successMessage: null, errorMessage: null });
+    }catch(error)
+    {
+        console.error("❌ Contact Page Error:", error);
+        res.status(500).send("Server error");
+    }
 };
 
 // ✅ Handle Contact Form Submission
 exports.handleContactForm = async (req, res) => {
     try {
-        const { name, email, message } = req.body;
+        const { name, email,phone, message } = req.body;
 
-        if (!name || !email || !message) {
+        if (!name || !email || !phone || !message) {
             return res.render("pages/contact", { 
                 user: req.user || null,
                 errorMessage: "All fields are required.",
                 successMessage: null
             });
         }
+
+         // ✅ Save contact form data to the database
+         await Contact.create({ name, email, phone, message });
 
         // ✅ Simulate email sending (Replace this with your email service)
         console.log(`📧 Contact Form Submission: Name: ${name}, Email: ${email}, Message: ${message}`);
