@@ -43,9 +43,12 @@ exports.renderRegisterPage = (req, res) => {
 
 // ✅ Render OTP Verification Page
 exports.renderOtpPage = (req, res) => {
-    const email = req.query.email || ""; // ✅ Ensure email is passed correctly
-    res.render("auth/verify-otp", { email, error: null });
+    if (!req.session.tempUser || !req.session.tempUser.email) {
+        return res.redirect("/auth/register"); // 🚫 Redirect if no email in session
+    }
+    res.render("auth/verify-otp", { email: req.session.tempUser.email, error: null });
 };
+
 
 
 // ✅ Render Login Page
@@ -165,6 +168,9 @@ exports.register = async (req, res) => {
 
         console.log("✅ User saved. Sending OTP email...");
 
+        // ✅ Store email in session to avoid showing it in URL
+        req.session.tempUser = { email };
+
         // ✅ Send OTP Email
         try {
             const html = `<p>Your OTP is: <strong>${otp}</strong></p>`;
@@ -187,7 +193,14 @@ exports.register = async (req, res) => {
 
 // ✅ Verify OTP & Generate JWT
 exports.verifyOTP = async (req, res) => {
-    const { email, otp } = req.body;
+
+    if (!req.session.tempUser || !req.session.tempUser.email) {
+        return res.redirect("/auth/register"); // 🚫 Redirect if session is missing
+    }
+
+
+    const email = req.session.tempUser.email;
+    const { otp } = req.body;
 
     try {
         const user = await User.findOne({ email });
@@ -219,6 +232,9 @@ exports.verifyOTP = async (req, res) => {
         user.tokens.push({ token });
         await user.save();
 
+         // ✅ Clear session after OTP verification
+         req.session.tempUser = null;
+
         // ✅ Set JWT in cookies
         res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
 
@@ -232,20 +248,19 @@ exports.verifyOTP = async (req, res) => {
 };
 
 
-// ✅ Resend OTP
+// ✅ Resend OTP (No Email in URL)
 exports.resendOTP = async (req, res) => {
-    const { email } = req.body;
+    if (!req.session.tempUser || !req.session.tempUser.email) {
+        return res.redirect("/auth/register"); // 🚫 Redirect if session is missing
+    }
+
+    const email = req.session.tempUser.email;
 
     try {
         const user = await User.findOne({ email });
 
         if (!user) {
             return res.render("auth/verify-otp", { email, error: "User not found." });
-        }
-
-        // ✅ If user is already verified, redirect to login
-        if (user.verified) {
-            return res.redirect("/auth/login");
         }
 
         // ✅ Generate a new OTP
@@ -270,6 +285,7 @@ exports.resendOTP = async (req, res) => {
         return res.render("auth/verify-otp", { email, error: "Server error. Please try again later." });
     }
 };
+
 
 // ✅ Logout (Remove JWT & Redirect)
 exports.logout = async (req, res) => {

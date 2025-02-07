@@ -10,7 +10,8 @@
   const indexRoutes = require('./routes/index');
   const adminRoutes = require('./routes/admin');
   const pageRoutes = require("./routes/page");
-  // const verifyToken = require("./middleware/authMiddleware");
+  const verifyToken = require("./middleware/authMiddleware");
+  const authRestrictionMiddleware = require("./middleware/authRestrictionMiddleware");
   const path = require('path');
 
   const app = express();
@@ -53,10 +54,13 @@
   app.use(express.json());
   app.use(express.urlencoded({ extended: false }));
 
+  app.use(verifyToken); // ✅ Set `req.user` for all requests
+
+  // ✅ Make `req.user` available globally in views
   app.use((req, res, next) => {
-    res.locals.user = req.user || null; // ✅ Set `user` globally for EJS views
-    next();
-});
+      res.locals.user = req.user || null;
+      next();
+  });
 
 
 

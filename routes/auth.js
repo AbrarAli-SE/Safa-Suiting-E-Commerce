@@ -1,5 +1,6 @@
 const express = require("express");
 const authController = require("../controllers/authController"); // ✅ Import authController
+const authRestrictionMiddleware = require("../middleware/authRestrictionMiddleware");
 
 const router = express.Router();
 
@@ -8,32 +9,22 @@ const router = express.Router();
 router.get("/google", authController.googleAuth);
 router.get("/google/callback", authController.googleAuthCallback);
 
-// ✅ Serve Register, Login, and Forgot Password Pages
-// ✅ Register Page (GET) - Render Registration Form
-router.get("/register", authController.renderRegisterPage);
+// ✅ Prevent logged-in users from accessing register, login, verify OTP, and resend OTP
+router.get("/register", authRestrictionMiddleware.restrictAuthRoutesForLoggedInUsers, authController.renderRegisterPage);
+router.post("/register", authRestrictionMiddleware.restrictAuthRoutesForLoggedInUsers, authController.register);
 
-// ✅ Register User (POST) - Handles Registration & Sends OTP
-router.post("/register", authController.register);
+// ✅ OTP Verification Page & Submission - Only Accessible During Registration
+router.get("/verify-otp", authRestrictionMiddleware.restrictOtpAccess, authController.renderOtpPage);
+router.post("/verify-otp", authRestrictionMiddleware.restrictOtpAccess, authController.verifyOTP);
 
-// ✅ OTP Verification Page (GET) - Render OTP Input Page
-router.get("/verify-otp", authController.renderOtpPage);
+// ✅ Resend OTP - Only Allowed During Registration
+router.post("/resend-otp", authRestrictionMiddleware.restrictOtpAccess, authController.resendOTP);
 
-// ✅ Verify OTP (POST) - Verifies OTP and Logs User In
-router.post("/verify-otp", authController.verifyOTP);
+router.get("/login", authRestrictionMiddleware.restrictAuthRoutesForLoggedInUsers, authController.renderLoginPage);
+router.post("/login", authRestrictionMiddleware.restrictAuthRoutesForLoggedInUsers, authController.login);
 
-// ✅ Resend OTP (POST) - Resends OTP to User Email
-router.post("/resend-otp", authController.resendOTP);
-
-// ✅ Render Login Page (GET)
-router.get("/login", authController.renderLoginPage);
-
-// ✅ Handle Login Submission (POST)
-router.post("/login", authController.login);
-
-// ✅ Render Forgot Password Page (GET)
+// ✅ Forgot Password - Accessible to Anyone
 router.get("/forgot-password", authController.renderForgotPasswordPage);
-
-// ✅ Handle Forgot Password Submission (POST)
 router.post("/forgot-password", authController.forgotPassword);
 
 // ✅ Ensure Logout Route Exists
