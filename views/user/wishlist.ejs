@@ -1,0 +1,135 @@
+<%- include('../shared/header') %>
+
+
+  <main class="container mx-auto px-4 py-12 mt-14">
+    <!-- Breadcrumb -->
+    <div class="text-sm text-gray-700 m-10 mr-3">
+      <nav class="flex space-x-2 text-sm text-gray-500">
+        <a href="/" class="hover:text-gray-900">Home</a>
+        <span>/</span>
+        <span class="text-gray-900">Wishlist</span>
+      </nav>
+    </div>
+
+    <div class="flex items-center justify-between px-4">
+      <div class="flex items-center gap-2">
+        <div class="w-2 h-6 bg-red-500 rounded"></div>
+        <p class="text-red-500 font-semibold px-4">Favourite</p>
+      </div>
+    </div>
+    <div class="flex items-center justify-between flex-col md:flex-row px-4">
+      <h2 class="text-3xl font-bold text-center md:text-left">Wishlist</h2>
+
+
+      <div class="flex md:justify-end justify-center items-center mt-4 space-x-4 mr-4">
+        <button class="slider-button left-button  bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-arrow-left text-red-600" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+          </svg>
+        </button>
+
+        <button class="slider-button right-button bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-arrow-right text-red-600" viewBox="0 0 16 16">
+            <path fill-rule="evenodd"
+              d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+        <!-- Cards Slider Container -->
+        <div class="relative border-b border-gray-500 px-4">
+          <% if (!user || !user.wishlist || user.wishlist.length === 0) { %>
+              <p class="text-gray-600 text-center mt-10">Your wishlist is empty.</p>
+          <% } else { %>
+              <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
+                  <% user.wishlist.forEach((item) => { %>
+                      <div class="bg-[#F5F5F5] h-96 md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg">
+                          <img src="<%= item.image %>" alt="<%= item.name %>" 
+                              class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+  
+                          <!-- Hover Buttons -->
+                          <div class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <!-- Remove Wishlist Button -->
+                              <form action="/user/remove-wishlist" method="POST">
+                                  <input type="hidden" name="productId" value="<%= item._id %>">
+                                  <button type="submit" 
+                                      class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+                                      <i class="bi bi-trash"></i>
+                                      <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                                          Remove
+                                      </span>
+                                  </button>
+                              </form>
+  
+                              <!-- Quick View Button -->
+                              <button onclick="openQuickView('<%= item.name %>', '<%= item.image %>', '<%= item.price %>', '<%= item.oldPrice || '' %>')"
+                                  class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+                                  <i class="bi bi-eye"></i>
+                                  <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                                      Quick View
+                                  </span>
+                              </button>
+
+                          </div>
+  
+                          <!-- Product Info -->
+                          <div class="absolute bottom-0 left-0 right-0 bg-white/90 dark:text-black p-4 translate-y-20 group-hover:translate-y-0 transition-all duration-300">
+                              <h3 class="font-bold mb-2"><%= item.name %></h3>
+                              <div class="flex justify-between items-center">
+                                  <div>
+                                      <span class="font-bold">$<%= item.price %></span>
+                                      <% if (item.oldPrice) { %>
+                                          <span class="text-sm line-through ml-2">$<%= item.oldPrice %></span>
+                                      <% } %>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  <% }) %>
+              </div>
+          <% } %>
+      </div>
+
+  </main>
+
+  <!-- Quick View Modal -->
+  <div id="quickViewModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 pointer-events-none transition-all duration-300 z-50">
+    <div class="bg-white w-96 p-6 rounded-lg relative">
+      <button onclick="closeQuickView()" class="absolute top-4 right-4 text-xl font-bold dark:text-black text-gray-600">X</button>
+      <h3 class="font-bold mb-4 dark:text-black">Product Name</h3>
+      <img src="/assests/default-image.jpg" alt="Product" class="w-full h-60 object-cover mb-4">
+      <div class="flex justify-between mb-4 dark:text-black">
+        <span class="font-bold">$0.00</span>
+        <span class="text-sm line-through">$0.00</span>
+      </div>
+      <p class="text-sm text-gray-600 dark:text-black">Product description...</p>
+    </div>
+  </div>
+
+
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const quickViewModal = document.getElementById("quickViewModal");
+  
+      window.openQuickView = function (title, image, price, oldPrice) {
+          quickViewModal.classList.remove("opacity-0", "pointer-events-none");
+  
+          // Insert product data dynamically
+          quickViewModal.querySelector("h3").textContent = title;
+          quickViewModal.querySelector("img").src = image;
+          quickViewModal.querySelector(".font-bold").textContent = `$${price}`;
+          quickViewModal.querySelector(".line-through").textContent = oldPrice ? `$${oldPrice}` : "";
+      };
+  
+      window.closeQuickView = function () {
+          quickViewModal.classList.add("opacity-0", "pointer-events-none");
+      };
+  });
+  </script>
+
+  <%- include('../shared/footer') %>

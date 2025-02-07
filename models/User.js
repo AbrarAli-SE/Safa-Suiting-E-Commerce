@@ -32,7 +32,15 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    tokens: [{ token: { type: String } }]  // ✅ Store active JWTs
+    tokens: [{ token: { type: String } }],  // ✅ Store active JWTs
+    
+     // ✅ Wishlist Feature: Store array of Product IDs
+     wishlist: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Product", // Reference to Product model
+      }
+    ]
   },
   { timestamps: true } // Adds createdAt & updatedAt
 );

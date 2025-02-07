@@ -68,7 +68,6 @@
 
 
 
-
 // Routes
 app.use('/', indexRoutes)
 app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
