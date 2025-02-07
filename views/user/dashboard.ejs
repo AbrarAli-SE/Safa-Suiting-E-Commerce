@@ -29,14 +29,21 @@
 
                     <!-- ✅ Profile Update Form -->
                     <form id="profileForm" action="/user/update-profile" method="POST" class="space-y-6">
-                        <!-- Centered Error Message -->
-                        <% if (error) { %>
-                            <div class="flex justify-center">
-                                <div class="alert-message text-green-500 text-center font-medium">
-                                    <%= error %>
-                                </div>
+                        
+                        <!-- ✅ Success & Error Messages for Password Change -->
+                    <div class="text-center mb-4">
+                        <% if (successMessage) { %>
+                            <div class="alert-message text-green-500 text-center font-medium">
+                                <%= successMessage %>
                             </div>
                         <% } %>
+                    
+                        <% if (error) { %>
+                            <div class="alert-message text-red-500 text-center font-medium">
+                                <%= error %>
+                            </div>
+                        <% } %>
+                    </div>
 
                         <!-- Name Field -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -43,5 +43,13 @@ const adminAuth = async (req, res, next) => {
     }
 };
 
+// ✅ User Authorization Middleware (Protects `/user/*` routes)
+const verifyUser = (req, res, next) => {
+    if (!req.user) {
+        return res.redirect("/auth/login"); // ✅ Redirect unauthenticated users to login
+    }
+    next();
+};
 
-module.exports = { verifyToken, adminAuth };
+
+module.exports = { verifyToken, adminAuth ,verifyUser };
