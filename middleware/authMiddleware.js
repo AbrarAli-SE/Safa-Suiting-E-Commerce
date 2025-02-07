@@ -30,4 +30,18 @@ const verifyToken = async (req, res, next) => {
     }
 };
 
-module.exports = verifyToken;
+// ✅ Admin Authorization Middleware (Protects `/admin/*` routes)
+const adminAuth = async (req, res, next) => {
+    try {
+        if (!req.user || req.user.role !== "admin") {
+            return res.redirect("/"); // Redirect non-admin users to the home page
+        }
+        next();
+    } catch (err) {
+        console.error("❌ Admin Middleware Error:", err);
+        res.redirect("/auth/login"); // Redirect to login if something goes wrong
+    }
+};
+
+
+module.exports = { verifyToken, adminAuth };

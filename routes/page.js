@@ -1,5 +1,5 @@
 const express = require("express");
-const verifyToken = require("../middleware/authMiddleware"); // ✅ Ensure user authentication is checked
+const {verifyToken} = require("../middleware/authMiddleware"); // ✅ Ensure user authentication is checked
 const pageController = require("../controllers/pageController");
 
 const router = express.Router();

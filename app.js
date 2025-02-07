@@ -10,7 +10,7 @@
   const indexRoutes = require('./routes/index');
   const adminRoutes = require('./routes/admin');
   const pageRoutes = require("./routes/page");
-  const verifyToken = require("./middleware/authMiddleware");
+  const {verifyToken} = require("./middleware/authMiddleware");
   const authRestrictionMiddleware = require("./middleware/authRestrictionMiddleware");
   const path = require('path');
 
