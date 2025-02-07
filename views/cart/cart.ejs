@@ -122,7 +122,7 @@
   </div>
   <!-- Fix Button Overflow -->
   <button class="w-full px-6 py-2.5 mt-auto bg-red-500 text-white rounded hover:bg-red-600 transition">
-    <a href="/checkout">
+    <a href="/user/cart/checkout">
       Proceed to checkout
     </a> 
   </button>
@@ -130,6 +130,79 @@
 
 </div>
 
+<!-- <main class="container mx-auto px-4 py-12 mt-14"> -->
+    <!-- Breadcrumb -->
+    <!-- <div class="text-sm text-gray-700 m-10 mr-3">
+        <nav class="flex space-x-2 text-sm text-gray-500">
+            <a href="/" class="hover:text-gray-900">Home</a>
+            <span>/</span>
+            <span class="text-gray-900">Cart</span>
+        </nav>
+    </div> -->
+
+    <!-- <div class="max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-8"> -->
+        <!-- Cart Items Section (Left Side) -->
+        <!-- <div class="md:col-span-2 space-y-6"> -->
+            <!-- <h2 class="text-2xl font-semibold">Shopping Cart</h2> -->
+            <% /* %>
+            <% if (!user || !user.cart || user.cart.length === 0) { %>
+                <p class="text-gray-600 text-center mt-10">Your cart is empty.</p>
+            <% } else { %>
+                <% user.cart.forEach((item) => { %>
+                    <div class="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row items-center justify-between border">
+                        <div class="flex items-center gap-4">
+                            <form action="/user/cart/remove" method="POST">
+                                <input type="hidden" name="productId" value="<%= item._id %>">
+                                <button type="submit" class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50">
+                                    ✕
+                                </button>
+                            </form>
+                            <img src="<%= item.image %>" alt="<%= item.name %>" class="w-24 h-20 object-cover rounded">
+                            <div>
+                                <h3 class="font-medium"><%= item.name %></h3>
+                                <span class="text-gray-500">Price: <span class="price" data-price="<%= item.price %>">$<%= item.price %></span></span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="number" name="quantity" value="<%= item.quantity %>" min="1" class="quantity w-16 px-3 py-2 text-center border rounded bg-gray-50">
+                            <span class="font-medium subtotal">$<%= item.price * item.quantity %></span>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
+
+            <!-- Buttons -->
+            <div class="flex justify-between pt-4">
+                <a href="/" class="px-6 py-2.5 border rounded hover:bg-gray-100 transition">Return To Shop</a>
+                <button id="updateCart" class="px-6 py-2.5 border rounded hover:bg-gray-100 transition">Update Cart</button>
+            </div>
+        </div>
+
+        <!-- Cart Total Section (Right Side) -->
+        <div class="border rounded-lg p-6 bg-white shadow w-[350px] md:w-[400px] self-start flex flex-col">
+            <h2 class="text-xl font-semibold mb-6">Cart Total</h2>
+            <div class="space-y-4 flex-grow">
+                <div class="flex justify-between items-center py-3 border-t">
+                    <span class="text-gray-600">Subtotal:</span>
+                    <span id="cartSubtotal" class="font-medium">$<%= user.cart.reduce((acc, item) => acc + item.price * item.quantity, 0) %></span>
+                </div>
+                <div class="flex justify-between items-center py-3 border-t">
+                    <span class="text-gray-600">Shipping:</span>
+                    <span class="font-medium">Free</span>
+                </div>
+                <div class="flex justify-between items-center py-3 border-t">
+                    <span class="text-gray-600">Total:</span>
+                    <span id="cartTotal" class="font-medium">$<%= user.cart.reduce((acc, item) => acc + item.price * item.quantity, 0) %></span>
+                </div>
+            </div>
+            <!-- Fix Button Overflow -->
+            <button class="w-full px-6 py-2.5 mt-auto bg-red-500 text-white rounded hover:bg-red-600 transition">
+                <a href="/checkout">Proceed to checkout</a> 
+            </button>
+        </div>
+    </div>
+</main>
+<% */ %>
 <!-- JavaScript for Cart Functionality -->
 <script>
   document.addEventListener("DOMContentLoaded", function () {

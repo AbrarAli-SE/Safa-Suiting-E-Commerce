@@ -10,8 +10,10 @@
   const indexRoutes = require('./routes/index');
   const adminRoutes = require('./routes/admin');
   const pageRoutes = require("./routes/page");
+  const wishlistRoutes = require("./routes/wishlist"); // ✅ Import Wishlist Routes
+  const cartRoutes = require("./routes/cart"); // ✅ Import Cart Routes
   const {verifyToken} = require("./middleware/authMiddleware");
-  const authRestrictionMiddleware = require("./middleware/authRestrictionMiddleware");
+  
   const path = require('path');
 
   const app = express();
@@ -72,6 +74,8 @@
 app.use('/', indexRoutes)
 app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
 app.use('/user', userRoutes);
+app.use("/user/wishlist", wishlistRoutes); // ✅ Wishlist Routes
+app.use("/user/cart", cartRoutes); // ✅ Cart Routes
 // ✅ Ensures `/pages/contact` and `/pages/about` are accessible for all users
 app.use("/pages", pageRoutes);
 app.use('/admin', adminRoutes);

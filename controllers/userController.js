@@ -19,16 +19,6 @@ exports.renderDashboard = async (req, res) => {
     }
 };
 
-// ✅ Render Wishlist Page
-exports.renderWishlist = async (req, res) => {
-    try {
-        res.render("user/wishlist", { user: req.user });
-    } catch (error) {
-        console.error("❌ Wishlist Page Error:", error);
-        res.status(500).send("Server error");
-    }
-};
-
 
 // ✅ Update User Profile
 exports.updateProfile = async (req, res) => {
