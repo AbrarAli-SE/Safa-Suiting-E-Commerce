@@ -80,9 +80,53 @@
                 </table>
 
                  <!-- ✅ No Results Message -->
-        <p id="noResults" class="text-center text-red-500 font-semibold hidden mt-4">No users found</p>
+                <p id="noResults" class="text-center text-red-500 font-semibold hidden mt-4">No users found</p>
               </div>
             </div>
+
+            <!-- ✅ Entries Per Page & Pagination -->
+<div class="flex justify-between items-center mt-4">
+  <!-- Entries Per Page -->
+  <div>
+      <label for="entriesPerPage" class="text-gray-700 dark:text-gray-300">Show</label>
+      <select id="entriesPerPage" class="px-3 py-1 border rounded-lg bg-white dark:bg-gray-800 dark:text-white">
+          <option value="5">5</option>
+          <option value="10" selected>10</option>
+          <option value="20">20</option>
+          <option value="50">50</option>
+      </select>
+      <span class="text-gray-700 dark:text-gray-300">entries</span>
+  </div>
+
+  
+  <div class="flex items-center justify-center space-x-2">
+    <!-- Prev Page Button -->
+    <button id="prevPage" class="flex items-center justify-center size-8 rounded-sm border bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+      aria-label="Previous Page">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd"
+          d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+          clip-rule="evenodd" />
+      </svg>
+    </button>
+  
+    <!-- Page Input -->
+    <div class="flex items-center space-x-1">
+      <span id="currentPage" class="text-gray-700 dark:text-white">1</span>
+    </div>
+  
+    <!-- Next Page Button -->
+    <button id="nextPage" class="flex items-center justify-center size-8 rounded-sm border bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+      aria-label="Next Page">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
+        <path fill-rule="evenodd"
+          d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+          clip-rule="evenodd" />
+      </svg>
+    </button>
+  </div>
+  
+</div>
   </main>
 
   <script>
@@ -139,7 +183,69 @@
     });
   </script>
 
-
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const entriesPerPage = document.getElementById("entriesPerPage");
+      const userRows = document.querySelectorAll(".user-row");
+      const noResults = document.getElementById("noResults");
+      const prevPage = document.getElementById("prevPage");
+      const nextPage = document.getElementById("nextPage");
+      const currentPage = document.getElementById("currentPage");
+  
+      let page = 1;
+      let rowsPerPage = parseInt(entriesPerPage.value);
+  
+      function displayTable() {
+          let start = (page - 1) * rowsPerPage;
+          let end = start + rowsPerPage;
+          let visibleCount = 0;
+  
+          userRows.forEach((row, index) => {
+              if (index >= start && index < end) {
+                  row.style.display = "";
+                  visibleCount++;
+              } else {
+                  row.style.display = "none";
+              }
+          });
+  
+          // ✅ Show "No users found" if no users are displayed
+          noResults.style.display = visibleCount === 0 ? "block" : "none";
+  
+          // ✅ Disable Prev/Next buttons if necessary
+          prevPage.disabled = page === 1;
+          nextPage.disabled = end >= userRows.length;
+      }
+  
+      // ✅ Pagination Controls
+      prevPage.addEventListener("click", function () {
+          if (page > 1) {
+              page--;
+              displayTable();
+              currentPage.textContent = page;
+          }
+      });
+  
+      nextPage.addEventListener("click", function () {
+          if (page * rowsPerPage < userRows.length) {
+              page++;
+              displayTable();
+              currentPage.textContent = page;
+          }
+      });
+  
+      // ✅ Entries Per Page Change
+      entriesPerPage.addEventListener("change", function () {
+          rowsPerPage = parseInt(entriesPerPage.value);
+          page = 1;
+          displayTable();
+          currentPage.textContent = page;
+      });
+  
+      // ✅ Initial Table Load
+      displayTable();
+  });
+  </script>
 
 
 
