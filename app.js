@@ -67,7 +67,7 @@
 
 
 // app.use('/adminusers',(req,res) => {
-//   res.render('admin/manage-users');
+//   res.render('admin/setting');
 // })
 
 

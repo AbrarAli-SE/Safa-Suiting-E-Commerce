@@ -1,68 +1,243 @@
 <%- include('../shared/asideBar') %>
 
-<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+  <main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
     <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Profile Settings</h1>
-    <form class="space-y-4 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <!-- Left Side: Personal Information Section -->
-        <div class="space-y-4">
-          <h2 class="text-2xl font-semibold mb-4">Personal Information</h2>
-  
-          <!-- Full Name -->
-          <div class="space-y-2">
-            <label for="name" class="block text-gray-700 dark:text-gray-300 font-medium">Full Name</label>
-            <input type="text" id="name" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" placeholder="Enter your full name">
-          </div>
-  
-          <!-- Email -->
-          <div class="space-y-2">
-            <label for="email" class="block text-gray-700 dark:text-gray-300 font-medium">Email Address</label>
-            <input type="email" id="email" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" placeholder="Enter your email address">
-          </div>
-  
-          <!-- Password -->
-          <div class="space-y-2">
-            <label for="password" class="block text-gray-700 dark:text-gray-300 font-medium">New Password</label>
-            <input type="password" id="password" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" placeholder="Enter your new password">
-          </div>
-        </div>
-  
-        <!-- Right Side: Profile Picture Section -->
-        <div class="space-y-4">
-          <h2 class="text-2xl font-semibold mb-4">Profile Picture</h2>
-  
-          <!-- Profile Picture Upload -->
-          <div class="space-y-2">
-            <label for="profilePicture" class="block text-gray-700 dark:text-gray-300 font-medium">Upload Profile Picture</label>
-            
-            <!-- Image Preview & Upload -->
-            <div class="border-2 border-gray-300 dark:border-gray-600 p-6 rounded-lg text-center flex flex-col items-center justify-center">
-              <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-500 dark:text-gray-400 mb-4">
-                <p>Preview</p>
-              </div>
-              <label class="text-blue-500 cursor-pointer hover:text-blue-600 mb-4">
-                <i class="bi bi-cloud-upload text-gray-500 dark:text-gray-300"></i> 
-                Upload your profile picture
-              </label>
-              <input type="file" id="profilePicture" class="hidden" accept="image/*">
+    <!-- ✅ Profile Update Form -->
+      <!-- Breadcrumb & Welcome -->
+      <div class="flex justify-between items-center mb-8">
+        <nav class="flex space-x-2 text-sm text-gray-500">
+            <a href="/admin/intro" class="hover:text-gray-900">Home</a>
+            <span>/</span>
+            <span class="text-gray-900 dark:text-red-500 transition">Setting</span>
+        </nav>
+        <div class="flex items-center space-x-4">
+            <div class="text-sm">
+                Welcome! <span class="text-red-500 dark:text-red-400"><%= user.name %></span>
             </div>
-          </div>
         </div>
+    </div>
+     <!-- ✅ Password Change Form -->
+    <h2 class="mt-10 text-xl font-semibold text-red-500">Change Password</h2>
+    <form id="profileForm" action="/admin/update-profile" method="POST" class="space-y-6">
+
+          <!-- ✅ Success & Error Messages for Password Change -->
+          <div class="text-center mb-4">
+            <% if (successMessage) { %>
+                <div class="alert-message text-green-500 text-center font-medium">
+                    <%= successMessage %>
+                </div>
+            <% } %>
+        
+            <% if (error) { %>
+                <div class="alert-message text-red-500 text-center font-medium">
+                    <%= error %>
+                </div>
+            <% } %>
+        </div>
+
+      <!-- Name & Email Fields -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Full Name</label>
+          <input type="text" id="name" name="name" value="<%= user.name %>" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
+          <div id="nameError" class="text-red-500 text-sm hidden"></div>
       </div>
-  
-      <div class="flex items-center justify-between mt-8">
-        <button type="submit" class="w-full px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition">
-          Save Changes
+
+      <!-- Email -->
+      <div class="space-y-2">
+          <label class="block text-sm font-medium text-gray-700">Email</label>
+          <input type="email" id="email" name="email" value="<%= user.email %>" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
+          <div id="emailError" class="text-red-500 text-sm hidden"></div>
+      </div>
+      
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-end space-x-4">
+        <button type="reset" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+            Cancel
         </button>
-      </div>
+        <button type="submit" class="px-4 py-2 text-sm text-white bg-red-500 rounded-md hover:bg-red-600">
+            Save Changes
+        </button>
+    </div>
     </form>
+
+          <!-- ✅ Success & Error Messages for Password Change -->
+          <div class="text-center mb-4">
+            <% if (passwordSuccess) { %>
+                <div class="alert-message text-green-500 text-center font-medium">
+                    <%= passwordSuccess %>
+                </div>
+            <% } %>
+        
+            <% if (passwordError) { %>
+                <div class="alert-message text-red-500 text-center font-medium">
+                    <%= passwordError %>
+                </div>
+            <% } %>
+        </div>
+
+
+
+    <!-- ✅ Password Change Form -->
+    <h2 class="mt-10 text-xl font-semibold text-red-500">Change Password</h2>
+    <form id="passwordForm" action="/admin/change-password" method="POST" class="space-y-6 mt-4">
+      <div class="space-y-4">
+          <input type="password" id="currentPassword" name="currentPassword" placeholder="Current Password" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
+          <div id="currentPasswordError" class="text-red-500 text-sm hidden"></div>
+
+          <input type="password" id="newPassword" name="newPassword" placeholder="New Password" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
+          <div id="newPasswordError" class="text-red-500 text-sm hidden"></div>
+
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
+          <div id="confirmPasswordError" class="text-red-500 text-sm hidden"></div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-end space-x-4">
+          <button type="submit" class="px-4 py-2 text-sm text-white bg-red-500 rounded-md hover:bg-red-600">
+              Change Password
+          </button>
+      </div>
+  </form>
+
   </main>
-  
 
-</div>
 
-     <!-- Link the JavaScript file -->
-     <script src="/js/main.js"></script>
-</body>
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Function to hide error/success messages after 5 seconds
+        setTimeout(function () {
+            const errorMessages = document.querySelectorAll(".alert-message");
+            errorMessages.forEach((message) => {
+                message.style.display = "none";
+            });
+        }, 5000); // 5 seconds
+    });
+</script>
 
-</html>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const darkModeIcon = document.getElementById("darkModeIcon");
+
+    // ✅ Check for saved user preference in localStorage
+    if (localStorage.getItem("darkMode") === "enabled") {
+        document.documentElement.classList.add("dark");
+        darkModeIcon.classList.replace("bi-moon", "bi-sun");
+    }
+
+    darkModeToggle.addEventListener("click", function () {
+        const isDarkMode = document.documentElement.classList.toggle("dark");
+        darkModeIcon.classList.replace(isDarkMode ? "bi-moon" : "bi-sun", isDarkMode ? "bi-sun" : "bi-moon");
+        localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+    });
+
+    // ✅ Profile Form Validation
+    const profileForm = document.getElementById("profileForm");
+    const nameInput = document.getElementById("name");
+    const emailInput = document.getElementById("email");
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+
+    function validateName() {
+        const nameValue = nameInput.value.trim();
+        if (nameValue.length === 0) {
+            nameError.classList.add("hidden");
+            return false;
+        }
+        if (nameValue.length < 3) {
+            nameError.textContent = "Name must be at least 3 characters long.";
+            nameError.classList.remove("hidden");
+            return false;
+        }
+        nameError.classList.add("hidden");
+        return true;
+    }
+
+    function validateEmail() {
+        const emailValue = emailInput.value.trim();
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+        
+        if (emailValue.length === 0) {
+            emailError.classList.add("hidden");
+            return false;
+        }
+        if (!emailPattern.test(emailValue)) {
+            emailError.textContent = "Enter a valid email address.";
+            emailError.classList.remove("hidden");
+            return false;
+        }
+        emailError.classList.add("hidden");
+        return true;
+    }
+
+    nameInput.addEventListener("input", validateName);
+    emailInput.addEventListener("input", validateEmail);
+
+    profileForm.addEventListener("submit", function (event) {
+        if (!validateName() || !validateEmail()) {
+            event.preventDefault();
+        }
+    });
+
+    // ✅ Password Form Validation
+    const passwordForm = document.getElementById("passwordForm");
+    const newPassword = document.getElementById("newPassword");
+    const confirmPassword = document.getElementById("confirmPassword");
+    const newPasswordError = document.getElementById("newPasswordError");
+    const confirmPasswordError = document.getElementById("confirmPasswordError");
+
+    function validatePassword() {
+        const passwordValue = newPassword.value.trim();
+        if (passwordValue.length === 0) {
+            newPasswordError.classList.add("hidden");
+            return false;
+        }
+        if (passwordValue.length < 6) {
+            newPasswordError.textContent = "Password must be at least 6 characters long.";
+            newPasswordError.classList.remove("hidden");
+            return false;
+        }
+        newPasswordError.classList.add("hidden");
+        return true;
+    }
+
+    function validateConfirmPassword() {
+        const confirmPasswordValue = confirmPassword.value.trim();
+        if (confirmPasswordValue.length === 0) {
+            confirmPasswordError.classList.add("hidden");
+            return false;
+        }
+        if (confirmPasswordValue.length < 6) {
+            confirmPasswordError.textContent = "Password must be at least 6 characters long.";
+            confirmPasswordError.classList.remove("hidden");
+            return false;
+        }
+        if (newPassword.value !== confirmPassword.value) {
+            confirmPasswordError.textContent = "Passwords do not match.";
+            confirmPasswordError.classList.remove("hidden");
+            return false;
+        }
+        confirmPasswordError.classList.add("hidden");
+        return true;
+    }
+
+    newPassword.addEventListener("input", validatePassword);
+    confirmPassword.addEventListener("input", validateConfirmPassword);
+
+    passwordForm.addEventListener("submit", function (event) {
+        if (!validatePassword() || !validateConfirmPassword()) {
+            event.preventDefault();
+        }
+    });
+});
+
+</script>
+  <!-- Link the JavaScript file -->
+  <script src="/js/main.js"></script>
+  </body>
+
+  </html>

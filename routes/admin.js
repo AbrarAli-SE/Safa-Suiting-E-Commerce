@@ -13,5 +13,14 @@ router.get("/users/:userId", verifyToken, adminAuth, adminController.renderUserD
 // ✅ Update User Role Route
 router.post("/users/update-role", verifyToken, adminAuth, adminController.updateUserRole);
 
+// ✅ Admin Settings Page Route
+router.get("/settings", verifyToken, adminAuth, adminController.renderAdminSettings);
+
+// ✅ Update Profile Route
+router.post("/update-profile",verifyToken,adminAuth, adminController.updateProfile);
+
+// ✅ Change Password Route
+router.post("/change-password",verifyToken,adminAuth, adminController.changePassword);
+
 
 module.exports = router;
