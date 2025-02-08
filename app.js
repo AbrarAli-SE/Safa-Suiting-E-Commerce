@@ -66,7 +66,9 @@
 
 
 
-
+// app.use('/adminusers',(req,res) => {
+//   res.render('admin/manage-users');
+// })
 
 
 
