@@ -10,5 +10,8 @@ router.get("/users", verifyToken, adminAuth, adminController.renderManageUsers);
 
 router.get("/users/:userId", verifyToken, adminAuth, adminController.renderUserDetails);
 
+// ✅ Update User Role Route
+router.post("/users/update-role", verifyToken, adminAuth, adminController.updateUserRole);
+
 
 module.exports = router;
