@@ -20,11 +20,19 @@ exports.renderAdminDashboard = async (req, res) => {
 
 exports.renderManageUsers = async (req, res) => {
     try {
-        const users = await User.find({}, "name email role"); // ✅ Get all users
+        let page = parseInt(req.query.page) || 1;
+        let limit = 10; // ✅ Number of users per page
+        let skip = (page - 1) * limit;
+
+        const totalUsers = await User.countDocuments();
+        const users = await User.find({}, "name email role").skip(skip).limit(limit);
+        
 
         res.render("admin/manage-users", { 
-            user: req.user,  // ✅ Pass logged-in user
-            users,           // ✅ Pass users to EJS
+            user: req.user,   // ✅ Pass logged-in admin user
+            users,            // ✅ Pass paginated users
+            currentPage: page,
+            totalPages: Math.ceil(totalUsers / limit),
             errorMessage: null,
             successMessage: null
 
