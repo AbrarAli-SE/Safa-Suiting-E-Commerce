@@ -1,6 +1,29 @@
 const User = require("../models/User");
+const Contact = require("../models/Contact");
 const bcrypt = require("bcryptjs");
 
+
+
+exports.renderContacts = async (req, res) => {
+    try {
+        let page = parseInt(req.query.page) || 1;
+        let limit = 10; // ✅ Contacts per page
+        let skip = (page - 1) * limit;
+
+        const totalContacts = await Contact.countDocuments();
+        const contacts = await Contact.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+
+        res.render("admin/contact-list", {
+            user: req.user,
+            contacts,
+            currentPage: page,
+            totalPages: Math.ceil(totalContacts / limit),
+        });
+    } catch (error) {
+        console.error("❌ Error fetching contacts:", error);
+        res.status(500).send("Server error");
+    }
+};
 
 
 // ✅ Render Admin Dashboard
@@ -16,6 +39,63 @@ exports.renderAdminDashboard = async (req, res) => {
     }
 };
 
+exports.renderCouponCode = async(req, res) =>{
+    try {
+        res.render("admin/CouponCode");
+    } catch (error) {
+        console.error("❌ CouponCode Error:", error);
+        res.status(500).send("Server error");
+    }
+}
+
+
+exports.renderPayment = async(req, res) =>{
+    try {
+        res.render("admin/payment");
+    } catch (error) {
+        console.error("❌ Payment Error:", error);
+        res.status(500).send("Server error");
+    }
+}
+
+exports.renderTrackId = async(req, res) =>{
+    try {
+        res.render("admin/trackId");
+    } catch (error) {
+        console.error("❌ Track ID Error:", error);
+        res.status(500).send("Server error");
+    }
+}
+
+
+exports.renderCancelOrder = async(req, res) =>{
+    try {
+        res.render("orders/order-history");
+    } catch (error) {
+        console.error("❌ Cancel Order Error:", error);
+        res.status(500).send("Server error");
+    }
+}
+
+exports.renderAnalytical = async(req, res) =>{
+    try {
+        res.render("admin/analytical");
+    } catch (error) {
+        console.error("❌ Cancel Order Error:", error);
+        res.status(500).send("Server error");
+    }
+}
+
+
+
+exports.renderCoursel = async(req, res) =>{
+    try {
+        res.render("admin/coursel");
+    } catch (error) {
+        console.error("❌ Cancel Order Error:", error);
+        res.status(500).send("Server error");
+    }
+}
 
 
 exports.renderManageUsers = async (req, res) => {
@@ -71,8 +151,6 @@ exports.renderUserDetails = async (req, res) => {
         res.status(500).render("admin/user-details", { error: "Server error", user: null });
     }
 };
-
-
 
 
 // ✅ Update User Role

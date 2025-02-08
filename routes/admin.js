@@ -23,4 +23,27 @@ router.post("/update-profile",verifyToken,adminAuth, adminController.updateProfi
 router.post("/change-password",verifyToken,adminAuth, adminController.changePassword);
 
 
+router.get("/coupon-code",verifyToken,adminAuth, adminController.renderCouponCode);
+
+
+router.get("/payment",verifyToken,adminAuth, adminController.renderPayment);
+
+
+router.get("/assign-id",verifyToken,adminAuth, adminController.renderTrackId);
+
+
+router.get("/cancel-order",verifyToken,adminAuth, adminController.renderCancelOrder);
+
+
+router.get("/analytical",verifyToken,adminAuth, adminController.renderAnalytical);
+
+
+router.get("/manage-coursel",verifyToken,adminAuth, adminController.renderCoursel);
+
+// ✅ Admin Contact Submissions Page
+router.get("/contacts", verifyToken, adminAuth, adminController.renderContacts);
+
+
+
+
 module.exports = router;

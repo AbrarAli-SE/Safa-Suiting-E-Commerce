@@ -12,6 +12,7 @@
   const pageRoutes = require("./routes/page");
   const wishlistRoutes = require("./routes/wishlist"); // ✅ Import Wishlist Routes
   const cartRoutes = require("./routes/cart"); // ✅ Import Cart Routes
+  const productRoutes = require("./routes/product"); // ✅ Import Cart Routes
   const {verifyToken} = require("./middleware/authMiddleware");
   
   const path = require('path');
@@ -81,6 +82,7 @@ app.use("/user/cart", cartRoutes); // ✅ Cart Routes
 // ✅ Ensures `/pages/contact` and `/pages/about` are accessible for all users
 app.use("/pages", pageRoutes);
 app.use('/admin', adminRoutes);
+app.use('/admin/product', productRoutes);
 // ✅ Routes
 
 
