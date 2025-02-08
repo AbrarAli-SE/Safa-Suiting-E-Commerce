@@ -8,5 +8,7 @@ router.get("/intro", verifyToken, adminAuth, adminController.renderAdminDashboar
 
 router.get("/users", verifyToken, adminAuth, adminController.renderManageUsers);
 
+router.get("/users/:userId", verifyToken, adminAuth, adminController.renderUserDetails);
+
 
 module.exports = router;

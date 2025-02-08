@@ -30,3 +30,32 @@ exports.renderManageUsers = async (req, res) => {
         res.status(500).send("Server error");
     }
 };
+
+
+
+
+exports.renderUserDetails = async (req, res) => {
+    try {
+        const userId = req.params.userId;
+        // console.log("Fetching User ID:", userId); // ✅ Debug Log
+
+        if (!userId || userId.length !== 24) {
+            // console.error("❌ Invalid User ID Format:", userId);
+            return res.status(400).render("admin/user-details", { error: "Invalid User ID", user: null });
+        }
+
+        const user = await User.findById(userId);
+        // console.log("Found User:", user); // ✅ Debug Log
+
+        if (!user) {
+            console.error("❌ User Not Found for ID:", userId);
+            return res.status(404).render("admin/user-details", { error: "User not found", user: null });
+        }
+
+        res.render("admin/user-details", { user, error: null });
+    } catch (error) {
+        console.error("❌ User Details Error:", error);
+        res.status(500).render("admin/user-details", { error: "Server error", user: null });
+    }
+};
+
