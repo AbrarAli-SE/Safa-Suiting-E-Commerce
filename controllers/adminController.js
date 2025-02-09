@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const Contact = require("../models/Contact");
 const bcrypt = require("bcryptjs");
+const Carousel = require("../models/Carousel");  // Make sure you have a Carousel Model
 
 
 
@@ -144,6 +145,37 @@ exports.renderCoursel = async(req, res) =>{
     }
 }
 
+// ✅ Upload Carousel Images Securely
+exports.uploadCarouselImages = async (req, res) => {
+    try {
+        if (!req.files || req.files.length === 0) {
+            return res.status(400).send("No images uploaded.");
+        }
+
+        // ✅ Get Secure Cloudinary URLs
+        let uploadedImages = req.files.map(file => file.path);
+
+        // ✅ Save URLs to Database
+        await Carousel.create({ images: uploadedImages });
+
+        res.redirect("/admin/manage-coursel");
+
+    } catch (error) {
+        console.error("❌ Secure Upload Error:", error);
+        res.status(500).send("Server error");
+    }
+};
+
+// ✅ Get Images for User Page
+exports.getCarouselImages = async (req, res) => {
+    try {
+        const carousel = await Carousel.findOne().sort({ createdAt: -1 }); // ✅ Get latest images
+        res.json({ success: true, images: carousel ? carousel.images : [] });
+    } catch (error) {
+        console.error("❌ Fetch Carousel Error:", error);
+        res.status(500).send("Server error");
+    }
+};
 
 exports.renderManageUsers = async (req, res) => {
     try {

@@ -2,94 +2,59 @@
 
 
 <main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
-    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Update Carousel</h1>
+  <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9">Update Carousel</h1>
 
-    <!-- Unified Form: Image Upload and Context Input -->
-    <section class="mb-8">
+  <!-- ✅ Upload Form -->
+  <section class="mb-8">
       <h2 class="text-2xl font-semibold mb-4">Manage Carousel</h2>
-      <form id="carousel-form" enctype="multipart/form-data">
+      <form id="carousel-form" action="/admin/carousel/upload" method="POST" enctype="multipart/form-data">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <div>
-            <label class="block text-lg font-semibold mb-2">Image 1</label>
-            <input type="file" name="image1" class="image-upload border p-2 w-full" accept="image/*"
-              onchange="previewImage(event, 0)" />
-          </div>
-
-          <div>
-            <label class="block text-lg font-semibold mb-2">Image 2</label>
-            <input type="file" name="image2" class="image-upload border p-2 w-full" accept="image/*"
-              onchange="previewImage(event, 1)" />
-          </div>
-
-          <div>
-            <label class="block text-lg font-semibold mb-2">Image 3</label>
-            <input type="file" name="image3" class="image-upload border p-2 w-full" accept="image/*"
-              onchange="previewImage(event, 2)" />
-          </div>
-        </div>
-        <button type="button" onclick="uploadSlider()"
-          class="px-6 py-2 bg-[#DB4444]  hover:bg-[#de2d2d]  transition text-white rounded">
-          Upload Slider
-        </button>
-      </form>
-    </section>
-
-
-    <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Image Slider</h2>
-      <div class="w-full xlg:ml-3">
-        <div class="w-full relative">
-          <div class="swiper default-carousel swiper-container">
-            <div class="swiper-wrapper">
-              <div class="swiper-slide">
-                <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden">
-                  <img src="/assests/image.png" class="w-full h-[80vh] object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden">
-                  <img src="/assests/image2.jpg" class="w-full h-[80vh] object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
-                  </div>
-                </div>
-              </div>
-              <div class="swiper-slide">
-                <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden">
-                  <img src="/assests/image3.jpg" class="w-full h-[80vh] object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
-                  </div>
-                </div>
-              </div>
+            <div>
+                <label class="block text-lg font-semibold mb-2">Image 1</label>
+                <input type="file" name="images" class="border p-2 w-full" accept="image/*" multiple required />
             </div>
-            <button id="slider-button-left"
-            class="swiper-button-prev group p-2 flex justify-center items-center border border-solid border-red-600 w-12 aspect-square rounded-full left-5 hover:bg-red-500">
-            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 16 16" fill="none">
-              <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </button>
-          
-          <button id="slider-button-right"
-            class="swiper-button-next group p-2 flex justify-center items-center border border-solid border-red-600 w-12 aspect-square rounded-full right-5 hover:bg-red-500">
-            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 16 16" fill="none">
-              <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
-                stroke-linejoin="round" />
-            </svg>
-          </button>
-          
-            <div class="swiper-pagination"></div>
-          </div>
         </div>
-      </div>
-      
-    </section>
-  </main>
+        <button type="submit" class="px-6 py-2 bg-red-500 hover:bg-red-600 transition text-white rounded">
+            Upload Slider
+        </button>
+    </form>
+    
+  </section>
 
-</div>
+  <!-- ✅ Preview Carousel -->
+  <section class="mb-8">
+      <h2 class="text-2xl font-semibold mb-4">Image Slider</h2>
+      <div class="swiper default-carousel swiper-container">
+          <div class="swiper-wrapper" id="adminCarouselImages">
+              <!-- Images will be dynamically loaded here -->
+          </div>
+      </div>
+      <div class="swiper-pagination"></div>
+  </section>
+</main>
+
+<script>
+  async function loadAdminCarouselImages() {
+      const res = await fetch("/admin/carousel/get");
+      const data = await res.json();
+      const carouselContainer = document.getElementById("adminCarouselImages");
+
+      if (data.success) {
+          carouselContainer.innerHTML = data.images
+              .map(img => `
+                  <div class="swiper-slide">
+                      <img src="${img}" class="w-full h-[80vh] object-cover">
+                  </div>
+              `)
+              .join("");
+      }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadAdminCarouselImages);
+</script>
+
+
+
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     var swiper = new Swiper(".default-carousel", {

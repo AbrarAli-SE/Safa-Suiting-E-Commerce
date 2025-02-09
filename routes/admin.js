@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
 const { verifyToken, adminAuth } = require("../middleware/authMiddleware");
+const { upload } = require("../config/cloudinary");
 
 
 // ✅ Fetch Unread Notifications
@@ -46,6 +47,13 @@ router.get("/analytical",verifyToken,adminAuth, adminController.renderAnalytical
 
 
 router.get("/manage-coursel",verifyToken,adminAuth, adminController.renderCoursel);
+
+
+// ✅ Upload Carousel Images (Cloudinary)
+router.post("/carousel/upload", verifyToken, adminAuth, upload.array("images", 3), adminController.uploadCarouselImages);
+
+// ✅ Get Carousel Images
+router.get("/carousel/get", adminController.getCarouselImages);
 
 // ✅ Admin Contact Submissions Page
 router.get("/contacts", verifyToken, adminAuth, adminController.renderContacts);
