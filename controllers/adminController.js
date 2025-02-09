@@ -25,6 +25,20 @@ exports.renderContacts = async (req, res) => {
     }
 };
 
+// ✅ Delete Contact Message & Stay on Same Page
+exports.deleteContact = async (req, res) => {
+    try {
+        const { contactId } = req.body;
+        const currentPage = req.query.page || 1; // ✅ Get the current page number
+
+        await Contact.findByIdAndDelete(contactId);
+
+        res.redirect(`/admin/contacts?page=${currentPage}`); // ✅ Stay on the same page after deletion
+    } catch (error) {
+        console.error("❌ Contact Deletion Error:", error);
+        res.status(500).send("Server error");
+    }
+};
 
 // ✅ Render Admin Dashboard
 exports.renderAdminDashboard = async (req, res) => {

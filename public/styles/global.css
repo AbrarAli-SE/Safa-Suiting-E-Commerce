@@ -1232,6 +1232,10 @@ video {
   width: 100%;
 }
 
+.w-\[400px\] {
+  width: 400px;
+}
+
 .min-w-56 {
   min-width: 14rem;
 }
@@ -1722,10 +1726,6 @@ video {
 
 .p-8 {
   padding: 2rem;
-}
-
-.p-\[1\.5rem\] {
-  padding: 1.5rem;
 }
 
 .px-1 {

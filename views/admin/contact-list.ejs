@@ -16,6 +16,7 @@
                             <th class="px-4 py-2 text-left">Phone</th>
                             <th class="px-4 py-2 text-left">Message</th>
                             <th class="px-4 py-2 text-left">Date</th>
+                            <th class="px-4 py-2 text-left">Actions</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-700 dark:text-gray-300">
@@ -24,16 +25,36 @@
                                 <td class="px-4 py-2"><%= contact.name %></td>
                                 <td class="px-4 py-2"><%= contact.email %></td>
                                 <td class="px-4 py-2"><%= contact.phone %></td>
-                                <td class="px-4 py-2"><%= contact.message %></td>
+                                <!-- ✅ Show only first 10 characters of the message -->
+                                <td class="px-4 py-2"><%= contact.message.substring(0, 10) %>...</td>
                                 <td class="px-4 py-2"><%= contact.createdAt.toLocaleString() %></td>
+                                <td class="px-4 py-2 flex gap-3">
+                                    <!-- ✅ View Button (Opens Modal) -->
+                                    <button class="viewContactBtn px-4 py-2 text-blue-500" 
+                                        data-name="<%= contact.name %>"
+                                        data-email="<%= contact.email %>"
+                                        data-phone="<%= contact.phone %>"
+                                        data-message="<%= contact.message %>"
+                                        data-date="<%= contact.createdAt.toLocaleString() %>">
+                                        View
+                                    </button>
+
+                                    <!-- ✅ Delete Contact -->
+                                    <form action="/admin/contacts/delete?page=<%= currentPage %>" method="POST">
+                                        <input type="hidden" name="contactId" value="<%= contact._id %>">
+                                        <button type="submit" class="px-4 py-2 text-red-500">Delete</button>
+                                    </form>
+
+                                </td>
                             </tr>
                         <% }) %>
                     </tbody>
                 </table>
             </div>
         </div>
-         <!-- ✅ Pagination Controls -->
-         <div class="flex justify-center mt-6">
+
+        <!-- ✅ Pagination Controls -->
+        <div class="flex justify-center mt-6">
             <% if (currentPage > 1) { %>
                 <a href="/admin/contacts?page=<%= currentPage - 1 %>"
                    class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white mx-2">
@@ -53,4 +74,38 @@
             <% } %>
         </div>
     <% } %>
+
+    <!-- ✅ Modal for Viewing Full Contact Details -->
+    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+        <div class="bg-white p-6 rounded-lg shadow-md w-[400px] relative">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-600 text-xl">✕</button>
+            <h2 class="text-xl font-bold text-red-500 mb-4">Full Contact Message</h2>
+            <p><strong>Name:</strong> <span id="modalName"></span></p>
+            <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+            <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
+            <p><strong>Date:</strong> <span id="modalDate"></span></p>
+            <p><strong>Message:</strong></p>
+            <p id="modalMessage" class="bg-gray-100 p-3 rounded-md mt-2"></p>
+        </div>
+    </div>
 </main>
+
+<script>
+    // ✅ Open Contact Modal
+    document.querySelectorAll(".viewContactBtn").forEach(button => {
+        button.addEventListener("click", function () {
+            document.getElementById("modalName").innerText = this.dataset.name;
+            document.getElementById("modalEmail").innerText = this.dataset.email;
+            document.getElementById("modalPhone").innerText = this.dataset.phone;
+            document.getElementById("modalMessage").innerText = this.dataset.message;
+            document.getElementById("modalDate").innerText = this.dataset.date;
+            document.getElementById("contactModal").classList.remove("hidden");
+        });
+    });
+
+    // ✅ Close Modal
+    function closeModal() {
+        document.getElementById("contactModal").classList.add("hidden");
+    }
+</script>
+

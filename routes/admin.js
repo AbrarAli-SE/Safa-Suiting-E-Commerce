@@ -44,6 +44,9 @@ router.get("/manage-coursel",verifyToken,adminAuth, adminController.renderCourse
 router.get("/contacts", verifyToken, adminAuth, adminController.renderContacts);
 
 
+// ✅ Delete Contact Message
+router.post("/contacts/delete", verifyToken, adminAuth, adminController.deleteContact);
+
 
 
 module.exports = router;
