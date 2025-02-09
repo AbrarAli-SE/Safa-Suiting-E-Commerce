@@ -5,6 +5,7 @@ const { verifyToken, adminAuth } = require("../middleware/authMiddleware");
 const { upload } = require("../config/cloudinary");
 
 
+
 // ✅ Fetch Unread Notifications
 router.get("/notifications", verifyToken, adminAuth, adminController.getNotifications);
 
@@ -49,8 +50,8 @@ router.get("/analytical",verifyToken,adminAuth, adminController.renderAnalytical
 router.get("/manage-coursel",verifyToken,adminAuth, adminController.renderCoursel);
 
 
-// ✅ Upload Carousel Images (Cloudinary)
-router.post("/carousel/upload", verifyToken, adminAuth, upload.array("images", 3), adminController.uploadCarouselImages);
+// ✅ Upload Route - Correct Middleware Usage
+router.post("/carousel/upload", verifyToken, adminAuth, upload, adminController.uploadCarouselImages);
 
 // ✅ Get Carousel Images
 router.get("/carousel/get", adminController.getCarouselImages);

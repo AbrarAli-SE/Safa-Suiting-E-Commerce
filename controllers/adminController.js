@@ -6,6 +6,8 @@ const Carousel = require("../models/Carousel");  // Make sure you have a Carouse
 
 
 
+
+
 // ✅ Fetch Notifications for Admin
 exports.getNotifications = async (req, res) => {
     try {
@@ -136,45 +138,43 @@ exports.renderAnalytical = async(req, res) =>{
 
 
 
-exports.renderCoursel = async(req, res) =>{
+// ✅ Render Carousel Page
+exports.renderCoursel = async (req, res) => {
     try {
-        res.render("admin/coursel");
+        const carousel = await Carousel.findOne();
+        res.render("admin/coursel", { carouselImages: carousel ? carousel.images : [] });
     } catch (error) {
-        console.error("❌ Cancel Order Error:", error);
-        res.status(500).send("Server error");
-    }
-}
-
-// ✅ Upload Carousel Images Securely
-exports.uploadCarouselImages = async (req, res) => {
-    try {
-        if (!req.files || req.files.length === 0) {
-            return res.status(400).send("No images uploaded.");
-        }
-
-        // ✅ Get Secure Cloudinary URLs
-        let uploadedImages = req.files.map(file => file.path);
-
-        // ✅ Save URLs to Database
-        await Carousel.create({ images: uploadedImages });
-
-        res.redirect("/admin/manage-coursel");
-
-    } catch (error) {
-        console.error("❌ Secure Upload Error:", error);
+        console.error("❌ Render Carousel Error:", error);
         res.status(500).send("Server error");
     }
 };
 
-// ✅ Get Images for User Page
-exports.getCarouselImages = async (req, res) => {
+exports.uploadCarouselImages = async (req, res) => {
     try {
-        const carousel = await Carousel.findOne().sort({ createdAt: -1 }); // ✅ Get latest images
-        res.json({ success: true, images: carousel ? carousel.images : [] });
+        console.log("Received Files:", req.files); // ✅ Debugging log
+
+        if (!req.files || req.files.length < 1 || req.files.length > 3) {
+            return res.status(400).send("Please upload 1 to 3 images.");
+        }
+
+        const imageUrls = req.files.map(file => file.path); // ✅ Cloudinary URLs
+
+        // ✅ Store new images (overwrite existing)
+        await Carousel.findOneAndUpdate({}, { images: imageUrls }, { upsert: true, new: true });
+
+        res.redirect("/admin/manage-coursel");
     } catch (error) {
-        console.error("❌ Fetch Carousel Error:", error);
+        console.error("❌ Upload Carousel Error:", error);
         res.status(500).send("Server error");
     }
+};
+
+
+
+// ✅ Get Carousel Images
+exports.getCarouselImages = async (req, res) => {
+    const carousel = await Carousel.findOne();
+    res.json({ success: true, images: carousel ? carousel.images : [] });
 };
 
 exports.renderManageUsers = async (req, res) => {

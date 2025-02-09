@@ -27,19 +27,8 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({
-  storage,
-  limits: {
-    fileSize: 5 * 1024 * 1024, // ✅ 5MB limit per image
-  },
-  fileFilter: (req, file, cb) => {
-    const allowedTypes = ["image/jpeg", "image/png"];
-    if (allowedTypes.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      cb(new Error("Invalid file type. Only JPG and PNG are allowed."));
-    }
-  },
-});
+
+// ✅ Multer allows multiple images (3 max)
+const upload = multer({ storage }).array("images", 3); 
 
 module.exports = { cloudinary, upload };

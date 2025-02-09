@@ -6,33 +6,120 @@
 
   <!-- ✅ Upload Form -->
   <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Manage Carousel</h2>
-      <form id="carousel-form" action="/admin/carousel/upload" method="POST" enctype="multipart/form-data">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <div>
-                <label class="block text-lg font-semibold mb-2">Image 1</label>
-                <input type="file" name="images" class="border p-2 w-full" accept="image/*" multiple required />
-            </div>
-        </div>
-        <button type="submit" class="px-6 py-2 bg-red-500 hover:bg-red-600 transition text-white rounded">
-            Upload Slider
-        </button>
-    </form>
-    
+    <h2 class="text-2xl font-semibold mb-4">Manage Carousel</h2>
+    <form id="carousel-form" action="/admin/carousel/upload" method="POST" enctype="multipart/form-data">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <% for (let i = 0; i < 3; i++) { %>
+          <div>
+              <label class="block text-lg font-semibold mb-2">Image <%= i + 1 %></label>
+              <input type="file" name="images" class="image-upload border p-2 w-full" accept="image/*"
+                  onchange="previewImage(event, <%= i %>)" required />
+  
+              <!-- ✅ Image Preview (Live & Stored) -->
+              <img id="preview-<%= i %>" 
+                  class="mt-2 rounded shadow-lg w-full h-40 object-cover <%= carouselImages[i] ? '' : 'hidden' %>" 
+                  src="<%= carouselImages[i] ? carouselImages[i] : '' %>" 
+                  alt="Preview <%= i + 1 %>">
+          </div>
+          <% } %>
+      </div>
+  
+      <!-- ✅ Upload Button (Disabled Until All Images Selected) -->
+      <button type="submit" id="uploadButton" disabled 
+          class="px-6 py-2 bg-gray-300 text-white rounded transition">
+          Upload Slider
+      </button>
+  </form>
+  
+
+  
   </section>
 
-  <!-- ✅ Preview Carousel -->
+  <!-- ✅ Live Preview Image Slider -->
   <section class="mb-8">
-      <h2 class="text-2xl font-semibold mb-4">Image Slider</h2>
-      <div class="swiper default-carousel swiper-container">
-          <div class="swiper-wrapper" id="adminCarouselImages">
-              <!-- Images will be dynamically loaded here -->
+    <h2 class="text-2xl font-semibold mb-4">Image Slider Preview</h2>
+    <div class="w-full xlg:ml-3">
+      <div class="w-full relative">
+        <div class="swiper default-carousel swiper-container">
+          <div class="swiper-wrapper">
+            <% carouselImages.forEach((image) => { %>
+            <div class="swiper-slide">
+              <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden">
+                <img src="<%= image %>" class="w-full h-[80vh] object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
+                  <button class="z-10 text-2xl hover:underline text-white p-2">Shop Now</button>
+                </div>
+              </div>
+            </div>
+            <% }) %>
           </div>
+  
+          <button id="slider-button-left"
+            class="swiper-button-prev group p-2 flex justify-center items-center border border-solid border-red-600 w-12 h-12 transition-all duration-500 rounded-full left-5 hover:bg-red-500">
+            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16" fill="none">
+              <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          <button id="slider-button-right"
+            class="swiper-button-next group p-2 flex justify-center items-center border border-solid border-red-600 w-12 h-12 transition-all duration-500 rounded-full right-5 hover:bg-red-500">
+            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16" fill="none">
+              <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+  
+          <div class="swiper-pagination"></div>
+        </div>
       </div>
-      <div class="swiper-pagination"></div>
+    </div>
+
+
+    
   </section>
 </main>
 
+  <!-- ✅ JavaScript for Live Preview & Button Enable -->
+  <script>
+    function previewImage(event, index) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgPreview = document.getElementById(`preview-${index}`);
+                imgPreview.src = e.target.result;
+                imgPreview.classList.remove("hidden");
+            };
+            reader.readAsDataURL(file);
+        }
+  
+        // ✅ Enable Upload Button When All Images Are Selected
+        checkUploadButton();
+    }
+  
+    function checkUploadButton() {
+        const inputs = document.querySelectorAll('.image-upload');
+        const uploadBtn = document.getElementById("uploadButton");
+  
+        const allFilled = Array.from(inputs).every(input => input.files.length > 0);
+        if (allFilled) {
+            uploadBtn.disabled = false;
+            uploadBtn.classList.remove("bg-gray-300");
+            uploadBtn.classList.add("bg-red-500", "hover:bg-red-600");
+        } else {
+            uploadBtn.disabled = true;
+            uploadBtn.classList.add("bg-gray-300");
+            uploadBtn.classList.remove("bg-red-500", "hover:bg-red-600");
+        }
+    }
+  </script>
+
+
+
+
+<!-- 
 <script>
   async function loadAdminCarouselImages() {
       const res = await fetch("/admin/carousel/get");
@@ -51,7 +138,7 @@
   }
 
   document.addEventListener("DOMContentLoaded", loadAdminCarouselImages);
-</script>
+</script> -->
 
 
 

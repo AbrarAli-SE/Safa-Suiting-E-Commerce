@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const carouselSchema = new mongoose.Schema(
     {
-        images: [String], // ✅ Array of image URLs
+        images: {type:[String],required: true} // ✅ Array of image URLs
     },
     { timestamps: true } // ✅ Save createdAt & updatedAt
 );
