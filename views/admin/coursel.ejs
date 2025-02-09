@@ -13,42 +13,18 @@
             <label class="block text-lg font-semibold mb-2">Image 1</label>
             <input type="file" name="image1" class="image-upload border p-2 w-full" accept="image/*"
               onchange="previewImage(event, 0)" />
-            <textarea name="bold-text-1"
-              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
-              rows="2" placeholder="Bold Context for Image 1"
-              oninput="updateContext(0, 'bold', this.value)"></textarea>
-            <textarea name="normal-text-1"
-              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
-              rows="2" placeholder="Normal Context for Image 1"
-              oninput="updateContext(0, 'normal', this.value)"></textarea>
           </div>
 
           <div>
             <label class="block text-lg font-semibold mb-2">Image 2</label>
             <input type="file" name="image2" class="image-upload border p-2 w-full" accept="image/*"
               onchange="previewImage(event, 1)" />
-            <textarea name="bold-text-2"
-              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
-              rows="2" placeholder="Bold Context for Image 2"
-              oninput="updateContext(1, 'bold', this.value)"></textarea>
-            <textarea name="normal-text-2"
-              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
-              rows="2" placeholder="Normal Context for Image 2"
-              oninput="updateContext(1, 'normal', this.value)"></textarea>
           </div>
 
           <div>
             <label class="block text-lg font-semibold mb-2">Image 3</label>
             <input type="file" name="image3" class="image-upload border p-2 w-full" accept="image/*"
               onchange="previewImage(event, 2)" />
-            <textarea name="bold-text-3"
-              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
-              rows="2" placeholder="Bold Context for Image 3"
-              oninput="updateContext(2, 'bold', this.value)"></textarea>
-            <textarea name="normal-text-3"
-              class="w-full p-3 mt-2 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
-              rows="2" placeholder="Normal Context for Image 3"
-              oninput="updateContext(2, 'normal', this.value)"></textarea>
           </div>
         </div>
         <button type="button" onclick="uploadSlider()"
@@ -58,29 +34,84 @@
       </form>
     </section>
 
-    <!-- Stack Slider Section -->
+
     <section class="mb-8">
       <h2 class="text-2xl font-semibold mb-4">Image Slider</h2>
-      <div id="carousel" class="relative overflow-hidden">
-        <div class="slider-container flex justify-center items-center relative">
-          <div id="slider" class="flex gap-6 transition-transform duration-500 ease-in-out">
-            <!-- Dynamically added images will appear here -->
+      <div class="w-full xlg:ml-3">
+        <div class="w-full relative">
+          <div class="swiper default-carousel swiper-container">
+            <div class="swiper-wrapper">
+              <div class="swiper-slide">
+                <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden">
+                  <img src="/assests/image.png" class="w-full h-[80vh] object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden">
+                  <img src="/assests/image2.jpg" class="w-full h-[80vh] object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
+                  </div>
+                </div>
+              </div>
+              <div class="swiper-slide">
+                <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden">
+                  <img src="/assests/image3.jpg" class="w-full h-[80vh] object-cover">
+                  <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <button id="slider-button-left"
+            class="swiper-button-prev group p-2 flex justify-center items-center border border-solid border-red-600 w-12 aspect-square rounded-full left-5 hover:bg-red-500">
+            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16" fill="none">
+              <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          
+          <button id="slider-button-right"
+            class="swiper-button-next group p-2 flex justify-center items-center border border-solid border-red-600 w-12 aspect-square rounded-full right-5 hover:bg-red-500">
+            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 16 16" fill="none">
+              <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          
+            <div class="swiper-pagination"></div>
           </div>
         </div>
-        <!-- Previous and Next Buttons -->
-        <div class="absolute top-1/2 left-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 p-2 cursor-pointer"
-          onclick="prevSlide()">
-          <i class="bi bi-chevron-left text-white text-2xl"></i>
-        </div>
-        <div class="absolute top-1/2 right-4 transform -translate-y-1/2 bg-gray-800 bg-opacity-50 p-2 cursor-pointer"
-          onclick="nextSlide()">
-          <i class="bi bi-chevron-right text-white text-2xl"></i>
-        </div>
       </div>
+      
     </section>
   </main>
 
 </div>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    var swiper = new Swiper(".default-carousel", {
+      loop: true, // Enables infinite loop
+      autoplay: {
+        delay: 3000, // Auto-slide every 3 seconds
+        disableOnInteraction: false,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+      },
+      slidesPerView: 1,
+      spaceBetween: 10,
+    });
+  });
+</script>
+
      <!-- Link the JavaScript file -->
      <script src="/js/main.js"></script>
 </body>
