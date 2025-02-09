@@ -1228,12 +1228,12 @@ video {
   width: 350px;
 }
 
-.w-full {
-  width: 100%;
-}
-
 .w-\[400px\] {
   width: 400px;
+}
+
+.w-full {
+  width: 100%;
 }
 
 .min-w-56 {
