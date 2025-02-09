@@ -20,6 +20,11 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    isNotified: 
+    { 
+      type: Boolean, 
+      default: false 
+    }, // ✅ New Field for Notification
     otp: {
       type: String,
       default: null,

@@ -163,7 +163,7 @@ exports.register = async (req, res) => {
         const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
         const role = adminEmails.includes(email) ? "admin" : "user";
 
-        const newUser = new User({ name, email, password: hashedPassword, otp, otpExpires, role });
+        const newUser = new User({ name, email, password: hashedPassword, otp, otpExpires, role, isNotified: false });
         await newUser.save();
 
         console.log("✅ User saved. Sending OTP email...");

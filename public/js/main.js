@@ -63,13 +63,7 @@ document.getElementById('manageProductsButton').addEventListener('click', functi
 });
 
 
-                              //  The event handlers to show and hide the notifications 
-
-document.getElementById('notification').addEventListener('click', function () {
-  const dropdown = document.getElementById('notificationDropdown');
-  dropdown.classList.toggle('hidden');
-});
-
+ 
 
                                   // Function to highlight the active link of aside bar 
 
@@ -584,3 +578,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+window.openNotifications = function () {
+  fetch("/admin/notifications/mark-read", { method: "POST" })
+      .then(() => {
+          document.getElementById("notificationCount").classList.add("hidden");
+          fetchNotifications();
+      })
+      .catch(error => console.error("❌ Error marking notifications as read:", error));
+
+  const dropdown = document.getElementById("notificationDropdown");
+  dropdown.classList.toggle("hidden");
+};

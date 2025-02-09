@@ -4,6 +4,39 @@ const bcrypt = require("bcryptjs");
 
 
 
+
+// ✅ Fetch Notifications for Admin
+exports.getNotifications = async (req, res) => {
+    try {
+        const newUsersCount = await User.countDocuments({ isNotified: false });
+        const newContactsCount = await Contact.countDocuments({ isNotified: false });
+
+        res.json({
+            success: true,
+            newUsers: newUsersCount,
+            newContacts: newContactsCount,
+            totalNotifications: newUsersCount + newContactsCount
+        });
+    } catch (error) {
+        console.error("❌ Fetch Notifications Error:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+// ✅ Mark Notifications as Read when Admin Clicks the Bell
+exports.markNotificationsAsRead = async (req, res) => {
+    try {
+        await User.updateMany({ isNotified: false }, { $set: { isNotified: true } });
+        await Contact.updateMany({ isNotified: false }, { $set: { isNotified: true } });
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error("❌ Mark Notifications Error:", error);
+        res.status(500).json({ success: false, message: "Server error" });
+    }
+};
+
+
 exports.renderContacts = async (req, res) => {
     try {
         let page = parseInt(req.query.page) || 1;
