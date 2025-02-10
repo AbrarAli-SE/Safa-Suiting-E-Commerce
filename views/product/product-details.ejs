@@ -43,6 +43,7 @@
               <input type="text" name="brand" id="brand"
                 class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
                 required>
+                <div id="brandError" class="text-red-500 text-sm hidden"></div>
             </div>
           </div>
 
@@ -51,6 +52,7 @@
             <input type="text" name="name" id="name"
               class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
               required>
+              <div id="nameError" class="text-red-500 text-sm hidden"></div>
           </div>
 
           <div class="space-y-2">
@@ -58,13 +60,16 @@
             <input type="number" name="price" id="price"
               class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
               required>
+              <div id="priceError" class="text-red-500 text-sm hidden"></div>
           </div>
 
           <div class="space-y-2">
             <label for="description" class="block text-gray-700 dark:text-gray-300 font-medium">Description</label>
             <textarea name="description" id="description" rows="5"
               class="w-full p-3 border border-gray-300 resize-none dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
-              required></textarea>
+              required>
+              
+            </textarea>
           </div>
         </div>
 
@@ -100,8 +105,9 @@
                 </p>
 
                 <!-- Hidden File Input -->
-                <input type="file" name="image" id="image" class="hidden" accept="image/*" required
+                <input type="file" name="image" id="image" class="hidden" accept="image/*" 
                   onchange="previewImage(event)">
+                  <div id="imageError" class="text-red-500 text-sm hidden"></div>
               </div>
 
             </div>
@@ -114,6 +120,7 @@
               <input type="number" name="quantity" id="quantity"
                 class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
                 required>
+                <div id="quantityError" class="text-red-500 text-sm hidden"></div>
             </div>
 
             <div class="space-y-2">
@@ -121,6 +128,7 @@
                 Price</label>
               <input type="number" name="discountPrice" id="discountPrice"
                 class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+                <div id="discountError" class="text-red-500 text-sm hidden"></div>
             </div>
 
           </div>
@@ -130,6 +138,7 @@
             <input type="text" name="keywords" id="keywords"
               class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
               placeholder="shirt, casual, men">
+              <div id="keywordsError" class="text-red-500 text-sm hidden"></div>
           </div>
 
 
@@ -171,6 +180,7 @@
       }, 5000); // 5 seconds
   });
 </script>
+
 
   <!-- Link the JavaScript file -->
   <script src="/js/main.js"></script>

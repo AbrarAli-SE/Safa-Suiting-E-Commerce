@@ -46,29 +46,22 @@ exports.addProduct = async (req, res) => {
     }
 };
 
-// ✅ Render Product List with Pagination & Search
+// ✅ Render Product List with Pagination (No Search)
 exports.renderProductList = async (req, res) => {
     try {
-        let { page, search, category, brand } = req.query;
-        page = parseInt(page) || 1;
-        const limit = 5; // ✅ Number of products per page
-        const skip = (page - 1) * limit;
+        let page = parseInt(req.query.page) || 1;
+        let limit = 5; // ✅ Number of products per page
+        let skip = (page - 1) * limit;
 
-        let filter = {};
-        if (search) filter.keywords = { $in: search.toLowerCase().split(" ") };
-        if (category) filter.category = category;
-        if (brand) filter.brand = brand;
-
-        const totalProducts = await Product.countDocuments(filter);
-        const products = await Product.find(filter).skip(skip).limit(limit);
+        const totalProducts = await Product.countDocuments();
+        const products = await Product.find().skip(skip).limit(limit);
 
         res.render("product/product-list", {
             products,
             currentPage: page,
             totalPages: Math.ceil(totalProducts / limit),
-            searchQuery: search || "",
-            selectedCategory: category || "",
-            selectedBrand: brand || "",
+            errorMessage: null,
+            successMessage: null
         });
 
     } catch (error) {
