@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
 const { verifyToken, adminAuth } = require("../middleware/authMiddleware");
-const { upload } = require("../config/cloudinary");
+const { uploadCarousel } = require("../config/cloudinary");
 
 
 
@@ -51,7 +51,7 @@ router.get("/manage-coursel",verifyToken,adminAuth, adminController.renderCourse
 
 
 // ✅ Upload Route - Correct Middleware Usage
-router.post("/carousel/upload", verifyToken, adminAuth, upload, adminController.uploadCarouselImages);
+router.post("/carousel/upload", verifyToken, adminAuth, uploadCarousel, adminController.uploadCarouselImages);
 
 // ✅ Get Carousel Images
 router.get("/carousel/get", adminController.getCarouselImages);

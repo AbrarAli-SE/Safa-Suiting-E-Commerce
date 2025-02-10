@@ -9,12 +9,12 @@ cloudinary.config({
   secure: true, // ✅ Ensures HTTPS connections
 });
 
-// ✅ Multer Storage with Security Features
-const storage = new CloudinaryStorage({
+// ✅ Multer Storage for Carousel (Only for 3 Images)
+const carouselStorage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
     return {
-      folder: "carousel",
+      folder: "carousel", // ✅ Uploads to "carousel" folder
       format: file.mimetype.split("/")[1], // ✅ Ensures correct format
       resource_type: "image",
       allowed_formats: ["jpg", "jpeg", "png"], // ✅ Allow only specific formats
@@ -27,8 +27,26 @@ const storage = new CloudinaryStorage({
   },
 });
 
+// ✅ Multer Storage for Products (Only 1 Image per Product)
+const productStorage = new CloudinaryStorage({
+  cloudinary,
+  params: async (req, file) => {
+    return {
+      folder: "products", // ✅ Uploads to "products" folder
+      format: file.mimetype.split("/")[1], // ✅ Ensures correct format
+      resource_type: "image",
+      allowed_formats: ["jpg", "jpeg", "png"], // ✅ Allow only specific formats
+      transformation: [
+        { width: 1000, height: 1000, crop: "limit" }, // ✅ Resize to 1000x1000
+        { quality: "auto" }, // ✅ Optimize image quality
+        { fetch_format: "auto" }, // ✅ Auto format for better compression
+      ],
+    };
+  },
+});
 
-// ✅ Multer allows multiple images (3 max)
-const upload = multer({ storage }).array("images", 3); 
+// ✅ Multer Upload Middleware (Separate for Each Use Case)
+const uploadCarousel = multer({ storage: carouselStorage }).array("images", 3); // ✅ Allows up to 3 images
+const uploadProduct = multer({ storage: productStorage }).single("image"); // ✅ Allows only 1 image per product
 
-module.exports = { cloudinary, upload };
+module.exports = { cloudinary, uploadCarousel, uploadProduct };

@@ -151,7 +151,7 @@ exports.renderCoursel = async (req, res) => {
 
 exports.uploadCarouselImages = async (req, res) => {
     try {
-        console.log("Received Files:", req.files); // ✅ Debugging log
+        // console.log("Received Files:", req.files); // ✅ Debugging log
 
         if (!req.files || req.files.length < 1 || req.files.length > 3) {
             return res.status(400).send("Please upload 1 to 3 images.");

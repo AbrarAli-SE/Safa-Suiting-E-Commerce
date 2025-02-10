@@ -1071,9 +1071,11 @@
     <script>
 
 let swiper = new Swiper(".default-carousel", {
-        loop: true,
-        slidesPerView: 1,
-        spaceBetween: 20,
+        loop: true, // Enables infinite loop
+        autoplay: {
+        delay: 4000, // Auto-slide every 3 seconds
+        disableOnInteraction: false,
+        },
         pagination: {
           el: ".swiper-pagination",
           clickable: true,
