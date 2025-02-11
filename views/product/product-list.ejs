@@ -27,6 +27,20 @@
       </div>
     </div>
 
+    <% if (successMessage) { %>
+      <div class="bg-green-500 text-white p-3 rounded-lg text-center mb-4">
+          <%= successMessage %>
+      </div>
+    <% } %>
+    
+    <% if (errorMessage) { %>
+      <div class="bg-red-500 text-white p-3 rounded-lg text-center mb-4">
+          <%= errorMessage %>
+      </div>
+    <% } %>
+    
+  
+
 
     <!-- ✅ Product Table -->
     <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
@@ -44,7 +58,11 @@
             </tr>
           </thead>
           <tbody class="text-gray-700 dark:text-gray-300" id="productList">
-            
+            <% if (products.length === 0) { %>
+              <tr>
+                <td colspan="6" class="text-center text-red-500 font-semibold py-4">No products found.</td>
+              </tr>
+            <% } else { %>
                 <% products.forEach((product)=> { %>
                   <tr class="border-t border-gray-200 dark:border-gray-600 product-row">
                     <td class="px-4 py-2">
@@ -68,13 +86,16 @@
                       <a href="/admin/product/edit/<%= product._id %>" class="px-4 py-2 text-blue-600">
                         Edit
                       </a>
-                      <form action="/admin/product/delete/<%= product._id %>" method="POST">
+                      <form action="/admin/product/delete-product" method="POST">
+                        <input type="hidden" name="productId" value="<%= product._id %>">
+                        <input type="hidden" name="page" value="<%= currentPage %>"> <!-- ✅ Pass Current Page -->
                         <button type="submit" class="px-4 py-2 text-red-600">Delete</button>
-                      </form>
+                    </form>
+                    
                     </td>
                   </tr>
                   <% }) %>
-                    
+                  <% } %>
           </tbody>
         </table>
          <!-- ✅ No Results Message -->

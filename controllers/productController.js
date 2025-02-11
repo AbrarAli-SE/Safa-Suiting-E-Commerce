@@ -70,25 +70,37 @@ exports.renderProductList = async (req, res) => {
     }
 };
 
-// ✅ Delete Product
 exports.deleteProduct = async (req, res) => {
     try {
-        const { productId } = req.body;
-        const product = await Product.findById(productId);
+        const { productId, page } = req.body; // ✅ Capture current page from the request
 
-        if (!product) {
-            return res.redirect("/admin/product/product-list?page=1");
+        if (!productId) {
+            return res.redirect(`/admin/product/product-list?page=${page || 1}&error=Invalid product ID.`);
         }
 
-        // ✅ Delete Image from Cloudinary
-        const imagePublicId = product.image.split("/").pop().split(".")[0];
-        await cloudinary.uploader.destroy(`products/${imagePublicId}`);
+        const product = await Product.findById(productId);
+        if (!product) {
+            return res.redirect(`/admin/product/product-list?page=${page || 1}&error=Product not found.`);
+        }
 
+        // ✅ Ensure Image Deletion is Safe
+        if (product.image && product.image.includes("cloudinary.com")) {
+            try {
+                const imagePublicId = product.image.split("/").pop().split(".")[0]; // Extract public ID
+                await cloudinary.uploader.destroy(imagePublicId); // ✅ Fix Cloudinary delete path
+            } catch (cloudinaryError) {
+                console.error("❌ Cloudinary Delete Error:", cloudinaryError);
+            }
+        }
+
+        // ✅ Delete Product from Database
         await Product.findByIdAndDelete(productId);
-        res.redirect("/admin/product/product-list?page=1");
+
+        // ✅ Redirect to the same page with success message
+        res.redirect(`/admin/product/product-list?page=${page || 1}&success=Product deleted successfully`);
 
     } catch (error) {
         console.error("❌ Delete Product Error:", error);
-        res.status(500).send("Server error");
+        res.redirect(`/admin/product/product-list?page=${req.body.page || 1}&error=Server error. Please try again.`);
     }
 };
