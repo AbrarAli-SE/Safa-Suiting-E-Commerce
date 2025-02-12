@@ -104,37 +104,36 @@
          <p id="noResults" class="text-center text-red-500 font-semibold hidden mt-4">No products found</p>
         </div>
       </div>
-    </div>
+    
 
 
-      <!-- ✅ Pagination -->
-  <div class="flex justify-center mt-6">
-    <% if (totalPages > 1) { %>
-        <nav class="flex items-center space-x-2">
-            <% if (currentPage > 1) { %>
-                <a href="/admin/product/product-list?page=<%= currentPage - 1 %>" class="px-3 py-1 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white">
-                    &laquo; Prev
-                </a>
-            <% } %>
+<!-- ✅ Pagination Controls -->
+<div class="flex justify-center mt-6">
+  <% if (totalPages > 1) { %>
+      <% if (currentPage > 1) { %>
+          <a href="/admin/product/product-list?page=<%= currentPage - 1 %>"
+             class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white mx-2">
+             Previous
+          </a>
+      <% } %>
 
-            <% for (let i = 1; i <= totalPages; i++) { %>
-                <a href="/admin/product/product-list?page=<%= i %>" class="px-3 py-1 border rounded-lg <%= currentPage === i ? 'bg-red-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white' %>">
-                    <%= i %>
-                </a>
-            <% } %>
+      <span class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white">
+          Page <%= currentPage %> of <%= totalPages %>
+      </span>
 
-            <% if (currentPage < totalPages) { %>
-                <a href="/admin/product/product-list?page=<%= currentPage + 1 %>" class="px-3 py-1 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white">
-                    Next &raquo;
-                </a>
-            <% } %>
-        </nav>
-    <% } %>
+      <% if (currentPage < totalPages) { %>
+          <a href="/admin/product/product-list?page=<%= currentPage + 1 %>"
+             class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white mx-2">
+             Next
+          </a>
+      <% } %>
+  <% } %>
 </div>
 
 
+
   </main>
-  </div>
+
 
   <script>
     document.addEventListener("DOMContentLoaded", function(){

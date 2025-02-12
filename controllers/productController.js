@@ -50,7 +50,7 @@ exports.addProduct = async (req, res) => {
 exports.renderProductList = async (req, res) => {
     try {
         let page = parseInt(req.query.page) || 1;
-        let limit = 5; // ✅ Number of products per page
+        let limit = 7; // ✅ Number of products per page
         let skip = (page - 1) * limit;
 
         const totalProducts = await Product.countDocuments();
