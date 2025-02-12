@@ -70,9 +70,10 @@ exports.renderProductList = async (req, res) => {
     }
 };
 
+
 exports.deleteProduct = async (req, res) => {
     try {
-        const { productId, page } = req.body; // ✅ Capture current page from the request
+        const { productId, page } = req.body;
 
         if (!productId) {
             return res.redirect(`/admin/product/product-list?page=${page || 1}&error=Invalid product ID.`);
@@ -87,7 +88,7 @@ exports.deleteProduct = async (req, res) => {
         if (product.image && product.image.includes("cloudinary.com")) {
             try {
                 const imagePublicId = product.image.split("/").pop().split(".")[0]; // Extract public ID
-                await cloudinary.uploader.destroy(imagePublicId); // ✅ Fix Cloudinary delete path
+                await cloudinary.uploader.destroy(imagePublicId);
             } catch (cloudinaryError) {
                 console.error("❌ Cloudinary Delete Error:", cloudinaryError);
             }
@@ -96,11 +97,30 @@ exports.deleteProduct = async (req, res) => {
         // ✅ Delete Product from Database
         await Product.findByIdAndDelete(productId);
 
-        // ✅ Redirect to the same page with success message
-        res.redirect(`/admin/product/product-list?page=${page || 1}&success=Product deleted successfully`);
+        // ✅ Fetch Updated Product List
+        let limit = 5; // Number of products per page
+        let skip = (page - 1) * limit;
+        const totalProducts = await Product.countDocuments();
+        const products = await Product.find().skip(skip).limit(limit);
+
+        // ✅ Render the same page with success message
+        res.render("product/product-list", {
+            products,
+            currentPage: page,
+            totalPages: Math.ceil(totalProducts / limit),
+            successMessage: "Product deleted successfully!",
+            errorMessage: null,
+        });
 
     } catch (error) {
         console.error("❌ Delete Product Error:", error);
-        res.redirect(`/admin/product/product-list?page=${req.body.page || 1}&error=Server error. Please try again.`);
+        res.render("product/product-list", {
+            products: [],
+            currentPage: req.body.page || 1,
+            totalPages: 1,
+            successMessage: null,
+            errorMessage: "Server error. Please try again.",
+        });
     }
 };
+
