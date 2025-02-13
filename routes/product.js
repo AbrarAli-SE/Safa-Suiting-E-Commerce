@@ -9,6 +9,12 @@ router.get("/add-product", verifyToken, adminAuth, productController.renderAddPr
 
 router.post("/product/add", verifyToken, adminAuth, uploadProduct, productController.addProduct);
 
+// ✅ Route to Render Edit Product Page
+router.get("/edit/:productId", verifyToken, adminAuth, productController.renderEditProduct);
+
+// ✅ Route to Update an Existing Product (With Image Upload)
+router.post("/update/:productId", verifyToken, adminAuth, productController.updateProduct);
+
 
 // ✅ Render Product List (Pagination & Search)
 router.get("/product-list", verifyToken, adminAuth, productController.renderProductList);

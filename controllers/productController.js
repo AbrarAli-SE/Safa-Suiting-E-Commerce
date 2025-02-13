@@ -70,6 +70,78 @@ exports.renderProductList = async (req, res) => {
     }
 };
 
+// ✅ Render Edit Product Page
+exports.renderEditProduct = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const product = await Product.findById(productId);
+
+        if (!product) {
+            return res.status(404).send("Product Not Found.");
+        }
+
+        res.render("product/edit-product", { product }); // ✅ Render new page
+
+    } catch (error) {
+        console.error("❌ Render Edit Product Error:", error);
+        res.status(500).send("Server error");
+    }
+};
+
+exports.updateProduct = async (req, res) => {
+    try {
+        const { productId } = req.params;
+        const { name, description, price, discountPrice, quantity, category, brand, keywords } = req.body;
+
+        let updateData = {
+            name,
+            description,
+            price,
+            discountPrice: discountPrice || 0,
+            quantity,
+            category,
+            brand,
+            keywords: keywords.split(",").map(k => k.trim().toLowerCase())
+        };
+
+        const product = await Product.findById(productId);
+
+        if (!product) {
+            return res.redirect(`/admin/product/product-list?page=1&error=Product not found.`);
+        }
+
+        // ✅ Only process if the product has an image
+        if (product.image && product.image.includes("cloudinary.com")) {
+            try {
+                const imagePublicId = product.image.split("/").pop().split(".")[0];
+
+                // ✅ Delete old image if a new one is uploaded
+                if (req.file) {
+                    await cloudinary.uploader.destroy(imagePublicId);
+                    updateData.image = req.file.path; // ✅ Assign new image URL from Cloudinary
+                }
+            } catch (cloudinaryError) {
+                console.error("❌ Cloudinary Delete Error:", cloudinaryError);
+            }
+        } else {
+            // ✅ If no new image is uploaded, keep the existing one
+            if (req.file) {
+                updateData.image = req.file.path;
+            } else {
+                updateData.image = product.image; // Retain existing image
+            }
+        }
+
+        await Product.findByIdAndUpdate(productId, updateData, { new: true });
+
+        res.redirect(`/admin/product/product-list?page=1&success=Product updated successfully`);
+
+    } catch (error) {
+        console.error("❌ Update Product Error:", error);
+        res.redirect(`/admin/product/product-list?page=1&error=Server error. Please try again.`);
+    }
+};
+
 
 exports.deleteProduct = async (req, res) => {
     try {

@@ -1,0 +1,134 @@
+<%- include('../shared/asideBar') %>
+
+<main class="p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+    <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9">Edit Product</h1>
+  
+    <!-- ✅ Edit Product Form -->
+    <form id="product-form" action="/admin/product/update/<%= product._id %>" method="POST" enctype="multipart/form-data"
+      class="space-y-6 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
+      
+      <input type="hidden" name="productId" value="<%= product._id %>">
+  
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Left Side: Product Details Section -->
+        <div class="space-y-4">
+          <h2 class="text-2xl font-semibold mb-4">Product Details</h2>
+  
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="block text-gray-700 dark:text-gray-300 font-medium">Category</label>
+              <select name="category" id="category"
+                class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+                <option value="Flash Sales" <%= product.category === "Flash Sales" ? "selected" : "" %>>Flash Sales</option>
+                <option value="New Arrival" <%= product.category === "New Arrival" ? "selected" : "" %>>New Arrival</option>
+                <option value="Explore our Products" <%= product.category === "Explore our Products" ? "selected" : "" %>>Explore our Products</option>
+                <option value="Best Selling Products" <%= product.category === "Best Selling Products" ? "selected" : "" %>>Best Selling Products</option>
+              </select>
+            </div>
+  
+            <div class="space-y-2">
+              <label class="block text-gray-700 dark:text-gray-300 font-medium">Brand</label>
+              <input type="text" name="brand" value="<%= product.brand %>"
+                class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" required>
+            </div>
+          </div>
+  
+          <div class="space-y-2">
+            <label class="block text-gray-700 dark:text-gray-300 font-medium">Product Name</label>
+            <input type="text" name="name" value="<%= product.name %>"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" required>
+          </div>
+  
+          <div class="space-y-2">
+            <label class="block text-gray-700 dark:text-gray-300 font-medium">Price</label>
+            <input type="number" name="price" value="<%= product.price %>"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" required>
+          </div>
+
+          <div class="space-y-2">
+            <label for="keywords" class="block text-gray-700 dark:text-gray-300 font-medium">Keywords</label>
+            <input type="text" name="keywords" id="keywords" value="<%= product.keywords %>"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-[#DB4444] focus:outline-none bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
+              placeholder="shirt, casual, men">
+              <div id="keywordsError" class="text-red-500 text-sm hidden"></div>
+          </div>
+  
+          <div class="space-y-2">
+            <label class="block text-gray-700 dark:text-gray-300 font-medium">Description</label>
+            <textarea name="description" rows="5"
+              class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300"
+              required><%= product.description %></textarea>
+          </div>
+        </div>
+  
+        <!-- Right Side: Image Upload & Quantity -->
+        <div class="space-y-4">
+          <h2 class="text-2xl font-semibold mb-4">Additional Details</h2>
+  
+          <div class="space-y-2">
+            <label class="block text-gray-700 dark:text-gray-300 font-medium">Upload Product Image</label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="border-2 border-gray-300 dark:border-gray-600 p-6 rounded-lg text-center">
+                <div class="w-full h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                  <% if (product.image) { %>
+                    <img id="image-preview" src="<%= product.image %>" class="w-full h-48 rounded-lg">
+                  <% } else { %>
+                    <img id="image-preview" class="hidden w-full h-48 rounded-lg">
+                  <% } %>
+                </div>
+              </div>
+              <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 p-6 rounded-lg text-center">
+                <label for="image" class="text-blue-500 hover:text-blue-600 cursor-pointer">Click to browse</label>
+                <input type="file" name="image" id="image" class="hidden" accept="image/*">
+              </div>
+            </div>
+          </div>
+  
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="block text-gray-700 dark:text-gray-300 font-medium">Quantity</label>
+              <input type="number" name="quantity" value="<%= product.quantity %>"
+                class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300" required>
+            </div>
+  
+            <div class="space-y-2">
+              <label class="block text-gray-700 dark:text-gray-300 font-medium">Discount Price</label>
+              <input type="number" name="discountPrice" value="<%= product.discountPrice %>"
+                class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
+            </div>
+          </div>
+  
+          <button type="submit" class="w-full px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition">
+            Update Product
+          </button>
+        </div>
+      </div>
+    </form>
+  </main>
+  
+
+  <script>
+    function previewImage(event) {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const preview = document.getElementById("image-preview");
+          const previewText = document.getElementById("preview-text");
+
+          preview.src = e.target.result;
+          preview.classList.remove("hidden");
+          previewText.classList.add("hidden"); // Hide "Preview" text
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  </script>
+
+
+
+  <!-- Link the JavaScript file -->
+  <script src="/js/main.js"></script>
+  </body>
+
+  </html>
