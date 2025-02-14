@@ -3,6 +3,7 @@ const router = express.Router();
 const productController = require("../controllers/productController"); // ✅ Fix Typo
 const { verifyToken, adminAuth } = require("../middleware/authMiddleware");
 const { uploadProduct } = require("../config/cloudinary");
+const Product = require('../models/Product');
 
 // ✅ Ensure Callback Functions Exist
 router.get("/add-product", verifyToken, adminAuth, productController.renderAddProduct);
@@ -21,5 +22,31 @@ router.get("/product-list", verifyToken, adminAuth, productController.renderProd
 
 // ✅ Delete Product
 router.post("/delete-product", verifyToken, adminAuth, productController.deleteProduct);
+
+
+
+
+router.get("/search", async (req, res) => {
+    try {
+      const searchQuery = req.query.q || "";
+      if (!searchQuery) return res.json([]); // Return empty if no query
+      const regex = new RegExp(searchQuery, "i"); // Case insensitive search
+  
+      const results = await Product.find({
+        $or: [
+          { name: { $regex: regex } },
+          { description: { $regex: regex } },
+          { keywords: { $regex: regex } }
+        ]
+      }).limit(12);
+  
+      res.json(results);
+    } catch (error) {
+      console.error("Search error:", error);
+      res.status(500).send("Error processing search request");
+    }
+  });
+  
+
 
 module.exports = router;

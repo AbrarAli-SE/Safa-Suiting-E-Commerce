@@ -169,7 +169,7 @@
 </header>
 
 
-<script>
+<!-- <script>
 document.addEventListener("DOMContentLoaded", function () {
   const searchInput = document.getElementById("desktopSearchInput");
   const searchIcon = document.getElementById("desktopSearchIcon");
@@ -255,8 +255,88 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-</script>
+</script> -->
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const searchInput = document.getElementById("desktopSearchInput");
+  const searchIcon = document.getElementById("desktopSearchIcon");
+  const expandedSearchBar = document.getElementById("expandedSearchBar");
+  const closeSearch = document.getElementById("closeSearch");
+  const expandedSearchInput = document.getElementById("expandedSearchInput"); 
+  const expandedSearchResults = document.getElementById("expandedSearchResults");
+
+  // Function to show expanded search bar
+  function showExpandedSearch() {
+    expandedSearchBar.classList.remove("hidden");
+    searchInput.parentElement.classList.add("hidden"); // Hide default search
+    expandedSearchInput.focus(); // Focus on the input when expanded
+  }
+
+  // Function to hide expanded search bar
+  function hideExpandedSearch() {
+    expandedSearchBar.classList.add("hidden");
+    searchInput.parentElement.classList.remove("hidden"); // Show default search
+    expandedSearchResults.classList.add("hidden"); // Hide results
+  }
+
+  // Click event to show search bar
+  searchInput.addEventListener("click", showExpandedSearch);
+  searchIcon.addEventListener("click", showExpandedSearch);
+
+  // Click event to close search bar
+  closeSearch.addEventListener("click", hideExpandedSearch);
+
+  // Function to handle live search
+  async function handleSearch(input) {
+    const query = input.value.trim().toLowerCase();
+    expandedSearchResults.innerHTML = ''; // Clear previous results
+
+    if (query.length > 0) {
+      try {
+        const response = await fetch(`/api/search?q=${query}`); // Use '/api/search'
+            if (!response.ok) throw new Error("Network response was not ok");
+            const results = await response.json();
+
+            console.log("Search Results:", results); // Debugging
+
+        if (results.length > 0) {
+          results.slice(0, 12).forEach((product) => {
+            const resultItem = document.createElement("div");
+            resultItem.textContent = product.name;
+            resultItem.className = "p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer";
+            resultItem.addEventListener("click", () => {
+              window.location.href = `/product/${product._id}`; // Redirect to product page
+            });
+            expandedSearchResults.appendChild(resultItem);
+          });
+        } else {
+          const noResult = document.createElement("div");
+          noResult.textContent = "No results found";
+          noResult.className = "p-2 text-gray-500";
+          expandedSearchResults.appendChild(noResult);
+        }
+        expandedSearchResults.classList.remove("hidden");
+      } catch (error) {
+        console.error("Error fetching search results:", error);
+      }
+    } else {
+      expandedSearchResults.classList.add("hidden");
+    }
+  }
+
+  // Event listener for search input
+  expandedSearchInput.addEventListener("input", () => handleSearch(expandedSearchInput));
+
+  // Hide results when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!expandedSearchBar.contains(e.target) && !expandedSearchResults.contains(e.target)) {
+      expandedSearchResults.classList.add("hidden");
+    }
+  });
+});
+
+</script>
 
   <script>
 

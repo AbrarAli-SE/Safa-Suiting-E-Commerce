@@ -78,6 +78,7 @@
 app.use('/', indexRoutes)
 app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
 app.use('/user', userRoutes);
+app.use("/api", productRoutes); // Prefix API routes with '/api'
 app.use("/user/wishlist", wishlistRoutes); // ✅ Wishlist Routes
 app.use("/user/cart", cartRoutes); // ✅ Cart Routes
 app.use("/user/order", orderRoutes); // ✅ Cart Routes
