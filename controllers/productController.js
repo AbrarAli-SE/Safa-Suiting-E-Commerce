@@ -70,23 +70,22 @@ exports.renderProductList = async (req, res) => {
     }
 };
 
-// ✅ Render Edit Product Page
 exports.renderEditProduct = async (req, res) => {
     try {
         const { productId } = req.params;
         const product = await Product.findById(productId);
 
         if (!product) {
-            return res.status(404).send("Product Not Found.");
+            return res.status(404).render('error-page', { message: "Product Not Found." }); // Render an error page or send a more informative response
         }
 
-        res.render("product/edit-product", { product }); // ✅ Render new page
-
+        res.render("product/edit-product", { product });
     } catch (error) {
         console.error("❌ Render Edit Product Error:", error);
-        res.status(500).send("Server error");
+        res.status(500).render('error-page', { message: "Server error" }); // Render an error page or send a more informative response
     }
 };
+
 
 exports.updateProduct = async (req, res) => {
     try {

@@ -13,7 +13,7 @@ router.post("/product/add", verifyToken, adminAuth, uploadProduct, productContro
 router.get("/edit/:productId", verifyToken, adminAuth, productController.renderEditProduct);
 
 // ✅ Route to Update an Existing Product (With Image Upload)
-router.post("/update/:productId", verifyToken, adminAuth, productController.updateProduct);
+router.post("/update/:productId", verifyToken, adminAuth,uploadProduct,productController.updateProduct);
 
 
 // ✅ Render Product List (Pagination & Search)
