@@ -10,6 +10,7 @@
   const indexRoutes = require('./routes/index');
   const adminRoutes = require('./routes/admin');
   const pageRoutes = require("./routes/page");
+  const searchRouter = require('./routes/search'); // Make sure this path is correct
   const wishlistRoutes = require("./routes/wishlist"); // ✅ Import Wishlist Routes
   const cartRoutes = require("./routes/cart"); // ✅ Import Cart Routes
   const productRoutes = require("./routes/product"); // ✅ Import Cart Routes
@@ -76,9 +77,10 @@
 
 // Routes
 app.use('/', indexRoutes)
+app.use('/search', searchRouter); // Use the search router under the '/search' path
 app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
 app.use('/user', userRoutes);
-app.use("/api", productRoutes); // Prefix API routes with '/api'
+// app.use("/api", productRoutes); // Prefix API routes with '/api'
 app.use("/user/wishlist", wishlistRoutes); // ✅ Wishlist Routes
 app.use("/user/cart", cartRoutes); // ✅ Cart Routes
 app.use("/user/order", orderRoutes); // ✅ Cart Routes

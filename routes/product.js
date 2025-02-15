@@ -23,29 +23,6 @@ router.get("/product-list", verifyToken, adminAuth, productController.renderProd
 // ✅ Delete Product
 router.post("/delete-product", verifyToken, adminAuth, productController.deleteProduct);
 
-
-
-
-router.get("/search", async (req, res) => {
-    try {
-      const searchQuery = req.query.q || "";
-      if (!searchQuery) return res.json([]); // Return empty if no query
-      const regex = new RegExp(searchQuery, "i"); // Case insensitive search
-  
-      const results = await Product.find({
-        $or: [
-          { name: { $regex: regex } },
-          { description: { $regex: regex } },
-          { keywords: { $regex: regex } }
-        ]
-      }).limit(12);
-  
-      res.json(results);
-    } catch (error) {
-      console.error("Search error:", error);
-      res.status(500).send("Error processing search request");
-    }
-  });
   
 
 

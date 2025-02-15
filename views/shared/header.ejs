@@ -294,7 +294,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (query.length > 0) {
       try {
-        const response = await fetch(`/api/search?q=${query}`); // Use '/api/search'
+        const response = await fetch(`/search/api/search?q=${query}`); // Use '/api/search'
             if (!response.ok) throw new Error("Network response was not ok");
             const results = await response.json();
 
@@ -306,7 +306,7 @@ document.addEventListener("DOMContentLoaded", function () {
             resultItem.textContent = product.name;
             resultItem.className = "p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer";
             resultItem.addEventListener("click", () => {
-              window.location.href = `/product/${product._id}`; // Redirect to product page
+              window.location.href = `/search/searchResults?productId=${product._id}`;
             });
             expandedSearchResults.appendChild(resultItem);
           });
