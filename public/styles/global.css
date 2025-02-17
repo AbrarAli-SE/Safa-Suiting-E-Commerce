@@ -821,6 +821,10 @@ video {
   inset: 0px;
 }
 
+.inset-\[-26px\] {
+  inset: -26px;
+}
+
 .inset-y-0 {
   top: 0px;
   bottom: 0px;
