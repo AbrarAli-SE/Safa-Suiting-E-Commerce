@@ -428,6 +428,64 @@ document.addEventListener("click", (e) => {
     });
 
   </script>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const cartIcon = document.querySelector('#cart'); // Cart icon selector
+    const cartQuantity = cartIcon.querySelector('span'); // Cart quantity span
+
+    const wishlistIcon = document.querySelector('#wishlist'); // Wishlist icon selector
+    const wishlistQuantity = wishlistIcon.querySelector('span'); // Wishlist quantity span
+
+    document.querySelectorAll('.bi-cart, .bi-heart').forEach(button => {
+        button.addEventListener('click', function () {
+            const isWishlist = this.classList.contains('bi-heart');
+            const targetIcon = isWishlist ? wishlistIcon : cartIcon;
+            const quantitySpan = isWishlist ? wishlistQuantity : cartQuantity;
+            const productCard = this.closest('.group'); // Find closest product card
+            const { top, left, width, height } = productCard.getBoundingClientRect(); // Get product position
+
+            // Check if screen width is greater than 768 pixels before applying the animation
+            if (window.innerWidth > 768) {
+                // Create flying "+1" effect
+                const quantityElement = document.createElement('div');
+                quantityElement.textContent = "+1";
+                quantityElement.style.position = 'fixed';
+                quantityElement.style.top = `${top + height / 2}px`;
+                quantityElement.style.left = `${left + width / 2}px`;
+                quantityElement.style.fontSize = '16px';
+                quantityElement.style.color = 'white'; // White text color
+                quantityElement.style.backgroundColor = 'red'; // Red background
+                quantityElement.style.padding = '5px 10px';
+                quantityElement.style.borderRadius = '50%'; // Circular shape
+                quantityElement.style.fontWeight = 'bold';
+                quantityElement.style.transition = 'all 1s ease-in-out';
+                quantityElement.style.zIndex = '1001';
+                document.body.appendChild(quantityElement);
+
+                const iconRect = targetIcon.getBoundingClientRect();
+
+                setTimeout(() => {
+                    quantityElement.style.top = `${iconRect.top}px`;
+                    quantityElement.style.left = `${iconRect.left}px`;
+                    quantityElement.style.opacity = '0';
+                }, 10);
+
+                // Remove the quantity element after the animation
+                setTimeout(() => {
+                    quantityElement.remove();
+                }, 1000); // Match timeout to transition duration
+            }
+
+            // Always update the quantity
+            let currentQuantity = parseInt(quantitySpan.textContent) || 0;
+            quantitySpan.textContent = currentQuantity + 1; // Increment quantity
+        });
+    });
+});
+
+</script>
 </body>
 
 </html>

@@ -805,6 +805,10 @@ video {
   pointer-events: auto;
 }
 
+.visible {
+  visibility: visible;
+}
+
 .fixed {
   position: fixed;
 }
@@ -819,10 +823,6 @@ video {
 
 .inset-0 {
   inset: 0px;
-}
-
-.inset-\[-26px\] {
-  inset: -26px;
 }
 
 .inset-y-0 {
