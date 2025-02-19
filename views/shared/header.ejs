@@ -100,38 +100,10 @@
 
       <!-- Account Icon -->
       <button>
-        <a class="relative hidden md:block cursor-pointer" id="accountIcon">
+        <a href="/user/dashboard" class="relative hidden md:block cursor-pointer" id="accountIcon">
           <i class="bi bi-person text-3xl text-black dark:text-white"></i>
         </a>
       </button>
-
-      <!-- Account Dropdown Menu -->
-      <div id="accountMenu"
-        class="hidden absolute right-11 mt-72 min-w-56 bg-white shadow-lg rounded-md text-black w-48 dark:bg-gray-800 dark:text-white dark:shadow-gray-700">
-        <ul>
-          <li>
-            <a href="/user/dashboard" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <i class="bi bi-person mr-2"></i> Manage My Account
-            </a>
-          </li>
-          <li>
-            <a href="/user/order/user-order" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <i class="bi bi-bag mr-2"></i> My Order
-            </a>
-          </li>
-          <li>
-            <a href="/user/order/cancel-order" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <i class="bi bi-x-circle mr-2"></i> My Cancellations
-            </a>
-          </li>
-
-          <li>
-            <a href="/auth/logout" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-              <i class="bi bi-box-arrow-right mr-2"></i> Logout
-            </a>
-          </li>
-        </ul>
-      </div>
       <% } %>
     </div>
   </div>
@@ -380,54 +352,7 @@ document.addEventListener("click", (e) => {
  </script>
  
 
-  <script>
 
-
-  try {
-      const accountIcon = document.getElementById('accountIcon');
-      const accountMenu = document.getElementById('accountMenu');
-
-      if (accountIcon && accountMenu) {
-          // ✅ Show menu on hover
-          accountIcon.addEventListener('mouseenter', () => {
-              accountMenu.classList.remove('hidden');
-          });
-
-          accountMenu.addEventListener('mouseenter', () => {
-              accountMenu.classList.remove('hidden');
-          });
-
-          // ✅ Hide menu when mouse leaves
-          accountMenu.addEventListener('mouseleave', () => {
-              accountMenu.classList.add('hidden');
-          });
-
-          accountIcon.addEventListener('mouseleave', () => {
-              // Give a small delay before hiding (to allow smooth transition)
-              setTimeout(() => {
-                  if (!accountMenu.matches(':hover')) {
-                      accountMenu.classList.add('hidden');
-                  }
-              }, 200); 
-          });
-      } else {
-          console.error("❌ accountIcon or accountMenu not found in the DOM.");
-      }
-  } catch (error) {
-      console.error("❌ Error in handling account menu visibility:", error);
-  }
-
-
-    
-
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', () => {
-        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
-        link.classList.add('active');
-      });
-    });
-
-  </script>
 
 
 <script>
