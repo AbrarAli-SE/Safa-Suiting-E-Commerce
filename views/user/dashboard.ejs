@@ -21,9 +21,82 @@
             </div>
         </div>
 
-        <div>
+        <div class="flex">
+            <!-- Sidebar -->
+            <aside class="w-1/4 bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hidden md:block" id="sidebar">
+                <h5 class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
+                <button type="button" id="closeSidebar" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close menu</span>
+                </button>
+                <ul>
+                    <li>
+                        <a href="/user/dashboard" class="block p-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="bi bi-person mr-2"></i> Manage My Account
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/user/order/user-order" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="bi bi-bag mr-2"></i> My Order
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/user/order/cancel-order" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="bi bi-x-circle mr-2"></i> My Cancellations
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/auth/logout" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="bi bi-box-arrow-right mr-2"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Hamburger Menu for Small Screens -->
+            <div class="md:hidden">
+                <button id="hamburger" class="p-2 rounded-md bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                    <i class="bi bi-list text-xl text-gray-700 dark:text-gray-300"></i>
+                </button>
+            </div>
+
+
+            <!-- Drawer Sidebar for Small Screens -->
+            <div id="drawer-navigation" class="fixed top-0 left-0 z-50 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
+                <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
+                <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                    <span class="sr-only">Close menu</span>
+                </button>
+                <div class="py-4 overflow-y-auto">
+                    <ul class="space-y-2 font-medium">
+                        <li>
+                            <a href="/user/dashboard" class="flex items-center p-2 text-red-500 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <i class="bi bi-person mr-2"></i> Manage My Account
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/user/order/user-order" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <i class="bi bi-bag mr-2"></i> My Order
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/user/order/cancel-order" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <i class="bi bi-x-circle mr-2"></i> My Cancellations
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/auth/logout" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <i class="bi bi-box-arrow-right mr-2"></i> Logout
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
             <!-- Main Content -->
-            <main class="md:col-span-3">
+            <div class="w-3/4 ml-4">
                 <div class="bg-white p-6 rounded-lg shadow-sm">
                     <h1 class="text-2xl font-semibold text-red-500 mb-6">Edit Your Profile</h1>
 
@@ -31,19 +104,19 @@
                     <form id="profileForm" action="/user/update-profile" method="POST" class="space-y-6">
                         
                         <!-- ✅ Success & Error Messages for Password Change -->
-                    <div class="text-center mb-4">
-                        <% if (successMessage) { %>
-                            <div class="alert-message text-green-500 text-center font-medium">
-                                <%= successMessage %>
-                            </div>
-                        <% } %>
-                    
-                        <% if (error) { %>
-                            <div class="alert-message text-red-500 text-center font-medium">
-                                <%= error %>
-                            </div>
-                        <% } %>
-                    </div>
+                        <div class="text-center mb-4">
+                            <% if (successMessage) { %>
+                                <div class="alert-message text-green-500 text-center font-medium">
+                                    <%= successMessage %>
+                                </div>
+                            <% } %>
+                        
+                            <% if (error) { %>
+                                <div class="alert-message text-red-500 text-center font-medium">
+                                    <%= error %>
+                                </div>
+                            <% } %>
+                        </div>
 
                         <!-- Name Field -->
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -71,7 +144,6 @@
                             </button>
                         </div>
                     </form>
-
 
                     <!-- ✅ Success & Error Messages for Password Change -->
                     <div class="text-center mb-4">
@@ -109,10 +181,8 @@
                             </button>
                         </div>
                     </form>
-
-
                 </div>
-            </main>
+            </div>
         </div>
     </div>
 </main>
@@ -245,7 +315,21 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
+</script>
+<script>
 
+  // Toggle sidebar visibility on small screens
+  const hamburger = document.getElementById("hamburger");
+        const sidebar = document.getElementById("drawer-navigation");
+
+        hamburger.addEventListener("click", function () {
+            sidebar.classList.toggle("-translate-x-full");
+        });
+
+        const closeButton = document.querySelector('[data-drawer-hide="drawer-navigation"]');
+        closeButton.addEventListener("click", function () {
+            sidebar.classList.add("-translate-x-full");
+        });
 </script>
 
-<%- include('../shared/footer') %> 
+<%- include('../shared/footer') %>
