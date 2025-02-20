@@ -363,10 +363,18 @@ exports.getToken = async (req, res) => {
       if (!user) {
         return res.status(401).json({ error: "Unauthorized" });
       }
-      // Send back the token or any user-related data
-      return res.status(200).json({ token: user.token });
+      
+      // Check if the user has tokens and return the last token
+      if (!user.tokens || user.tokens.length === 0) {
+        return res.status(404).json({ error: "Token not found" });
+      }
+      
+      const latestToken = user.tokens[user.tokens.length - 1].token; // Get the last token from the array
+  
+      return res.status(200).json({ token: latestToken });
     } catch (error) {
       res.status(500).json({ error: "Error fetching token" });
     }
   };
+  
   
