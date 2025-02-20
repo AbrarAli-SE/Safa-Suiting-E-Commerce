@@ -56,8 +56,8 @@
   // Serve static files (CSS, images, etc.) from the public folder
   app.use(express.static(path.join(__dirname, 'public')));
 
+  app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
-  app.use(express.urlencoded({ extended: false }));
 
   app.use(verifyToken); // ✅ Set `req.user` for all requests
 

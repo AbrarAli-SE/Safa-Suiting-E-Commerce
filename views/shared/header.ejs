@@ -10,422 +10,299 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
-
-   <!-- AOS Library for Scroll Animations -->
-   <!-- <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" /> -->
-
-
 </head>
 
 <body class="transition-all duration-300 bg-[#FFFFFF] text-gray-900 dark:bg-gray-900 dark:text-gray-100 !scroll-smooth">
-  
- 
-  <header
-  class=" border-b border-gray-500 bg-[#FFFFFF] text-black dark:bg-gray-900 dark:text-gray-100  dark:border-gray-700 fixed top-0 left-0 w-full z-50 ">
-  <!-- Top Bar -->
-  <div class="bg-black text-white text-sm py-2 px-4 flex justify-center items-center dark:bg-gray-800">
-    <span class="mr-2">Unleash the Summer Vibes: Dive into Style with Our Hot Deals and Free Delivery!</span>
-    <a href="#" class="underline">ShopNow</a>
-  </div>
+  <header class="border-b border-gray-500 bg-[#FFFFFF] text-black dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 fixed top-0 left-0 w-full z-50">
+    <!-- Top Bar -->
+    <div class="bg-black text-white text-sm py-2 px-4 flex justify-center items-center dark:bg-gray-800">
+      <span class="mr-2">Unleash the Summer Vibes: Dive into Style with Our Hot Deals and Free Delivery!</span>
+      <a href="#" class="underline">ShopNow</a>
+    </div>
 
-  <!-- Main Navigation -->
-  <div class="flex justify-between items-center py-5 px-4 lg:px-24 md:px-8">
-    <!-- Logo -->
-    <!-- <div class="lg:text-2xl text-xl font-bold">Safa Suiting</div> -->
-    <a href="/">
-      <img src="/assests/safaLogo.png" alt="Safa Suiting" class="w-12 h-8 dark:brightness-0 dark:invert">
-    </a>
-    
+    <!-- Main Navigation -->
+    <div class="flex justify-between items-center py-5 px-4 lg:px-24 md:px-8">
+      <!-- Logo -->
+      <a href="/">
+        <img src="/assests/safaLogo.png" alt="Safa Suiting" class="w-12 h-8 dark:brightness-0 dark:invert">
+      </a>
 
+      <!-- Navigation Links -->
+      <nav class="hidden md:flex md:space-x-6 text-base font-semibold tracking-wide">
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/pages/contact" class="nav-link">Contact</a>
+        <a href="/pages/about" class="nav-link">About</a>
+        <% if (!user) { %>
+          <a href="/auth/register" class="nav-link">Sign Up</a>
+        <% } %>
+      </nav>
 
-    <!-- Navigation Links -->
-    <nav class="hidden md:flex md:space-x-6 text-base font-semibold tracking-wide ">
-      <a href="/" class="nav-link active">Home</a>
-      <a href="/pages/contact" class="nav-link">Contact</a>
-      <a href="/pages/about" class="nav-link">About</a>
-      <% if (!user) { %> 
-        <a href="/auth/register" class="nav-link">Sign Up</a>
-      <% } %>
-    </nav>
+      <!-- Search and Icons -->
+      <div class="flex items-center space-x-4">
+        <!-- Search Bar for Medium and Large Screens -->
+        <div class="relative group">
+          <input type="text" id="desktopSearchInput" placeholder="Search..." class="block p-2 w-48 z-20 border border-slate-400 text-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:focus:ring-gray-500 rounded-md">
+          <button id="desktopSearchIcon" class="absolute top-0 right-0 p-2 text-sm font-medium h-full text-black dark:text-white">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
 
-
-    <!-- Search and Icons -->
-    <div class="flex items-center space-x-4">
-
-      <!-- Search Bar for Medium and Large Screens -->
-      <div class="relative group">
-        <input type="text" id="desktopSearchInput" placeholder="Search..."
-          class="block p-2 w-48 z-20 border border-slate-400 text-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:focus:ring-gray-500 rounded-md ">
-        <button id="desktopSearchIcon" class="absolute top-0 right-0 p-2 text-sm font-medium h-full text-black dark:text-white">
-          <i class="bi bi-search"></i>
-        </button>
-      </div>
-
-      <!-- Expanded Search Bar (Hidden by Default) -->
-      <div id="expandedSearchBar"
-        class="hidden p-4 bg-gray-100 border-b border-gray-300 dark:bg-gray-800 dark:border-gray-600 fixed top-8 right-0 w-full z-40">
-        <div class="flex items-center space-x-2">
-          <div class="relative w-full">
-            <input type="text" id="expandedSearchInput" placeholder="Search..." autocomplete="off"
-              class="block p-2.5 w-full text-black border-2 border-black bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-gray-500 rounded-md pl-2 pr-8">
-
-            <!-- Close Button inside the input -->
-            <button id="closeSearch" class="absolute top-1/2 right-2 transform -translate-y-1/2 text-black dark:text-white text-2xl">
-              <i class="bi bi-x-lg"></i>
-            </button>
+        <!-- Expanded Search Bar (Hidden by Default) -->
+        <div id="expandedSearchBar" class="hidden p-4 bg-gray-100 border-b border-gray-300 dark:bg-gray-800 dark:border-gray-600 fixed top-8 right-0 w-full z-40">
+          <div class="flex items-center space-x-2">
+            <div class="relative w-full">
+              <input type="text" id="expandedSearchInput" placeholder="Search..." autocomplete="off" class="block p-2.5 w-full text-black border-2 border-black bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-gray-500 rounded-md pl-2 pr-8">
+              <!-- Close Button inside the input -->
+              <button id="closeSearch" class="absolute top-1/2 right-2 transform -translate-y-1/2 text-black dark:text-white text-2xl">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+          <div id="expandedSearchResults" class="hidden mt-2 bg-white border border-gray-300 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-600">
+            <!-- Search results will appear here -->
           </div>
         </div>
 
-        <div id="expandedSearchResults"
-          class="hidden mt-2 bg-white border border-gray-300 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-600">
-          <!-- Search results will appear here -->
-        </div>
+        <!-- ✅ Show Cart, Wishlist, and Account Only If Logged In -->
+        <% if (user) { %>
+          <button>
+            <a href="/user/wishlist" class="relative hidden md:block cursor-pointer" id="largeScreenWishlist">
+              <i class="bi bi-heart text-2xl dark:text-white"></i>
+              <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
+            </a>
+          </button>
+          <button>
+            <a href="/user/cart" class="relative hidden md:block cursor-pointer" id="largeScreenCart">
+              <i class="bi bi-cart3 text-2xl dark:text-white"></i>
+              <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
+            </a>
+          </button>
+          <!-- Account Icon -->
+          <button>
+            <a href="/user/dashboard" class="relative hidden md:block cursor-pointer" id="accountIcon">
+              <i class="bi bi-person text-3xl text-black dark:text-white"></i>
+            </a>
+          </button>
+        <% } %>
       </div>
+    </div>
 
-      <!-- ✅ Show Cart, Wishlist, and Account Only If Logged In -->
+    <!-- Bottom Navigation for Small Screens -->
+    <div class="border-t fixed bottom-0 left-0 w-full z-20 bg-white shadow-md md:hidden flex justify-around py-2 dark:bg-gray-900 dark:border-gray-700">
+      <a href="/" class="flex flex-col items-center text-black dark:text-white">
+        <i class="bi bi-house text-xl"></i>
+        <span class="text-xs">Home</span>
+      </a>
       <% if (user) { %>
-      <button>
-        <a href="/user/wishlist" class="relative hidden md:block cursor-pointer" id="largeScreenWishlist">
-          <i class="bi bi-heart text-2xl dark:text-white"></i>
-          <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
+        <!-- Wishlist (Only if Logged In) -->
+        <a href="/user/wishlist" class="relative flex flex-col items-center text-black dark:text-white" id="smallScreenWishlist">
+          <i class="bi bi-heart text-xl"></i>
+          <span class="absolute -top-1 right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
+          <span class="text-xs">Wishlist</span>
         </a>
-      </button>
-
-      <button>
-        <a href="/user/cart" class="relative hidden md:block cursor-pointer" id="largeScreenCart">
-          <i class="bi bi-cart3 text-2xl dark:text-white"></i>
-          <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
+        <a href="/user/cart" class="px-3 relative flex flex-col items-center text-black dark:text-white" id="smallScreenCart">
+          <i class="bi bi-cart3 text-xl"></i>
+          <span class="absolute -top-1 right-2 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
+          <span class="text-xs">Cart</span>
         </a>
-      </button>
-
-      <!-- Account Icon -->
-      <button>
-        <a href="/user/dashboard" class="relative hidden md:block cursor-pointer" id="accountIcon">
-          <i class="bi bi-person text-3xl text-black dark:text-white"></i>
+      <% } else { %>
+        <a href="/auth/register" class="flex flex-col items-center text-black dark:text-white">
+          <i class="bi bi-person text-xl"></i>
+          <span class="text-xs">Sign Up</span>
         </a>
-      </button>
       <% } %>
     </div>
-  </div>
+  </header>
 
-  
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("desktopSearchInput");
+      const searchIcon = document.getElementById("desktopSearchIcon");
+      const expandedSearchBar = document.getElementById("expandedSearchBar");
+      const closeSearch = document.getElementById("closeSearch");
+      const expandedSearchInput = document.getElementById("expandedSearchInput");
+      const expandedSearchResults = document.getElementById("expandedSearchResults");
+      let currentFocus = -1; // Track the currently focused item in the search results
 
-  <!-- Bottom Navigation for Small Screens -->
-  <div
-    class="border-t fixed bottom-0 left-0 w-full z-20 bg-white shadow-md md:hidden flex justify-around py-2 dark:bg-gray-900 dark:border-gray-700">
-    <a href="/" class="flex flex-col items-center text-black dark:text-white">
-      <i class="bi bi-house text-xl"></i>
-      <span class="text-xs">Home</span>
-    </a>
-
-    <% if (user) { %>
-      <!-- Wishlist (Only if Logged In) -->
-    <a href="/user/wishlist" class="relative flex flex-col items-center text-black dark:text-white" id="smallScreenWishlist">
-      <i class="bi bi-heart text-xl"></i>
-      <span class="absolute -top-1 right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
-      <span class="text-xs">Wishlist</span>
-    </a>
-    <a href="/user/cart" class="px-3 relative flex flex-col items-center text-black dark:text-white" id="smallScreenCart">
-      <i class="bi bi-cart3 text-xl"></i>
-      <span class="absolute -top-1 right-2 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
-      <span class="text-xs">Cart</span>
-
-    </a>
-    <% } else { %>
-    <a href="/auth/register" class="flex flex-col items-center text-black dark:text-white">
-      <i class="bi bi-person text-xl"></i>
-      <span class="text-xs">Sign Up</span>
-    </a>
-    <% } %>
-  </div>
-</header>
-
-
-<!-- <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const searchInput = document.getElementById("desktopSearchInput");
-  const searchIcon = document.getElementById("desktopSearchIcon");
-  const expandedSearchBar = document.getElementById("expandedSearchBar");
-  const closeSearch = document.getElementById("closeSearch");
-  const expandedSearchInput = document.getElementById('expandedSearchInput'); // Expanded search input field
-
-  // Function to show expanded search bar
-  function showExpandedSearch() {
-    expandedSearchBar.classList.remove("hidden");
-    searchInput.parentElement.classList.add("hidden"); // Hide default search
-    expandedSearchInput.focus(); // Focus on the input when expanded
-  }
-
-  // Function to hide expanded search bar
-  function hideExpandedSearch() {
-    expandedSearchBar.classList.add("hidden");
-    searchInput.parentElement.classList.remove("hidden"); // Show default search
-  }
-
-  // Click event to show search bar
-  searchInput.addEventListener("click", showExpandedSearch);
-  searchIcon.addEventListener("click", showExpandedSearch);
-
-  // Click event to close search bar
-  closeSearch.addEventListener("click", hideExpandedSearch);
-
-  // Dummy data for search
-  const dummyResults = [
-    'Summer Collection 2023',
-    'Men’s Formal Suits',
-    'Casual Wear for Women',
-    'Trending Accessories',
-    'New Arrivals: Kids Wear',
-    'Top Picks for Winter'
-  ];
-
-  // Function to handle search input and display results
-  function handleSearch(input, resultsContainer) {
-    const query = input.value.toLowerCase();
-    resultsContainer.innerHTML = ''; // Clear previous results
-
-    if (query) {
-      const filteredResults = dummyResults.filter(item =>
-        item.toLowerCase().includes(query)
-      );
-      if (filteredResults.length > 0) {
-        filteredResults.forEach(result => {
-          const resultItem = document.createElement('div');
-          resultItem.textContent = result;
-          resultItem.className = 'p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer';
-          resultsContainer.appendChild(resultItem);
-        });
-      } else {
-        const noResult = document.createElement('div');
-        noResult.textContent = 'No results found';
-        noResult.className = 'p-2 text-gray-500';
-        resultsContainer.appendChild(noResult);
+      // Function to show expanded search bar
+      function showExpandedSearch() {
+        expandedSearchBar.classList.remove("hidden");
+        searchInput.parentElement.classList.add("hidden");
+        expandedSearchInput.focus();
       }
-      resultsContainer.classList.remove('hidden');
-    } else {
-      resultsContainer.classList.add('hidden');
-    }
-  }
 
-  // Event listener for the expanded search input
-  const expandedSearchResults = document.getElementById('expandedSearchResults');
-  expandedSearchInput.addEventListener('input', () =>
-    handleSearch(expandedSearchInput, expandedSearchResults)
-  );
+      // Function to hide expanded search bar
+      function hideExpandedSearch() {
+        expandedSearchBar.classList.add("hidden");
+        searchInput.parentElement.classList.remove("hidden");
+        expandedSearchResults.classList.add("hidden");
+        currentFocus = -1;
+      }
 
-  // Hide results when clicking outside
-  document.addEventListener('click', (e) => {
-    // Close expanded search results
-    if (
-      !expandedSearchBar.contains(e.target) &&
-      !expandedSearchResults.contains(e.target)
-    ) {
-      expandedSearchResults.classList.add('hidden');
-    }
-  });
+      // Click event to show search bar
+      searchInput.addEventListener("click", showExpandedSearch);
+      searchIcon.addEventListener("click", showExpandedSearch);
 
-});
+      // Click event to close search bar
+      closeSearch.addEventListener("click", hideExpandedSearch);
 
+      // Function to handle live search
+      async function handleSearch(input) {
+        const query = input.value.trim().toLowerCase();
+        expandedSearchResults.innerHTML = '';
+        currentFocus = -1; // Reset focus
 
-</script> -->
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-   const searchInput = document.getElementById("desktopSearchInput");
-   const searchIcon = document.getElementById("desktopSearchIcon");
-   const expandedSearchBar = document.getElementById("expandedSearchBar");
-   const closeSearch = document.getElementById("closeSearch");
-   const expandedSearchInput = document.getElementById("expandedSearchInput"); 
-   const expandedSearchResults = document.getElementById("expandedSearchResults");
-   let currentFocus = -1; // Track the currently focused item in the search results
- 
-   // Function to show expanded search bar
-   function showExpandedSearch() {
-     expandedSearchBar.classList.remove("hidden");
-     searchInput.parentElement.classList.add("hidden");
-     expandedSearchInput.focus();
-   }
- 
-   // Function to hide expanded search bar
-   function hideExpandedSearch() {
-     expandedSearchBar.classList.add("hidden");
-     searchInput.parentElement.classList.remove("hidden");
-     expandedSearchResults.classList.add("hidden");
-     currentFocus = -1;
-   }
- 
-   // Click event to show search bar
-   searchInput.addEventListener("click", showExpandedSearch);
-   searchIcon.addEventListener("click", showExpandedSearch);
- 
-   // Click event to close search bar
-   closeSearch.addEventListener("click", hideExpandedSearch);
- 
-   // Function to handle live search
-   async function handleSearch(input) {
-     const query = input.value.trim().toLowerCase();
-     expandedSearchResults.innerHTML = '';
-     currentFocus = -1; // Reset focus
- 
-     if (query.length > 0) {
-       try {
-        const response = await fetch(`/search?q=${encodeURIComponent(query)}`, {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        if (query.length > 0) {
+          try {
+            const response = await fetch(`/search?q=${encodeURIComponent(query)}`, {
+              headers: { 'X-Requested-With': 'XMLHttpRequest' }
             });
-         if (!response.ok) throw new Error("Network response was not ok");
-         const results = await response.json();
- 
-         if (results.length > 0) {
-           results.slice(0, 12).forEach((product, index) => {
-             const resultItem = document.createElement("div");
-             resultItem.textContent = product.name;
-             resultItem.className = "search-result-item p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer";
-             resultItem.setAttribute("data-index", index);
-             resultItem.addEventListener("click", () => {
-               window.location.href = `/search?q=${expandedSearchInput.value.trim()}`;
-             });
-             expandedSearchResults.appendChild(resultItem);
-           });
-         } else {
-           const noResult = document.createElement("div");
-           noResult.textContent = "No results found";
-           noResult.className = "p-2 text-gray-500";
-           expandedSearchResults.appendChild(noResult);
-         }
-         expandedSearchResults.classList.remove("hidden");
-       } catch (error) {
-         console.error("Error fetching search results:", error);
-       }
-     } else {
-       expandedSearchResults.classList.add("hidden");
-     }
-   }
- 
-   // Event listener for search input
-   expandedSearchInput.addEventListener("input", () => handleSearch(expandedSearchInput));
- 
-   // Keydown event to manage navigation and selection in search results
-expandedSearchInput.addEventListener("keydown", function (e) {
-  const x = document.querySelectorAll(".search-result-item");
-  if (e.keyCode === 40) { // Down arrow
-    currentFocus++;
-    addActive(x);
-  } else if (e.keyCode === 38) { // Up arrow
-    currentFocus--;
-    addActive(x);
-  } else if (e.keyCode === 13) { // Enter key
-    e.preventDefault();
-    if (currentFocus > -1) {
-      if (x) x[currentFocus].click();
-    } else {
-      window.location.href = `/search?q=${expandedSearchInput.value.trim()}`;
-    }
-  }
-});
+            if (!response.ok) throw new Error("Network response was not ok");
+            const results = await response.json();
 
-// Function to classify an item as "active"
-function addActive(x) {
-  if (!x) return false;
-  removeActive(x);
-  if (currentFocus >= x.length) currentFocus = 0;
-  if (currentFocus < 0) currentFocus = x.length - 1;
-  x[currentFocus].classList.add("bg-gray-200"); // Add class for active item
-  expandedSearchInput.value = x[currentFocus].textContent; // Update the search input with the active item's text
-}
-
-// Function to remove "active" from any item
-function removeActive(x) {
-  for (var i = 0; i < x.length; i++) {
-    x[i].classList.remove("bg-gray-200");
-  }
-}
-
-// Hide results when clicking outside
-document.addEventListener("click", (e) => {
-  if (!expandedSearchBar.contains(e.target) && !expandedSearchResults.contains(e.target)) {
-    expandedSearchResults.classList.add("hidden");
-    expandedSearchInput.value = ''; // Reset the search input when clicking outside
-  }
-});
-
- });
- </script>
- 
-
-
-
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-    const largeScreenCartIcon = document.querySelector('#largeScreenCart'); // Large screen cart icon selector
-    const largeScreenCartQuantity = largeScreenCartIcon.querySelector('span'); // Large screen cart quantity span
-
-    const smallScreenCartIcon = document.querySelector('#smallScreenCart'); // Small screen cart icon selector
-    const smallScreenCartQuantity = smallScreenCartIcon.querySelector('span'); // Small screen cart quantity span
-
-    const largeScreenWishlistIcon = document.querySelector('#largeScreenWishlist'); // Large screen wishlist icon selector
-    const largeScreenWishlistQuantity = largeScreenWishlistIcon.querySelector('span'); // Large screen wishlist quantity span
-
-    const smallScreenWishlistIcon = document.querySelector('#smallScreenWishlist'); // Small screen wishlist icon selector
-    const smallScreenWishlistQuantity = smallScreenWishlistIcon.querySelector('span'); // Small screen wishlist quantity span
-
-    document.querySelectorAll('.bi-cart, .bi-heart').forEach(button => {
-        button.addEventListener('click', function () {
-            const isWishlist = this.classList.contains('bi-heart');
-            const targetIcon = isWishlist ? largeScreenWishlistIcon : largeScreenCartIcon;
-            const quantitySpan = isWishlist ? largeScreenWishlistQuantity : largeScreenCartQuantity;
-            const productCard = this.closest('.group'); // Find closest product card
-            const { top, left, width, height } = productCard.getBoundingClientRect(); // Get product position
-
-            // Check if screen width is greater than 768 pixels before applying the animation
-            if (window.innerWidth > 768) {
-                // Create flying "+1" effect
-                const quantityElement = document.createElement('div');
-                quantityElement.textContent = "+1";
-                quantityElement.style.position = 'fixed';
-                quantityElement.style.top = `${top + height / 2}px`;
-                quantityElement.style.left = `${left + width / 2}px`;
-                quantityElement.style.fontSize = '16px';
-                quantityElement.style.color = 'white'; // White text color
-                quantityElement.style.backgroundColor = 'red'; // Red background
-                quantityElement.style.padding = '5px 10px';
-                quantityElement.style.borderRadius = '50%'; // Circular shape
-                quantityElement.style.fontWeight = 'bold';
-                quantityElement.style.transition = 'all 1s ease-in-out';
-                quantityElement.style.zIndex = '1001';
-                document.body.appendChild(quantityElement);
-
-                const iconRect = targetIcon.getBoundingClientRect();
-
-                setTimeout(() => {
-                    quantityElement.style.top = `${iconRect.top}px`;
-                    quantityElement.style.left = `${iconRect.left}px`;
-                    quantityElement.style.opacity = '0';
-                }, 10);
-
-                // Remove the quantity element after the animation
-                setTimeout(() => {
-                    quantityElement.remove();
-                }, 1000); // Match timeout to transition duration
-            }
-
-            // Always update the quantity
-            let currentQuantity = parseInt(quantitySpan.textContent) || 0;
-            quantitySpan.textContent = currentQuantity + 1; // Increment quantity
-
-            // Update small screen quantities as well
-            if (isWishlist) {
-                let smallScreenWishlistCurrentQuantity = parseInt(smallScreenWishlistQuantity.textContent) || 0;
-                smallScreenWishlistQuantity.textContent = smallScreenWishlistCurrentQuantity + 1; // Increment wishlist quantity
+            if (results.length > 0) {
+              results.slice(0, 12).forEach((product, index) => {
+                const resultItem = document.createElement("div");
+                resultItem.textContent = product.name;
+                resultItem.className = "search-result-item p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer";
+                resultItem.setAttribute("data-index", index);
+                resultItem.addEventListener("click", () => {
+                  window.location.href = `/search?q=${expandedSearchInput.value.trim()}`;
+                });
+                expandedSearchResults.appendChild(resultItem);
+              });
             } else {
-                let smallScreenCartCurrentQuantity = parseInt(smallScreenCartQuantity.textContent) || 0;
-                smallScreenCartQuantity.textContent = smallScreenCartCurrentQuantity + 1; // Increment cart quantity
+              const noResult = document.createElement("div");
+              noResult.textContent = "No results found";
+              noResult.className = "p-2 text-gray-500";
+              expandedSearchResults.appendChild(noResult);
             }
-        });
-    });
-});
+            expandedSearchResults.classList.remove("hidden");
+          } catch (error) {
+            console.error("Error fetching search results:", error);
+          }
+        } else {
+          expandedSearchResults.classList.add("hidden");
+        }
+      }
 
-</script>
+      // Event listener for search input
+      expandedSearchInput.addEventListener("input", () => handleSearch(expandedSearchInput));
+
+      // Keydown event to manage navigation and selection in search results
+      expandedSearchInput.addEventListener("keydown", function (e) {
+        const x = document.querySelectorAll(".search-result-item");
+        if (e.keyCode === 40) { // Down arrow
+          currentFocus++;
+          addActive(x);
+        } else if (e.keyCode === 38) { // Up arrow
+          currentFocus--;
+          addActive(x);
+        } else if (e.keyCode === 13) { // Enter key
+          e.preventDefault();
+          if (currentFocus > -1) {
+            if (x) x[currentFocus].click();
+          } else {
+            window.location.href = `/search?q=${expandedSearchInput.value.trim()}`;
+          }
+        }
+      });
+
+      // Function to classify an item as "active"
+      function addActive(x) {
+        if (!x) return false;
+        removeActive(x);
+        if (currentFocus >= x.length) currentFocus = 0;
+        if (currentFocus < 0) currentFocus = x.length - 1;
+        x[currentFocus].classList.add("bg-gray-200"); // Add class for active item
+        expandedSearchInput.value = x[currentFocus].textContent; // Update the search input with the active item's text
+      }
+
+      // Function to remove "active" from any item
+      function removeActive(x) {
+        for (var i = 0; i < x.length; i++) {
+          x[i].classList.remove("bg-gray-200");
+        }
+      }
+
+      // Hide results when clicking outside
+      document.addEventListener("click", (e) => {
+        if (!expandedSearchBar.contains(e.target) && !expandedSearchResults.contains(e.target)) {
+          expandedSearchResults.classList.add("hidden");
+          expandedSearchInput.value = ''; // Reset the search input when clicking outside
+        }
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const largeScreenCartIcon = document.querySelector('#largeScreenCart'); // Large screen cart icon selector
+      const largeScreenCartQuantity = largeScreenCartIcon.querySelector('span'); // Large screen cart quantity span
+
+      const smallScreenCartIcon = document.querySelector('#smallScreenCart'); // Small screen cart icon selector
+      const smallScreenCartQuantity = smallScreenCartIcon.querySelector('span'); // Small screen cart quantity span
+
+      const largeScreenWishlistIcon = document.querySelector('#largeScreenWishlist'); // Large screen wishlist icon selector
+      const largeScreenWishlistQuantity = largeScreenWishlistIcon.querySelector('span'); // Large screen wishlist quantity span
+
+      const smallScreenWishlistIcon = document.querySelector('#smallScreenWishlist'); // Small screen wishlist icon selector
+      const smallScreenWishlistQuantity = smallScreenWishlistIcon.querySelector('span'); // Small screen wishlist quantity span
+
+      document.querySelectorAll('.bi-cart, .bi-heart').forEach(button => {
+        button.addEventListener('click', function () {
+          const isWishlist = this.classList.contains('bi-heart');
+          const targetIcon = isWishlist ? largeScreenWishlistIcon : largeScreenCartIcon;
+          const quantitySpan = isWishlist ? largeScreenWishlistQuantity : largeScreenCartQuantity;
+          const productCard = this.closest('.group'); // Find closest product card
+          const { top, left, width, height } = productCard.getBoundingClientRect(); // Get product position
+
+          // Check if screen width is greater than 768 pixels before applying the animation
+          if (window.innerWidth > 768) {
+            // Create flying "+1" effect
+            const quantityElement = document.createElement('div');
+            quantityElement.textContent = "+1";
+            quantityElement.style.position = 'fixed';
+            quantityElement.style.top = `${top + height / 2}px`;
+            quantityElement.style.left = `${left + width / 2}px`;
+            quantityElement.style.fontSize = '16px';
+            quantityElement.style.color = 'white'; // White text color
+            quantityElement.style.backgroundColor = 'red'; // Red background
+            quantityElement.style.padding = '5px 10px';
+            quantityElement.style.borderRadius = '50%'; // Circular shape
+            quantityElement.style.fontWeight = 'bold';
+            quantityElement.style.transition = 'all 1s ease-in-out';
+            quantityElement.style.zIndex = '1001';
+            document.body.appendChild(quantityElement);
+
+            const iconRect = targetIcon.getBoundingClientRect();
+
+            setTimeout(() => {
+              quantityElement.style.top = `${iconRect.top}px`;
+              quantityElement.style.left = `${iconRect.left}px`;
+              quantityElement.style.opacity = '0';
+            }, 10);
+
+            // Remove the quantity element after the animation
+            setTimeout(() => {
+              quantityElement.remove();
+            }, 1000); // Match timeout to transition duration
+          }
+
+          // Always update the quantity
+          let currentQuantity = parseInt(quantitySpan.textContent) || 0;
+          quantitySpan.textContent = currentQuantity + 1; // Increment quantity
+
+          // Update small screen quantities as well
+          if (isWishlist) {
+            let smallScreenWishlistCurrentQuantity = parseInt(smallScreenWishlistQuantity.textContent) || 0;
+            smallScreenWishlistQuantity.textContent = smallScreenWishlistCurrentQuantity + 1; // Increment wishlist quantity
+          } else {
+            let smallScreenCartCurrentQuantity = parseInt(smallScreenCartQuantity.textContent) || 0;
+            smallScreenCartQuantity.textContent = smallScreenCartCurrentQuantity + 1; // Increment cart quantity
+          }
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

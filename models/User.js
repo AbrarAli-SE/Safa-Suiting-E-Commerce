@@ -37,7 +37,7 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    tokens: [{ token: { type: String } }] // ✅ Store active JWTs
+    tokens: { type: String, default: null } // ✅ Store a single active JWT
     
   },
   { timestamps: true } // Adds createdAt & updatedAt

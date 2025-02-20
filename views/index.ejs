@@ -108,10 +108,12 @@
                         </button>
                       
                       
-                      <button class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
-                        <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
-                        <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Add to Cart</span>
-                      </button>
+                        <button class="add-to-cart-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative"
+                        data-product-id="<%= product._id %>"
+                    <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+                    <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">Add to Cart</span>
+                </button>
+                
                     </div>
                     <!-- product info -->
                       <div class="absolute bottom-0 left-0 right-0 bg-white/90 dark:text-black p-4 translate-y-20 group-hover:translate-y-0 transition-all duration-300">
@@ -320,3 +322,70 @@ rightButtons.forEach((button, index) => {
       //   carouselItems.style.transform = `translateX(-${currentIndex * 100}%)`;
       // }
     </script>
+
+
+
+  
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+    button.addEventListener("click", async function () {
+      const productId = this.getAttribute("data-product-id");
+
+      try {
+        // Step 1: Fetch the token from the server
+        const tokenResponse = await fetch("/user/get-token", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${userToken}`  // Send token for authentication
+          }
+        });
+
+        // If fetching the token fails
+        if (!tokenResponse.ok) {
+          throw new Error("Failed to fetch token");
+        }
+
+        // Step 2: Extract token from the response
+        const tokenResult = await tokenResponse.json();
+        const userToken = tokenResult.token;  // Use the token for the next request
+
+        if (!userToken) {
+          alert("You must be logged in to add items to the cart.");
+          return;
+        }
+
+        // Step 3: Add item to the cart with the fetched token
+        const response = await fetch("/user/cart/add", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${userToken}`  // Attach the fetched token
+          },
+          body: JSON.stringify({ productId, quantity: 1 })
+        });
+
+        // Step 4: Handle the response
+        const result = await response.json();
+        
+        // Log the result to the console
+        console.log(result);
+
+        if (response.ok) {
+          alert("Product added to cart!");
+        } else {
+          alert(result.error || "Failed to add product to cart.");
+        }
+
+      } catch (error) {
+        console.error("Error adding product to cart:", error);
+        alert("An error occurred. Please try again.");
+      }
+    });
+  });
+});
+
+ 
+ </script>

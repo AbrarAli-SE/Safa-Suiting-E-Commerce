@@ -355,3 +355,18 @@ exports.forgotPassword = async (req, res) => {
         res.render("auth/forgot-password", { error: "Server error. Please try again later.", success: null });
     }
 };
+
+
+exports.getToken = async (req, res) => {
+    try {
+      const user = await User.findById(req.user._id);  // Assumes the `verifyToken` middleware sets `req.user`
+      if (!user) {
+        return res.status(401).json({ error: "Unauthorized" });
+      }
+      // Send back the token or any user-related data
+      return res.status(200).json({ token: user.token });
+    } catch (error) {
+      res.status(500).json({ error: "Error fetching token" });
+    }
+  };
+  
