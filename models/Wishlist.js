@@ -2,24 +2,36 @@ const mongoose = require("mongoose");
 
 const wishlistSchema = new mongoose.Schema(
   {
-    userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User", // ✅ References User Model
-      required: true,
+    user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',  // Reference to User model
+          required: true,
     },
     items: [
       {
-        productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product", // ✅ References Product Model
-          required: true,
-        },
-        addedAt: {
-          type: Date,
-          default: Date.now, // ✅ Stores when the item was added
-        },
-      },
-    ],
+        product: {
+              type: mongoose.Schema.Types.ObjectId,
+              ref: 'Product',  // Reference to Product model
+              required: true,
+          },
+          name: {
+              type: String,
+              required: true,
+          },
+          img: {
+              type: String,
+              required: true,
+          },
+          price: {
+              type: Number,
+              required: true,
+          },
+          discountPrice:{
+            type:Number,
+            required:true,
+          },
+    }
+    ]
   },
   { timestamps: true } // ✅ Adds createdAt & updatedAt fields
 );

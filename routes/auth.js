@@ -1,12 +1,12 @@
 const express = require("express");
-const { verifyToken } = require("../middleware/authMiddleware"); 
+const { authenticateUser } = require("../middleware/authMiddleware"); 
 const authController = require("../controllers/authController"); // ✅ Import authController
 const authRestrictionMiddleware = require("../middleware/authRestrictionMiddleware");
 
 const router = express.Router();
 
 
-router.get("/get-token", verifyToken, authController.getToken); 
+router.get("/get-token",authenticateUser,  authController.getToken); 
 
 // ✅ Google OAuth Routes
 router.get("/google", authController.googleAuth);

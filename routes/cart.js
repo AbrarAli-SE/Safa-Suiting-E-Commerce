@@ -1,15 +1,15 @@
 const express = require("express");
 const router = express.Router();
-const { verifyToken, verifyUser } = require("../middleware/authMiddleware");
+const { authenticateUser, verifyUser } = require("../middleware/authMiddleware");
 const cartController = require("../controllers/cartController");
 
 // ✅ Cart Page Route
-router.get("/", verifyToken, verifyUser, cartController.renderCart);
+router.get("/", authenticateUser, verifyUser, cartController.renderCart);
 
 // ✅ Add to Cart Route
-router.post("/add", verifyToken, cartController.addToCart);
+router.post("/add", authenticateUser, cartController.addToCart);
 
 // ✅ Render Checkout Page
-router.get("/checkout", verifyToken, verifyUser, cartController.renderCheckout);
+router.get("/checkout", authenticateUser, verifyUser, cartController.renderCheckout);
 
 module.exports = router;

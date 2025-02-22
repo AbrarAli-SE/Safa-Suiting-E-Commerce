@@ -1,67 +1,67 @@
 const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
-const { verifyToken, adminAuth } = require("../middleware/authMiddleware");
+const { authenticateUser, adminAuth } = require("../middleware/authMiddleware");
 const { uploadCarousel } = require("../config/cloudinary");
 
 
 
 // ✅ Fetch Unread Notifications
-router.get("/notifications", verifyToken, adminAuth, adminController.getNotifications);
+router.get("/notifications", authenticateUser, adminAuth, adminController.getNotifications);
 
 // ✅ Mark Notifications as Read
-router.post("/notifications/mark-read", verifyToken, adminAuth, adminController.markNotificationsAsRead);
+router.post("/notifications/mark-read", authenticateUser, adminAuth, adminController.markNotificationsAsRead);
 
 // ✅ User Dashboard Route
-router.get("/intro", verifyToken, adminAuth, adminController.renderAdminDashboard);
+router.get("/intro", authenticateUser, adminAuth, adminController.renderAdminDashboard);
 
-router.get("/users", verifyToken, adminAuth, adminController.renderManageUsers);
+router.get("/users", authenticateUser, adminAuth, adminController.renderManageUsers);
 
-router.get("/users/:userId", verifyToken, adminAuth, adminController.renderUserDetails);
+router.get("/users/:userId", authenticateUser, adminAuth, adminController.renderUserDetails);
 
 // ✅ Update User Role Route
-router.post("/users/update-role", verifyToken, adminAuth, adminController.updateUserRole);
+router.post("/users/update-role", authenticateUser, adminAuth, adminController.updateUserRole);
 
 // ✅ Admin Settings Page Route
-router.get("/settings", verifyToken, adminAuth, adminController.renderAdminSettings);
+router.get("/settings", authenticateUser, adminAuth, adminController.renderAdminSettings);
 
 // ✅ Update Profile Route
-router.post("/update-profile",verifyToken,adminAuth, adminController.updateProfile);
+router.post("/update-profile",authenticateUser,adminAuth, adminController.updateProfile);
 
 // ✅ Change Password Route
-router.post("/change-password",verifyToken,adminAuth, adminController.changePassword);
+router.post("/change-password",authenticateUser,adminAuth, adminController.changePassword);
 
 
-router.get("/coupon-code",verifyToken,adminAuth, adminController.renderCouponCode);
+router.get("/coupon-code",authenticateUser,adminAuth, adminController.renderCouponCode);
 
 
-router.get("/payment",verifyToken,adminAuth, adminController.renderPayment);
+router.get("/payment",authenticateUser,adminAuth, adminController.renderPayment);
 
 
-router.get("/assign-id",verifyToken,adminAuth, adminController.renderTrackId);
+router.get("/assign-id",authenticateUser,adminAuth, adminController.renderTrackId);
 
 
-router.get("/cancel-order",verifyToken,adminAuth, adminController.renderCancelOrder);
+router.get("/cancel-order",authenticateUser,adminAuth, adminController.renderCancelOrder);
 
 
-router.get("/analytical",verifyToken,adminAuth, adminController.renderAnalytical);
+router.get("/analytical",authenticateUser,adminAuth, adminController.renderAnalytical);
 
 
-router.get("/manage-coursel",verifyToken,adminAuth, adminController.renderCoursel);
+router.get("/manage-coursel",authenticateUser,adminAuth, adminController.renderCoursel);
 
 
 // ✅ Upload Route - Correct Middleware Usage
-router.post("/carousel/upload", verifyToken, adminAuth, uploadCarousel, adminController.uploadCarouselImages);
+router.post("/carousel/upload", authenticateUser, adminAuth, uploadCarousel, adminController.uploadCarouselImages);
 
 // ✅ Get Carousel Images
 router.get("/carousel/get", adminController.getCarouselImages);
 
 // ✅ Admin Contact Submissions Page
-router.get("/contacts", verifyToken, adminAuth, adminController.renderContacts);
+router.get("/contacts", authenticateUser, adminAuth, adminController.renderContacts);
 
 
 // ✅ Delete Contact Message
-router.post("/contacts/delete", verifyToken, adminAuth, adminController.deleteContact);
+router.post("/contacts/delete", authenticateUser, adminAuth, adminController.deleteContact);
 
 
 

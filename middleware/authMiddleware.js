@@ -3,32 +3,51 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const { secretKey } = require("../config/jwtConfig");
 
-const verifyToken = async (req, res, next) => {
-    try {
-        const token = req.cookies.authToken || req.headers.authorization?.split(" ")[1];
+// const verifyToken = async (req, res, next) => {
+//     try {
+//         const token = req.cookies.authToken || req.headers.authorization?.split(" ")[1];
 
-        if (!token) {
-            req.user = null; // ✅ No user if no token
-            return next();
+//         if (!token) {
+//             req.user = null; // ✅ No user if no token
+//             return next();
+//         }
+
+//         const decoded = jwt.verify(token, secretKey);
+//         const user = await User.findOne({ _id: decoded.userId, "tokens.token": token });
+
+//         if (!user) {
+//             res.clearCookie("authToken");
+//             req.user = null;
+//             return next();
+//         }
+
+//         req.user = user;
+//         next();
+//     } catch (err) {
+//         res.clearCookie("authToken");
+//         req.user = null;
+//         next();
+//     }
+// };
+
+// const jwt = require("jsonwebtoken");
+
+const authenticateUser = async (req, res, next) => {
+    const token = req.cookies.authToken;
+    
+    if (token) {
+        try {
+            const decoded = jwt.verify(token, secretKey);
+            req.user = decoded; // Store user data in request
+        } catch (err) {
+            req.user = null; // If token is invalid, user remains null
         }
-
-        const decoded = jwt.verify(token, secretKey);
-        const user = await User.findOne({ _id: decoded.userId, "tokens.token": token });
-
-        if (!user) {
-            res.clearCookie("authToken");
-            req.user = null;
-            return next();
-        }
-
-        req.user = user;
-        next();
-    } catch (err) {
-        res.clearCookie("authToken");
-        req.user = null;
-        next();
+    } else {
+        req.user = null; // No token found
     }
+    next();
 };
+
 
 // ✅ Admin Authorization Middleware (Protects `/admin/*` routes)
 const adminAuth = async (req, res, next) => {
@@ -52,4 +71,4 @@ const verifyUser = (req, res, next) => {
 };
 
 
-module.exports = { verifyToken, adminAuth ,verifyUser };
+module.exports = {authenticateUser,  adminAuth ,verifyUser };

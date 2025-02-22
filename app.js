@@ -15,7 +15,7 @@
   const cartRoutes = require("./routes/cart"); // ✅ Import Cart Routes
   const productRoutes = require("./routes/product"); // ✅ Import Cart Routes
   const orderRoutes = require("./routes/orders"); // ✅ Import Cart Routes
-  const {verifyToken} = require("./middleware/authMiddleware");
+  const {authenticateUser} = require("./middleware/authMiddleware");
   
   const path = require('path');
 
@@ -56,10 +56,11 @@
   // Serve static files (CSS, images, etc.) from the public folder
   app.use(express.static(path.join(__dirname, 'public')));
 
-  app.use(express.urlencoded({ extended: true }));
+  app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
-  app.use(verifyToken); // ✅ Set `req.user` for all requests
+  app.use(authenticateUser);
+
 
   // ✅ Make `req.user` available globally in views
   app.use((req, res, next) => {

@@ -92,10 +92,12 @@
                       
                       <!-- Hover Buttons -->
                     <div class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
-                        <i class="bi bi-heart"></i> <!-- Wishlist Icon -->
+                      <button class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button wishlist-btn"
+                        data-product-id="<%= product._id %>">
+                        <i class="bi bi-heart" data-heart-icon></i> <!-- Wishlist Icon -->
                         <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
-                      </button>
+                    </button>
+
                       
                         <button class="quick-view-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button"
                                 data-name="<%= product.name %>"
@@ -103,16 +105,17 @@
                                 data-price="<%= product.price %>"
                                 data-discountprice="<%= product.discountPrice %>"
                                 data-description="<%= product.description || 'No description available.' %>">
+                                
                           <i class="bi bi-eye"></i> <!-- Quick View Icon -->
                           <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick View</span>
                         </button>
                       
                       
-                        <button class="add-to-cart-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative"
-                        data-product-id="<%= product._id %>"
-                    <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
-                    <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">Add to Cart</span>
-                </button>
+                        <button class="add-to-cart-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button"
+                        data-product-id="<%= product._id %>">
+                        <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+                    <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Add to Cart</span>
+                    </button>
                 
                     </div>
                     <!-- product info -->
@@ -329,63 +332,78 @@ rightButtons.forEach((button, index) => {
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll(".add-to-cart-btn").forEach(button => {
-    button.addEventListener("click", async function () {
-      const productId = this.getAttribute("data-product-id");
-
-      try {
-        // Step 1: Fetch the token from the server
-        const tokenResponse = await fetch("/user/get-token", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${userToken}`  // Send token for authentication
-          }
+    document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+        button.addEventListener("click", function () {
+            const productId = this.dataset.productId; // Get Product ID from button attribute
+            
+            // Send AJAX request to add the product to the cart
+            fetch("user/cart/add", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ productId }) // Send product ID in request body
+            })
+            .then(response => response.json()) // Convert response to JSON
+            .then(data => {
+               if (data.message === "User not authenticated.") {
+                    // Redirect to login page if user is not authenticated
+                    window.location.href = '/auth/login';
+                } 
+            })
+            .catch(error => console.error("Error:", error)); // Log errors
         });
-
-        // If fetching the token fails
-        if (!tokenResponse.ok) {
-          throw new Error("Failed to fetch token");
-        }
-
-        // Step 2: Extract token from the response
-        const tokenResult = await tokenResponse.json();
-        const userToken = tokenResult.token;  // Use the token for the next request
-
-        if (!userToken) {
-          alert("You must be logged in to add items to the cart.");
-          return;
-        }
-
-        // Step 3: Add item to the cart with the fetched token
-        const response = await fetch("/user/cart/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${userToken}`  // Attach the fetched token
-          },
-          body: JSON.stringify({ productId, quantity: 1 })
-        });
-
-        // Step 4: Handle the response
-        const result = await response.json();
-        
-        // Log the result to the console
-        console.log(result);
-
-        if (response.ok) {
-          alert("Product added to cart!");
-        } else {
-          alert(result.error || "Failed to add product to cart.");
-        }
-
-      } catch (error) {
-        console.error("Error adding product to cart:", error);
-        alert("An error occurred. Please try again.");
-      }
     });
-  });
 });
 
- 
  </script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      document.querySelectorAll(".wishlist-btn").forEach(button => {
+          button.addEventListener("click", function () {
+              const productId = this.dataset.productId; // Get Product ID from button attribute
+              const button = this; // Store the button reference for later
+              const heartIcon = button.querySelector("[data-heart-icon]"); // Get heart icon
+  
+              // Send AJAX request to toggle the product in the wishlist (add/remove)
+              fetch("user/wishlist/add", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json"
+                  },
+                  body: JSON.stringify({ productId }) // Send product ID in request body
+              })
+              .then(response => response.json()) // Convert response to JSON
+              .then(data => {
+                  if (data.success) {
+                      // If the product was added to the wishlist
+                      if (data.message === "Product added to wishlist.") {
+                          alert("✅ Product added to wishlist!");
+                          heartIcon.classList.add("text-red-500"); // Change icon to filled (red heart)
+                          heartIcon.classList.remove("bi-heart"); // Change to filled heart icon class
+                          heartIcon.classList.add("bi-heart-fill");
+                          button.querySelector("span").innerText = "Remove from Wishlist"; // Change button text
+                      }
+                      // If the product was removed from the wishlist
+                      else if (data.message === "Product removed from wishlist.") {
+                          alert("❌ Product removed from wishlist!");
+                          heartIcon.classList.remove("text-red-500"); // Remove filled icon style
+                          heartIcon.classList.add("bi-heart"); // Change back to empty heart icon class
+                          heartIcon.classList.remove("bi-heart-fill");
+                          button.querySelector("span").innerText = "Add to Wishlist"; // Reset button text
+                      }
+                  } else {
+                      if (data.message === "Please log in to modify your wishlist.") {
+                          window.location.href = '/auth/login'; // Redirect to login page if not logged in
+                      } else {
+                          alert("❌ " + data.message); // Show error message
+                      }
+                  }
+              })
+              .catch(error => console.error("Error:", error)); // Log errors
+          });
+      });
+  });
+  </script>
+  

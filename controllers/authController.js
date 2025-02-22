@@ -95,68 +95,50 @@ exports.googleAuthCallback = (req, res, next) => {
 };
 
 
-// ✅ Process Login Request
+
+// Login Controller
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        // ✅ Check if the user exists
         const user = await User.findOne({ email });
         if (!user) {
             return res.render("auth/login", { error: "Invalid email or password." });
         }
 
-        // ✅ Check if password is correct
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.render("auth/login", { error: "Invalid email or password." });
         }
 
-        // ✅ Check if the user is verified
         if (!user.verified) {
             return res.render("auth/login", { error: "Account not verified. Please verify your email with OTP." });
         }
 
-        // ✅ Generate JWT Token
         const token = jwt.sign(
             { userId: user._id, name: user.name, email: user.email, role: user.role },
-            secretKey,
-            { expiresIn }
+            process.env.JWT_SECRET,
+            { expiresIn: '24h' }
         );
 
-        // ✅ Store token in MongoDB
-        user.tokens.push({ token });
-        await user.save();
-
-        // ✅ Store JWT in HTTP-only Cookie
-        res.cookie("authToken", token, {
-            httpOnly: true,
-            secure: false, // Set `true` in production with HTTPS
-            maxAge: 24 * 60 * 60 * 1000 // Token expires in 24 hours
-        });
-
-        // ✅ Redirect user based on role
+        res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
         return res.redirect(user.role === "admin" ? "/admin/intro" : "/");
 
     } catch (err) {
-        console.error("❌ Login Error:", err);
+        console.error("Login Error:", err);
         res.render("auth/login", { error: "Server error. Please try again later." });
     }
 };
 
-
-// ✅ Register User & Redirect to OTP Page
+// Register Controller
 exports.register = async (req, res) => {
     const { name, email, password } = req.body;
     try {
-        console.log("🔹 Registering user:", { name, email });
-
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
+        if (await User.findOne({ email })) {
             return res.render("auth/register", { error: "User already exists." });
         }
 
-        const otp = generateOTP();
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
         const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
         const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -166,38 +148,24 @@ exports.register = async (req, res) => {
         const newUser = new User({ name, email, password: hashedPassword, otp, otpExpires, role, isNotified: false });
         await newUser.save();
 
-        console.log("✅ User saved. Sending OTP email...");
-
-        // ✅ Store email in session to avoid showing it in URL
         req.session.tempUser = { email };
 
-        // ✅ Send OTP Email
-        try {
-            const html = `<p>Your OTP is: <strong>${otp}</strong></p>`;
-            await sendEmail(email, "Verify Your OTP", html);
-        } catch (emailError) {
-            console.error("❌ Email sending failed:", emailError);
-            return res.render("auth/register", { error: "Failed to send OTP. Please try again later." });
-        }
+        const html = `<p>Your OTP is: <strong>${otp}</strong></p>`;
+        await sendEmail(email, "Verify Your OTP", html);
 
-        console.log("✅ Redirecting to OTP page for:", email);
-        return res.redirect(`/auth/verify-otp?email=${email}`); // ✅ Use Redirect
+        return res.redirect(`/auth/verify-otp?email=${email}`);
 
     } catch (error) {
-        console.error("❌ Register Error:", error);
+        console.error("Register Error:", error);
         return res.render("auth/register", { error: "Server error. Please try again." });
     }
 };
 
-
-
-// ✅ Verify OTP & Generate JWT
+// Verify OTP Controller
 exports.verifyOTP = async (req, res) => {
-
     if (!req.session.tempUser || !req.session.tempUser.email) {
-        return res.redirect("/auth/register"); // 🚫 Redirect if session is missing
+        return res.redirect("/auth/register");
     }
-
 
     const email = req.session.tempUser.email;
     const { otp } = req.body;
@@ -209,7 +177,6 @@ exports.verifyOTP = async (req, res) => {
             return res.render("auth/verify-otp", { email, error: "User not found." });
         }
 
-        // ✅ Validate OTP
         if (user.otp !== otp) {
             return res.render("auth/verify-otp", { email, error: "Invalid OTP. Please try again." });
         }
@@ -217,32 +184,23 @@ exports.verifyOTP = async (req, res) => {
             return res.render("auth/verify-otp", { email, error: "OTP expired. Please request a new one." });
         }
 
-        // ✅ Mark user as verified
         user.verified = true;
         user.otp = null;
         user.otpExpires = null;
+        await user.save();
 
-        // ✅ Generate JWT Token
+        req.session.tempUser = null;
+
         const token = jwt.sign(
             { userId: user._id, name: user.name, email: user.email, role: user.role },
             secretKey,
-            { expiresIn }
+            { expiresIn: '24h' }
         );
 
-        user.tokens.push({ token });
-        await user.save();
-
-         // ✅ Clear session after OTP verification
-         req.session.tempUser = null;
-
-        // ✅ Set JWT in cookies
         res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
-
-        // ✅ Redirect user to respective dashboard
         return res.redirect(user.role === "admin" ? "/admin/intro" : "/");
-
     } catch (err) {
-        console.error("❌ OTP Verification Error:", err);
+        console.error("OTP Verification Error:", err);
         return res.render("auth/verify-otp", { email, error: "Server error. Please try again later." });
     }
 };
@@ -290,31 +248,8 @@ exports.resendOTP = async (req, res) => {
 // ✅ Logout (Remove JWT & Redirect)
 exports.logout = async (req, res) => {
     try {
-        const token = req.cookies.authToken || req.headers.authorization?.split(" ")[1];
-
-        if (!token) {
-            // ✅ If it's a direct link logout, redirect immediately
-            return res.clearCookie("authToken").redirect("/");
-        }
-
-        const user = await User.findOneAndUpdate(
-            { "tokens.token": token },
-            { $pull: { tokens: { token } } },
-            { new: true }
-        );
-
-        if (!user) {
-            return res.status(401).json({ error: "Invalid session" });
-        }
-
         res.clearCookie("authToken");
-
-        // ✅ Handle Logout for Direct Requests vs AJAX Calls
-        if (req.headers.accept && req.headers.accept.includes("application/json")) {
-            res.json({ success: true, message: "Logged out successfully" });
-        } else {
-            res.redirect("/");
-        }
+        res.redirect("/");
     } catch (err) {
         res.status(500).json({ error: "Server error." });
     }

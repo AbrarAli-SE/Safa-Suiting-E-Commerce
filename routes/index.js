@@ -2,8 +2,12 @@ const express = require("express");
 const router = express.Router();
 const Carousel = require("../models/Carousel"); // Ensure this is the correct path to your Carousel model
 const Product = require("../models/Product"); // Ensure this is the correct path to your Product model
+const { authenticateUser } = require("../middleware/authMiddleware");
 
-router.get('/', async (req, res, next) => {
+
+
+
+router.get('/',authenticateUser ,async (req, res, next) => {
     try {
         // Fetch all unique categories from the products collection
         let categories = await Product.distinct("category");
@@ -27,7 +31,11 @@ router.get('/', async (req, res, next) => {
         }, {});
 
         const carousel = await Carousel.findOne(); // Fetch images from DB
-        res.render('index', { carouselImages: carousel ? carousel.images : [] , categorizedProducts});
+        res.render('index', {
+            carouselImages: carousel ? carousel.images : [],
+            categorizedProducts,
+            user: req.user // Add user-specific data to the render
+        });
     } catch (error) {
         console.error("❌ Index Page Error:", error);
         res.status(500).send("Server error");
