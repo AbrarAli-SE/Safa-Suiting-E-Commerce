@@ -850,6 +850,10 @@ video {
   left: 1.25rem;
 }
 
+.left-\[-61px\] {
+  left: -61px;
+}
+
 .left-\[-80px\] {
   left: -80px;
 }

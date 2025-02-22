@@ -93,10 +93,17 @@
                       <!-- Hover Buttons -->
                     <div class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <button class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button wishlist-btn"
-                        data-product-id="<%= product._id %>">
-                        <i class="bi bi-heart" data-heart-icon></i> <!-- Wishlist Icon -->
-                        <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Wishlist</span>
-                    </button>
+                      data-product-id="<%= product._id %>"
+                      data-wishlist="false"> <!-- Default value, will be updated via JavaScript -->
+                      <i class="bi bi-heart" data-heart-icon></i>
+                      <span class="absolute left-[-61px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                          Add
+                      </span>
+                  </button>                  
+                  
+                  
+
+                  
 
                       
                         <button class="quick-view-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button"
@@ -112,10 +119,14 @@
                       
                       
                         <button class="add-to-cart-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button"
-                        data-product-id="<%= product._id %>">
-                        <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
-                    <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Add to Cart</span>
-                    </button>
+                          data-product-id="<%= product._id %>"
+                          data-cart="false"> <!-- Default value, will be updated via JavaScript -->
+                          <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+                          <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                              Add to Cart
+                          </span>
+                      </button>
+
                 
                     </div>
                     <!-- product info -->
@@ -330,7 +341,7 @@ rightButtons.forEach((button, index) => {
 
   
 
-<script>
+<!-- <script>
 document.addEventListener("DOMContentLoaded", function () {
     document.querySelectorAll(".add-to-cart-btn").forEach(button => {
         button.addEventListener("click", function () {
@@ -356,9 +367,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
- </script>
+ </script> -->
 
-<script>
+<!-- <script>
   document.addEventListener("DOMContentLoaded", function () {
       document.querySelectorAll(".wishlist-btn").forEach(button => {
           button.addEventListener("click", function () {
@@ -383,7 +394,7 @@ document.addEventListener("DOMContentLoaded", function () {
                           heartIcon.classList.add("text-red-500"); // Change icon to filled (red heart)
                           heartIcon.classList.remove("bi-heart"); // Change to filled heart icon class
                           heartIcon.classList.add("bi-heart-fill");
-                          button.querySelector("span").innerText = "Remove from Wishlist"; // Change button text
+                          button.querySelector("span").innerText = "Remove"; // Change button text
                       }
                       // If the product was removed from the wishlist
                       else if (data.message === "Product removed from wishlist.") {
@@ -391,7 +402,7 @@ document.addEventListener("DOMContentLoaded", function () {
                           heartIcon.classList.remove("text-red-500"); // Remove filled icon style
                           heartIcon.classList.add("bi-heart"); // Change back to empty heart icon class
                           heartIcon.classList.remove("bi-heart-fill");
-                          button.querySelector("span").innerText = "Add to Wishlist"; // Reset button text
+                          button.querySelector("span").innerText = "Add"; // Reset button text
                       }
                   } else {
                       if (data.message === "Please log in to modify your wishlist.") {
@@ -405,5 +416,132 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       });
   });
-  </script>
+  </script> -->
   
+
+  <script>
+ document.addEventListener("DOMContentLoaded", function () {
+    const largeScreenWishlistIcon = document.querySelector("#largeScreenWishlist");
+    const largeScreenWishlistQuantity = largeScreenWishlistIcon.querySelector("span");
+    const smallScreenWishlistIcon = document.querySelector("#smallScreenWishlist");
+    const smallScreenWishlistQuantity = smallScreenWishlistIcon.querySelector("span");
+
+    // Function to update wishlist quantity
+    function updateWishlistQuantity(quantity) {
+        largeScreenWishlistQuantity.textContent = quantity;
+        smallScreenWishlistQuantity.textContent = quantity;
+    }
+
+    // Load wishlist from localStorage
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    updateWishlistQuantity(wishlist.length);
+
+    // Function to handle wishlist click
+    function handleWishlistClick(button, productId) {
+        const isInWishlist = button.getAttribute("data-wishlist") === "true";
+        const heartIcon = button.querySelector("[data-heart-icon]");
+        const tooltip = button.querySelector("span");
+
+        if (isInWishlist) {
+            // Remove from wishlist
+            wishlist = wishlist.filter(id => id !== productId);
+            button.setAttribute("data-wishlist", "false");
+            heartIcon.classList.add("bi-heart");
+            heartIcon.classList.remove("bi-heart-fill", "text-red-500");
+            tooltip.textContent = "Add";
+        } else {
+            // Add to wishlist
+            wishlist.push(productId);
+            button.setAttribute("data-wishlist", "true");
+            heartIcon.classList.add("bi-heart-fill", "text-red-500");
+            heartIcon.classList.remove("bi-heart");
+            tooltip.textContent = "Remove";
+
+            // Play animation only when adding
+            playWishlistAnimation(button);
+        }
+
+        // Save updated wishlist to localStorage
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+        updateWishlistQuantity(wishlist.length);
+    }
+
+    // Function to play animation when adding to wishlist
+    function playWishlistAnimation(button) {
+        if (window.innerWidth <= 768) return; // Play animation only on large screens
+
+        const productCard = button.closest(".group");
+        if (!productCard) return;
+
+        const { top, left, width, height } = productCard.getBoundingClientRect();
+        const targetIcon = largeScreenWishlistIcon;
+        const iconRect = targetIcon.getBoundingClientRect();
+
+        // Create the flying "+1" effect
+        const quantityElement = document.createElement("div");
+        quantityElement.textContent = "+1";
+        quantityElement.style.position = "fixed";
+        quantityElement.style.top = `${top + height / 2}px`;
+        quantityElement.style.left = `${left + width / 2}px`;
+        quantityElement.style.fontSize = "16px";
+        quantityElement.style.color = "white";
+        quantityElement.style.backgroundColor = "red";
+        quantityElement.style.padding = "5px 10px";
+        quantityElement.style.borderRadius = "50%";
+        quantityElement.style.fontWeight = "bold";
+        quantityElement.style.transition = "all 1s ease-in-out";
+        quantityElement.style.zIndex = "1001";
+        document.body.appendChild(quantityElement);
+
+        // Move towards wishlist icon
+        setTimeout(() => {
+            quantityElement.style.top = `${iconRect.top}px`;
+            quantityElement.style.left = `${iconRect.left}px`;
+            quantityElement.style.opacity = "0";
+        }, 10);
+
+        // Remove the element after animation
+        setTimeout(() => {
+            quantityElement.remove();
+        }, 1000);
+    }
+
+    // Initialize wishlist buttons
+    document.querySelectorAll(".wishlist-btn").forEach(button => {
+        const productId = button.dataset.productId;
+        const heartIcon = button.querySelector("[data-heart-icon]");
+        const tooltip = button.querySelector("span");
+
+        // Set initial UI based on localStorage
+        if (wishlist.includes(productId)) {
+            button.setAttribute("data-wishlist", "true");
+            heartIcon.classList.add("bi-heart-fill", "text-red-500");
+            heartIcon.classList.remove("bi-heart");
+            tooltip.textContent = "Remove";
+        } else {
+            button.setAttribute("data-wishlist", "false");
+        }
+
+        button.addEventListener("click", async function () {
+            try {
+                const response = await fetch("user/wishlist/add", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ productId })
+                });
+
+                const data = await response.json();
+
+                if (data.message === "User not authenticated.") {
+                    window.location.href = "/auth/login"; // Redirect to login if not authenticated
+                } else if (data.success) {
+                    handleWishlistClick(button, productId);
+                }
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        });
+    });
+});
+
+  </script>

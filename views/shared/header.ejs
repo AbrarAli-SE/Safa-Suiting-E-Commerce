@@ -68,13 +68,13 @@
           <button>
             <a href="/user/wishlist" class="relative hidden md:block cursor-pointer" id="largeScreenWishlist">
               <i class="bi bi-heart text-2xl dark:text-white"></i>
-              <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
+              <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1"></span>
             </a>
           </button>
           <button>
             <a href="/user/cart" class="relative hidden md:block cursor-pointer" id="largeScreenCart">
               <i class="bi bi-cart3 text-2xl dark:text-white"></i>
-              <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
+              <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1"></span>
             </a>
           </button>
           <!-- Account Icon -->
@@ -234,75 +234,107 @@
       });
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-      const largeScreenCartIcon = document.querySelector('#largeScreenCart'); // Large screen cart icon selector
-      const largeScreenCartQuantity = largeScreenCartIcon.querySelector('span'); // Large screen cart quantity span
 
-      const smallScreenCartIcon = document.querySelector('#smallScreenCart'); // Small screen cart icon selector
-      const smallScreenCartQuantity = smallScreenCartIcon.querySelector('span'); // Small screen cart quantity span
+</script>
 
-      const largeScreenWishlistIcon = document.querySelector('#largeScreenWishlist'); // Large screen wishlist icon selector
-      const largeScreenWishlistQuantity = largeScreenWishlistIcon.querySelector('span'); // Large screen wishlist quantity span
-
-      const smallScreenWishlistIcon = document.querySelector('#smallScreenWishlist'); // Small screen wishlist icon selector
-      const smallScreenWishlistQuantity = smallScreenWishlistIcon.querySelector('span'); // Small screen wishlist quantity span
-
-      document.querySelectorAll('.bi-cart, .bi-heart').forEach(button => {
-        button.addEventListener('click', function () {
-          const isWishlist = this.classList.contains('bi-heart');
-          const targetIcon = isWishlist ? largeScreenWishlistIcon : largeScreenCartIcon;
-          const quantitySpan = isWishlist ? largeScreenWishlistQuantity : largeScreenCartQuantity;
-          const productCard = this.closest('.group'); // Find closest product card
-          const { top, left, width, height } = productCard.getBoundingClientRect(); // Get product position
-
-          // Check if screen width is greater than 768 pixels before applying the animation
-          if (window.innerWidth > 768) {
-            // Create flying "+1" effect
-            const quantityElement = document.createElement('div');
-            quantityElement.textContent = "+1";
-            quantityElement.style.position = 'fixed';
-            quantityElement.style.top = `${top + height / 2}px`;
-            quantityElement.style.left = `${left + width / 2}px`;
-            quantityElement.style.fontSize = '16px';
-            quantityElement.style.color = 'white'; // White text color
-            quantityElement.style.backgroundColor = 'red'; // Red background
-            quantityElement.style.padding = '5px 10px';
-            quantityElement.style.borderRadius = '50%'; // Circular shape
-            quantityElement.style.fontWeight = 'bold';
-            quantityElement.style.transition = 'all 1s ease-in-out';
-            quantityElement.style.zIndex = '1001';
-            document.body.appendChild(quantityElement);
-
-            const iconRect = targetIcon.getBoundingClientRect();
-
-            setTimeout(() => {
-              quantityElement.style.top = `${iconRect.top}px`;
-              quantityElement.style.left = `${iconRect.left}px`;
-              quantityElement.style.opacity = '0';
-            }, 10);
-
-            // Remove the quantity element after the animation
-            setTimeout(() => {
-              quantityElement.remove();
-            }, 1000); // Match timeout to transition duration
-          }
-
-          // Always update the quantity
-          let currentQuantity = parseInt(quantitySpan.textContent) || 0;
-          quantitySpan.textContent = currentQuantity + 1; // Increment quantity
-
-          // Update small screen quantities as well
-          if (isWishlist) {
-            let smallScreenWishlistCurrentQuantity = parseInt(smallScreenWishlistQuantity.textContent) || 0;
-            smallScreenWishlistQuantity.textContent = smallScreenWishlistCurrentQuantity + 1; // Increment wishlist quantity
-          } else {
-            let smallScreenCartCurrentQuantity = parseInt(smallScreenCartQuantity.textContent) || 0;
-            smallScreenCartQuantity.textContent = smallScreenCartCurrentQuantity + 1; // Increment cart quantity
-          }
-        });
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+      const largeScreenCartIcon = document.querySelector('#largeScreenCart');
+      const largeScreenCartQuantity = largeScreenCartIcon.querySelector('span');
+      const smallScreenCartIcon = document.querySelector('#smallScreenCart');
+      const smallScreenCartQuantity = smallScreenCartIcon.querySelector('span');
+  
+      // Function to update cart quantity on the page
+      function updateCartQuantity(cartQuantity) {
+          largeScreenCartQuantity.textContent = cartQuantity;
+          smallScreenCartQuantity.textContent = cartQuantity;
+      }
+  
+      // Function to handle the cart button click event
+      function handleCartClick(productId) {
+          // Send AJAX request to add the product to the cart
+          fetch("user/cart/add", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json"
+              },
+              body: JSON.stringify({ productId }) // Send product ID in request body
+          })
+          .then(response => response.json()) // Convert response to JSON
+          .then(data => {
+              if (data.message === "User not authenticated.") {
+                  // Redirect to login page if user is not authenticated
+                  window.location.href = '/auth/login';
+              } else if (data.success) {
+                  // Update cart quantity and localStorage after a successful request
+                  let currentQuantity = parseInt(localStorage.getItem('cartQuantity')) || 0;
+                  localStorage.setItem('cartQuantity', currentQuantity + 1); // Increment and store in localStorage
+                  updateCartQuantity(currentQuantity + 1); // Update UI
+              }
+          })
+          .catch(error => console.error("Error:", error)); // Log errors
+      }
+  
+      // Handle the cart button click event for each "add-to-cart-btn"
+      document.querySelectorAll(".add-to-cart-btn").forEach(button => {
+          button.addEventListener("click", function () {
+              const productId = this.dataset.productId; // Get Product ID from button attribute
+              handleCartClick(productId); // Call the function to handle the cart update
+          });
       });
-    });
-  </script>
+  
+      // Initialize the cart quantity from localStorage on page load
+      const initialCartQuantity = parseInt(localStorage.getItem('cartQuantity')) || 0;
+      updateCartQuantity(initialCartQuantity); // Set initial cart quantity from localStorage
+  
+      // Handle cart icon animation when clicked (flying "+1" effect)
+      document.querySelectorAll('.bi-cart').forEach(button => {
+          button.addEventListener('click', function () {
+              const targetIcon = largeScreenCartIcon;
+              const productCard = this.closest('.group'); // Find closest product card
+              const { top, left, width, height } = productCard.getBoundingClientRect(); // Get product position
+  
+              // Check if screen width is greater than 768 pixels before applying the animation
+              if (window.innerWidth > 768) {
+                  // Create flying "+1" effect
+                  const quantityElement = document.createElement('div');
+                  quantityElement.textContent = "+1";
+                  quantityElement.style.position = 'fixed';
+                  quantityElement.style.top = `${top + height / 2}px`;
+                  quantityElement.style.left = `${left + width / 2}px`;
+                  quantityElement.style.fontSize = '16px';
+                  quantityElement.style.color = 'white';
+                  quantityElement.style.backgroundColor = 'red';
+                  quantityElement.style.padding = '5px 10px';
+                  quantityElement.style.borderRadius = '50%';
+                  quantityElement.style.fontWeight = 'bold';
+                  quantityElement.style.transition = 'all 1s ease-in-out';
+                  quantityElement.style.zIndex = '1001';
+                  document.body.appendChild(quantityElement);
+  
+                  const iconRect = targetIcon.getBoundingClientRect();
+  
+                  setTimeout(() => {
+                      quantityElement.style.top = `${iconRect.top}px`;
+                      quantityElement.style.left = `${iconRect.left}px`;
+                      quantityElement.style.opacity = '0';
+                  }, 10);
+  
+                  // Remove the quantity element after the animation
+                  setTimeout(() => {
+                      quantityElement.remove();
+                  }, 1000);
+              }
+          });
+      });
+  });
+ 
+ 
+ </script>
+  
+
+  
+
 </body>
 
 </html>

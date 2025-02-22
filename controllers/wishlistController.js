@@ -2,6 +2,8 @@ const Wishlist = require("../models/Wishlist");
 const Product = require("../models/Product");
 
 
+
+
 // ✅ Add to Wishlist
 exports.addToWishlist = async (req, res) => {
     const { productId } = req.body; // Get product ID from AJAX request
