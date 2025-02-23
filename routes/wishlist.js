@@ -12,7 +12,5 @@ router.post("/add", authenticateUser, wishlistController.addToWishlist);
 // ✅ Remove from Wishlist
 router.post("/remove", authenticateUser, wishlistController.removeFromWishlist);
 
-// ✅ Clear Wishlist
-router.post("/clear", authenticateUser, wishlistController.clearWishlist);
 
 module.exports = router;
