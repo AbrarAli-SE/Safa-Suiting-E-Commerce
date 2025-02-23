@@ -4,257 +4,74 @@
   <nav class="flex space-x-2 text-sm text-gray-500">
       <a href="/" class="hover:text-gray-900">Home</a>
       <span>/</span>
-      <span class="text-gray-900">Contact</span>
+      <span class="text-gray-900">Cart</span>
   </nav>
 </div>
 
 <div class="max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-8">
   <!-- Cart Items Section (Left Side) -->
   <div class="md:col-span-2 space-y-6">
+    <% if (cart.length === 0) { %>
+      <p>Your cart is empty.</p>
+    <% } else { %>
       <h2 class="text-2xl font-semibold">Shopping Cart</h2>
-
-      <!-- Cart Item 1 -->
-      <div class="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row items-center justify-between border">
-          <div class="flex items-center gap-4">
-              <button class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50 remove-item">✕</button>
-              <img src="/assets/pics (3).jpeg" alt="LCD Monitor" class="w-24 h-20 object-cover rounded">
+      <!-- Scrollable Container -->
+      <div class="cart-items-container overflow-y-auto max-h-96">
+        <% cart.forEach(item => { %>
+          <div class="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row items-center justify-between border cart-item" data-item-id="<%= item._id %>">
+            <div class="flex items-center gap-4">
+              <button class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50 remove-item" data-item-id="<%= item._id %>">✕</button>
+              <img src="<%= item.product.image %>" alt="<%= item.product.name %>" class="w-24 h-20 object-cover rounded">
               <div>
-                  <h3 class="font-medium">LCD Monitor</h3>
-                  <span class="text-gray-500">Price: <span class="price" data-price="650">$650</span></span>
+                <h3 class="font-medium"><%= item.product.name %></h3>
+                <span class="text-gray-500">Price: <span class="price" data-price="<%= item.price %>">$<%= item.price %></span></span>
               </div>
-          </div>
-          <div class="flex items-center gap-2">
-              <input type="number" value="1" min="1" class="quantity w-16 px-3 py-2 text-center border rounded bg-gray-50">
-              <span class="font-medium subtotal">$650</span>
-          </div>
-      </div>
-
-      <!-- Cart Item 2 -->
-      <div class="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row items-center justify-between border">
-          <div class="flex items-center gap-4">
-              <button class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50 remove-item">✕</button>
-              <img src="/assets/pics (3).jpeg" alt="H1 Gamepad" class="w-24 h-20 object-cover rounded">
-              <div>
-                  <h3 class="font-medium">H1 Gamepad</h3>
-                  <span class="text-gray-500">Price: <span class="price" data-price="550">$550</span></span>
-              </div>
-          </div>
-          <div class="flex items-center gap-2">
-              <input type="number" value="2" min="1" class="quantity w-16 px-3 py-2 text-center border rounded bg-gray-50">
-              <span class="font-medium subtotal">$1100</span>
-          </div>
-      </div>
-
-      <div class="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row items-center justify-between border">
-        <div class="flex items-center gap-4">
-            <button class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50 remove-item">✕</button>
-            <img src="/assets/pics (3).jpeg" alt="H1 Gamepad" class="w-24 h-20 object-cover rounded">
-            <div>
-                <h3 class="font-medium">H1 Gamepad</h3>
-                <span class="text-gray-500">Price: <span class="price" data-price="550">$550</span></span>
             </div>
-        </div>
-        <div class="flex items-center gap-2">
-            <input type="number" value="2" min="1" class="quantity w-16 px-3 py-2 text-center border rounded bg-gray-50">
-            <span class="font-medium subtotal">$1100</span>
-        </div>
-    </div>
-
-
-    <div class="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row items-center justify-between border">
-      <div class="flex items-center gap-4">
-          <button class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50 remove-item">✕</button>
-          <img src="/assets/pics (3).jpeg" alt="H1 Gamepad" class="w-24 h-20 object-cover rounded">
-          <div>
-              <h3 class="font-medium">H1 Gamepad</h3>
-              <span class="text-gray-500">Price: <span class="price" data-price="550">$550</span></span>
+            <div class="flex items-center gap-2">
+              <input type="number" value="<%= item.quantity %>" min="1" class="quantity w-16 px-3 py-2 text-center border rounded bg-gray-50" data-item-id="<%= item._id %>">
+              <span class="font-medium subtotal">$<%= (item.price * item.quantity) %></span>
+            </div>
           </div>
+        <% }); %>
       </div>
-      <div class="flex items-center gap-2">
-          <input type="number" value="2" min="1" class="quantity w-16 px-3 py-2 text-center border rounded bg-gray-50">
-          <span class="font-medium subtotal">$1100</span>
+
+      <!-- Buttons (Only shown when cart has items) -->
+      <div class="flex justify-between pt-4 cart-buttons">
+        <button class="px-6 py-2.5 border rounded hover:bg-gray-100 transition">
+          <a href="/">Return To Shop</a>
+        </button>
+        <button id="updateCart" class="px-6 py-2.5 border rounded hover:bg-gray-100 transition">
+          Update Cart
+        </button>
       </div>
+    <% } %>
   </div>
 
-  <div class="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row items-center justify-between border">
-    <div class="flex items-center gap-4">
-        <button class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50 remove-item">✕</button>
-        <img src="/assets/pics (3).jpeg" alt="H1 Gamepad" class="w-24 h-20 object-cover rounded">
-        <div>
-            <h3 class="font-medium">H1 Gamepad</h3>
-            <span class="text-gray-500">Price: <span class="price" data-price="550">$550</span></span>
-        </div>
-    </div>
-    <div class="flex items-center gap-2">
-        <input type="number" value="2" min="1" class="quantity w-16 px-3 py-2 text-center border rounded bg-gray-50">
-        <span class="font-medium subtotal">$1100</span>
-    </div>
-</div>
-
-      <!-- Buttons -->
-      <div class="flex justify-between pt-4">
-          <button class="px-6 py-2.5 border rounded hover:bg-gray-100 transition">
-            <a href="/">
-                Return To Shop
-            </a>  
-          </button>
-          <button id="updateCart" class="px-6 py-2.5 border rounded hover:bg-gray-100 transition">
-              Update Cart
-          </button>
-      </div>
-  </div>
-
-  
- <!-- Cart Total Section (Right Side) -->
-<div class="border rounded-lg p-6 bg-white shadow w-[350px] md:w-[400px] self-start flex flex-col">
-  <h2 class="text-xl font-semibold mb-6">Cart Total</h2>
-  <div class="space-y-4 flex-grow">
-      <div class="flex justify-between items-center py-3 border-t">
+  <!-- Cart Total Section (Right Side, Only shown when cart has items) -->
+  <% if (cart.length > 0) { %>
+    <div class="cart-total-section border rounded-lg p-6 bg-white shadow w-[350px] md:w-[400px] self-start flex flex-col">
+      <h2 class="text-xl font-semibold mb-6">Cart Total</h2>
+      <div class="space-y-4 flex-grow">
+        <div class="flex justify-between items-center py-3 border-t">
           <span class="text-gray-600">Subtotal:</span>
-          <span id="cartSubtotal" class="font-medium">$1750</span>
-      </div>
-      <div class="flex justify-between items-center py-3 border-t">
+          <span id="cartSubtotal" class="font-medium">$<%= totalAmount %></span>
+        </div>
+        <div class="flex justify-between items-center py-3 border-t">
           <span class="text-gray-600">Shipping:</span>
           <span class="font-medium">Free</span>
-      </div>
-      <div class="flex justify-between items-center py-3 border-t">
+        </div>
+        <div class="flex justify-between items-center py-3 border-t">
           <span class="text-gray-600">Total:</span>
-          <span id="cartTotal" class="font-medium">$1750</span>
+          <span id="cartTotal" class="font-medium">$<%= totalAmount %></span>
+        </div>
       </div>
-  </div>
-  <!-- Fix Button Overflow -->
-  <button class="w-full px-6 py-2.5 mt-auto bg-red-500 text-white rounded hover:bg-red-600 transition">
-    <a href="/user/cart/checkout">
-      Proceed to checkout
-    </a> 
-  </button>
-</div>
-
-</div>
-
-<!-- <main class="container mx-auto px-4 py-12 mt-14"> -->
-    <!-- Breadcrumb -->
-    <!-- <div class="text-sm text-gray-700 m-10 mr-3">
-        <nav class="flex space-x-2 text-sm text-gray-500">
-            <a href="/" class="hover:text-gray-900">Home</a>
-            <span>/</span>
-            <span class="text-gray-900">Cart</span>
-        </nav>
-    </div> -->
-
-    <!-- <div class="max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-8"> -->
-        <!-- Cart Items Section (Left Side) -->
-        <!-- <div class="md:col-span-2 space-y-6"> -->
-            <!-- <h2 class="text-2xl font-semibold">Shopping Cart</h2> -->
-            <% /* %>
-            <% if (!user || !user.cart || user.cart.length === 0) { %>
-                <p class="text-gray-600 text-center mt-10">Your cart is empty.</p>
-            <% } else { %>
-                <% user.cart.forEach((item) => { %>
-                    <div class="bg-white shadow rounded-lg p-4 flex flex-col md:flex-row items-center justify-between border">
-                        <div class="flex items-center gap-4">
-                            <form action="/user/cart/remove" method="POST">
-                                <input type="hidden" name="productId" value="<%= item._id %>">
-                                <button type="submit" class="text-red-500 hover:text-red-600 p-1 rounded-full bg-red-50">
-                                    ✕
-                                </button>
-                            </form>
-                            <img src="<%= item.image %>" alt="<%= item.name %>" class="w-24 h-20 object-cover rounded">
-                            <div>
-                                <h3 class="font-medium"><%= item.name %></h3>
-                                <span class="text-gray-500">Price: <span class="price" data-price="<%= item.price %>">$<%= item.price %></span></span>
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <input type="number" name="quantity" value="<%= item.quantity %>" min="1" class="quantity w-16 px-3 py-2 text-center border rounded bg-gray-50">
-                            <span class="font-medium subtotal">$<%= item.price * item.quantity %></span>
-                        </div>
-                    </div>
-                <% }) %>
-            <% } %>
-
-            <!-- Buttons -->
-            <div class="flex justify-between pt-4">
-                <a href="/" class="px-6 py-2.5 border rounded hover:bg-gray-100 transition">Return To Shop</a>
-                <button id="updateCart" class="px-6 py-2.5 border rounded hover:bg-gray-100 transition">Update Cart</button>
-            </div>
-        </div>
-
-        <!-- Cart Total Section (Right Side) -->
-        <div class="border rounded-lg p-6 bg-white shadow w-[350px] md:w-[400px] self-start flex flex-col">
-            <h2 class="text-xl font-semibold mb-6">Cart Total</h2>
-            <div class="space-y-4 flex-grow">
-                <div class="flex justify-between items-center py-3 border-t">
-                    <span class="text-gray-600">Subtotal:</span>
-                    <span id="cartSubtotal" class="font-medium">$<%= user.cart.reduce((acc, item) => acc + item.price * item.quantity, 0) %></span>
-                </div>
-                <div class="flex justify-between items-center py-3 border-t">
-                    <span class="text-gray-600">Shipping:</span>
-                    <span class="font-medium">Free</span>
-                </div>
-                <div class="flex justify-between items-center py-3 border-t">
-                    <span class="text-gray-600">Total:</span>
-                    <span id="cartTotal" class="font-medium">$<%= user.cart.reduce((acc, item) => acc + item.price * item.quantity, 0) %></span>
-                </div>
-            </div>
-            <!-- Fix Button Overflow -->
-            <button class="w-full px-6 py-2.5 mt-auto bg-red-500 text-white rounded hover:bg-red-600 transition">
-                <a href="/checkout">Proceed to checkout</a> 
-            </button>
-        </div>
+      <button class="w-full px-6 py-2.5 mt-auto bg-red-500 text-white rounded hover:bg-red-600 transition">
+        <a href="/user/cart/checkout">Proceed to checkout</a>
+      </button>
     </div>
-</main>
-<% */ %>
-<!-- JavaScript for Cart Functionality -->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-      const updateCartButton = document.getElementById("updateCart");
-      const cartSubtotal = document.getElementById("cartSubtotal");
-      const cartTotal = document.getElementById("cartTotal");
+  <% } %>
+</div>
 
-      function updateCart() {
-          let total = 0;
+<script type="module" src="/js/updateCart.js"></script>
 
-          document.querySelectorAll(".bg-white.shadow").forEach((row) => {
-              const quantityInput = row.querySelector(".quantity");
-              const priceElement = row.querySelector(".price");
-              const subtotalElement = row.querySelector(".subtotal");
-
-              if (quantityInput && priceElement && subtotalElement) {
-                  const quantity = parseInt(quantityInput.value);
-                  const price = parseInt(priceElement.getAttribute("data-price"));
-                  const subtotal = quantity * price;
-
-                  subtotalElement.textContent = `$${subtotal}`;
-                  total += subtotal;
-              }
-          });
-
-          cartSubtotal.textContent = `$${total}`;
-          cartTotal.textContent = `$${total}`;
-      }
-
-      // Attach event listener to quantity inputs
-      document.querySelectorAll(".quantity").forEach((input) => {
-          input.addEventListener("input", updateCart);
-      });
-
-      // Attach event listener to "Update Cart" button
-      updateCartButton.addEventListener("click", updateCart);
-
-      // Attach event listener to "Remove" buttons
-      document.querySelectorAll(".remove-item").forEach((button) => {
-          button.addEventListener("click", function () {
-              this.closest(".bg-white.shadow").remove();
-              updateCart();
-          });
-      });
-
-      // Initialize cart on page load
-      updateCart();
-  });
-</script>
-
-
-  <%- include('../shared/footer') %>
-
+<%- include('../shared/footer') %>

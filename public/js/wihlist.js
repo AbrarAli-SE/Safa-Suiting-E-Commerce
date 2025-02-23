@@ -13,22 +13,42 @@ document.addEventListener("DOMContentLoaded", function () {
         smallScreenWishlistQuantity.textContent = wishlist.length;
     }
 
-    // Load wishlist from localStorage
-    let wishlist = getWishlist();
+    // Function to update wishlist button states (heart icon and tooltip)
+    function updateWishlistButtons() {
+        const wishlist = getWishlist();
+        document.querySelectorAll(".wishlist-btn").forEach(button => {
+            const productId = button.dataset.productId;
+            const heartIcon = button.querySelector("[data-heart-icon]");
+            const tooltip = button.querySelector("span");
+
+            if (wishlist.includes(productId)) {
+                button.setAttribute("data-wishlist", "true");
+                heartIcon.classList.add("bi-heart-fill", "text-red-500");
+                heartIcon.classList.remove("bi-heart");
+                tooltip.textContent = "Added";
+            } else {
+                button.setAttribute("data-wishlist", "false");
+                heartIcon.classList.remove("bi-heart-fill", "text-red-500");
+                heartIcon.classList.add("bi-heart");
+                tooltip.textContent = "Add"; // Adjust this to your default tooltip text
+            }
+        });
+    }
+
+    // Initial load
     updateWishlistQuantity();
+    updateWishlistButtons();
 
     // Function to play animation when adding to wishlist
     function playWishlistAnimation(button) {
-        if (window.innerWidth <= 768) return; // Play animation only on large screens
+        if (window.innerWidth <= 768) return;
 
         const productCard = button.closest(".group");
         if (!productCard) return;
 
         const { top, left, width, height } = productCard.getBoundingClientRect();
-        const targetIcon = largeScreenWishlistIcon;
-        const iconRect = targetIcon.getBoundingClientRect();
+        const iconRect = largeScreenWishlistIcon.getBoundingClientRect();
 
-        // Create the flying "+1" effect
         const quantityElement = document.createElement("div");
         quantityElement.textContent = "+1";
         quantityElement.style.position = "fixed";
@@ -44,14 +64,12 @@ document.addEventListener("DOMContentLoaded", function () {
         quantityElement.style.zIndex = "1001";
         document.body.appendChild(quantityElement);
 
-        // Move towards wishlist icon
         setTimeout(() => {
             quantityElement.style.top = `${iconRect.top}px`;
             quantityElement.style.left = `${iconRect.left}px`;
             quantityElement.style.opacity = "0";
         }, 10);
 
-        // Remove the element after animation
         setTimeout(() => {
             quantityElement.remove();
         }, 1000);
@@ -63,34 +81,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const heartIcon = button.querySelector("[data-heart-icon]");
         const tooltip = button.querySelector("span");
 
-        // Set initial UI based on localStorage
-        if (wishlist.includes(productId)) {
-            button.setAttribute("data-wishlist", "true");
-            heartIcon.classList.add("bi-heart-fill", "text-red-500");
-            heartIcon.classList.remove("bi-heart");
-            tooltip.textContent = "Added"; // Tooltip text should be "Added"
-        } else {
-            button.setAttribute("data-wishlist", "false");
-        }
-
         button.addEventListener("click", async function () {
             const isInWishlist = button.getAttribute("data-wishlist") === "true";
             if (isInWishlist) {
-                return; // If the item is already in wishlist, no action needed
+                return;
             } else {
-                // Add item to wishlist
                 addToWishlist(productId);
                 button.setAttribute("data-wishlist", "true");
                 heartIcon.classList.add("bi-heart-fill", "text-red-500");
                 heartIcon.classList.remove("bi-heart");
-                tooltip.textContent = "Added"; // Tooltip text should be "Added"
+                tooltip.textContent = "Added";
                 updateWishlistQuantity();
-
-                // Play animation when adding to wishlist
                 playWishlistAnimation(button);
             }
 
-            // Sync changes with the server
             try {
                 const response = await fetch("user/wishlist/add", {
                     method: "POST",
@@ -99,13 +103,26 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 const data = await response.json();
-
                 if (data.message === "User not authenticated.") {
-                    window.location.href = "/auth/login"; // Redirect to login if not authenticated
+                    window.location.href = "/auth/login";
                 }
             } catch (error) {
                 console.error("Error:", error);
             }
         });
+    });
+
+    // // Reinitialize UI when the tab/window regains focus
+    // window.addEventListener("focus", () => {
+    //     updateWishlistQuantity();
+    //     updateWishlistButtons();
+    // });
+
+    // Optional: Use visibilitychange for more robust detection
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+            updateWishlistQuantity();
+            updateWishlistButtons();
+        }
     });
 });

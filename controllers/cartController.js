@@ -63,46 +63,44 @@ exports.addToCart = async (req, res) => {
 
 
 
-
-
-
 // ✅ Get User Cart
 exports.renderCart = async (req, res) => {
-    try {
+  try {
       // Fetch cart with populated product details
-      const cart = await Cart.findOne({ userId: req.user._id }).populate("items.productId");
-  
+      const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
+
       // Handle empty cart case
       if (!cart || cart.items.length === 0) {
-        return res.render("cart/cart", { 
-          user: req.user, 
-          cart: [], 
-          totalAmount: 0 
-        });
+          return res.render("cart/cart", { 
+              user: req.user, 
+              cart: [], 
+              totalAmount: 0 
+          });
       }
-  
-      // Calculate total cart amount
+
+      // Calculate total cart amount (sum of product price * quantity)
       const totalAmount = cart.items.reduce((total, item) => {
-        return total + item.productId.price * item.quantity;
+          return total + item.product.price * item.quantity;
       }, 0);
-  
+
       // Render cart page with data
       res.render("cart/cart", { 
-        user: req.user, 
-        cart: cart.items, 
-        totalAmount 
+          user: req.user, 
+          cart: cart.items, 
+          totalAmount 
       });
-  
-    } catch (error) {
+
+  } catch (error) {
       console.error("❌ Cart Page Error:", error);
       res.status(500).render("cart/cart", { 
-        user: req.user, 
-        cart: [], 
-        totalAmount: 0, 
-        errorMessage: "Server error. Please try again." 
+          user: req.user, 
+          cart: [], 
+          totalAmount: 0, 
+          errorMessage: "Server error. Please try again." 
       });
-    }
-  };
+  }
+};
+
 
 // ✅ Render Checkout Page
 exports.renderCheckout = async (req, res) => {
@@ -121,53 +119,85 @@ exports.renderCheckout = async (req, res) => {
 };
   
 
-// ✅ Add to Cart
 
 
 
-
-
-// ✅ Update Cart Quantity
 exports.updateCart = async (req, res) => {
+    const { updatedItems } = req.body; // Array of updated items with itemId and quantity
+
+    if (!req.user) {
+        return res.status(401).json({ success: false, message: "User not authenticated." });
+    }
+
     try {
-        const { productId, quantity } = req.body;
-        const user = await User.findById(req.user._id);
+        // Find the user's cart
+        let cart = await Cart.findOne({ user: req.user.userId });
 
-        const cartItem = user.cart.find(item => item.product.toString() === productId);
-
-        if (!cartItem) {
-            return res.status(404).send("Product not found in cart.");
+        if (!cart) {
+            return res.status(404).json({ success: false, message: "Cart not found." });
         }
 
-        cartItem.quantity = parseInt(quantity);
-        await user.save();
+        // Update the quantity of each item in the cart
+        updatedItems.forEach(updatedItem => {
+            const item = cart.items.find(item => item._id.toString() === updatedItem.itemId);
+            if (item) {
+                item.quantity = updatedItem.quantity;
+            }
+        });
 
-        res.redirect("/user/cart");
+        // Recalculate total price
+        cart.totalPrice = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        // Save the updated cart to the database
+        await cart.save();
+
+        // Clean up the response to return plain IDs
+        const updatedCart = cart.toObject();
+        updatedCart.items = updatedCart.items.map(item => {
+            item._id = item._id.toString(); // Convert ObjectId to string
+            return item;
+        });
+
+        return res.json({ success: true, cart: updatedCart });
+
     } catch (error) {
-        console.error("❌ Update Cart Error:", error);
-        res.status(500).send("Server error");
+        console.error("Update Cart Error:", error);
+        return res.status(500).json({ success: false, message: "Server error. Please try again." });
     }
 };
 
-// ✅ Remove from Cart
-exports.removeFromCart = async (req, res) => {
-  try {
-    const userId = req.user._id;
-    const { productId } = req.body;
 
-    const cart = await Cart.findOne({ userId });
-    if (!cart) {
-      return res.status(404).json({ error: "Cart not found." });
+
+exports.deleteItem = async (req, res) => {
+    const { itemId } = req.params; // The item ID to be removed
+
+    if (!req.user) {
+        return res.status(401).json({ success: false, message: "User not authenticated." });
     }
 
-    cart.items = cart.items.filter((item) => item.productId.toString() !== productId);
-    await cart.save();
+    try {
+        // Find the user's cart
+        let cart = await Cart.findOne({ user: req.user.userId });
 
-    return res.status(200).json({ success: "Product removed from cart!" });
-  } catch (error) {
-    console.error("❌ Remove Cart Error:", error);
-    res.status(500).json({ error: "Server error. Try again." });
-  }
+        if (!cart) {
+            return res.status(404).json({ success: false, message: "Cart not found." });
+        }
+
+        // Find and remove the item from the cart
+        cart.items = cart.items.filter(item => item._id.toString() !== itemId);
+
+        // Recalculate the total price
+        cart.totalPrice = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+        // Save the updated cart to the database
+        await cart.save();
+
+        return res.json({ success: true, message: "Item removed from cart.", cart });
+
+    } catch (error) {
+        console.error("Delete Item Error:", error);
+        return res.status(500).json({ success: false, message: "Server error. Please try again." });
+    }
 };
 
 
