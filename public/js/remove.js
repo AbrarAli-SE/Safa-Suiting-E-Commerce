@@ -1,54 +1,37 @@
+import { getWishlist, removeFromWishlist, updateWishlistQuantity } from './localStorage.js';
 
-  // Function to handle remove wishlist item via AJAX without confirmation
-  document.querySelectorAll('.remove-from-wishlist').forEach(button => {
-    button.addEventListener('click', async (e) => {
-      const productId = e.target.getAttribute('data-product-id');
-      let wishlist = JSON.parse(localStorage.getItem("wishlist")) || []; // Load wishlist from localStorage
+document.addEventListener("DOMContentLoaded", function () {
+    const removeButtons = document.querySelectorAll('.remove-from-wishlist');
+    
+    // Initial sync with localStorage
+    let wishlist = getWishlist();
+    updateWishlistQuantity();
 
-      try {
-        // Send an AJAX request to remove the item
-        const response = await fetch('/user/wishlist/remove', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ productId })
+    removeButtons.forEach(button => {
+        button.addEventListener('click', async function () {
+            const productId = this.getAttribute('data-product-id');
+            const response = await fetch('/user/wishlist/remove', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productId })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+                // Remove the item from the UI
+                this.closest('.group').remove();
+
+                // Remove from localStorage
+                removeFromWishlist(productId);
+
+                // Update the wishlist quantity in the UI
+                updateWishlistQuantity();
+            } else {
+                alert(result.message || "Error removing item.");
+            }
         });
-
-        const data = await response.json();
-
-        if (data.success) {
-          alert('Product removed from wishlist.');
-
-          // Remove the item from the DOM (UI update)
-          e.target.closest('.bg-[#F5F5F5]').remove();
-
-          // Remove the product from the localStorage wishlist array
-          wishlist = wishlist.filter(id => id !== productId);
-
-          // Save updated wishlist to localStorage
-          localStorage.setItem("wishlist", JSON.stringify(wishlist));
-
-          // Update the wishlist quantity in the UI
-          updateWishlistQuantity(wishlist.length);
-        } else {
-          alert('Error: ' + data.message);
-        }
-      } catch (error) {
-        console.error('Error removing product from wishlist:', error);
-        alert('An error occurred while removing the product.');
-      }
     });
-  });
-
-  // Function to update wishlist quantity in the UI
-  function updateWishlistQuantity(quantity) {
-    const largeScreenWishlistIcon = document.querySelector("#largeScreenWishlist");
-    const smallScreenWishlistIcon = document.querySelector("#smallScreenWishlist");
-
-    const largeScreenWishlistQuantity = largeScreenWishlistIcon.querySelector("span");
-    const smallScreenWishlistQuantity = smallScreenWishlistIcon.querySelector("span");
-
-    largeScreenWishlistQuantity.textContent = quantity;
-    smallScreenWishlistQuantity.textContent = quantity;
-  }
+});

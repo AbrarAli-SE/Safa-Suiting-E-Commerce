@@ -60,31 +60,7 @@ exports.addToWishlist = async (req, res) => {
 
 
 
-// ✅ Render Wishlist Page with User's Wishlist
-exports.renderWishlist = async (req, res) => {
-  // Check if user is logged in
-  if (!req.user) {
-      return res.status(401).json({ success: false, message: "Please log in to view your wishlist." });
-  }
 
-  console.log("User Info:", req.user); // Log to check if user object is set correctly
-
-  try {
-      // Find the user's wishlist
-      const wishlist = await Wishlist.findOne({ user: req.user.userId }).populate('items.product');
-
-      // If the wishlist does not exist
-      if (!wishlist) {
-          return res.render("user/wishlist", { wishlist: [] }); // Empty wishlist
-      }
-
-      // Render the wishlist page and pass the wishlist data to the view
-      return res.render("user/wishlist", { wishlist: wishlist.items });
-  } catch (error) {
-      console.error("❌ Render Wishlist Error:", error);
-      res.status(500).json({ error: "Server error. Try again." });
-  }
-};
 
 
 
@@ -124,3 +100,28 @@ exports.removeFromWishlist = async (req, res) => {
 };
 
 
+// ✅ Render Wishlist Page with User's Wishlist
+exports.renderWishlist = async (req, res) => {
+  // Check if user is logged in
+  if (!req.user) {
+      return res.status(401).json({ success: false, message: "Please log in to view your wishlist." });
+  }
+
+  // console.log("User Info:", req.user); // Log to check if user object is set correctly
+
+  try {
+      // Find the user's wishlist
+      const wishlist = await Wishlist.findOne({ user: req.user.userId }).populate('items.product');
+
+      // If the wishlist does not exist
+      if (!wishlist) {
+          return res.render("user/wishlist", { wishlist: [] }); // Empty wishlist
+      }
+
+      // Render the wishlist page and pass the wishlist data to the view
+      return res.render("user/wishlist", { wishlist: wishlist.items });
+  } catch (error) {
+      console.error("❌ Render Wishlist Error:", error);
+      res.status(500).json({ error: "Server error. Try again." });
+  }
+};

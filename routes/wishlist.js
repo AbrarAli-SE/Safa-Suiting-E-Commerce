@@ -9,8 +9,8 @@ router.get("/", authenticateUser,verifyUser ,wishlistController.renderWishlist);
 // ✅ Add to Wishlist
 router.post("/add", authenticateUser, wishlistController.addToWishlist);
 
-// ✅ Remove from Wishlist
-router.post("/remove", authenticateUser, wishlistController.removeFromWishlist);
+// ✅ Remove from Wishlist (Changed to DELETE)
+router.delete("/remove", authenticateUser, wishlistController.removeFromWishlist);
 
 
 module.exports = router;

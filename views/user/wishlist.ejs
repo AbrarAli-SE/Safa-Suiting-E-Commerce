@@ -38,7 +38,7 @@
   <!-- Cards Slider Container -->
   <div class="relative border-b border-gray-500 px-4">
     <% if (wishlist.length === 0) { %>
-      <p class="text-gray-600 text-center mt-10">Your wishlist is empty.</p>
+      <p class="text-gray-600 text-center mt-10">Your wishlist is empty. Start adding items!</p>
     <% } else { %>
       <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
         <% wishlist.forEach((item) => { %>
@@ -58,9 +58,7 @@
               </button>
 
               <!-- Quick View Button -->
-              <button onclick="openQuickView('<%= item.product.name %>', '<%= item.product.image %>', '<%= item.product.price %>', '<%= item.product.oldPrice || '' %>')" 
-                class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button" 
-                aria-label="Quick view of <%= item.product.name %>">
+              <button class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
                 <i class="bi bi-eye"></i>
                 <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
                   Quick View
@@ -73,9 +71,9 @@
               <h3 class="font-bold mb-2"><%= item.product.name %></h3>
               <div class="flex justify-between items-center">
                 <div>
-                  <span class="font-bold">$<%= item.product.price %></span>
-                  <% if (item.product.oldPrice) { %>
-                    <span class="text-sm line-through ml-2">$<%= item.product.oldPrice %></span>
+                  <span class="font-bold">$<%= item.product.discountPrice || item.product.price %></span>
+                  <% if (item.product.discountPrice) { %>
+                    <span class="text-sm line-through ml-2">$<%= item.product.price %></span>
                   <% } %>
                 </div>
               </div>
@@ -88,40 +86,66 @@
 
 </main>
 
-<!-- Quick View Modal -->
-<div id="quickViewModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 pointer-events-none transition-all duration-300 z-50">
-  <div class="bg-white w-96 p-6 rounded-lg relative">
-    <button onclick="closeQuickView()" class="absolute top-4 right-4 text-xl font-bold dark:text-black text-gray-600">X</button>
-    <h3 class="font-bold mb-4 dark:text-black">Product Name</h3>
-    <img src="" alt="Product" class="w-full h-60 object-cover mb-4">
-    <div class="flex justify-between mb-4 dark:text-black">
-      <span class="font-bold">$0.00</span>
-      <span class="text-sm line-through">$0.00</span>
-    </div>
-    <p class="text-sm text-gray-600 dark:text-black">Product description...</p>
-  </div>
-</div>
-
-<script>
+<script type="module" src="/js/remove.js"></script>
+ <!-- <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const quickViewModal = document.getElementById("quickViewModal");
+  // Handle removing product from wishlist
+  const largeScreenWishlistIcon = document.querySelector("#largeScreenWishlist");
+  const largeScreenWishlistQuantity = largeScreenWishlistIcon.querySelector("span");
+  const smallScreenWishlistIcon = document.querySelector("#smallScreenWishlist");
+  const smallScreenWishlistQuantity = smallScreenWishlistIcon.querySelector("span");
+  const removeButtons = document.querySelectorAll('.remove-from-wishlist');
 
-    window.openQuickView = function (title, image, price, oldPrice) {
-        quickViewModal.classList.remove("opacity-0", "pointer-events-none");
+  
+  // Function to update wishlist quantity
+  function updateWishlistQuantity(quantity) {
+      largeScreenWishlistQuantity.textContent = quantity;
+      smallScreenWishlistQuantity.textContent = quantity;
+  }
 
-        // Insert product data dynamically
-        quickViewModal.querySelector("h3").textContent = title;
-        quickViewModal.querySelector("img").src = image;
-        quickViewModal.querySelector(".font-bold").textContent = `$${price}`;
-        quickViewModal.querySelector(".line-through").textContent = oldPrice ? `$${oldPrice}` : "";
-    };
+  // Load wishlist from localStorage
+  let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+  updateWishlistQuantity(wishlist.length);
 
-    window.closeQuickView = function () {
-        quickViewModal.classList.add("opacity-0", "pointer-events-none");
-    };
+
+  removeButtons.forEach(button => {
+    button.addEventListener('click', async function () {
+      const productId = this.getAttribute('data-product-id');
+      const response = await fetch('/user/wishlist/remove', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ productId })
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        // Remove the item from the UI
+        this.closest('.group').remove();
+
+        // Remove the product from the localStorage wishlist array
+        wishlist = wishlist.filter(id => id !== productId);
+
+        // Save updated wishlist to localStorage
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+
+        // Update the wishlist quantity in the UI
+        updateWishlistQuantity(wishlist.length);
+        // Notify the index page to update the heart icon state
+        window.postMessage({ type: 'REMOVE_FROM_WISHLIST', productId }, '*');
+      } else {
+        alert(result.message || "Error removing item.");
+      }
+    });
+
+     
   });
-</script>
+});
 
-<script src="/js/wishlist.js"></script>
+ </script> -->
 
-<%- include('../shared/footer') %>
+
+
+ <%- include('../shared/footer') %>
