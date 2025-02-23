@@ -42,9 +42,9 @@
     <% } else { %>
       <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
         <% wishlist.forEach((item) => { %>
-          <div class="bg-[#F5F5F5] h-96 md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg">
+          <div class="bg-[#F5F5F5] h-96 md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-all duration-700 hover:translate-y-[-10px]">
             <!-- Product Image -->
-            <img src="<%= item.product.image %>" alt="<%= item.product.name %>" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105">
+            <img src="<%= item.product.image %>" alt="<%= item.product.name %>" class="h-full w-full object-cover ">
 
             <!-- Hover Buttons -->
             <div class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
