@@ -58,12 +58,26 @@
               </button>
 
               <!-- Quick View Button -->
-              <button class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button">
+              <button class="quick-view-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button"
+              data-name="<%= item.product.name %>"
+              data-image="<%= item.product.image %>"
+              data-price="<%= item.product.price %>"
+              data-discountprice="<%= item.product.discountPrice %>"
+              data-description="<%= item.product.description || 'No description available.' %>">
                 <i class="bi bi-eye"></i>
                 <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
                   Quick View
                 </span>
               </button>
+
+
+              <button class="add-to-cart-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button"
+                data-product-id="<%= item.product._id %>">
+                <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
+                <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
+                    Add to Cart
+                </span>
+            </button>
             </div>
 
             <!-- Product Info -->
@@ -71,10 +85,8 @@
               <h3 class="font-bold mb-2"><%= item.product.name %></h3>
               <div class="flex justify-between items-center">
                 <div>
-                  <span class="font-bold">$<%= item.product.discountPrice || item.product.price %></span>
-                  <% if (item.product.discountPrice) { %>
-                    <span class="text-sm line-through ml-2">$<%= item.product.price %></span>
-                  <% } %>
+                  <span class="font-bold">RS. <%=  item.product.price %></span>
+                    <span class="text-sm line-through ml-2">Rs. <%= item.product.discountPrice %></span>
                 </div>
               </div>
             </div>
@@ -84,7 +96,59 @@
     <% } %>
   </div>
 
+
+
+<div id="quickViewModal"
+class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 pointer-events-none transition-all duration-300 z-50">
+<div class="bg-white w-96 p-6 rounded-lg relative">
+  <button onclick="closeQuickView()"
+    class="absolute top-4 right-4 text-xl font-bold dark:text-black text-gray-600">X</button>
+  <h3 id="modalProductName" class="font-bold mb-4 dark:text-black"></h3>
+  <img id="modalProductImage" src="" alt="Product" class="w-full h-60 object-cover mb-4">
+  <div class="flex justify-between mb-4 dark:text-black">
+    <span id="modalProductPrice" class="font-bold"></span>
+    <span id="modalProductOldPrice" class="text-sm line-through"></span>
+  </div>
+  <p id="modalProductDesc" class="text-sm text-gray-600 dark:text-black"></p>
+</div>
+</div>
+
+
 </main>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+   document.querySelectorAll(".quick-view-btn").forEach(button => {
+     button.addEventListener("click", function () {
+       const modal = document.getElementById("quickViewModal");
+       const productName = document.getElementById("modalProductName");
+       const productImage = document.getElementById("modalProductImage");
+       const productPrice = document.getElementById("modalProductPrice");
+       const productOldPrice = document.getElementById("modalProductOldPrice");
+       const productDesc = document.getElementById("modalProductDesc");
+ 
+       // Update modal content using data attributes
+       productName.innerText = this.getAttribute("data-name");
+       productImage.src = this.getAttribute("data-image");
+       productPrice.innerText = `Rs : ${this.getAttribute("data-price")}`;
+       productOldPrice.innerText = `Rs : ${this.getAttribute("data-discountprice")}`;
+       productDesc.innerText = this.getAttribute("data-description");
+ 
+       // Show the modal
+       modal.classList.remove("opacity-0", "pointer-events-none");
+       modal.classList.add("opacity-100", "pointer-events-auto");
+     });
+   });
+ });
+ 
+ function closeQuickView() {
+   const modal = document.getElementById("quickViewModal");
+   modal.classList.remove("opacity-100", "pointer-events-auto");
+   modal.classList.add("opacity-0", "pointer-events-none");
+ }
+ 
+ 
+  </script>
 
 <script type="module" src="/js/remove.js"></script>
  <!-- <script>
