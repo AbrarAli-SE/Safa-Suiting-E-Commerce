@@ -1,14 +1,8 @@
 <%- include('../shared/header') %>
 
-<div class="text-sm text-gray-700 m-10 mt-[154px] mr-3">
-  <nav class="flex space-x-2 text-sm text-gray-500">
-      <a href="/" class="hover:text-gray-900">Home</a>
-      <span>/</span>
-      <span class="text-gray-900">Cart</span>
-  </nav>
-</div>
 
-<div class="max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-8">
+
+<div class="max-w-7xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-8 pt-36">
   <!-- Cart Items Section (Left Side) -->
   <div class="md:col-span-2 space-y-6">
     <% if (cart.length === 0) { %>

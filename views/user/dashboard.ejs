@@ -1,25 +1,8 @@
 <%- include('../shared/header') %> 
 
-<main class="container mx-auto px-4 py-12 mt-14">
+<main class="container mx-auto px-3 py-14 mt-14">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <!-- Breadcrumb & Welcome -->
-        <div class="flex justify-between items-center mb-8">
-            <nav class="flex space-x-2 text-sm text-gray-500">
-                <a href="/" class="hover:text-gray-900">Home</a>
-                <span>/</span>
-                <span class="text-gray-900 dark:text-red-500 transition">My Account</span>
-            </nav>
-            <div class="flex items-center space-x-4">
-                <div class="text-sm">
-                    Welcome! <span class="text-red-500 dark:text-red-400"><%= user.name %></span>
-                </div>
-
-                <!-- Dark Mode Toggle Button -->
-                <button id="darkModeToggle" class="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-                    <i id="darkModeIcon" class="bi bi-moon text-gray-700 dark:text-gray-300 text-lg"></i>
-                </button>
-            </div>
-        </div>
+        
 
         <div class="flex">
             <!-- Sidebar -->
@@ -30,6 +13,13 @@
                     <span class="sr-only">Close menu</span>
                 </button>
                 <ul>
+                    <li>
+                        <a class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <i class="bi bi-person-raised-hand text-xl mr-1"></i>
+                            Welcome!
+                            <span class=" text-red-500 "><%= user.name %></span>
+                        </a>
+                    </li>
                     <li>
                         <a href="/user/dashboard" class="block p-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700">
                             <i class="bi bi-person mr-2"></i> Manage My Account
@@ -44,6 +34,12 @@
                         <a href="/user/order/cancel-order" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
                             <i class="bi bi-x-circle mr-2"></i> My Cancellations
                         </a>
+                    </li>
+                    <li>
+                        <!-- Dark Mode Toggle Button -->
+                    <a id="darkModeToggle" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+                        <i id="darkModeIcon" class="bi bi-moon mr-2"></i>Dark Mode
+                    </a>
                     </li>
                     <li>
                         <a href="/auth/logout" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
@@ -71,6 +67,13 @@
                 <div class="py-4 overflow-y-auto">
                     <ul class="space-y-2 font-medium">
                         <li>
+                            <a class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                                <i class="bi bi-person-raised-hand text-xl mr-1"></i>
+                                Welcome!
+                                <span class=" text-red-500 "> <%=  user.name %></span>
+                            </a>
+                        </li>
+                        <li>
                             <a href="/user/dashboard" class="flex items-center p-2 text-red-500 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <i class="bi bi-person mr-2"></i> Manage My Account
                             </a>
@@ -84,6 +87,12 @@
                             <a href="/user/order/cancel-order" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                                 <i class="bi bi-x-circle mr-2"></i> My Cancellations
                             </a>
+                        </li>
+                        <li>
+                            <!-- Dark Mode Toggle Button -->
+                        <a id="darkModeToggle" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer">
+                            <i id="darkModeIcon" class="bi bi-moon mr-2"></i>Dark Mode
+                        </a>
                         </li>
                         <li>
                             <a href="/auth/logout" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">

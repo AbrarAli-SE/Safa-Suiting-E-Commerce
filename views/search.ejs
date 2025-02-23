@@ -1,28 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<%- include('./shared/header') %>
 
-<head>
-    <link rel="stylesheet" href="/styles/global.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Products</title>
-</head>
-
-<body class="bg-gray-100">
-    <section id="explore-products" class="items-start p-4 md:px-16 mt-8">
-        <div class="flex items-center justify-between">
-            <div class="flex items-center gap-2">
-                <div class="w-2 h-6 bg-red-500 rounded"></div>
-                <p class="text-red-500 font-semibold">Search Results</p>
-            </div>
-        </div>
-        <div class="flex items-center justify-between flex-col md:flex-row">
-            <h2 class="text-3xl font-bold text-center md:text-left capitalize">
-                <%= searchQuery %>
-            </h2>
+    <main class="container mx-auto px-4 pb-12 pt-24 mt-14">
+    
+    
+            <div class="flex items-center justify-between px-10">
+                <div class="flex items-center gap-2">
+                  <div class="w-2 h-6 bg-red-500 rounded"></div>
+                  <p class="text-red-500 font-semibold px-4">Search Result</p>
+                </div>
+              </div>
+      
+                
+            <div class="flex items-center justify-between flex-col md:flex-row px-10">
+                <h2 class="text-3xl font-bold text-center md:text-left capitalize"><%= searchQuery %></h2>
     
     
             <div class="flex md:justify-end justify-center items-center mt-4 space-x-4 mr-4">
@@ -45,7 +35,7 @@
         </div>
     
         <!-- Cards Slider Container -->
-        <div class="relative">
+        <div class="relative px-10">
             <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
                 <% if (results.length > 0) { %>
                     <% results.forEach(function(product) { %>
@@ -91,10 +81,11 @@
         </div>
         
     
-    </section>
-</body>
+  
 
-</html>
+    </main>
+    <%- include('./shared/footer') %>
+
 
 
 
