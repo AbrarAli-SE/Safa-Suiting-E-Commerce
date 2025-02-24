@@ -1,11 +1,99 @@
 const User = require("../models/User");
 const Contact = require("../models/Contact");
 const bcrypt = require("bcryptjs");
-const Carousel = require("../models/Carousel");  // Make sure you have a Carousel Model
+const Carousel = require("../models/Carousel");
+const { uploadCarousel } = require("../config/multer-config");
+const fs = require("fs").promises;
+const path = require("path");
 
+exports.uploadCarouselImages = async (req, res) => {
+  uploadCarousel(req, res, async (err) => {
+    try {
+      if (err) {
+        return res.status(400).json({ error: err.message });
+      }
 
+      if (!req.files || req.files.length < 1) {
+        return res.status(400).json({ error: "Please upload at least 1 image." });
+      }
 
+      // Fetch existing carousel to preserve slides not being replaced
+      const existingCarousel = await Carousel.findOne();
+      let existingSlides = existingCarousel ? existingCarousel.slides : [];
 
+      // Map uploaded files to new slides
+      const newSlides = req.files.map((file, index) => ({
+        image: `/uploads/carousel/${file.filename}`,
+        text: req.body[`text${index + 1}`] || "",
+        font: req.body[`font${index + 1}`] || "Arial",
+        fontSize: parseInt(req.body[`fontSize${index + 1}`]) || 24,
+        color: req.body[`color${index + 1}`] || "#FFFFFF",
+        opacity: parseFloat(req.body[`opacity${index + 1}`]) || 1.0,
+      }));
+
+      // Update the carousel with the new slides (replaces all existing ones)
+      await Carousel.findOneAndUpdate(
+        {},
+        { slides: newSlides, updatedAt: Date.now() },
+        { upsert: true, new: true }
+      );
+
+      // Clean up old images from disk if they were replaced
+      if (existingSlides.length > 0) {
+        const oldImagePaths = existingSlides.map(slide => path.join(__dirname, "../public", slide.image));
+        const newImagePaths = newSlides.map(slide => path.join(__dirname, "../public", slide.image));
+        const imagesToDelete = oldImagePaths.filter(path => !newImagePaths.includes(path));
+
+        for (const imagePath of imagesToDelete) {
+          try {
+            await fs.unlink(imagePath);
+          } catch (deleteError) {
+            console.error("❌ File Delete Error:", deleteError);
+          }
+        }
+      }
+
+      res.status(200).json({ message: "Carousel updated successfully!" });
+    } catch (error) {
+      console.error("❌ Upload Carousel Error:", error);
+      if (req.files) {
+        for (const file of req.files) {
+          try {
+            await fs.unlink(path.join(__dirname, "../public/uploads/carousel", file.filename));
+          } catch (deleteError) {
+            console.error("❌ File Delete Error:", deleteError);
+          }
+        }
+      }
+      res.status(500).json({ error: "Server error. Please try again." });
+    }
+  });
+};
+
+exports.getCarouselImages = async (req, res) => {
+  try {
+    const carousel = await Carousel.findOne();
+    if (!carousel) {
+      return res.status(200).json({ slides: [] });
+    }
+    res.status(200).json({ slides: carousel.slides });
+  } catch (error) {
+    console.error("❌ Get Carousel Images Error:", error);
+    res.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.renderCoursel = async (req, res) => {
+  try {
+    const carousel = await Carousel.findOne();
+    res.render("admin/coursel", {
+      carouselImages: carousel ? carousel.slides : [],
+    });
+  } catch (error) {
+    console.error("❌ Render Carousel Error:", error);
+    res.status(500).send("Server error");
+  }
+};
 
 
 // ✅ Fetch Notifications for Admin
@@ -138,44 +226,7 @@ exports.renderAnalytical = async(req, res) =>{
 
 
 
-// ✅ Render Carousel Page
-exports.renderCoursel = async (req, res) => {
-    try {
-        const carousel = await Carousel.findOne();
-        res.render("admin/coursel", { carouselImages: carousel ? carousel.images : [] });
-    } catch (error) {
-        console.error("❌ Render Carousel Error:", error);
-        res.status(500).send("Server error");
-    }
-};
 
-exports.uploadCarouselImages = async (req, res) => {
-    try {
-        // console.log("Received Files:", req.files); // ✅ Debugging log
-
-        if (!req.files || req.files.length < 1 || req.files.length > 3) {
-            return res.status(400).send("Please upload 1 to 3 images.");
-        }
-
-        const imageUrls = req.files.map(file => file.path); // ✅ Cloudinary URLs
-
-        // ✅ Store new images (overwrite existing)
-        await Carousel.findOneAndUpdate({}, { images: imageUrls }, { upsert: true, new: true });
-
-        res.redirect("/admin/manage-coursel");
-    } catch (error) {
-        console.error("❌ Upload Carousel Error:", error);
-        res.status(500).send("Server error");
-    }
-};
-
-
-
-// ✅ Get Carousel Images
-exports.getCarouselImages = async (req, res) => {
-    const carousel = await Carousel.findOne();
-    res.json({ success: true, images: carousel ? carousel.images : [] });
-};
 
 exports.renderManageUsers = async (req, res) => {
     try {

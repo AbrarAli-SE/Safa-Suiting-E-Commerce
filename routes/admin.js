@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
 const { authenticateUser, adminAuth } = require("../middleware/authMiddleware");
-const { uploadCarousel } = require("../config/multer-config");
+// const { uploadCarousel } = require("../config/multer-config");
 
-
-
+router.put("/carousel/upload", authenticateUser, adminAuth,  adminController.uploadCarouselImages); // ✅ Changed to PUT
+router.get("/carousel/get", authenticateUser, adminAuth, adminController.getCarouselImages);
 // ✅ Fetch Unread Notifications
 router.get("/notifications", authenticateUser, adminAuth, adminController.getNotifications);
 
@@ -47,14 +47,10 @@ router.get("/cancel-order",authenticateUser,adminAuth, adminController.renderCan
 router.get("/analytical",authenticateUser,adminAuth, adminController.renderAnalytical);
 
 
-router.get("/manage-coursel",authenticateUser,adminAuth, adminController.renderCoursel);
+router.get("/manage-coursel", authenticateUser, adminAuth, adminController.renderCoursel); // ✅ Added route
 
 
-// ✅ Upload Route - Correct Middleware Usage
-router.post("/carousel/upload", authenticateUser, adminAuth, uploadCarousel, adminController.uploadCarouselImages);
 
-// ✅ Get Carousel Images
-router.get("/carousel/get", adminController.getCarouselImages);
 
 // ✅ Admin Contact Submissions Page
 router.get("/contacts", authenticateUser, adminAuth, adminController.renderContacts);

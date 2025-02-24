@@ -1,5 +1,5 @@
 const Product = require("../models/Product");
-const { uploadCarousel, uploadProduct } = require("../config/multer-config");
+// const { uploadCarousel, uploadProduct } = require("../config/multer-config");
 const fs = require("fs").promises; // ✅ Correctly import fs.promises
 const path = require("path");
 const multer = require("multer");
