@@ -22,14 +22,9 @@ router.get("/users/:userId", authenticateUser, adminAuth, adminController.render
 // ✅ Update User Role Route
 router.put("/users/update-role", authenticateUser, adminAuth, adminController.updateUserRole);
 
-// ✅ Admin Settings Page Route
-router.get("/settings", authenticateUser, adminAuth, adminController.renderAdminSettings);
-
-// ✅ Update Profile Route
-router.post("/update-profile",authenticateUser,adminAuth, adminController.updateProfile);
-
-// ✅ Change Password Route
-router.post("/change-password",authenticateUser,adminAuth, adminController.changePassword);
+router.put("/update-profile", authenticateUser, adminAuth, adminController.updateProfile);
+router.put("/change-password", authenticateUser, adminAuth, adminController.changePassword);
+router.get("/setting", authenticateUser, adminAuth, adminController.renderSettings);
 
 
 router.get("/coupon-code",authenticateUser,adminAuth, adminController.renderCouponCode);
