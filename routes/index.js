@@ -18,7 +18,7 @@ router.get('/',authenticateUser ,async (req, res, next) => {
 
         // Prepare a map of promises to fetch products for each category
         const categoryPromises = categories.map(category => 
-            Product.find({ category: category }).limit(10)
+            Product.find({ category: category })
         );
 
         // Resolve all promises to get products organized by categories

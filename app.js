@@ -1,5 +1,7 @@
-  require('dotenv').config();
-  const express = require('express');
+require('dotenv').config();
+const express = require('express');
+const path = require('path');
+const fs = require("fs");
   const session = require("express-session");
   const cookieParser = require("cookie-parser");
   const passport = require("./config/passport"); // ✅ Import configured passport
@@ -8,6 +10,7 @@
   const dbConfig = require('./config/dbConfig');
   const userRoutes = require('./routes/user');
   const indexRoutes = require('./routes/index');
+  const uploadRoutes = require("./routes/upload");
   const adminRoutes = require('./routes/admin');
   const pageRoutes = require("./routes/page");
   const searchRouter = require('./routes/search'); // Make sure this path is correct
@@ -17,7 +20,6 @@
   const orderRoutes = require("./routes/orders"); // ✅ Import Cart Routes
   const {authenticateUser} = require("./middleware/authMiddleware");
   
-  const path = require('path');
 
   const app = express();
   app.use(express.json());
@@ -56,6 +58,11 @@
   // Serve static files (CSS, images, etc.) from the public folder
   app.use(express.static(path.join(__dirname, 'public')));
 
+  // Create upload folders if they don’t exist
+["public/uploads/carousel", "public/uploads/products"].forEach(dir => {
+  fs.mkdirSync(dir, { recursive: true });
+});
+
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());
 
@@ -77,7 +84,8 @@
 
 
 // Routes
-app.use('/', indexRoutes)
+app.use('/', indexRoutes);
+app.use("/upload", uploadRoutes);
 app.use('/search', searchRouter); // Use the search router under the '/search' path
 app.use("/auth", authRoutes); // ✅ Ensure "/auth" prefix is correctly set
 app.use('/user', userRoutes);

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const productController = require("../controllers/productController"); // ✅ Fix Typo
 const { authenticateUser, adminAuth } = require("../middleware/authMiddleware");
-const { uploadProduct } = require("../config/cloudinary");
+const { uploadProduct } = require("../config/multer-config");
 const Product = require('../models/Product');
 
 // ✅ Ensure Callback Functions Exist
