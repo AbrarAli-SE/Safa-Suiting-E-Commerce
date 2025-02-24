@@ -40,7 +40,7 @@ const authenticateUser = async (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, secretKey);
-      console.log("Decoded Token:", decoded); // Debug log
+      // console.log("Decoded Token:", decoded); // Debug log
       req.user = decoded; // { userId, name, email, role }
     } catch (err) {
       console.error("Token Verification Error:", err.message); // Debug log

@@ -1,32 +1,91 @@
 <%- include('../shared/asideBar') %>
 
 <main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
-  <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9">User Details</h1>
+  <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9 text-gray-800 dark:text-gray-100 flex items-center">
+    <i class="bi bi-person-circle mr-2 text-[#DB4444]"></i> User Details
+  </h1>
 
   <% if (error) { %>
-    <p class="text-red-500"><%= error %></p>
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md flex items-center">
+      <i class="bi bi-exclamation-triangle-fill mr-2"></i>
+      <%= error %>
+    </div>
   <% } else if (user) { %>
-    <div class="space-y-6 bg-white p-6 shadow-md rounded-lg">
-      <p><strong>Name:</strong> <%= user.name %></p>
-      <p><strong>Email:</strong> <%= user.email %></p>
-      <p><strong>Role:</strong> <%= user.role %></p>
-      <p><strong>Created At:</strong> <%= user.createdAt.toDateString() %></p>
+    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <!-- Personal Info -->
+        <div class="space-y-4">
+          <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 flex items-center">
+            <i class="bi bi-person-fill mr-2 text-[#DB4444]"></i> Personal Information
+          </h2>
+          <div class="space-y-3">
+            <p class="flex items-center text-gray-700 dark:text-gray-300">
+              <i class="bi bi-person mr-3 text-gray-500"></i>
+              <span class="font-medium">Name:</span> <span class="ml-2"><%= user.name %></span>
+            </p>
+            <p class="flex items-center text-gray-700 dark:text-gray-300">
+              <i class="bi bi-envelope mr-3 text-gray-500"></i>
+              <span class="font-medium">Email:</span> <span class="ml-2"><%= user.email %></span>
+            </p>
+            <p class="flex items-center text-gray-700 dark:text-gray-300">
+              <i class="bi bi-shield-lock mr-3 text-gray-500"></i>
+              <span class="font-medium">Role:</span>
+              <span class="ml-2 inline-block px-2 py-1 text-xs font-semibold rounded-full <%= user.role === 'admin' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800' %>">
+                <%= user.role %>
+              </span>
+            </p>
+            <p class="flex items-center text-gray-700 dark:text-gray-300">
+              <i class="bi bi-calendar-date mr-3 text-gray-500"></i>
+              <span class="font-medium">Joined:</span> <span class="ml-2"><%= user.createdAt.toDateString() %></span>
+            </p>
+            <p class="flex items-center text-gray-700 dark:text-gray-300">
+              <i class="bi bi-check-circle mr-3 text-gray-500"></i>
+              <span class="font-medium">Verified:</span>
+              <span class="ml-2 inline-block px-2 py-1 text-xs font-semibold rounded-full <%= user.verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800' %>">
+                <%= user.verified ? 'Yes' : 'No' %>
+              </span>
+            </p>
+          </div>
+        </div>
+
+        <!-- Activity Stats -->
+        <div class="space-y-4">
+          <h2 class="text-2xl font-semibold text-gray-800 dark:text-gray-100 flex items-center">
+            <i class="bi bi-activity mr-2 text-[#DB4444]"></i> User Activity
+          </h2>
+          <div class="space-y-3">
+            <p class="flex items-center text-gray-700 dark:text-gray-300">
+              <i class="bi bi-heart-fill mr-3 text-red-500"></i>
+              <span class="font-medium">Wishlist Items:</span> <span class="ml-2"><%= user.wishlistCount %></span>
+            </p>
+            <p class="flex items-center text-gray-700 dark:text-gray-300">
+              <i class="bi bi-cart-fill mr-3 text-green-500"></i>
+              <span class="font-medium">Cart Items:</span> <span class="ml-2"><%= user.cartCount %></span>
+            </p>
+            <p class="flex items-center text-gray-700 dark:text-gray-300">
+              <i class="bi bi-currency-dollar mr-3 text-green-500"></i>
+              <span class="font-medium">Cart Total:</span> <span class="ml-2">$<%= user.cartTotalPrice.toFixed(2) %></span>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   <% } else { %>
-    <p class="text-gray-600">No user details available.</p>
+    <div class="bg-blue-100 border-l-4 border-blue-500 text-blue-700 p-4 rounded-md flex items-center">
+      <i class="bi bi-info-circle-fill mr-2"></i>
+      No user details available.
+    </div>
   <% } %>
 
   <div class="flex justify-end mt-6">
-    <a href="/admin/users" class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-400 transition">
-      Back to Manage Users
+    <a href="/admin/users" class="inline-flex items-center px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition duration-200">
+      <i class="bi bi-arrow-left-circle mr-2"></i> Back to Manage Users
     </a>
   </div>
 </main>
 
- 
-
-
-  <!-- Link the JavaScript file -->
-  <script src="/js/main.js"></script>
-
-  
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<script src="/js/main.js"></script>
+</body>
+</html>

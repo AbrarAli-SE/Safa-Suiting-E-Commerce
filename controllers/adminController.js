@@ -1,4 +1,6 @@
 const User = require("../models/User");
+const Cart = require("../models/Cart");
+const Wishlist = require("../models/Wishlist");
 const Contact = require("../models/Contact");
 const bcrypt = require("bcryptjs");
 const Carousel = require("../models/Carousel");
@@ -321,32 +323,49 @@ exports.renderManageUsers = async (req, res) => {
   
   
 
-exports.renderUserDetails = async (req, res) => {
+  
+  
+  exports.renderUserDetails = async (req, res) => {
     try {
-        const userId = req.params.userId;
-        // console.log("Fetching User ID:", userId); // ✅ Debug Log
-
-        if (!userId || userId.length !== 24) {
-            // console.error("❌ Invalid User ID Format:", userId);
-            return res.status(400).render("admin/user-details", { error: "Invalid User ID", user: null });
-        }
-
-        const user = await User.findById(userId);
-        // console.log("Found User:", user); // ✅ Debug Log
-
-        if (!user) {
-            console.error("❌ User Not Found for ID:", userId);
-            return res.status(404).render("admin/user-details", { error: "User not found", user: null });
-        }
-
-        res.render("admin/user-details", { user, error: null });
+      const userId = req.params.userId;
+      console.log("Fetching User ID:", userId);
+  
+      if (!userId || userId.length !== 24) {
+        console.error("❌ Invalid User ID Format:", userId);
+        return res.status(400).render("admin/user-details", { error: "Invalid User ID", user: null });
+      }
+  
+      const user = await User.findById(userId);
+      console.log("Found User:", user);
+  
+      if (!user) {
+        console.error("❌ User Not Found for ID:", userId);
+        return res.status(404).render("admin/user-details", { error: "User not found", user: null });
+      }
+  
+      // Fetch cart details
+      const cart = await Cart.findOne({ user: userId });
+      const cartCount = cart ? cart.items.length : 0;
+      const cartTotalPrice = cart ? cart.totalPrice : 0;
+  
+      // Fetch wishlist details
+      const wishlist = await Wishlist.findOne({ user: userId });
+      const wishlistCount = wishlist ? wishlist.items.length : 0;
+  
+      res.render("admin/user-details", {
+        user: {
+          ...user._doc,
+          cartCount,
+          cartTotalPrice,
+          wishlistCount,
+        },
+        error: null,
+      });
     } catch (error) {
-        console.error("❌ User Details Error:", error);
-        res.status(500).render("admin/user-details", { error: "Server error", user: null });
+      console.error("❌ User Details Error:", error);
+      res.status(500).render("admin/user-details", { error: "Server error", user: null });
     }
-};
-
-
+  };
 
 
 
