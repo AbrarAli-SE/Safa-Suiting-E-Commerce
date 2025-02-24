@@ -1,344 +1,307 @@
-<%- include('../shared/header') %> 
+<%- include('../shared/header') %>
 
-<main class="container mx-auto px-3 py-14 mt-14">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        
+<main class="min-h-screen bg-gray-100 dark:bg-gray-900 py-14">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Sidebar Toggle Button -->
+    <button id="sidebarToggle" class="fixed top-20 left-4 z-50 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-transform duration-200 focus:outline-none">
+      <i class="bi bi-list text-xl"></i>
+    </button>
 
-        <div class="flex">
-            <!-- Sidebar -->
-            <aside class="lg:w-1/4 md:w-1/2  bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md hidden md:block" id="sidebar">
-                <h5 class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
-                <button type="button" id="closeSidebar" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    <span class="sr-only">Close menu</span>
-                </button>
-                <ul>
-                    <li>
-                        <a class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="bi bi-person-raised-hand text-xl mr-1"></i>
-                            Welcome!
-                            <span class=" text-red-500 "><%= user.name %></span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/user/dashboard" class="block p-2 text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="bi bi-person mr-2"></i> Manage My Account
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/user/order/user-order" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="bi bi-bag mr-2"></i> My Order
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/user/order/cancel-order" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="bi bi-x-circle mr-2"></i> My Cancellations
-                        </a>
-                    </li>
-                    <li>
-                        <!-- Dark Mode Toggle Button -->
-                    <a id="darkModeToggle" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
-                        <i id="darkModeIcon" class="bi bi-moon mr-2"></i>Dark Mode
-                    </a>
-                    </li>
-                    <li>
-                        <a href="/auth/logout" class="block p-2 hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="bi bi-box-arrow-right mr-2"></i> Logout
-                        </a>
-                    </li>
-                </ul>
-            </aside>
-
-            <!-- Hamburger Menu for Small Screens -->
-            <div class="md:hidden">
-                <button id="hamburger" class="p-2 rounded-md bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-                    <i class="bi bi-list text-xl text-gray-700 dark:text-gray-300"></i>
-                </button>
-            </div>
-
-
-            <!-- Drawer Sidebar for Small Screens -->
-            <div id="drawer-navigation" class="fixed top-0 left-0 z-50 w-64 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white dark:bg-gray-800" tabindex="-1" aria-labelledby="drawer-navigation-label">
-                <h5 id="drawer-navigation-label" class="text-base font-semibold text-gray-500 uppercase dark:text-gray-400">Menu</h5>
-                <button type="button" data-drawer-hide="drawer-navigation" aria-controls="drawer-navigation" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 absolute top-2.5 right-2.5 inline-flex items-center dark:hover:bg-gray-600 dark:hover:text-white">
-                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                    <span class="sr-only">Close menu</span>
-                </button>
-                <div class="py-4 overflow-y-auto">
-                    <ul class="space-y-2 font-medium">
-                        <li>
-                            <a class="flex items-center p-2  rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <i class="bi bi-person-raised-hand text-xl mr-1"></i>
-                                Welcome!
-                                <span class=" text-red-500 "> <%=  user.name %></span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/user/dashboard" class="flex items-center p-2 text-red-500 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <i class="bi bi-person mr-2"></i> Manage My Account
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/user/order/user-order" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <i class="bi bi-bag mr-2"></i> My Order
-                            </a>
-                        </li>
-                        <li>
-                            <a href="/user/order/cancel-order" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <i class="bi bi-x-circle mr-2"></i> My Cancellations
-                            </a>
-                        </li>
-                        <li>
-                            <!-- Dark Mode Toggle Button -->
-                        <a id="darkModeToggle" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group cursor-pointer">
-                            <i id="darkModeIcon" class="bi bi-moon mr-2"></i>Dark Mode
-                        </a>
-                        </li>
-                        <li>
-                            <a href="/auth/logout" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                                <i class="bi bi-box-arrow-right mr-2"></i> Logout
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-
-            <!-- Main Content -->
-            <div class="w-3/4 ml-4">
-                <div class="bg-white p-6 rounded-lg shadow-sm">
-                    <h1 class="text-2xl font-semibold text-red-500 mb-6">Edit Your Profile</h1>
-
-                    <!-- ✅ Profile Update Form -->
-                    <form id="profileForm" action="/user/update-profile" method="POST" class="space-y-6">
-                        
-                        <!-- ✅ Success & Error Messages for Password Change -->
-                        <div class="text-center mb-4">
-                            <% if (successMessage) { %>
-                                <div class="alert-message text-green-500 text-center font-medium">
-                                    <%= successMessage %>
-                                </div>
-                            <% } %>
-                        
-                            <% if (error) { %>
-                                <div class="alert-message text-red-500 text-center font-medium">
-                                    <%= error %>
-                                </div>
-                            <% } %>
-                        </div>
-
-                        <!-- Name Field -->
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Full Name</label>
-                                <input type="text" id="name" name="name" value="<%= user.name %>" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
-                                <div id="nameError" class="text-red-500 text-sm hidden"></div>
-                            </div>
-
-                            <!-- Email -->
-                            <div class="space-y-2">
-                                <label class="block text-sm font-medium text-gray-700">Email</label>
-                                <input type="email" id="email" name="email" value="<%= user.email %>" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
-                                <div id="emailError" class="text-red-500 text-sm hidden"></div>
-                            </div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="flex justify-end space-x-4">
-                            <button type="reset" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
-                                Cancel
-                            </button>
-                            <button type="submit" class="px-4 py-2 text-sm text-white bg-red-500 rounded-md hover:bg-red-600">
-                                Save Changes
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- ✅ Success & Error Messages for Password Change -->
-                    <div class="text-center mb-4">
-                        <% if (passwordSuccess) { %>
-                            <div class="alert-message text-green-500 text-center font-medium">
-                                <%= passwordSuccess %>
-                            </div>
-                        <% } %>
-                    
-                        <% if (passwordError) { %>
-                            <div class="alert-message text-red-500 text-center font-medium">
-                                <%= passwordError %>
-                            </div>
-                        <% } %>
-                    </div>
-
-                    <!-- ✅ Password Change Form -->
-                    <h2 class="mt-10 text-xl font-semibold text-red-500">Change Password</h2>
-                    <form id="passwordForm" action="/user/change-password" method="POST" class="space-y-6 mt-4">
-                        <div class="space-y-4">
-                            <input type="password" id="currentPassword" name="currentPassword" placeholder="Current Password" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
-                            <div id="currentPasswordError" class="text-red-500 text-sm hidden"></div>
-
-                            <input type="password" id="newPassword" name="newPassword" placeholder="New Password" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
-                            <div id="newPasswordError" class="text-red-500 text-sm hidden"></div>
-
-                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password" class="w-full p-2 border rounded-md bg-gray-50 dark:text-gray-700 transition" required>
-                            <div id="confirmPasswordError" class="text-red-500 text-sm hidden"></div>
-                        </div>
-
-                        <!-- Action Buttons -->
-                        <div class="flex justify-end space-x-4">
-                            <button type="submit" class="px-4 py-2 text-sm text-white bg-red-500 rounded-md hover:bg-red-600">
-                                Change Password
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 bg-white dark:bg-gray-800 shadow-2xl transform -translate-x-full transition-transform duration-300 ease-in-out">
+      <div class="p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-xl font-bold text-gray-800 dark:text-gray-100 flex items-center">
+            <i class="bi bi-person-circle mr-2 text-[#DB4444]"></i> My Account
+          </h2>
+          <button id="closeSidebar" class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+            <i class="bi bi-x-lg"></i>
+          </button>
         </div>
+        <div class="text-gray-700 dark:text-gray-300 mb-6">
+          Welcome, <span id="sidebar-welcome-name" class="text-red-500 dark:text-red-400 font-semibold"><%= user.name %></span>!
+        </div>
+        <nav class="space-y-2">
+          <a href="/user/dashboard" class="flex items-center p-3 text-red-500 dark:text-red-400 bg-red-50 dark:bg-red-900/20 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/40 transition">
+            <i class="bi bi-person mr-3"></i> Profile Settings
+          </a>
+          <a href="/user/order/user-order" class="flex items-center p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+            <i class="bi bi-bag mr-3"></i> My Orders
+          </a>
+          <a href="/user/order/cancel-order" class="flex items-center p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+            <i class="bi bi-x-circle mr-3"></i> Cancellations
+          </a>
+          <a id="darkModeToggle" class="flex items-center p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition cursor-pointer">
+            <i id="darkModeIcon" class="bi bi-moon mr-3"></i> Dark Mode
+          </a>
+          <a href="/auth/logout" class="flex items-center p-3 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition">
+            <i class="bi bi-box-arrow-right mr-3"></i> Logout
+          </a>
+        </nav>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="w-full lg:pl-16">
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-100 mb-6 flex items-center">
+          <i class="bi bi-gear-fill mr-2 text-[#DB4444]"></i> Profile Settings
+        </h1>
+
+        <!-- Messages -->
+        <div id="message-container" class="mb-6"></div>
+
+        <!-- Profile Update Form -->
+        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8 hover:shadow-lg transition-shadow duration-200">
+          <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+            <i class="bi bi-person-fill mr-2 text-[#DB4444]"></i> Edit Profile
+          </h2>
+          <form id="profileForm" class="space-y-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+                <input type="text" id="name" name="name" value="<%= user.name %>" class="w-full p-3 border rounded-md bg-white dark:bg-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-red-400 focus:outline-none transition" required>
+                <div id="nameError" class="text-red-500 text-sm hidden"></div>
+              </div>
+              <div class="space-y-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                <input type="email" id="email" name="email" value="<%= user.email %>" class="w-full p-3 border rounded-md bg-white dark:bg-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-red-400 focus:outline-none transition" required>
+                <div id="emailError" class="text-red-500 text-sm hidden"></div>
+              </div>
+            </div>
+            <div class="flex justify-end space-x-4">
+              <button type="reset" class="px-4 py-2 text-sm text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-200">Cancel</button>
+              <button type="submit" class="px-4 py-2 text-sm text-white bg-red-500 rounded-md hover:bg-red-600 transition flex items-center">
+                <i class="bi bi-save mr-2"></i> Save Changes
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Password Change Form -->
+        <div class="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg hover:shadow-lg transition-shadow duration-200">
+          <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center">
+            <i class="bi bi-lock-fill mr-2 text-[#DB4444]"></i> Change Password
+          </h2>
+          <form id="passwordForm" class="space-y-6">
+            <div class="space-y-4">
+              <input type="password" id="currentPassword" name="currentPassword" placeholder="Current Password" class="w-full p-3 border rounded-md bg-white dark:bg-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-red-400 focus:outline-none transition" required>
+              <div id="currentPasswordError" class="text-red-500 text-sm hidden"></div>
+              <input type="password" id="newPassword" name="newPassword" placeholder="New Password" class="w-full p-3 border rounded-md bg-white dark:bg-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-red-400 focus:outline-none transition" required>
+              <div id="newPasswordError" class="text-red-500 text-sm hidden"></div>
+              <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm New Password" class="w-full p-3 border rounded-md bg-white dark:bg-gray-600 dark:text-gray-300 focus:ring-2 focus:ring-red-400 focus:outline-none transition" required>
+              <div id="confirmPasswordError" class="text-red-500 text-sm hidden"></div>
+            </div>
+            <div class="flex justify-end">
+              <button type="submit" class="px-4 py-2 text-sm text-white bg-red-500 rounded-md hover:bg-red-600 transition flex items-center">
+                <i class="bi bi-key-fill mr-2"></i> Change Password
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </main>
 
+<%- include('../shared/footer') %>
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+<script src="/js/main.js"></script>
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        // Function to hide error/success messages after 5 seconds
-        setTimeout(function () {
-            const errorMessages = document.querySelectorAll(".alert-message");
-            errorMessages.forEach((message) => {
-                message.style.display = "none";
-            });
-        }, 5000); // 5 seconds
-    });
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const darkModeToggle = document.getElementById("darkModeToggle");
-    const darkModeIcon = document.getElementById("darkModeIcon");
-
-    // ✅ Check for saved user preference in localStorage
-    if (localStorage.getItem("darkMode") === "enabled") {
-        document.documentElement.classList.add("dark");
-        darkModeIcon.classList.replace("bi-moon", "bi-sun");
-    }
-
-    darkModeToggle.addEventListener("click", function () {
-        const isDarkMode = document.documentElement.classList.toggle("dark");
-        darkModeIcon.classList.replace(isDarkMode ? "bi-moon" : "bi-sun", isDarkMode ? "bi-sun" : "bi-moon");
-        localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
-    });
-
-    // ✅ Profile Form Validation
+  document.addEventListener("DOMContentLoaded", function () {
+    const sidebarToggle = document.getElementById("sidebarToggle");
+    const closeSidebar = document.getElementById("closeSidebar");
+    const sidebar = document.getElementById("sidebar");
     const profileForm = document.getElementById("profileForm");
+    const passwordForm = document.getElementById("passwordForm");
+    const messageContainer = document.getElementById("message-container");
+    const sidebarWelcomeName = document.getElementById("sidebar-welcome-name");
     const nameInput = document.getElementById("name");
     const emailInput = document.getElementById("email");
-    const nameError = document.getElementById("nameError");
-    const emailError = document.getElementById("emailError");
-
-    function validateName() {
-        const nameValue = nameInput.value.trim();
-        if (nameValue.length === 0) {
-            nameError.classList.add("hidden");
-            return false;
-        }
-        if (nameValue.length < 3) {
-            nameError.textContent = "Name must be at least 3 characters long.";
-            nameError.classList.remove("hidden");
-            return false;
-        }
-        nameError.classList.add("hidden");
-        return true;
-    }
-
-    function validateEmail() {
-        const emailValue = emailInput.value.trim();
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-        
-        if (emailValue.length === 0) {
-            emailError.classList.add("hidden");
-            return false;
-        }
-        if (!emailPattern.test(emailValue)) {
-            emailError.textContent = "Enter a valid email address.";
-            emailError.classList.remove("hidden");
-            return false;
-        }
-        emailError.classList.add("hidden");
-        return true;
-    }
-
-    nameInput.addEventListener("input", validateName);
-    emailInput.addEventListener("input", validateEmail);
-
-    profileForm.addEventListener("submit", function (event) {
-        if (!validateName() || !validateEmail()) {
-            event.preventDefault();
-        }
-    });
-
-    // ✅ Password Form Validation
-    const passwordForm = document.getElementById("passwordForm");
+    const currentPassword = document.getElementById("currentPassword");
     const newPassword = document.getElementById("newPassword");
     const confirmPassword = document.getElementById("confirmPassword");
+    const nameError = document.getElementById("nameError");
+    const emailError = document.getElementById("emailError");
+    const currentPasswordError = document.getElementById("currentPasswordError");
     const newPasswordError = document.getElementById("newPasswordError");
     const confirmPasswordError = document.getElementById("confirmPasswordError");
 
-    function validatePassword() {
-        const passwordValue = newPassword.value.trim();
-        if (passwordValue.length === 0) {
-            newPasswordError.classList.add("hidden");
-            return false;
-        }
-        if (passwordValue.length < 6) {
-            newPasswordError.textContent = "Password must be at least 6 characters long.";
-            newPasswordError.classList.remove("hidden");
-            return false;
-        }
+    // Sidebar Toggle
+    sidebarToggle.addEventListener("click", () => {
+      sidebar.classList.toggle("-translate-x-full");
+    });
+    closeSidebar.addEventListener("click", () => {
+      sidebar.classList.add("-translate-x-full");
+    });
+
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById("darkModeToggle");
+    const darkModeIcon = document.getElementById("darkModeIcon");
+    if (localStorage.getItem("darkMode") === "enabled") {
+      document.documentElement.classList.add("dark");
+      darkModeIcon.classList.replace("bi-moon", "bi-sun");
+    }
+    darkModeToggle.addEventListener("click", () => {
+      const isDarkMode = document.documentElement.classList.toggle("dark");
+      darkModeIcon.classList.replace(isDarkMode ? "bi-moon" : "bi-sun", isDarkMode ? "bi-sun" : "bi-moon");
+      localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+    });
+
+    // Validation Functions
+    function validateName() {
+      const nameValue = nameInput.value.trim();
+      if (nameValue.length === 0) {
+        nameError.classList.add("hidden");
+        return false;
+      }
+      if (nameValue.length < 3) {
+        nameError.textContent = "Name must be at least 3 characters long.";
+        nameError.classList.remove("hidden");
+        return false;
+      }
+      nameError.classList.add("hidden");
+      return true;
+    }
+
+    function validateEmail() {
+      const emailValue = emailInput.value.trim();
+      const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+      if (emailValue.length === 0) {
+        emailError.classList.add("hidden");
+        return false;
+      }
+      if (!emailPattern.test(emailValue)) {
+        emailError.textContent = "Enter a valid Gmail address.";
+        emailError.classList.remove("hidden");
+        return false;
+      }
+      emailError.classList.add("hidden");
+      return true;
+    }
+
+    function validateCurrentPassword() {
+      const value = currentPassword.value.trim();
+      if (value.length === 0) {
+        currentPasswordError.classList.add("hidden");
+        return false;
+      }
+      currentPasswordError.classList.add("hidden");
+      return true;
+    }
+
+    function validateNewPassword() {
+      const value = newPassword.value.trim();
+      if (value.length === 0) {
         newPasswordError.classList.add("hidden");
-        return true;
+        return false;
+      }
+      if (value.length < 6) {
+        newPasswordError.textContent = "Password must be at least 6 characters long.";
+        newPasswordError.classList.remove("hidden");
+        return false;
+      }
+      newPasswordError.classList.add("hidden");
+      return true;
     }
 
     function validateConfirmPassword() {
-        const confirmPasswordValue = confirmPassword.value.trim();
-        if (confirmPasswordValue.length === 0) {
-            confirmPasswordError.classList.add("hidden");
-            return false;
-        }
-        if (confirmPasswordValue.length < 6) {
-            confirmPasswordError.textContent = "Password must be at least 6 characters long.";
-            confirmPasswordError.classList.remove("hidden");
-            return false;
-        }
-        if (newPassword.value !== confirmPassword.value) {
-            confirmPasswordError.textContent = "Passwords do not match.";
-            confirmPasswordError.classList.remove("hidden");
-            return false;
-        }
+      const value = confirmPassword.value.trim();
+      if (value.length === 0) {
         confirmPasswordError.classList.add("hidden");
-        return true;
+        return false;
+      }
+      if (value !== newPassword.value) {
+        confirmPasswordError.textContent = "Passwords do not match.";
+        confirmPasswordError.classList.remove("hidden");
+        return false;
+      }
+      confirmPasswordError.classList.add("hidden");
+      return true;
     }
 
-    newPassword.addEventListener("input", validatePassword);
+    // Input Listeners
+    nameInput.addEventListener("input", validateName);
+    emailInput.addEventListener("input", validateEmail);
+    currentPassword.addEventListener("input", validateCurrentPassword);
+    newPassword.addEventListener("input", validateNewPassword);
     confirmPassword.addEventListener("input", validateConfirmPassword);
 
-    passwordForm.addEventListener("submit", function (event) {
-        if (!validatePassword() || !validateConfirmPassword()) {
-            event.preventDefault();
+    // AJAX Profile Update
+    profileForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      if (!validateName() || !validateEmail()) return;
+
+      const formData = new FormData(profileForm);
+      const data = Object.fromEntries(formData);
+
+      try {
+        const response = await fetch("/user/update-profile", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+          credentials: "include",
+        });
+
+        const result = await response.json();
+        messageContainer.innerHTML = "";
+
+        if (response.ok) {
+          showMessage(result.message, "success");
+          nameInput.value = result.user.name;
+          emailInput.value = result.user.email;
+          sidebarWelcomeName.textContent = result.user.name;
+        } else {
+          showMessage(result.error || "An error occurred.", "error");
         }
+      } catch (error) {
+        console.error("❌ AJAX Profile Update Error:", error);
+        showMessage("Network error. Please try again.", "error");
+      }
     });
-});
-</script>
-<script>
 
-  // Toggle sidebar visibility on small screens
-  const hamburger = document.getElementById("hamburger");
-        const sidebar = document.getElementById("drawer-navigation");
+    // AJAX Password Change
+    passwordForm.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      if (!validateCurrentPassword() || !validateNewPassword() || !validateConfirmPassword()) return;
 
-        hamburger.addEventListener("click", function () {
-            sidebar.classList.toggle("-translate-x-full");
+      const formData = new FormData(passwordForm);
+      const data = Object.fromEntries(formData);
+
+      try {
+        const response = await fetch("/user/change-password", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+          credentials: "include",
         });
 
-        const closeButton = document.querySelector('[data-drawer-hide="drawer-navigation"]');
-        closeButton.addEventListener("click", function () {
-            sidebar.classList.add("-translate-x-full");
-        });
-</script>
+        const result = await response.json();
+        messageContainer.innerHTML = "";
 
-<%- include('../shared/footer') %>
+        if (response.ok) {
+          showMessage(result.message, "success");
+          passwordForm.reset();
+        } else {
+          showMessage(result.error || "An error occurred.", "error");
+        }
+      } catch (error) {
+        console.error("❌ AJAX Password Change Error:", error);
+        showMessage("Network error. Please try again.", "error");
+      }
+    });
+
+    // Show Message Helper
+    function showMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = `p-4 rounded-md text-center font-medium ${
+        type === "success" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"
+      }`;
+      div.textContent = text;
+      messageContainer.appendChild(div);
+      setTimeout(() => div.remove(), 5000);
+    }
+  });
+</script>
