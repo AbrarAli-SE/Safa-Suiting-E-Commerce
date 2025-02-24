@@ -1,184 +1,237 @@
 <%- include('../shared/asideBar') %>
 
-  <main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
-    <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9">Manage Users</h1>
+<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+  <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9">Manage Users</h1>
 
-    <!-- Filter, Search Bar, and Entries Per Page -->
-    <div class="mb-4 flex justify-between items-center flex-wrap">
-      <!-- ✅ Role Filter Dropdown -->
-      <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
-        <label for="userFilter" class="text-gray-700 dark:text-gray-300">Filter By:</label>
-        <select id="userFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:mb-2 sm:w-auto
-               dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-          <option value="all">All</option>
-          <option value="user">Users</option>
-          <option value="admin">Admins</option>
-        </select>
-      </div>
-
-
-      <!-- Search Bar -->
-<div class="relative flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
-  <svg class="absolute left-3 w-14 h-5 text-gray-400 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14z" />
-  </svg>
-  <input type="text" id="searchInput" placeholder="Search by Name or Email" 
-    class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-      dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-</div>
-
+  <div class="mb-4 flex justify-between items-center flex-wrap">
+    <!-- Role Filter Dropdown -->
+    <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
+      <label for="userFilter" class="text-gray-700 dark:text-gray-300">Filter By:</label>
+      <select id="userFilter" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
+        <option value="all">All</option>
+        <option value="user">Users</option>
+        <option value="admin">Admins</option>
+      </select>
     </div>
+  </div>
 
-    <!-- ✅ Success & Error Messages -->
+  <!-- Messages -->
+  <div id="message-container" class="mb-4">
     <% if (successMessage) { %>
-      <div class="alert-message bg-green-100 text-green-700 p-2 rounded mb-4 text-center">
-        <%= successMessage %>
-      </div>
-      <% } %>
-
-        <% if (errorMessage) { %>
-          <div class="alert-message bg-red-100 text-red-700 p-2 rounded mb-4 text-center">
-            <%= errorMessage %>
-          </div>
-          <% } %>
-
-
-            <!-- User Table -->
-            <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-              <div class="overflow-x-auto">
-                <table class="min-w-full table-fixed">
-                  <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                    <tr>
-                      <th class="px-4 py-2 text-left w-1/6">Name</th>
-                      <th class="px-4 py-2 text-left w-1/6">Email</th>
-                      <th class="px-4 py-2 text-left w-1/6">Role</th>
-                      <th class="px-4 py-2 text-left w-1/6">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="userList" class="text-gray-700 dark:text-gray-300">
-                    <% users.forEach((user)=> { %>
-                      <tr class="border-t border-gray-200 dark:border-gray-600 user-row" data-role="<%= user.role %>">
-                        <td class="px-4 py-2 user-name">
-                          <%= user.name %>
-                        </td>
-                        <td class="px-4 py-2 user-email">
-                          <%= user.email %>
-                        </td>
-                        <td class="px-4 py-2">
-                          <form action="/admin/users/update-role" method="POST">
-                            <input type="hidden" name="userId" value="<%= user._id %>">
-                            <select name="role" class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                              <option value="user" <%=user.role==='user' ? 'selected' : '' %>>User</option>
-                              <option value="admin" <%=user.role==='admin' ? 'selected' : '' %>>Admin</option>
-                            </select>
-                            <button type="submit" class="px-4 py-2 text-red-500">Update</button>
-                          </form>
-                        </td>
-                        <td class="pr-5 py-2 flex items-center gap-3">
-                          <a href="/admin/users/<%= user._id %>" class="px-4 py-2 text-blue-500">View</a>
-                        </td>
-                      </tr>
-                      <% }) %>
-                  </tbody>
-
-
-                </table>
-
-                 <!-- ✅ No Results Message -->
-                <p id="noResults" class="text-center text-red-500 font-semibold hidden mt-4">No users found</p>
-              </div>
-            </div>
-
-  
-  <!-- ✅ Pagination -->
-  <div class="flex justify-center mt-6">
-    <% if (totalPages > 1) { %>
-        <nav class="flex items-center space-x-2">
-            <% if (currentPage > 1) { %>
-                <a href="/admin/users?page=<%= currentPage - 1 %>" class="px-3 py-1 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white">
-                    &laquo; Prev
-                </a>
-            <% } %>
-
-            <% for (let i = 1; i <= totalPages; i++) { %>
-                <a href="/admin/users?page=<%= i %>" class="px-3 py-1 border rounded-lg <%= currentPage === i ? 'bg-red-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white' %>">
-                    <%= i %>
-                </a>
-            <% } %>
-
-            <% if (currentPage < totalPages) { %>
-                <a href="/admin/users?page=<%= currentPage + 1 %>" class="px-3 py-1 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white">
-                    Next &raquo;
-                </a>
-            <% } %>
-        </nav>
+      <div class="alert-message bg-green-100 text-green-700 p-2 rounded text-center"><%= successMessage %></div>
     <% } %>
-</div>
-  
-</div>
-  </main>
+    <% if (errorMessage) { %>
+      <div class="alert-message bg-red-100 text-red-700 p-2 rounded text-center"><%= errorMessage %></div>
+    <% } %>
+  </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Function to hide error/success messages after 5 seconds
-      setTimeout(function () {
-        const errorMessages = document.querySelectorAll(".alert-message");
-        errorMessages.forEach((message) => {
-          message.style.display = "none";
-        });
-      }, 5000); // 5 seconds
+  <!-- User Table -->
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-fixed">
+        <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <tr>
+            <th class="px-4 py-2 text-left w-1/6">Name</th>
+            <th class="px-4 py-2 text-left w-1/6">Email</th>
+            <th class="px-4 py-2 text-left w-1/6">Role</th>
+            <th class="px-4 py-2 text-left w-1/6">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="userList" class="text-gray-700 dark:text-gray-300">
+          <!-- Populated via AJAX -->
+        </tbody>
+      </table>
+      <p id="noResults" class="text-center text-red-500 font-semibold hidden mt-4">No users found</p>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-center mt-6">
+    <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
+  </div>
+</main>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const userList = document.getElementById("userList");
+    const messageContainer = document.getElementById("message-container");
+    const pagination = document.getElementById("pagination");
+    const noResults = document.getElementById("noResults");
+    const userFilter = document.getElementById("userFilter");
+    let currentPage = 1;
+    const currentUserId = "<%= user && user._id ? user._id : '' %>"; // Handle null req.user gracefully
+
+    // Fetch initial users
+    fetchUsers(currentPage);
+
+    // Filter functionality
+    userFilter.addEventListener("change", function () {
+      fetchUsers(currentPage);
     });
-  </script>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const userFilter = document.getElementById("userFilter");
-      const userRows = document.querySelectorAll(".user-row");
-      const searchInput = document.getElementById("searchInput");
-      const noResults = document.getElementById("noResults");
+    // AJAX Role Update
+    userList.addEventListener("click", async function (e) {
+      const button = e.target.closest(".update-role-btn");
+      if (!button) return;
 
-      userFilter.addEventListener("change", function () {
-        const filterValue = userFilter.value;
+      const userId = button.dataset.userId;
+      const role = button.previousElementSibling.value;
 
-        userRows.forEach(row => {
-          const role = row.getAttribute("data-role");
+      if (userId === currentUserId) {
+        showMessage("You cannot change your own role.", "error");
+        return;
+      }
 
-          if (filterValue === "all" || role === filterValue) {
-            row.style.display = "";
-          } else {
-            row.style.display = "none";
-          }
+      try {
+        const response = await fetch("/admin/users/update-role", {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId, role, page: currentPage }),
+          credentials: "include", // Ensure cookies are sent
         });
-      });
 
-      searchInput.addEventListener("input", function () {
-        const query = searchInput.value.toLowerCase();
-        let matchFound = false;
+        const result = await response.json();
 
-        userRows.forEach(row => {
-          const name = row.querySelector(".user-name").textContent.toLowerCase();
-          const email = row.querySelector(".user-email").textContent.toLowerCase();
+        messageContainer.innerHTML = "";
 
-          if (name.includes(query) || email.includes(query)) {
-            row.style.display = "";
-            matchFound = true;
-          } else {
-            row.style.display = "none";
-          }
-        });
-          // ✅ Show "No results found" if no matches
-          noResults.style.display = matchFound ? "none" : "block";
-      });
+        if (response.ok) {
+          showMessage(result.message, "success");
+          updateUserTable(result.users);
+          updatePagination(result.currentPage, result.totalPages);
+          currentPage = result.currentPage;
+        } else {
+          showMessage(result.error || "An error occurred.", "error");
+        }
+      } catch (error) {
+        console.error("❌ AJAX Role Update Error:", error);
+        showMessage("Network error. Please try again.", "error");
+      }
     });
-  </script>
 
+    // AJAX Pagination
+    pagination.addEventListener("click", async function (e) {
+      const target = e.target.closest(".page-link");
+      if (!target) return;
 
+      e.preventDefault();
+      const page = parseInt(target.dataset.page);
+      fetchUsers(page);
+    });
 
+    // Fetch users function
+    async function fetchUsers(page) {
+      const filter = userFilter.value;
+      try {
+        const response = await fetch(`/admin/users?page=${page}&filter=${filter}`, {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest",
+          },
+          credentials: "include", // Ensure cookies are sent
+        });
 
+        const result = await response.json();
 
-  <!-- Link the JavaScript file -->
-  <script src="/js/main.js"></script>
+        if (response.ok) {
+          updateUserTable(result.users);
+          updatePagination(result.currentPage, result.totalPages);
+          currentPage = result.currentPage;
+        } else {
+          console.error("❌ Fetch Users Error:", result.error);
+          showMessage("Error fetching users.", "error");
+        }
+      } catch (error) {
+        console.error("❌ AJAX Fetch Error:", error);
+        showMessage("Network error. Please try again.", "error");
+      }
+    }
 
-  </body>
+    // Update user table
+    function updateUserTable(users) {
+      userList.innerHTML = "";
+      if (users.length === 0) {
+        userList.innerHTML = '<tr><td colspan="4" class="text-center text-red-500 font-semibold py-4">No users found.</td></tr>';
+        noResults.style.display = "block";
+      } else {
+        users.forEach(user => {
+          const row = `
+            <tr class="border-t border-gray-200 dark:border-gray-600 user-row" data-role="${user.role}">
+              <td class="px-4 py-2 user-name">${user.name}</td>
+              <td class="px-4 py-2 user-email">${user.email}</td>
+              <td class="px-4 py-2">
+                <select class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                  <option value="user" ${user.role === "user" ? "selected" : ""}>User</option>
+                  <option value="admin" ${user.role === "admin" ? "selected" : ""}>Admin</option>
+                </select>
+                <button class="update-role-btn px-4 py-2 text-red-500" data-user-id="${user._id}">Update</button>
+              </td>
+              <td class="pr-5 py-2 flex items-center gap-3">
+                <a href="/admin/users/${user._id}" class="px-4 py-2 text-blue-500">View</a>
+              </td>
+            </tr>`;
+          userList.insertAdjacentHTML("beforeend", row);
+        });
+        noResults.style.display = "none";
+      }
+    }
 
-  </html>
+    // Update pagination
+    function updatePagination(currentPage, totalPages) {
+      const maxVisiblePages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+
+      let html = "";
+      if (currentPage > 1) {
+        html += `<button data-page="${currentPage - 1}" class="page-link relative inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#DB4444] border border-[#DB4444] rounded-l-md hover:bg-[#de2d2d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>`;
+      }
+
+      if (startPage > 1) {
+        html += `<button data-page="1" class="page-link relative inline-flex items-center px-4 py-2 text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">1</button>`;
+        if (startPage > 2) {
+          html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">...</span>`;
+        }
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        html += `<button data-page="${i}" class="page-link relative inline-flex items-center px-4 py-2 text-sm font-medium ${currentPage === i ? 'bg-[#DB4444] text-white border-[#DB4444]' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600'} border ${i === startPage ? '' : '-ml-px'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">${i}</button>`;
+      }
+
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">...</span>`;
+        }
+        html += `<button data-page="${totalPages}" class="page-link relative inline-flex items-center px-4 py-2 text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">${totalPages}</button>`;
+      }
+
+      if (currentPage < totalPages) {
+        html += `<button data-page="${currentPage + 1}" class="page-link relative inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#DB4444] border border-[#DB4444] rounded-r-md hover:bg-[#de2d2d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>`;
+      }
+
+      pagination.innerHTML = html;
+    }
+
+    // Show message helper
+    function showMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = `alert-message ${type === "success" ? "bg-green-100 text-green-700 border-green-400" : "bg-red-100 text-red-700 border-red-400"} border p-3 rounded text-center`;
+      div.textContent = text;
+      messageContainer.appendChild(div);
+      setTimeout(() => {
+        messageContainer.innerHTML = "";
+      }, 5000);
+    }
+  });
+</script>
+
+<script src="/js/main.js"></script>
+</body>
+</html>

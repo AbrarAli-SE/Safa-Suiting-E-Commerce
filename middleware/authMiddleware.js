@@ -32,35 +32,36 @@ const { secretKey } = require("../config/jwtConfig");
 
 // const jwt = require("jsonwebtoken");
 
+
 const authenticateUser = async (req, res, next) => {
-    const token = req.cookies.authToken;
-    
-    if (token) {
-        try {
-            const decoded = jwt.verify(token, secretKey);
-            req.user = decoded; // Store user data in request
-        } catch (err) {
-            req.user = null; // If token is invalid, user remains null
-        }
-    } else {
-        req.user = null; // No token found
-    }
-    next();
-};
+  const token = req.cookies.authToken;
+//   console.log("Auth Token from Cookie:", token); // Debug log
 
-
-// ✅ Admin Authorization Middleware (Protects `/admin/*` routes)
-const adminAuth = async (req, res, next) => {
+  if (token) {
     try {
-        if (!req.user || req.user.role !== "admin") {
-            return res.redirect("/"); // Redirect non-admin users to the home page
-        }
-        next();
+      const decoded = jwt.verify(token, secretKey);
+      console.log("Decoded Token:", decoded); // Debug log
+      req.user = decoded; // { userId, name, email, role }
     } catch (err) {
-        console.error("❌ Admin Middleware Error:", err);
-        res.redirect("/auth/login"); // Redirect to login if something goes wrong
+      console.error("Token Verification Error:", err.message); // Debug log
+      req.user = null;
     }
+  } else {
+    // console.log("No Token Found in Cookies"); // Debug log
+    req.user = null;
+  }
+  next();
 };
+
+
+
+const adminAuth = (req, res, next) => {
+  if (!req.user || req.user.role !== "admin") {
+    return res.redirect("/");
+  }
+  next();
+};
+
 
 // ✅ User Authorization Middleware (Protects `/user/*` routes)
 const verifyUser = (req, res, next) => {

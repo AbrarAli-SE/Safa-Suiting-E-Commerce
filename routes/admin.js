@@ -20,7 +20,7 @@ router.get("/users", authenticateUser, adminAuth, adminController.renderManageUs
 router.get("/users/:userId", authenticateUser, adminAuth, adminController.renderUserDetails);
 
 // ✅ Update User Role Route
-router.post("/users/update-role", authenticateUser, adminAuth, adminController.updateUserRole);
+router.put("/users/update-role", authenticateUser, adminAuth, adminController.updateUserRole);
 
 // ✅ Admin Settings Page Route
 router.get("/settings", authenticateUser, adminAuth, adminController.renderAdminSettings);

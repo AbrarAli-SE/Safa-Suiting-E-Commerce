@@ -230,30 +230,96 @@ exports.renderAnalytical = async(req, res) =>{
 
 exports.renderManageUsers = async (req, res) => {
     try {
-        let page = parseInt(req.query.page) || 1;
-        let limit = 10; // ✅ Number of users per page
-        let skip = (page - 1) * limit;
-
-        const totalUsers = await User.countDocuments();
-        const users = await User.find({}, "name email role").skip(skip).limit(limit);
-
-        res.render("admin/manage-users", { 
-            user: req.user,   
-            users,            
-            currentPage: page,
-            totalPages: Math.ceil(totalUsers / limit),
-            successMessage: req.query.successMessage || null, // ✅ Get success message from query
-            errorMessage: req.query.errorMessage || null // ✅ Get error message from query
+      let page = parseInt(req.query.page) || 1;
+      const limit = 10;
+      const skip = (page - 1) * limit;
+      const filter = req.query.filter || "all";
+  
+      let query = {};
+      if (filter !== "all") {
+        query.role = filter;
+      }
+  
+      const totalUsers = await User.countDocuments(query);
+      const users = await User.find(query, "name email role")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+  
+      if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+        res.status(200).json({
+          users,
+          currentPage: page,
+          totalPages: Math.ceil(totalUsers / limit),
         });
-
+      } else {
+        res.render("admin/manage-users", {
+          user: req.user,
+          users: [],
+          currentPage: 1,
+          totalPages: 1,
+          successMessage: req.query.successMessage || null,
+          errorMessage: req.query.errorMessage || null,
+        });
+      }
     } catch (error) {
-        console.error("❌ Manage Users Page Error:", error);
+      console.error("❌ Manage Users Page Error:", error);
+      if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+        res.status(500).json({ error: "Server error" });
+      } else {
         res.status(500).send("Server error");
+      }
     }
-};
-
-
-
+  };
+  
+  exports.updateUserRole = async (req, res) => {
+    try {
+      const { userId, role } = req.body;
+      const page = req.query.page || 1;
+  
+      if (!["user", "admin"].includes(role)) {
+        return res.status(400).json({ error: "Invalid role selection." });
+      }
+  
+      // Check if req.user is set by authenticateUser
+      if (!req.user || !req.user.userId) {
+        return res.status(401).json({ error: "User not authenticated. Please log in." });
+      }
+  
+      if (req.user.userId.toString() === userId) {
+        return res.status(403).json({ error: "You cannot change your own role." });
+      }
+  
+      const user = await User.findById(userId);
+      if (!user) {
+        return res.status(404).json({ error: "User not found." });
+      }
+  
+      user.role = role;
+      await user.save();
+  
+      // Fetch updated user list for the current page
+      const limit = 10;
+      const skip = (page - 1) * limit;
+      const totalUsers = await User.countDocuments();
+      const users = await User.find({}, "name email role")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit);
+  
+      res.status(200).json({
+        message: `Role updated successfully for ${user.email}`,
+        users,
+        currentPage: page,
+        totalPages: Math.ceil(totalUsers / limit),
+      });
+    } catch (error) {
+      console.error("❌ Update User Role Error:", error);
+      res.status(500).json({ error: "Server error. Please try again." });
+    }
+  };
+  
+  
 
 exports.renderUserDetails = async (req, res) => {
     try {
@@ -283,40 +349,7 @@ exports.renderUserDetails = async (req, res) => {
 
 
 
-// ✅ Update User Role
-exports.updateUserRole = async (req, res) => {
-    try {
-        const { userId, role } = req.body;
-        let page = req.query.page || 1;
 
-        // ✅ Ensure role is valid
-        if (!["user", "admin"].includes(role)) {
-            return res.redirect(`/admin/users?page=${page}&errorMessage=Invalid role selection.`);
-        }
-
-        // ✅ Prevent admin from changing their own role
-        if (req.user._id.toString() === userId) {
-            return res.redirect(`/admin/users?page=${page}&errorMessage=You cannot change your own role.`);
-        }
-
-        // ✅ Find user
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.redirect(`/admin/users?page=${page}&errorMessage=User not found.`);
-        }
-
-        // ✅ Update role and save
-        user.role = role;
-        await user.save();
-
-        // ✅ Redirect with success message
-        return res.redirect(`/admin/users?page=${page}&successMessage=Role updated successfully for ${user.email}`);
-
-    } catch (error) {
-        console.error("❌ Update User Role Error:", error);
-        return res.redirect(`/admin/users?page=${req.query.page || 1}&errorMessage=Server error. Please try again.`);
-    }
-};
 
 
 
