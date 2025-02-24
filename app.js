@@ -58,10 +58,10 @@ const fs = require("fs");
   // Serve static files (CSS, images, etc.) from the public folder
   app.use(express.static(path.join(__dirname, 'public')));
 
-  // Create upload folders if they don’t exist
-["public/uploads/carousel", "public/uploads/products"].forEach(dir => {
-  fs.mkdirSync(dir, { recursive: true });
-});
+//   // Create upload folders if they don’t exist
+// ["public/uploads/carousel", "public/uploads/products"].forEach(dir => {
+//   fs.mkdirSync(dir, { recursive: true });
+// });
 
   app.use(express.urlencoded({ extended: false }));
   app.use(express.json());

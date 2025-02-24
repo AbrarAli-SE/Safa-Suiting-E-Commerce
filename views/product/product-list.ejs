@@ -1,171 +1,210 @@
 <%- include('../shared/asideBar') %>
 
-  <main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
-    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Products List</h1>
+<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
+  <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9">Products List</h1>
 
-    <div class="mb-4 flex justify-between items-center flex-wrap">
-     <!-- Search Bar -->
-<div class="relative flex items-center w-full sm:w-auto mb-4 sm:mb-0">
-  <svg class="absolute left-3 w-5 h-5 text-gray-400 dark:text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M10 17a7 7 0 1 0 0-14 7 7 0 0 0 0 14z" />
-  </svg>
-  <input type="text" id="searchInput" placeholder="Search Products..." class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-    dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-</div>
-
-
-
-      <!-- Add new product -->
-      <div class="hidden sm:block">
-        <button
-          class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition flex items-center space-x-2">
-          <i class="bi bi-plus-circle"></i>
-          <a href="/admin/product/add-product" class="focus:outline-none">
-            Add New Product
-          </a>
-        </button>
-      </div>
+  <div class="mb-4 flex justify-between items-center flex-wrap">
+    <!-- Add new product -->
+    <div class="w-full sm:w-auto mb-4 sm:mb-0 sm:ml-auto">
+      <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition flex items-center space-x-2">
+        <i class="bi bi-plus-circle"></i>
+        <a href="/admin/product/add-product" class="focus:outline-none">Add New Product</a>
+      </button>
     </div>
+  </div>
 
-    <% if (successMessage) { %>
-      <div class="bg-green-100 text-green-700 p-3  border border-green-400 rounded-lg text-center mb-4">
-          <%= successMessage %>
-      </div>
-    <% } %>
-    
-    <% if (errorMessage) { %>
-      <div class="bg-red-100 text-red-700 border border-red-400 p-3 rounded-lg text-center mb-4">
-          <%= errorMessage %>
-      </div>
-    <% } %>
-    
-    
-  
+  <!-- Messages -->
+  <div id="message-container" class="mb-4"></div>
 
+  <!-- Product Table -->
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto">
+        <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <tr>
+            <th class="px-4 py-2 text-left w-1/6">Image</th>
+            <th class="px-4 py-2 text-left w-1/6">Product Name</th>
+            <th class="px-4 py-2 text-left w-1/6">Category</th>
+            <th class="px-4 py-2 text-left w-1/6">Brand</th>
+            <th class="px-4 py-2 text-left w-1/6">Stock</th>
+            <th class="px-4 py-2 text-left w-1/6">Price</th>
+            <th class="px-4 py-2 text-left w-1/6">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700 dark:text-gray-300" id="productList">
+          <!-- Populated via AJAX -->
+        </tbody>
+      </table>
+      <p id="noResults" class="text-center text-red-500 font-semibold hidden mt-4">No products found</p>
+    </div>
+  </div>
 
-    <!-- ✅ Product Table -->
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <div class="overflow-x-auto">
-        <table class="min-w-full table-auto">
-          <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-            <tr>
-              <th class="px-4 py-2 text-left w-1/6">Image</th>
-              <th class="px-4 py-2 text-left w-1/6">Product Name</th>
-              <th class="px-4 py-2 text-left w-1/6">Category</th>
-              <th class="px-4 py-2 text-left w-1/6">Brand</th>
-              <th class="px-4 py-2 text-left w-1/6">Stock</th>
-              <th class="px-4 py-2 text-left w-1/6">Price</th>
-              <th class="px-4 py-2 text-left w-1/6">Actions</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-700 dark:text-gray-300" id="productList">
-            <% if (products.length === 0) { %>
-              <tr>
-                <td colspan="6" class="text-center text-red-500 font-semibold py-4">No products found.</td>
-              </tr>
-            <% } else { %>
-                <% products.forEach((product)=> { %>
-                  <tr class="border-t border-gray-200 dark:border-gray-600 product-row">
-                    <td class="px-4 py-2">
-                      <img src="<%= product.image %>" alt="Product Image" class="w-16 h-16 object-cover rounded">
-                    </td>
-                    <td class="px-4 py-2 product-name">
-                      <%= product.name %>
-                    </td>
-                    <td class="px-4 py-2 category-name">
-                      <%= product.category %>
-                    </td>
-                    <td class="px-4 py-2 brand-name">
-                      <%= product.brand %>
-                    </td>
-                    <td class="px-4 py-2">
-                      <%= product.quantity %>
-                    </td>
-                    <td class="px-4 py-2">$<%= product.price %>
-                    </td>
-                    <td class="pr-5 py-2 flex items-center gap-3">
-                      <a href="/admin/product/edit/<%= product._id %>" class="px-4 py-2 text-blue-600">
-                        Edit
-                      </a>
-                      <form action="/admin/product/delete-product" method="POST">
-                        <input type="hidden" name="productId" value="<%= product._id %>">
-                        <input type="hidden" name="page" value="<%= currentPage %>"> <!-- ✅ Pass Current Page -->
-                        <button type="submit" class="px-4 py-2 text-red-600">Delete</button>
-                      </form>
-                    
-                    
-                    </td>
-                  </tr>
-                  <% }) %>
-                  <% } %>
-          </tbody>
-        </table>
-         <!-- ✅ No Results Message -->
-         <p id="noResults" class="text-center text-red-500 font-semibold hidden mt-4">No products found</p>
-        </div>
-      </div>
-    
+  <!-- Pagination Controls -->
+  <div class="flex justify-center mt-6">
+    <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
+  </div>
+</main>
 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const productList = document.getElementById("productList");
+    const messageContainer = document.getElementById("message-container");
+    const pagination = document.getElementById("pagination");
+    const noResults = document.getElementById("noResults");
+    let currentPage = 1;
 
-<!-- ✅ Pagination Controls -->
-<div class="flex justify-center mt-6">
-  <% if (totalPages > 1) { %>
-      <% if (currentPage > 1) { %>
-          <a href="/admin/product/product-list?page=<%= currentPage - 1 %>"
-             class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white mx-2">
-             Previous
-          </a>
-      <% } %>
+    // Fetch initial products
+    fetchProducts(currentPage);
 
-      <span class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white">
-          Page <%= currentPage %> of <%= totalPages %>
-      </span>
+    // AJAX Delete functionality
+    productList.addEventListener("click", async function (e) {
+      const button = e.target.closest(".delete-btn");
+      if (!button) return;
 
-      <% if (currentPage < totalPages) { %>
-          <a href="/admin/product/product-list?page=<%= currentPage + 1 %>"
-             class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white mx-2">
-             Next
-          </a>
-      <% } %>
-  <% } %>
-</div>
+      const productId = button.dataset.productId;
+      const page = button.dataset.page;
 
+      try {
+        const response = await fetch("/admin/product/delete-product", {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ productId, page }),
+        });
 
+        const result = await response.json();
 
-  </main>
+        messageContainer.innerHTML = "";
 
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function(){
-      const  productRows = document.querySelectorAll('.product-row');
-      const searchInput = document.getElementById('searchInput');
-      const noResults = document.getElementById('noResults');
-
-      searchInput.addEventListener('input', function(){
-        const query = searchInput.value.toLowerCase();
-        let matchFound = false;
-
-        productRows.forEach(row =>{
-          const name = row.querySelector('.product-name').textContent.toLowerCase();
-          const category = row.querySelector('.category-name').textContent.toLowerCase();
-          const brand = row.querySelector('.brand-name').textContent.toLowerCase();
-
-          if(name.includes(query) || category.includes(query) || brand.includes(query)){
-            row.style.display = "";
-            matchFound = true;
-          } else {
-            row.style.display = 'none';
-          }
-        })
-
-         // ✅ Show "No results found" if no matches
-         noResults.style.display = matchFound ? "none" : "block";
-      })
-
+        if (response.ok) {
+          showMessage(result.message, "success");
+          updateProductTable(result.products);
+          updatePagination(result.currentPage, result.totalPages);
+          currentPage = result.currentPage;
+        } else {
+          showMessage(result.error || "An error occurred.", "error");
+        }
+      } catch (error) {
+        console.error("❌ AJAX Delete Error:", error);
+        showMessage("Network error. Please try again.", "error");
+      }
     });
-  </script>
-  <!-- Link the JavaScript file -->
-  <script src="/js/main.js"></script>
-  </body>
 
-  </html>
+    // AJAX Pagination functionality
+    pagination.addEventListener("click", async function (e) {
+      const target = e.target.closest(".page-link");
+      if (!target) return;
+
+      e.preventDefault();
+      const page = parseInt(target.dataset.page);
+      fetchProducts(page);
+    });
+
+    // Fetch products function
+    async function fetchProducts(page) {
+      try {
+        const response = await fetch(`/admin/product/product-list?page=${page}`, {
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          updateProductTable(result.products);
+          updatePagination(result.currentPage, result.totalPages);
+          currentPage = result.currentPage;
+        } else {
+          console.error("❌ Fetch Products Error:", result.error);
+          showMessage("Error fetching products.", "error");
+        }
+      } catch (error) {
+        console.error("❌ AJAX Fetch Error:", error);
+        showMessage("Network error. Please try again.", "error");
+      }
+    }
+
+    // Update product table
+    function updateProductTable(products) {
+      productList.innerHTML = "";
+      if (products.length === 0) {
+        productList.innerHTML = '<tr><td colspan="7" class="text-center text-red-500 font-semibold py-4">No products found.</td></tr>';
+        noResults.style.display = "block";
+      } else {
+        products.forEach(product => {
+          const row = `
+            <tr class="border-t border-gray-200 dark:border-gray-600 product-row" data-product-id="${product._id}">
+              <td class="px-4 py-2"><img src="${product.image}" alt="Product Image" class="w-16 h-16 object-cover rounded"></td>
+              <td class="px-4 py-2 product-name">${product.name}</td>
+              <td class="px-4 py-2 category-name">${product.category}</td>
+              <td class="px-4 py-2 brand-name">${product.brand}</td>
+              <td class="px-4 py-2">${product.quantity}</td>
+              <td class="px-4 py-2">$${product.price}</td>
+              <td class="pr-5 py-2 flex items-center gap-3">
+                <a href="/admin/product/edit/${product._id}" class="px-4 py-2 text-blue-600">Edit</a>
+                <button class="delete-btn px-4 py-2 text-red-600" data-product-id="${product._id}" data-page="${currentPage}">Delete</button>
+              </td>
+            </tr>`;
+          productList.insertAdjacentHTML("beforeend", row);
+        });
+        noResults.style.display = "none";
+      }
+    }
+
+    // Update pagination
+    function updatePagination(currentPage, totalPages) {
+      const maxVisiblePages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+
+      let html = "";
+      if (currentPage > 1) {
+        html += `<button data-page="${currentPage - 1}" class="page-link relative inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#DB4444] border border-[#DB4444] rounded-l-md hover:bg-[#de2d2d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>`;
+      }
+
+      if (startPage > 1) {
+        html += `<button data-page="1" class="page-link relative inline-flex items-center px-4 py-2 text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">1</button>`;
+        if (startPage > 2) {
+          html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">...</span>`;
+        }
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        html += `<button data-page="${i}" class="page-link relative inline-flex items-center px-4 py-2 text-sm font-medium ${currentPage === i ? 'bg-[#DB4444] text-white border-[#DB4444]' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600'} border ${i === startPage ? '' : '-ml-px'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">${i}</button>`;
+      }
+
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">...</span>`;
+        }
+        html += `<button data-page="${totalPages}" class="page-link relative inline-flex items-center px-4 py-2 text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">${totalPages}</button>`;
+      }
+
+      if (currentPage < totalPages) {
+        html += `<button data-page="${currentPage + 1}" class="page-link relative inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#DB4444] border border-[#DB4444] rounded-r-md hover:bg-[#de2d2d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>`;
+      }
+
+      pagination.innerHTML = html;
+    }
+
+    // Show message helper
+    function showMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = `alert-message ${type === "success" ? "bg-green-100 text-green-700 border-green-400" : "bg-red-100 text-red-700 border-red-400"} border p-3 rounded-lg text-center`;
+      div.textContent = text;
+      messageContainer.appendChild(div);
+      setTimeout(() => {
+        messageContainer.innerHTML = "";
+      }, 5000);
+    }
+  });
+</script>
+
+<script src="/js/main.js"></script>
+</body>
+</html>

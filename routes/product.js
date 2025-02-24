@@ -1,27 +1,20 @@
 const express = require("express");
 const router = express.Router();
-const productController = require("../controllers/productController"); // ✅ Fix Typo
+const productController = require("../controllers/productController");
 const { authenticateUser, adminAuth } = require("../middleware/authMiddleware");
-const { uploadProduct } = require("../config/multer-config");
-const Product = require('../models/Product');
 
-// ✅ Ensure Callback Functions Exist
 router.get("/add-product", authenticateUser, adminAuth, productController.renderAddProduct);
+router.post("/product/add", authenticateUser, adminAuth, productController.addProduct);
 
-router.post("/product/add", authenticateUser, adminAuth, uploadProduct, productController.addProduct);
 
-// ✅ Route to Render Edit Product Page
+
 router.get("/edit/:productId", authenticateUser, adminAuth, productController.renderEditProduct);
+router.put("/update/:productId", authenticateUser, adminAuth, productController.updateProduct); // Changed to PUT
 
-// ✅ Route to Update an Existing Product (With Image Upload)
-router.post("/update/:productId", authenticateUser, adminAuth,uploadProduct,productController.updateProduct);
-
-
-// ✅ Render Product List (Pagination & Search)
+router.delete("/delete-product", authenticateUser, adminAuth, productController.deleteProduct); // Changed to DELETE
+// In routes/admin.js
 router.get("/product-list", authenticateUser, adminAuth, productController.renderProductList);
-
-// ✅ Delete Product
-router.post("/delete-product", authenticateUser, adminAuth, productController.deleteProduct);
+// router.get("/product-list-data", authenticateUser, adminAuth, productController.getProducts); // New AJAX endpoint
 
   
 
