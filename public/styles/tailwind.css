@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer utilities {
   .scrollbar-hide {
     -ms-overflow-style: none;
@@ -14,9 +13,17 @@
   }
 }
 
-/* Custom Classes */
-@layer components {
+@layer base {
+  * {
+    @apply m-0 p-0 box-border font-sans;
+  }
 
+  body {
+    @apply bg-white text-black min-h-screen overflow-x-hidden;
+  }
+}
+
+@layer components {
   /* Admin panel Side bar */
   .sidebar-link {
     @apply flex items-center gap-4 rounded px-3 py-1 hover:bg-[#DB4444] hover:text-white transition-all relative;
@@ -39,7 +46,6 @@
     @apply relative text-black dark:text-white hover:text-black cursor-pointer transition-all ease-in-out;
   }
 
-
   /* Pseudo-elements for underline */
   .nav-link::before,
   .nav-link::after {
@@ -56,7 +62,6 @@
   .dark .nav-link::before,
   .dark .nav-link::after {
     background-color: white !important;
-    /* Ensures dark mode underline color */
   }
 
   .nav-link::before {
@@ -82,19 +87,116 @@
   }
 
   .swiper-button-prev::after,
-.swiper-button-next::after {
-  content: none !important; /* Removes default Swiper arrows */
-}
+  .swiper-button-next::after {
+    content: none !important; /* Removes default Swiper arrows */
+  }
 
-.swiper {
-  border-radius: 20px; /* Adjust as needed */
-  overflow: hidden; /* Prevent content from breaking the rounded corners */
-}
+  .swiper {
+    border-radius: 20px; /* Adjust as needed */
+    overflow: hidden; /* Prevent content from breaking the rounded corners */
+  }
 
+  .swiper-pagination .swiper-pagination-bullet-active {
+    background-color: red !important;
+  }
 
-.swiper-pagination .swiper-pagination-bullet-active {
-  background-color: red !important;
-}
+  /* Drawer (Sidebar) */
+  .drawer {
+    @apply w-[250px] bg-white h-full fixed top-0 left-[-250px] transition-all duration-300 ease-in border-r-2 border-red-500 p-5 z-[1000];
+  }
 
+  .drawer.open {
+    left: 0; /* Custom property */
+  }
 
+  .drawer h2 {
+    @apply text-red-500 mb-5 text-xl flex items-center;
+  }
+
+  .drawer ul {
+    @apply list-none;
+  }
+
+  .drawer ul li {
+    @apply my-[15px];
+  }
+
+  .drawer ul li a {
+    @apply no-underline text-black font-bold flex items-center p-[10px] hover:text-red-500 hover:bg-red-50;
+  }
+
+  .drawer .welcome {
+    @apply text-black mb-5;
+  }
+
+  .drawer .welcome span {
+    @apply text-red-500 font-bold;
+  }
+
+  /* Main content */
+  .main-content {
+    @apply p-5 w-full transition-all duration-300 ease-in;
+  }
+
+  .header {
+    @apply bg-white p-[10px_20px] border-b border-black flex items-center mb-5;
+  }
+
+  .header h1 {
+    @apply text-black text-2xl flex-grow;
+  }
+
+  /* Hamburger Menu Button */
+  .menu-btn {
+    @apply bg-transparent border-none text-2xl text-black cursor-pointer p-[10px] hover:text-red-500;
+  }
+
+  .content {
+    @apply bg-white p-5 border border-red-500;
+  }
+
+  .content h2 {
+    @apply text-red-500 mb-[15px] text-xl flex items-center;
+  }
+
+  .content form {
+    @apply flex flex-col gap-5;
+  }
+
+  .content label {
+    @apply text-black font-medium text-sm;
+  }
+
+  .content input {
+    @apply p-[10px] border border-black rounded bg-white text-black w-full max-w-[300px] focus:outline-none focus:border-red-500;
+  }
+
+  .content .error {
+    @apply text-red-500 text-xs hidden;
+  }
+
+  .content-grid {
+    display: grid; /* Direct CSS instead of @apply grid */
+    @apply grid-cols-1 sm:grid-cols-2 gap-5 max-w-[600px];
+  }
+
+  .content button {
+    @apply p-[10px_20px] bg-red-500 text-white border-none rounded cursor-pointer flex items-center gap-[5px] w-fit hover:bg-red-700;
+  }
+
+  .content .reset-btn {
+    @apply bg-transparent text-black border-none hover:text-red-500;
+  }
+
+  #message-container div {
+    @apply p-[15px] mb-[15px] rounded;
+  }
+
+  #message-container .success {
+    @apply bg-green-50 text-black;
+  }
+
+  #message-container .error {
+    @apply bg-red-50 text-red-500;
+  }
 }
