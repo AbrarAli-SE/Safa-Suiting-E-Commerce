@@ -52,7 +52,7 @@ router.get("/contacts", authenticateUser, adminAuth, adminController.renderConta
 
 
 // ✅ Delete Contact Message
-router.post("/contacts/delete", authenticateUser, adminAuth, adminController.deleteContact);
+router.delete("/contacts/delete", authenticateUser, adminAuth, adminController.deleteContact);
 
 
 

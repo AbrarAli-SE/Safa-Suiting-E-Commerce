@@ -1,111 +1,233 @@
 <%- include('../shared/asideBar') %>
 
 <main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
-    <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9">Contact Submissions</h1>
+  <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9">Contact Submissions</h1>
 
-    <% if (contacts.length === 0) { %>
-        <p class="text-gray-500 text-center">No contact submissions found.</p>
-    <% } else { %>
-        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-            <div class="overflow-x-auto">
-                <table class="min-w-full table-auto">
-                    <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                        <tr>
-                            <th class="px-4 py-2 text-left">Name</th>
-                            <th class="px-4 py-2 text-left">Email</th>
-                            <th class="px-4 py-2 text-left">Phone</th>
-                            <th class="px-4 py-2 text-left">Message</th>
-                            <th class="px-4 py-2 text-left">Date</th>
-                            <th class="px-4 py-2 text-left">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-gray-700 dark:text-gray-300">
-                        <% contacts.forEach(contact => { %>
-                            <tr class="border-t border-gray-200 dark:border-gray-600">
-                                <td class="px-4 py-2"><%= contact.name %></td>
-                                <td class="px-4 py-2"><%= contact.email %></td>
-                                <td class="px-4 py-2"><%= contact.phone %></td>
-                                <!-- ✅ Show only first 10 characters of the message -->
-                                <td class="px-4 py-2"><%= contact.message.substring(0, 10) %>...</td>
-                                <td class="px-4 py-2"><%= contact.createdAt.toLocaleString() %></td>
-                                <td class="px-4 py-2 flex gap-3">
-                                    <!-- ✅ View Button (Opens Modal) -->
-                                    <button class="viewContactBtn px-4 py-2 text-blue-500" 
-                                        data-name="<%= contact.name %>"
-                                        data-email="<%= contact.email %>"
-                                        data-phone="<%= contact.phone %>"
-                                        data-message="<%= contact.message %>"
-                                        data-date="<%= contact.createdAt.toLocaleString() %>">
-                                        View
-                                    </button>
+  <!-- Messages -->
+  <div id="message-container" class="mb-4"></div>
 
-                                    <!-- ✅ Delete Contact -->
-                                    <form action="/admin/contacts/delete?page=<%= currentPage %>" method="POST">
-                                        <input type="hidden" name="contactId" value="<%= contact._id %>">
-                                        <button type="submit" class="px-4 py-2 text-red-500">Delete</button>
-                                    </form>
-
-                                </td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- ✅ Pagination Controls -->
-        <div class="flex justify-center mt-6">
-            <% if (currentPage > 1) { %>
-                <a href="/admin/contacts?page=<%= currentPage - 1 %>"
-                   class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white mx-2">
-                   Previous
-                </a>
-            <% } %>
-
-            <span class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white">
-                Page <%= currentPage %> of <%= totalPages %>
-            </span>
-
-            <% if (currentPage < totalPages) { %>
-                <a href="/admin/contacts?page=<%= currentPage + 1 %>"
-                   class="px-4 py-2 border rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-white mx-2">
-                   Next
-                </a>
-            <% } %>
-        </div>
-    <% } %>
-
-    <!-- ✅ Modal for Viewing Full Contact Details -->
-    <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
-        <div class="bg-white p-6 rounded-lg shadow-md w-[400px] relative">
-            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-600 text-xl">✕</button>
-            <h2 class="text-xl font-bold text-red-500 mb-4">Full Contact Message</h2>
-            <p><strong>Name:</strong> <span id="modalName"></span></p>
-            <p><strong>Email:</strong> <span id="modalEmail"></span></p>
-            <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
-            <p><strong>Date:</strong> <span id="modalDate"></span></p>
-            <p><strong>Message:</strong></p>
-            <p id="modalMessage" class="bg-gray-100 p-3 rounded-md mt-2"></p>
-        </div>
+  <!-- Contact Table -->
+  <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+    <div class="overflow-x-auto">
+      <table class="min-w-full table-auto">
+        <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+          <tr>
+            <th class="px-4 py-2 text-left">Name</th>
+            <th class="px-4 py-2 text-left">Email</th>
+            <th class="px-4 py-2 text-left">Phone</th>
+            <th class="px-4 py-2 text-left">Message</th>
+            <th class="px-4 py-2 text-left">Date</th>
+            <th class="px-4 py-2 text-left">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700 dark:text-gray-300" id="contactList">
+          <!-- Populated via AJAX -->
+        </tbody>
+      </table>
+      <p id="noResults" class="text-center text-red-500 font-semibold hidden mt-4">No contacts found</p>
     </div>
+  </div>
+
+  <!-- Pagination Controls -->
+  <div class="flex justify-center mt-6">
+    <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
+  </div>
+
+  <!-- Modal for Viewing Full Contact Details -->
+  <div id="contactModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-white p-6 rounded-lg shadow-md w-[400px] relative">
+      <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-600 text-xl">✕</button>
+      <h2 class="text-xl font-bold text-red-500 mb-4">Full Contact Message</h2>
+      <p><strong>Name:</strong> <span id="modalName"></span></p>
+      <p><strong>Email:</strong> <span id="modalEmail"></span></p>
+      <p><strong>Phone:</strong> <span id="modalPhone"></span></p>
+      <p><strong>Date:</strong> <span id="modalDate"></span></p>
+      <p><strong>Message:</strong></p>
+      <p id="modalMessage" class="bg-gray-100 p-3 rounded-md mt-2"></p>
+    </div>
+  </div>
 </main>
 
 <script>
-    // ✅ Open Contact Modal
-    document.querySelectorAll(".viewContactBtn").forEach(button => {
-        button.addEventListener("click", function () {
-            document.getElementById("modalName").innerText = this.dataset.name;
-            document.getElementById("modalEmail").innerText = this.dataset.email;
-            document.getElementById("modalPhone").innerText = this.dataset.phone;
-            document.getElementById("modalMessage").innerText = this.dataset.message;
-            document.getElementById("modalDate").innerText = this.dataset.date;
-            document.getElementById("contactModal").classList.remove("hidden");
-        });
+  // Close Modal function moved to global scope
+  function closeModal() {
+    document.getElementById("contactModal").classList.add("hidden");
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    const contactList = document.getElementById("contactList");
+    const messageContainer = document.getElementById("message-container");
+    const pagination = document.getElementById("pagination");
+    const noResults = document.getElementById("noResults");
+    let currentPage = 1;
+
+    // Fetch initial contacts
+    fetchContacts(currentPage);
+
+    // AJAX Delete and View functionality
+    contactList.addEventListener("click", async function (e) {
+      const deleteButton = e.target.closest(".delete-btn");
+      const viewButton = e.target.closest(".viewContactBtn");
+
+      if (deleteButton) {
+        const contactId = deleteButton.dataset.contactId;
+        const page = deleteButton.dataset.page;
+
+        try {
+          const response = await fetch("/admin/contacts/delete", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ contactId, page }),
+          });
+
+          const result = await response.json();
+
+          messageContainer.innerHTML = "";
+
+          if (response.ok) {
+            showMessage(result.message, "success");
+            updateContactTable(result.contacts);
+            updatePagination(result.currentPage, result.totalPages);
+            currentPage = result.currentPage;
+          } else {
+            showMessage(result.error || "An error occurred.", "error");
+          }
+        } catch (error) {
+          console.error("❌ AJAX Delete Error:", error);
+          showMessage("Network error. Please try again.", "error");
+        }
+      } else if (viewButton) {
+        document.getElementById("modalName").textContent = viewButton.dataset.name;
+        document.getElementById("modalEmail").textContent = viewButton.dataset.email;
+        document.getElementById("modalPhone").textContent = viewButton.dataset.phone;
+        document.getElementById("modalMessage").textContent = viewButton.dataset.message;
+        document.getElementById("modalDate").textContent = viewButton.dataset.date;
+        document.getElementById("contactModal").classList.remove("hidden");
+      }
     });
 
-    // ✅ Close Modal
-    function closeModal() {
-        document.getElementById("contactModal").classList.add("hidden");
+    // AJAX Pagination functionality
+    pagination.addEventListener("click", async function (e) {
+      const target = e.target.closest(".page-link");
+      if (!target) return;
+
+      e.preventDefault();
+      const page = parseInt(target.dataset.page);
+      fetchContacts(page);
+    });
+
+    // Fetch contacts function
+    async function fetchContacts(page) {
+      try {
+        const response = await fetch(`/admin/contacts?page=${page}`, {
+          headers: { "X-Requested-With": "XMLHttpRequest" },
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          updateContactTable(result.contacts);
+          updatePagination(result.currentPage, result.totalPages);
+          currentPage = result.currentPage;
+        } else {
+          console.error("❌ Fetch Contacts Error:", result.error);
+          showMessage("Error fetching contacts.", "error");
+        }
+      } catch (error) {
+        console.error("❌ AJAX Fetch Error:", error);
+        showMessage("Network error. Please try again.", "error");
+      }
     }
+
+    // Update contact table
+    function updateContactTable(contacts) {
+      contactList.innerHTML = "";
+      if (contacts.length === 0) {
+        contactList.innerHTML = '<tr><td colspan="6" class="text-center text-red-500 font-semibold py-4">No contact submissions found.</td></tr>';
+        noResults.style.display = "block";
+      } else {
+        contacts.forEach(contact => {
+          const row = `
+            <tr class="border-t border-gray-200 dark:border-gray-600">
+              <td class="px-4 py-2">${contact.name}</td>
+              <td class="px-4 py-2">${contact.email}</td>
+              <td class="px-4 py-2">${contact.phone}</td>
+              <td class="px-4 py-2">${contact.message.substring(0, 10)}...</td>
+              <td class="px-4 py-2">${new Date(contact.createdAt).toLocaleString()}</td>
+              <td class="px-4 py-2 flex gap-3">
+                <button class="viewContactBtn px-4 py-2 text-blue-500" 
+                  data-name="${contact.name}"
+                  data-email="${contact.email}"
+                  data-phone="${contact.phone}"
+                  data-message="${contact.message}"
+                  data-date="${new Date(contact.createdAt).toLocaleString()}">
+                  View
+                </button>
+                <button class="delete-btn px-4 py-2 text-red-500" data-contact-id="${contact._id}" data-page="${currentPage}">Delete</button>
+              </td>
+            </tr>`;
+          contactList.insertAdjacentHTML("beforeend", row);
+        });
+        noResults.style.display = "none";
+      }
+    }
+
+    // Update pagination
+    function updatePagination(currentPage, totalPages) {
+      const maxVisiblePages = 5;
+      let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+      let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+      if (endPage - startPage + 1 < maxVisiblePages) {
+        startPage = Math.max(1, endPage - maxVisiblePages + 1);
+      }
+
+      let html = "";
+      if (currentPage > 1) {
+        html += `<button data-page="${currentPage - 1}" class="page-link relative inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#DB4444] border border-[#DB4444] rounded-l-md hover:bg-[#de2d2d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>`;
+      }
+
+      if (startPage > 1) {
+        html += `<button data-page="1" class="page-link relative inline-flex items-center px-4 py-2 text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">1</button>`;
+        if (startPage > 2) {
+          html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">...</span>`;
+        }
+      }
+
+      for (let i = startPage; i <= endPage; i++) {
+        html += `<button data-page="${i}" class="page-link relative inline-flex items-center px-4 py-2 text-sm font-medium ${currentPage === i ? 'bg-[#DB4444] text-white border-[#DB4444]' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600'} border ${i === startPage ? '' : '-ml-px'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">${i}</button>`;
+      }
+
+      if (endPage < totalPages) {
+        if (endPage < totalPages - 1) {
+          html += `<span class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600">...</span>`;
+        }
+        html += `<button data-page="${totalPages}" class="page-link relative inline-flex items-center px-4 py-2 text-sm font-medium bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">${totalPages}</button>`;
+      }
+
+      if (currentPage < totalPages) {
+        html += `<button data-page="${currentPage + 1}" class="page-link relative inline-flex items-center px-3 py-2 text-sm font-medium text-white bg-[#DB4444] border border-[#DB4444] rounded-r-md hover:bg-[#de2d2d] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>`;
+      }
+
+      pagination.innerHTML = html;
+    }
+
+    // Show message helper
+    function showMessage(text, type) {
+      const div = document.createElement("div");
+      div.className = `alert-message ${type === "success" ? "bg-green-100 text-green-700 border-green-400" : "bg-red-100 text-red-700 border-red-400"} border p-3 rounded-lg text-center`;
+      div.textContent = text;
+      messageContainer.appendChild(div);
+      setTimeout(() => {
+        messageContainer.innerHTML = "";
+      }, 5000);
+    }
+  });
 </script>
 
+<script src="/js/main.js"></script>
+</body>
+</html>

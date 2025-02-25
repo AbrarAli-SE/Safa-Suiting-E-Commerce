@@ -130,40 +130,77 @@ exports.markNotificationsAsRead = async (req, res) => {
 };
 
 
+
 exports.renderContacts = async (req, res) => {
-    try {
-        let page = parseInt(req.query.page) || 1;
-        let limit = 10; // ✅ Contacts per page
-        let skip = (page - 1) * limit;
+  try {
+    let page = parseInt(req.query.page) || 1;
+    const limit = 10; // Contacts per page
+    const skip = (page - 1) * limit;
 
-        const totalContacts = await Contact.countDocuments();
-        const contacts = await Contact.find().sort({ createdAt: -1 }).skip(skip).limit(limit);
+    const totalContacts = await Contact.countDocuments();
+    const contacts = await Contact.find()
+      .sort({ createdAt: -1 }) // Newest first
+      .skip(skip)
+      .limit(limit);
 
-        res.render("admin/contact-list", {
-            user: req.user,
-            contacts,
-            currentPage: page,
-            totalPages: Math.ceil(totalContacts / limit),
-        });
-    } catch (error) {
-        console.error("❌ Error fetching contacts:", error);
-        res.status(500).send("Server error");
+    if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+      res.status(200).json({
+        contacts,
+        currentPage: page,
+        totalPages: Math.ceil(totalContacts / limit),
+      });
+    } else {
+      res.render("admin/contact-list", {
+        user: req.user,
+        contacts: [], // Empty initially, populated via AJAX
+        currentPage: 1,
+        totalPages: 1,
+      });
     }
+  } catch (error) {
+    console.error("❌ Error fetching contacts:", error);
+    if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+      res.status(500).json({ error: "Server error" });
+    } else {
+      res.status(500).send("Server error");
+    }
+  }
 };
 
-// ✅ Delete Contact Message & Stay on Same Page
 exports.deleteContact = async (req, res) => {
-    try {
-        const { contactId } = req.body;
-        const currentPage = req.query.page || 1; // ✅ Get the current page number
+  try {
+    const { contactId, page } = req.body;
 
-        await Contact.findByIdAndDelete(contactId);
-
-        res.redirect(`/admin/contacts?page=${currentPage}`); // ✅ Stay on the same page after deletion
-    } catch (error) {
-        console.error("❌ Contact Deletion Error:", error);
-        res.status(500).send("Server error");
+    if (!contactId) {
+      return res.status(400).json({ error: "Invalid contact ID." });
     }
+
+    const contact = await Contact.findById(contactId);
+    if (!contact) {
+      return res.status(404).json({ error: "Contact not found." });
+    }
+
+    await Contact.findByIdAndDelete(contactId);
+
+    // Fetch updated contact list
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const totalContacts = await Contact.countDocuments();
+    const contacts = await Contact.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      message: "Contact deleted successfully!",
+      contacts,
+      currentPage: page,
+      totalPages: Math.ceil(totalContacts / limit),
+    });
+  } catch (error) {
+    console.error("❌ Contact Deletion Error:", error);
+    res.status(500).json({ error: "Server error. Please try again." });
+  }
 };
 
 // ✅ Render Admin Dashboard
