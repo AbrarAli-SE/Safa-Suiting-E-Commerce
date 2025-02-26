@@ -1,308 +1,88 @@
 <%- include('../shared/asideBar') %>
 
-<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
-  <h1 class="text-4xl font-bold mb-8 sm:mt-7 mt-9">Update Carousel</h1>
+<main class="flex-grow px-4 sm:px-8 py-12 ml-0 sm:ml-20 lg:ml-64">
+  <h1 class="text-3xl font-bold text-[var(--color-black)] mb-8 mt-9 sm:mt-7">Update Carousel</h1>
 
   <!-- Messages -->
-  <div id="message-container" class="mb-4"></div>
+  <div id="message-container" class="mb-6"></div>
 
   <!-- Upload Form -->
   <section class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Manage Carousel</h2>
-    <form id="carousel-form" enctype="multipart/form-data" class="space-y-6 bg-gray-100 dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <div id="slides-container" class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-        <% carouselImages.forEach((slide, i) => { %>
-          <div class="space-y-4 slide-item" data-index="<%= i %>">
-            <label class="block text-lg font-semibold mb-2">Slide <%= i + 1 %></label>
-            <input type="file" name="images" class="image-upload border p-2 w-full" accept="image/*" onchange="previewImage(event, <%= i %>)" />
-            <img id="preview-<%= i %>" class="mt-2 rounded shadow-lg w-full h-40 object-cover <%= slide ? '' : 'hidden' %>" src="<%= slide ? slide.image : '' %>" alt="Preview <%= i + 1 %>">
-            <div>
-              <label class="block text-gray-700 dark:text-gray-300">Text</label>
-              <input type="text" name="text<%= i + 1 %>" class="w-full p-2 border rounded" value="<%= slide?.text || '' %>" placeholder="Enter slide text">
-            </div>
-            <div>
-              <label class="block text-gray-700 dark:text-gray-300">Font</label>
-              <select name="font<%= i + 1 %>" class="w-full p-2 border rounded">
-                <option value="Arial" <%= slide?.font === 'Arial' ? 'selected' : '' %>>Arial</option>
-                <option value="Helvetica" <%= slide?.font === 'Helvetica' ? 'selected' : '' %>>Helvetica</option>
-                <option value="Times New Roman" <%= slide?.font === 'Times New Roman' ? 'selected' : '' %>>Times New Roman</option>
-                <option value="Verdana" <%= slide?.font === 'Verdana' ? 'selected' : '' %>>Verdana</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-gray-700 dark:text-gray-300">Font Size (px)</label>
-              <input type="number" name="fontSize<%= i + 1 %>" class="w-full p-2 border rounded" min="12" max="100" value="<%= slide?.fontSize || 24 %>">
-            </div>
-            <div>
-              <label class="block text-gray-700 dark:text-gray-300">Text Color</label>
-              <input type="color" name="color<%= i + 1 %>" class="w-full p-1 border rounded" value="<%= slide?.color || '#FFFFFF' %>">
-            </div>
-            <div>
-              <label class="block text-gray-700 dark:text-gray-300">Opacity (0-1)</label>
-              <input type="number" name="opacity<%= i + 1 %>" class="w-full p-2 border rounded" min="0" max="1" step="0.1" value="<%= slide?.opacity || 1.0 %>">
-            </div>
-            <button type="button" class="remove-slide btn px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" onclick="removeSlide(<%= i %>)">Remove Slide</button>
+    <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-4">Manage Carousel</h2>
+    <form id="carousel-form" enctype="multipart/form-data" class="space-y-6 bg-[var(--color-white)] p-6 rounded-xl shadow-lg border border-[var(--color-gray-200)]">
+      <div id="slides-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <% const maxSlides = 3; %>
+        <% for (let i = 0; i < maxSlides; i++) { %>
+          <div class="space-y-4 slide-item bg-[var(--color-gray-50)] p-4 rounded-lg shadow-md" data-index="<%= i %>">
+            <label class="block text-lg font-semibold text-[var(--color-black)] mb-2">Slide <%= i + 1 %></label>
+            <input 
+              type="file" 
+              name="images" 
+              class="image-upload w-full p-2 border border-[var(--color-gray-300)] rounded-md bg-[var(--color-white)] focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300" 
+              accept="image/*" 
+              onchange="previewImage(event, <%= i %>)" />
+            <img 
+              id="preview-<%= i %>" 
+              class="mt-2 rounded-lg shadow-lg w-full h-40 object-cover border-4 border-[var(--color-red-500)]" 
+              src="<%= (carouselImages[i] && carouselImages[i].image) ? carouselImages[i].image : '' %>" 
+              alt="Preview <%= i + 1 %>" 
+              style="display: <%= (carouselImages[i] && carouselImages[i].image) ? 'block' : 'none' %>;">
           </div>
-        <% }) %>
+        <% } %>
       </div>
 
-      <!-- Add Slide Button -->
-      <button type="button" id="add-slide" class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Add Slide</button>
-
-      <!-- Upload Button -->
-      <button type="submit" id="uploadButton" class="px-6 py-2 bg-gray-300 text-white rounded transition">Update Slider</button>
+      <!-- Upload Button (Renamed and single action) -->
+      <button 
+        type="submit" 
+        id="uploadButton" 
+        class="w-full px-6 py-3 bg-[var(--color-gray-300)] text-[var(--color-white)] font-semibold rounded-lg transition-all duration-300 disabled:bg-[var(--color-gray-300)] enabled:bg-[var(--color-red-500)] enabled:hover:bg-[var(--color-red-700)] shadow-md enabled:hover:shadow-lg">
+        Update Carousel
+      </button>
     </form>
   </section>
 
   <!-- Live Preview Image Slider -->
   <section class="mb-8">
-    <h2 class="text-2xl font-semibold mb-4">Image Slider Preview</h2>
-    <div class="w-full xlg:ml-3">
-      <div class="w-full relative">
-        <div class="swiper default-carousel swiper-container">
-          <div class="swiper-wrapper" id="carouselPreview">
-            <% carouselImages.forEach((slide, i) => { %>
+    <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-4">Live Preview</h2>
+    <div class="relative w-full rounded-xl shadow-lg overflow-hidden">
+      <div class="swiper default-carousel">
+        <div class="swiper-wrapper" id="carouselPreview">
+          <% if (carouselImages && carouselImages.length > 0 && carouselImages.length <= 3) { %>
+            <% carouselImages.forEach((slide) => { %>
               <div class="swiper-slide">
-                <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden relative">
-                  <img src="<%= slide.image %>" class="w-full h-[80vh] object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
-                    <button style="font-family: <%= slide.font %>; font-size: <%= slide.fontSize %>px; color: <%= slide.color %>; opacity: <%= slide.opacity %>;" class="z-10 text-2xl hover:underline p-2"><%= slide.text || 'Shop Now' %></button>
+                <div class="relative w-full h-[60vh] overflow-hidden">
+                  <img src="<%= slide.image %>" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 border-4 border-[var(--color-red-500)]" alt="Carousel Slide">
+                  <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-gray-900)]/80 via-transparent to-transparent flex items-end p-6">
+                    <button class="px-6 py-2 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
+                      Shop Now
+                    </button>
                   </div>
                 </div>
               </div>
             <% }) %>
-          </div>
-
-          <button id="slider-button-left" class="swiper-button-prev group p-2 flex justify-center items-center border border-solid border-red-600 w-12 h-12 transition-all duration-500 rounded-full left-5 hover:bg-red-500">
-            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
-              <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-          <button id="slider-button-right" class="swiper-button-next group p-2 flex justify-center items-center border border-solid border-red-600 w-12 h-12 transition-all duration-500 rounded-full right-5 hover:bg-red-500">
-            <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
-              <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-            </svg>
-          </button>
-
-          <div class="swiper-pagination"></div>
+          <% } else { %>
+            <div class="swiper-slide flex justify-center items-center h-[60vh] bg-[var(--color-gray-100)]">
+              <p class="text-[var(--color-gray-600)] text-lg">No slides to preview.</p>
+            </div>
+          <% } %>
         </div>
+        <button class="swiper-button-prev group absolute top-1/2 left-4 transform -translate-y-1/2 p-2 border border-[var(--color-red-500)] w-12 h-12 rounded-full hover:bg-[var(--color-red-500)] transition-all duration-300 z-10">
+          <svg class="h-5 w-5 text-[var(--color-red-500)] group-hover:text-[var(--color-white)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
+            <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <button class="swiper-button-next group absolute top-1/2 right-4 transform -translate-y-1/2 p-2 border border-[var(--color-red-500)] w-12 h-12 rounded-full hover:bg-[var(--color-red-500)] transition-all duration-300 z-10">
+          <svg class="h-5 w-5 text-[var(--color-red-500)] group-hover:text-[var(--color-white)]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
+            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+        <div class="swiper-pagination absolute bottom-4 left-1/2 transform -translate-x-1/2 z-10"></div>
       </div>
     </div>
   </section>
 </main>
 
-<script>
-  let slideCount = <%= carouselImages.length || 0 %>;
+<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+<link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+<script src="/js/carouselAdmin.js"></script>
 
-  function previewImage(event, index) {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        const imgPreview = document.getElementById(`preview-${index}`);
-        imgPreview.src = e.target.result;
-        imgPreview.classList.remove("hidden");
-      };
-      reader.readAsDataURL(file);
-    }
-    checkUploadButton();
-  }
-
-  function checkUploadButton() {
-    const inputs = document.querySelectorAll(".image-upload");
-    const uploadBtn = document.getElementById("uploadButton");
-    const allFilled = Array.from(inputs).some(input => input.files.length > 0);
-    if (allFilled) {
-      uploadBtn.disabled = false;
-      uploadBtn.classList.remove("bg-gray-300");
-      uploadBtn.classList.add("bg-red-500", "hover:bg-red-600");
-    } else {
-      uploadBtn.disabled = true;
-      uploadBtn.classList.add("bg-gray-300");
-      uploadBtn.classList.remove("bg-red-500", "hover:bg-red-600");
-    }
-  }
-
-  function addSlide() {
-    const container = document.getElementById("slides-container");
-    const newSlide = `
-      <div class="space-y-4 slide-item" data-index="${slideCount}">
-        <label class="block text-lg font-semibold mb-2">Slide ${slideCount + 1}</label>
-        <input type="file" name="images" class="image-upload border p-2 w-full" accept="image/*" onchange="previewImage(event, ${slideCount})" />
-        <img id="preview-${slideCount}" class="mt-2 rounded shadow-lg w-full h-40 object-cover hidden" src="" alt="Preview ${slideCount + 1}">
-        <div>
-          <label class="block text-gray-700 dark:text-gray-300">Text</label>
-          <input type="text" name="text${slideCount + 1}" class="w-full p-2 border rounded" placeholder="Enter slide text">
-        </div>
-        <div>
-          <label class="block text-gray-700 dark:text-gray-300">Font</label>
-          <select name="font${slideCount + 1}" class="w-full p-2 border rounded">
-            <option value="Arial">Arial</option>
-            <option value="Helvetica">Helvetica</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Verdana">Verdana</option>
-          </select>
-        </div>
-        <div>
-          <label class="block text-gray-700 dark:text-gray-300">Font Size (px)</label>
-          <input type="number" name="fontSize${slideCount + 1}" class="w-full p-2 border rounded" min="12" max="100" value="24">
-        </div>
-        <div>
-          <label class="block text-gray-700 dark:text-gray-300">Text Color</label>
-          <input type="color" name="color${slideCount + 1}" class="w-full p-1 border rounded" value="#FFFFFF">
-        </div>
-        <div>
-          <label class="block text-gray-700 dark:text-gray-300">Opacity (0-1)</label>
-          <input type="number" name="opacity${slideCount + 1}" class="w-full p-2 border rounded" min="0" max="1" step="0.1" value="1.0">
-        </div>
-        <button type="button" class="remove-slide btn px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" onclick="removeSlide(${slideCount})">Remove Slide</button>
-      </div>`;
-    container.insertAdjacentHTML("beforeend", newSlide);
-    slideCount++;
-    checkUploadButton();
-  }
-
-  function removeSlide(index) {
-    const slide = document.querySelector(`.slide-item[data-index="${index}"]`);
-    if (slide) {
-      slide.remove();
-      checkUploadButton();
-    }
-  }
-
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("carousel-form");
-    const uploadButton = document.getElementById("uploadButton");
-    const messageContainer = document.getElementById("message-container");
-    const carouselPreview = document.getElementById("carouselPreview");
-    const addSlideButton = document.getElementById("add-slide");
-
-    addSlideButton.addEventListener("click", addSlide);
-
-    form.addEventListener("submit", async function (e) {
-      e.preventDefault();
-
-      uploadButton.disabled = true;
-      uploadButton.textContent = "Updating...";
-
-      const formData = new FormData(form);
-
-      try {
-        const response = await fetch("/admin/carousel/upload", {
-          method: "PUT",
-          body: formData,
-        });
-
-        const result = await response.json();
-
-        messageContainer.innerHTML = "";
-
-        if (response.ok) {
-          showMessage(result.message, "success");
-
-          // Fetch updated carousel data
-          const carouselRes = await fetch("/admin/carousel/get");
-          const carouselData = await carouselRes.json();
-
-          // Update preview
-          carouselPreview.innerHTML = "";
-          carouselData.slides.forEach(slide => {
-            const slideHtml = `
-              <div class="swiper-slide">
-                <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden relative">
-                  <img src="${slide.image}" class="w-full h-[80vh] object-cover">
-                  <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
-                    <button style="font-family: ${slide.font}; font-size: ${slide.fontSize}px; color: ${slide.color}; opacity: ${slide.opacity};" class="z-10 text-2xl hover:underline p-2">${slide.text || 'Shop Now'}</button>
-                  </div>
-                </div>
-              </div>`;
-            carouselPreview.insertAdjacentHTML("beforeend", slideHtml);
-          });
-
-          // Reset form and recreate slides based on updated data
-          form.reset();
-          document.getElementById("slides-container").innerHTML = "";
-          slideCount = carouselData.slides.length;
-          carouselData.slides.forEach((slide, i) => {
-            const slideHtml = `
-              <div class="space-y-4 slide-item" data-index="${i}">
-                <label class="block text-lg font-semibold mb-2">Slide ${i + 1}</label>
-                <input type="file" name="images" class="image-upload border p-2 w-full" accept="image/*" onchange="previewImage(event, ${i})" />
-                <img id="preview-${i}" class="mt-2 rounded shadow-lg w-full h-40 object-cover" src="${slide.image}" alt="Preview ${i + 1}">
-                <div>
-                  <label class="block text-gray-700 dark:text-gray-300">Text</label>
-                  <input type="text" name="text${i + 1}" class="w-full p-2 border rounded" value="${slide.text || ''}" placeholder="Enter slide text">
-                </div>
-                <div>
-                  <label class="block text-gray-700 dark:text-gray-300">Font</label>
-                  <select name="font${i + 1}" class="w-full p-2 border rounded">
-                    <option value="Arial" ${slide.font === 'Arial' ? 'selected' : ''}>Arial</option>
-                    <option value="Helvetica" ${slide.font === 'Helvetica' ? 'selected' : ''}>Helvetica</option>
-                    <option value="Times New Roman" ${slide.font === 'Times New Roman' ? 'selected' : ''}>Times New Roman</option>
-                    <option value="Verdana" ${slide.font === 'Verdana' ? 'selected' : ''}>Verdana</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="block text-gray-700 dark:text-gray-300">Font Size (px)</label>
-                  <input type="number" name="fontSize${i + 1}" class="w-full p-2 border rounded" min="12" max="100" value="${slide.fontSize || 24}">
-                </div>
-                <div>
-                  <label class="block text-gray-700 dark:text-gray-300">Text Color</label>
-                  <input type="color" name="color${i + 1}" class="w-full p-1 border rounded" value="${slide.color || '#FFFFFF'}">
-                </div>
-                <div>
-                  <label class="block text-gray-700 dark:text-gray-300">Opacity (0-1)</label>
-                  <input type="number" name="opacity${i + 1}" class="w-full p-2 border rounded" min="0" max="1" step="0.1" value="${slide.opacity || 1.0}">
-                </div>
-                <button type="button" class="remove-slide btn px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600" onclick="removeSlide(${i})">Remove Slide</button>
-              </div>`;
-            document.getElementById("slides-container").insertAdjacentHTML("beforeend", slideHtml);
-          });
-          checkUploadButton();
-        } else {
-          showMessage(result.error || "An error occurred.", "error");
-        }
-      } catch (error) {
-        console.error("❌ AJAX Error:", error);
-        showMessage("Network error. Please try again.", "error");
-      } finally {
-        uploadButton.disabled = false;
-        uploadButton.textContent = "Update Slider";
-      }
-    });
-
-    // Initialize Swiper
-    var swiper = new Swiper(".default-carousel", {
-      loop: true,
-      autoplay: {
-        delay: 3000,
-        disableOnInteraction: false,
-      },
-      navigation: {
-        nextEl: ".swiper-button-next",
-        prevEl: ".swiper-button-prev",
-      },
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
-      slidesPerView: 1,
-      spaceBetween: 10,
-    });
-
-    function showMessage(text, type) {
-      const div = document.createElement("div");
-      div.className = `alert-message ${type === "success" ? "bg-green-100 text-green-700 border-green-400" : "bg-red-100 text-red-700 border-red-400"} border p-3 rounded-lg text-center`;
-      div.textContent = text;
-      messageContainer.appendChild(div);
-      setTimeout(() => {
-        messageContainer.innerHTML = "";
-      }, 5000);
-    }
-
-  });
-</script>
-
-<script src="/js/main.js"></script>
-</body>
-</html>

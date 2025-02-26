@@ -2,10 +2,12 @@ const express = require("express");
 const router = express.Router();
 const adminController = require("../controllers/adminController");
 const { authenticateUser, adminAuth } = require("../middleware/authMiddleware");
-// const { uploadCarousel } = require("../config/multer-config");
 
-router.put("/carousel/upload", authenticateUser, adminAuth,  adminController.uploadCarouselImages); // ✅ Changed to PUT
+router.put("/carousel/upload", authenticateUser, adminAuth, adminController.uploadCarouselImages);
 router.get("/carousel/get", authenticateUser, adminAuth, adminController.getCarouselImages);
+router.get("/manage-carousel", authenticateUser, adminAuth, adminController.renderCoursel); // Fixed typo: "coursel" -> "carousel"
+
+
 // ✅ Fetch Unread Notifications
 router.get("/notifications", authenticateUser, adminAuth, adminController.getNotifications);
 
@@ -42,7 +44,6 @@ router.get("/cancel-order",authenticateUser,adminAuth, adminController.renderCan
 router.get("/analytical",authenticateUser,adminAuth, adminController.renderAnalytical);
 
 
-router.get("/manage-coursel", authenticateUser, adminAuth, adminController.renderCoursel); // ✅ Added route
 
 
 

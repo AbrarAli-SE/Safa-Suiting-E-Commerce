@@ -9,9 +9,9 @@ router.get('/', authenticateUser, async (req, res, next) => {
     // Fetch all unique categories from the products collection
     let categories = await Product.distinct("category");
 
-    // Ensure "Flash Sales" is at the forefront
-    categories = categories.filter(cat => cat !== "Flash Sales");
-    categories.unshift("Flash Sales");
+    // // Ensure "Flash Sales" is at the forefront
+    // categories = categories.filter(cat => cat !== "Flash Sales");
+    // categories.unshift("Flash Sales");
 
     // Prepare a map of promises to fetch products for each category, sorted by createdAt descending
     const categoryPromises = categories.map(category => 

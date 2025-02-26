@@ -10,113 +10,77 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css" />
   <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
+    <!-- CSS -->
+    <style>
+      #fullScreenNav {
+        clip-path: circle(0% at 100% 0%);
+        transition: clip-path 0.5s ease-in-out, opacity 0.3s ease-in-out;
+      }
+      #fullScreenNav.open {
+        clip-path: circle(150% at 100% 0%);
+        opacity: 1;
+      }
+  .animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+</style>
+
 </head>
 
-<body class="transition-all duration-300 bg-[#FFFFFF] text-gray-900 dark:bg-gray-900 dark:text-gray-100 !scroll-smooth">
-  <header class="border-b border-gray-500 bg-[#FFFFFF] text-black dark:bg-gray-900 dark:text-gray-100 dark:border-gray-700 fixed top-0 left-0 w-full z-50">
-    <!-- Top Bar -->
-    <div class="bg-black text-white text-sm py-2 px-4 flex justify-center items-center dark:bg-gray-800">
-      <span class="mr-2">Unleash the Summer Vibes: Dive into Style with Our Hot Deals and Free Delivery!</span>
-      <a href="#" class="underline">ShopNow</a>
-    </div>
 
-    <!-- Main Navigation -->
-    <div class="flex justify-between items-center py-5 px-4 lg:px-24 md:px-8">
-      <!-- Logo -->
-      <a href="/">
-        <img src="/assests/safaLogo.png" alt="Safa Suiting" class="w-12 h-8 dark:brightness-0 dark:invert">
-      </a>
+<body class="transition-all duration-300 bg-[var(--color-white)] text-[var(--color-black)] !scroll-smooth">
 
-      <!-- Navigation Links -->
-      <nav class="hidden md:flex md:space-x-6 text-base font-semibold tracking-wide">
-        <a href="/" class="nav-link active">Home</a>
-        <a href="/pages/contact" class="nav-link">Contact</a>
-        <a href="/pages/about" class="nav-link">About</a>
-        <% if (!user) { %>
-          <a href="/auth/register" class="nav-link">Sign Up</a>
-        <% } %>
-      </nav>
 
-      <!-- Search and Icons -->
-      <div class="flex items-center space-x-4">
-        <!-- Search Bar for Medium and Large Screens -->
-        <div class="relative group">
-          <input type="text" id="desktopSearchInput" placeholder="Search..." class="block p-2 w-48 z-20 border border-slate-400 text-black bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-800 dark:text-white dark:focus:ring-gray-500 rounded-md">
-          <button id="desktopSearchIcon" class="absolute top-0 right-0 p-2 text-sm font-medium h-full text-black dark:text-white">
-            <i class="bi bi-search"></i>
-          </button>
-        </div>
-
-        <!-- Expanded Search Bar (Hidden by Default) -->
-        <div id="expandedSearchBar" class="hidden p-4 bg-gray-100 border-b border-gray-300 dark:bg-gray-800 dark:border-gray-600 fixed top-8 right-0 w-full z-40">
-          <div class="flex items-center space-x-2">
-            <div class="relative w-full">
-              <input type="text" id="expandedSearchInput" placeholder="Search..." autocomplete="off" class="block p-2.5 w-full text-black border-2 border-black bg-white focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-white dark:border-gray-600 dark:focus:ring-gray-500 rounded-md pl-2 pr-8">
-              <!-- Close Button inside the input -->
-              <button id="closeSearch" class="absolute top-1/2 right-2 transform -translate-y-1/2 text-black dark:text-white text-2xl">
-                <i class="bi bi-x-lg"></i>
-              </button>
-            </div>
-          </div>
-          <div id="expandedSearchResults" class="hidden mt-2 bg-white border border-gray-300 rounded-md shadow-lg dark:bg-gray-800 dark:border-gray-600">
-            <!-- Search results will appear here -->
-          </div>
-        </div>
-
-        <!-- ✅ Show Cart, Wishlist, and Account Only If Logged In -->
-        <% if (user) { %>
-          <button>
-            <a href="/user/wishlist" class="relative hidden md:block cursor-pointer" id="largeScreenWishlist">
-              <i class="bi bi-heart text-2xl dark:text-white"></i>
-              <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1"></span>
-            </a>
-          </button>
-          <button>
-            <a href="/user/cart" class="relative hidden md:block cursor-pointer" id="largeScreenCart">
-              <i class="bi bi-cart3 text-2xl dark:text-white"></i>
-              <span class="absolute -top-1 -right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1"></span>
-            </a>
-          </button>
-          <!-- Account Icon -->
-          <button>
-            <a href="/user/dashboard" class="relative hidden md:block cursor-pointer" id="accountIcon">
-              <i class="bi bi-person text-3xl text-black dark:text-white"></i>
-            </a>
-          </button>
-        <% } %>
-      </div>
-    </div>
-
-    <!-- Bottom Navigation for Small Screens -->
-    <div class="border-t fixed bottom-0 left-0 w-full z-20 bg-white shadow-md md:hidden flex justify-around py-2 dark:bg-gray-900 dark:border-gray-700">
-      <a href="/" class="flex flex-col items-center text-black dark:text-white">
-        <i class="bi bi-house text-xl"></i>
-        <span class="text-xs">Home</span>
-      </a>
+<header id="mainHeader" class="border-b border-[var(--color-gray-300)] bg-[var(--color-white)] text-[var(--color-black)] fixed top-0 left-0 w-full z-50 transition-all duration-300">
+  <div id="headerContent" class="flex justify-between items-center py-3 px-4 lg:px-16 md:px-6">
+    <a href="/" id="logo">
+      <img src="/assests/safaLogo.png" alt="Safa Suiting" class="w-10 h-6 hover:opacity-80 transition-opacity">
+    </a>
+    <nav id="desktopNav" class="hidden md:flex md:space-x-4 text-sm font-semibold tracking-wide">
+      <a href="/" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Home</a>
+      <a href="/pages/contact" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Contact</a>
+      <a href="/pages/about" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">About</a>
+      <% if (!user) { %>
+        <a href="/auth/register" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Sign Up</a>
+      <% } %>
+    </nav>
+    <div id="icons" class="flex items-center space-x-3">
+      <button id="desktopSearchIcon" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors p-1.5"><i class="bi bi-search text-lg"></i></button>
+      <button id="hamburgerBtn" class="md:hidden text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"><i class="bi bi-list text-2xl"></i></button>
       <% if (user) { %>
-        <!-- Wishlist (Only if Logged In) -->
-        <a href="/user/wishlist" class="relative flex flex-col items-center text-black dark:text-white" id="smallScreenWishlist">
-          <i class="bi bi-heart text-xl"></i>
-          <span class="absolute -top-1 right-1 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">3</span>
-          <span class="text-xs">Wishlist</span>
-        </a>
-        <a href="/user/cart" class="px-3 relative flex flex-col items-center text-black dark:text-white" id="smallScreenCart">
-          <i class="bi bi-cart3 text-xl"></i>
-          <span class="absolute -top-1 right-2 bg-[#DB4444] dark:bg-[#de2d2d] text-white text-xs rounded-full px-1">5</span>
-          <span class="text-xs">Cart</span>
-        </a>
-      <% } else { %>
-        <a href="/auth/register" class="flex flex-col items-center text-black dark:text-white">
-          <i class="bi bi-person text-xl"></i>
-          <span class="text-xs">Sign Up</span>
-        </a>
+        <button><a href="/user/wishlist" class="relative hidden md:block cursor-pointer" id="js-wishlist"><i class="bi bi-heart text-lg text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"></i><span id="js-wishlist-qunatiy" class="absolute -top-1 -right-1 bg-[var(--color-red-500)] text-[var(--color-white)] text-xs rounded-full px-1">3</span></a></button>
+        <button><a href="/user/cart" class="relative hidden md:block cursor-pointer" id="js-cart"><i class="bi bi-cart3 text-lg text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"></i><span id="js-cart-qunatiy" class="absolute -top-1 -right-1 bg-[var(--color-red-500)] text-[var(--color-white)] text-xs rounded-full px-1">5</span></a></button>
+        <button><a href="/user/dashboard" class="relative hidden md:block cursor-pointer" id="accountIcon"><i class="bi bi-person text-xl text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"></i></a></button>
       <% } %>
     </div>
-  </header>
+  </div>
+  <div id="expandedSearchBar" class="hidden px-4 py-3 w-full bg-[var(--color-white)] border-b border-[var(--color-gray-300)]">
+    <div class="flex items-center space-x-1">
+      <div class="relative w-full">
+        <input type="text" id="expandedSearchInput" placeholder="Search..." autocomplete="off" class="block p-2 w-full text-[var(--color-black)] border-2 border-[var(--color-black)] bg-[var(--color-white)] focus:outline-none focus:ring-1 focus:ring-[var(--color-red-500)] rounded-md pl-2 pr-8">
+        <button id="closeSearch" class="absolute top-1/2 right-2 transform -translate-y-1/2 text-[var(--color-black)] hover:text-[var(--color-red-500)] text-lg transition-colors"><i class="bi bi-x-lg"></i></button>
+      </div>
+    </div>
+    <div id="expandedSearchResults" class="hidden mt-1 bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-md shadow-md"></div>
+  </div>
+  <div id="fullScreenNav" class="fixed inset-0 bg-[var(--color-white)] z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+    <button id="closeNavBtn" class="absolute top-4 right-4 text-[var(--color-black)] hover:text-[var(--color-red-500)] text-2xl transition-colors"><i class="bi bi-x-lg"></i></button>
+    <nav class="flex flex-col items-center space-y-8 text-2xl font-semibold">
+      <a href="/" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Home</a>
+      <a href="/pages/contact" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Contact</a>
+      <a href="/pages/about" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">About</a>
+      <% if (!user) { %>
+        <a href="/auth/register" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Sign Up</a>
+      <% } else { %>
+        <a href="/user/wishlist" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Wishlist</a>
+        <a href="/user/cart" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Cart</a>
+        <a href="/user/dashboard" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Account</a>
+      <% } %>
+    </nav>
+  </div>
+</header>
 
-
-  
-
-</body>
-
-</html>

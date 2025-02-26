@@ -23,14 +23,9 @@ exports.uploadCarouselImages = async (req, res) => {
       const existingCarousel = await Carousel.findOne();
       let existingSlides = existingCarousel ? existingCarousel.slides : [];
 
-      // Map uploaded files to new slides
-      const newSlides = req.files.map((file, index) => ({
-        image: `/uploads/carousel/${file.filename}`,
-        text: req.body[`text${index + 1}`] || "",
-        font: req.body[`font${index + 1}`] || "Arial",
-        fontSize: parseInt(req.body[`fontSize${index + 1}`]) || 24,
-        color: req.body[`color${index + 1}`] || "#FFFFFF",
-        opacity: parseFloat(req.body[`opacity${index + 1}`]) || 1.0,
+      // Map uploaded files to new slides (only save image paths)
+      const newSlides = req.files.map((file) => ({
+        image: `/uploads/carousel/${file.filename}`, // Only store image path
       }));
 
       // Update the carousel with the new slides (replaces all existing ones)
@@ -72,6 +67,7 @@ exports.uploadCarouselImages = async (req, res) => {
   });
 };
 
+
 exports.getCarouselImages = async (req, res) => {
   try {
     const carousel = await Carousel.findOne();
@@ -96,7 +92,6 @@ exports.renderCoursel = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-
 
 // ✅ Fetch Notifications for Admin
 exports.getNotifications = async (req, res) => {

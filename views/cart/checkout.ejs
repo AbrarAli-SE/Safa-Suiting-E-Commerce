@@ -1,199 +1,180 @@
 <%- include('../shared/header') %>
 
+<main class="container mx-auto px-4 py-12 mt-14">
+  <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 pt-12">
+    <!-- Billing Details Form -->
+    <div class="space-y-6">
+      <h1 class="text-3xl font-bold text-[var(--color-black)] mb-6">Billing Details</h1>
+      <form class="space-y-6" id="checkoutForm" action="/user/cart/checkout" method="POST">
+        <!-- First Name -->
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-black)] mb-2">First Name<span class="text-[var(--color-red-500)]">*</span></label>
+          <input 
+            type="text" 
+            id="firstName" 
+            name="firstName" 
+            required 
+            class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          <div id="firstNameError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">First name is required.</div>
+        </div>
 
-  <div class="max-w-7xl mx-auto p-6 mt-28">
-    <div class="grid lg:grid-cols-2 gap-12">
-      <!-- Billing Details Form -->
-      <div>
-        <h1 class="text-2xl font-bold mb-8">Billing Details</h1>
-        <form class="space-y-6" id="checkoutForm">
-          <!-- First Name -->
-          <div>
-              <label class="block text-sm text-gray-600 mb-2">First Name<span class="text-red-500">*</span></label>
-              <input type="text" id="firstName" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
-              <div id="firstNameError" class="text-red-500 text-sm hidden">First name is required.</div>
-          </div>
-      
-          <!-- Street Address -->
-          <div>
-              <label class="block text-sm text-gray-600 mb-2">Street Address<span class="text-red-500">*</span></label>
-              <input type="text" id="streetAddress" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
-              <div id="streetAddressError" class="text-red-500 text-sm hidden">Street address is required.</div>
-          </div>
-      
-          <!-- Apartment/Floor (Optional) -->
-          <div>
-              <label class="block text-sm text-gray-600 mb-2">Apartment, floor, etc. (optional)</label>
-              <input type="text" id="apartment" class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
-              <div id="apartmentError" class="text-red-500 text-sm hidden"></div>
-          </div>
-      
-          <!-- Town/City -->
-          <div>
-              <label class="block text-sm text-gray-600 mb-2">Town/City<span class="text-red-500">*</span></label>
-              <input type="text" id="townCity" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
-              <div id="townCityError" class="text-red-500 text-sm hidden">Town/City is required.</div>
-          </div>
-      
-          <!-- Phone Number -->
-          <div>
-              <label class="block text-sm text-gray-600 mb-2">Phone Number<span class="text-red-500">*</span></label>
-              <input type="tel" id="phoneNumber" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
-              <div id="phoneNumberError" class="text-red-500 text-sm hidden">Phone number is required.</div>
-          </div>
-      
-          <!-- Email Address -->
-          <div>
-              <label class="block text-sm text-gray-600 mb-2">Email Address<span class="text-red-500">*</span></label>
-              <input type="email" id="emailAddress" required class="w-full p-3 bg-gray-50 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
-              <div id="emailAddressError" class="text-red-500 text-sm hidden">Valid email address is required.</div>
-          </div>
-      
-          <!-- Save Info Checkbox -->
-          <div class="flex items-center gap-2">
-              <input type="checkbox" id="saveInfo" class="w-4 h-4 text-red-500 border-gray-300 rounded focus:ring-red-500">
-              <label for="saveInfo" class="text-sm text-gray-600">Save this information for faster check-out next time</label>
-          </div>
+        <!-- Street Address -->
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-black)] mb-2">Street Address<span class="text-[var(--color-red-500)]">*</span></label>
+          <input 
+            type="text" 
+            id="streetAddress" 
+            name="streetAddress" 
+            required 
+            class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          <div id="streetAddressError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">Street address is required.</div>
+        </div>
+
+        <!-- Apartment/Floor (Optional) -->
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-black)] mb-2">Apartment, floor, etc. (optional)</label>
+          <input 
+            type="text" 
+            id="apartment" 
+            name="apartment" 
+            class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          <div id="apartmentError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
+        </div>
+
+        <!-- Town/City -->
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-black)] mb-2">Town/City<span class="text-[var(--color-red-500)]">*</span></label>
+          <input 
+            type="text" 
+            id="townCity" 
+            name="townCity" 
+            required 
+            class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          <div id="townCityError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">Town/City is required.</div>
+        </div>
+
+        <!-- Phone Number -->
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-black)] mb-2">Phone Number<span class="text-[var(--color-red-500)]">*</span></label>
+          <input 
+            type="tel" 
+            id="phoneNumber" 
+            name="phoneNumber" 
+            required 
+            class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          <div id="phoneNumberError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">Phone number is required.</div>
+        </div>
+
+        <!-- Email Address -->
+        <div>
+          <label class="block text-sm font-medium text-[var(--color-black)] mb-2">Email Address<span class="text-[var(--color-red-500)]">*</span></label>
+          <input 
+            type="email" 
+            id="emailAddress" 
+            name="emailAddress" 
+            required 
+            class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          <div id="emailAddressError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">Valid email address is required.</div>
+        </div>
+
+        <!-- Save Info Checkbox -->
+        <div class="flex items-center gap-2">
+          <input 
+            type="checkbox" 
+            id="saveInfo" 
+            name="saveInfo" 
+            class="w-4 h-4 text-[var(--color-red-500)] border-[var(--color-gray-300)] rounded focus:ring-[var(--color-red-500)]" />
+          <label for="saveInfo" class="text-sm text-[var(--color-gray-600)]">Save this information for faster checkout next time</label>
+        </div>
       </form>
-      
-      </div>
+    </div>
 
-      <!-- Order Summary -->
-      <div>
-        <div class="bg-gray-50 p-6 rounded">
-          <div class="space-y-4">
-            <!-- Products -->
-            <div class="flex items-center justify-between py-4 border-b">
+    <!-- Order Summary -->
+    <div>
+      <div class="bg-[var(--color-gray-50)] p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold text-[var(--color-black)] mb-6">Order Summary</h2>
+        <div class="space-y-4">
+          <!-- Products (Dynamic from cart data) -->
+          <% cart.forEach(item => { %>
+            <div class="flex items-center justify-between py-4 border-b border-[var(--color-gray-200)]">
               <div class="flex items-center gap-4">
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Vouv2Vgw6AMU15loYgXHV29P9BNAJe.png" alt="LCD Monitor" class="w-12 h-12 object-cover">
-                <span>LCD Monitor</span>
+                <img src="<%= item.product.image %>" alt="<%= item.product.name %>" class="w-12 h-12 object-cover rounded">
+                <span class="text-[var(--color-black)]"><%= item.product.name %></span>
               </div>
-              <span class="font-medium">$650</span>
+              <span class="font-medium text-[var(--color-black)]">Rs <%= (item.price * (item.quantity || 1)) %></span>
             </div>
+          <% }) %>
 
-            <div class="flex items-center justify-between py-4 border-b">
-              <div class="flex items-center gap-4">
-                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/image-Vouv2Vgw6AMU15loYgXHV29P9BNAJe.png" alt="H1 Gamepad" class="w-12 h-12 object-cover">
-                <span>H1 Gamepad</span>
-              </div>
-              <span class="font-medium">$1100</span>
+          <!-- Totals -->
+          <div class="space-y-3 py-4">
+            <div class="flex justify-between">
+              <span class="text-[var(--color-gray-600)]">Subtotal:</span>
+              <span class="font-medium text-[var(--color-black)]">Rs <%= cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0) %></span>
             </div>
-
-            <!-- Totals -->
-            <div class="space-y-3 py-4">
-              <div class="flex justify-between">
-                <span class="text-gray-600">Subtotal:</span>
-                <span class="font-medium">$1750</span>
-              </div>
-              <div class="flex justify-between">
-                <span class="text-gray-600">Shipping:</span>
-                <span class="font-medium">Free</span>
-              </div>
-              <div class="flex justify-between pt-3 border-t">
-                <span class="text-gray-600">Total:</span>
-                <span class="font-medium">$1750</span>
-              </div>
+            <div class="flex justify-between">
+              <span class="text-[var(--color-gray-600)]">Shipping:</span>
+              <span class="font-medium text-[var(--color-black)]">Free</span>
             </div>
-
-            <!-- Payment Methods -->
-            <div class="space-y-4 py-4 border-t">
-              <div class="flex items-center gap-3">
-                <input type="radio" id="bank" name="payment" class="w-4 h-4 text-red-500 border-gray-300 focus:ring-red-500">
-                <label for="bank" class="flex items-center gap-2">
-                  Bank
-                  <div class="flex gap-2">
-                    <img src="/visa.png" alt="Visa" class="h-6">
-                    <img src="/mastercard.png" alt="Mastercard" class="h-6">
-                    <img src="/bkash.png" alt="bKash" class="h-6">
-                  </div>
-                </label>
-              </div>
-
-              <div class="flex items-center gap-3">
-                <input type="radio" id="cash" name="payment" class="w-4 h-4 text-red-500 border-gray-300 focus:ring-red-500">
-                <label for="cash">Cash on delivery</label>
-              </div>
+            <div class="flex justify-between pt-3 border-t border-[var(--color-gray-200)]">
+              <span class="text-[var(--color-gray-600)]">Total:</span>
+              <span class="font-medium text-[var(--color-black)]">Rs <%= cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0) %></span>
             </div>
-
-            <!-- Coupon -->
-            <div class="flex gap-4 py-4">
-              <input type="text" placeholder="Coupon Code" class="flex-1 p-3 border rounded focus:outline-none focus:ring-1 focus:ring-gray-300">
-              <button class="px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600">Apply Coupon</button>
-            </div>
-
-            <!-- Place Order Button -->
-            <button class="w-full px-6 py-3 bg-red-500 text-white rounded hover:bg-red-600">Place Order</button>
           </div>
+
+          <!-- Payment Methods -->
+          <div class="space-y-4 py-4 border-t border-[var(--color-gray-200)]">
+            <div class="flex items-center gap-3">
+              <input 
+                type="radio" 
+                id="bank" 
+                name="payment" 
+                value="bank" 
+                class="w-4 h-4 text-[var(--color-red-500)] border-[var(--color-gray-300)] focus:ring-[var(--color-red-500)]" />
+              <label for="bank" class="flex items-center gap-2 text-[var(--color-black)]">
+                Bank
+                <div class="flex gap-2">
+                  <img src="/visa.png" alt="Visa" class="h-6">
+                  <img src="/mastercard.png" alt="Mastercard" class="h-6">
+                  <img src="/bkash.png" alt="bKash" class="h-6">
+                </div>
+              </label>
+            </div>
+            <div class="flex items-center gap-3">
+              <input 
+                type="radio" 
+                id="cash" 
+                name="payment" 
+                value="cash" 
+                class="w-4 h-4 text-[var(--color-red-500)] border-[var(--color-gray-300)] focus:ring-[var(--color-red-500)]" />
+              <label for="cash" class="text-[var(--color-black)]">Cash on Delivery</label>
+            </div>
+          </div>
+
+          <!-- Coupon -->
+          <div class="flex gap-4 py-4">
+            <input 
+              type="text" 
+              placeholder="Coupon Code" 
+              class="flex-1 p-3 bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300" />
+            <button 
+              class="px-6 py-3 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
+              Apply Coupon
+            </button>
+          </div>
+
+          <!-- Place Order Button -->
+          <button 
+            type="submit" 
+            form="checkoutForm" 
+            class="w-full px-6 py-3 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
+            Place Order
+          </button>
         </div>
       </div>
     </div>
   </div>
+</main>
 
-<script>
-  document.getElementById('checkoutForm').addEventListener('submit', function (event) {
-    let isValid = true;
+<script src="/js/checkoutValidation.js"></script>
 
-    function showError(fieldId, message) {
-        const errorField = document.getElementById(fieldId);
-        errorField.textContent = message;
-        errorField.classList.remove('hidden');
-    }
-
-    function hideError(fieldId) {
-        document.getElementById(fieldId).classList.add('hidden');
-    }
-
-    // First Name Validation
-    const firstName = document.getElementById('firstName');
-    if (firstName.value.trim() === '') {
-        showError('firstNameError', 'First name is required.');
-        isValid = false;
-    } else {
-        hideError('firstNameError');
-    }
-
-    // Street Address Validation
-    const streetAddress = document.getElementById('streetAddress');
-    if (streetAddress.value.trim() === '') {
-        showError('streetAddressError', 'Street address is required.');
-        isValid = false;
-    } else {
-        hideError('streetAddressError');
-    }
-
-    // Town/City Validation
-    const townCity = document.getElementById('townCity');
-    if (townCity.value.trim() === '') {
-        showError('townCityError', 'Town/City is required.');
-        isValid = false;
-    } else {
-        hideError('townCityError');
-    }
-
-    // Phone Number Validation
-    const phoneNumber = document.getElementById('phoneNumber');
-    if (phoneNumber.value.trim() === '') {
-        showError('phoneNumberError', 'Phone number is required.');
-        isValid = false;
-    } else {
-        hideError('phoneNumberError');
-    }
-
-    // Email Validation
-    const emailAddress = document.getElementById('emailAddress');
-    if (!emailAddress.value.trim().match(/^\S+@\S+\.\S+$/)) {
-        showError('emailAddressError', 'Valid email address is required.');
-        isValid = false;
-    } else {
-        hideError('emailAddressError');
-    }
-
-    if (!isValid) {
-        event.preventDefault(); // Prevent form submission if errors exist
-    }
-});
-
-</script>  
-
-
-  <%- include('../shared/footer') %>
+<%- include('../shared/footer') %>

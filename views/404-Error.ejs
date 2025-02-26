@@ -6,33 +6,40 @@
   <title><%= error.status === 404 ? '404 - Page Not Found' : '500 - Server Error' %></title>
   <link rel="stylesheet" href="/styles/global.css">
 </head>
-<body>
+<body class="bg-[var(--color-gray-50)]">
 
 <%- include('./shared/header') %>
 
-  
-  <main class="mt-40">
-    <nav class="text-sm text-gray-700 m-10 mr-3">
-      <span><a class="px-3 py-2" href="/">Home</a></span>
-      <span class="mx-2">/</span>
-      <span class="font-semibold text-black"><%= error.status === 404 ? '404 Error' : '500 Error' %></span>
-    </nav>
-    <div class="text-center mt-40 lg:mt-32 px-6 sm:px-5 ">
-      <h2 class="text-4xl font-semibold text-black mb-6 lg:text-8xl md:text-7xl">
-        <%= error.status === 404 ? '404 NOT FOUND' : '500 SERVER ERROR' %>
-      </h2>
-      <p class="text-lg mb-11 font-sans text-black lg:mt-10 lg:mb-16 md:mb-9">
-        <%= error.status === 404 ? 'Your visited page not found. You may go home page.' : 'Something went wrong. Please try again later.' %>
-      </p>
-      <button class="focus:bg-[#de2d2d] focus:outline-none text-center mb-4 px-4 py-3 lg:px-10 bg-[#DB4444] hover:bg-[#de2d2d] text-white radius shadow">
-
-        <a href="/" >
-          Back to home page
-        </a>
-      </button>
-    </div>
-  </main>
-</body>
-</html>
+<main class="container mx-auto px-4 py-12 mt-20">
+  <div class="max-w-3xl mx-auto text-center">
+    <h2 class="text-5xl md:text-7xl lg:text-8xl font-bold text-[var(--color-black)] mb-6 animate-fade-in">
+      <%= error.status === 404 ? '404' : '500' %>
+    </h2>
+    <h3 class="text-2xl md:text-3xl font-semibold text-[var(--color-black)] mb-6">
+      <%= error.status === 404 ? 'Page Not Found' : 'Server Error' %>
+    </h3>
+    <p class="text-lg text-[var(--color-gray-600)] mb-10 md:mb-12 lg:mb-16">
+      <%= error.status === 404 ? 'The page you’re looking for doesn’t exist. Return to the home page?' : 'Something went wrong on our end. Please try again later.' %>
+    </p>
+    <a 
+      href="/" 
+      class="inline-block px-6 py-3 md:px-10 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-lg hover:bg-[var(--color-red-700)] focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-md hover:shadow-lg">
+      Back to Home Page
+    </a>
+  </div>
+</main>
 
 <%- include('./shared/footer') %>
+
+<style>
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+</style>
+
+</body>
+</html>

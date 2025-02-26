@@ -1,403 +1,262 @@
 <%- include('./shared/header') %>
 
 
-<section class="flex flex-row items-start p-4 lg:mt-[7rem] mt-[8rem] w-full h-[80vh]">
-  <div class="w-full xlg:ml-3 opacity-0 translate-y-10 transition-all duration-500" data-scroll>
-    <div class="w-full relative">
-      <div class="swiper default-carousel swiper-container">
-        <div class="swiper-wrapper">
-          <% carouselSlides.forEach((slide) => { %>
-            <div class="swiper-slide">
-              <div class="flex-col rounded-2xl h-full flex justify-center items-center overflow-hidden relative">
-                <img src="<%= slide.image %>" class="w-full h-[80vh] object-cover">
-                <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 flex items-end p-4">
-                  <button 
-                    style="font-family: <%= slide.font %>; font-size: <%= slide.fontSize %>px; color: <%= slide.color %>; opacity: <%= slide.opacity %>;" 
-                    class="z-10 text-2xl hover:underline p-2">
-                    <%= slide.text || 'Shop Now' %>
+  <!-- Hero Carousel Section -->
+  <section class="relative w-full h-[90vh] mt-14 overflow-hidden">
+    <div class="swiper default-carousel">
+      <div class="swiper-wrapper">
+        <% carouselSlides.forEach((slide)=> { %>
+          <div class="swiper-slide">
+            <div class="relative w-full h-[90vh] group">
+              <img src="<%= slide.image %>"
+                class="w-full h-full object-cover transition-all duration-1000 hover:scale-105 hover:border-4 hover:border-[var(--color-red-500)]"
+                alt="Carousel Slide">
+            </div>
+          </div>
+          <% }) %>
+      </div>
+      <!-- Navigation Buttons -->
+      <button
+        class="swiper-button-prev group absolute top-1/2 left-4 transform -translate-y-1/2 p-3 border border-[var(--color-red-500)] w-12 h-12 rounded-full hover:bg-[var(--color-red-500)] transition-all duration-300 z-20">
+        <svg class="h-6 w-6 text-[var(--color-red-500)] group-hover:text-[var(--color-white)]"
+          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
+          <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+      <button
+        class="swiper-button-next group absolute top-1/2 right-4 transform -translate-y-1/2 p-3 border border-[var(--color-red-500)] w-12 h-12 rounded-full hover:bg-[var(--color-red-500)] transition-all duration-300 z-20">
+        <svg class="h-6 w-6 text-[var(--color-red-500)] group-hover:text-[var(--color-white)]"
+          xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
+          <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </button>
+      <div class="swiper-pagination absolute bottom-6 left-1/2 transform -translate-x-1/2 flex space-x-2 z-20">
+        <span
+          class="swiper-pagination-bullet w-3 h-3 bg-[var(--color-red-500)] opacity-50 hover:opacity-100 transition-opacity duration-300"></span>
+        <span
+          class="swiper-pagination-bullet w-3 h-3 bg-[var(--color-red-500)] opacity-50 hover:opacity-100 transition-opacity duration-300"></span>
+        <span
+          class="swiper-pagination-bullet w-3 h-3 bg-[var(--color-red-500)] opacity-50 hover:opacity-100 transition-opacity duration-300"></span>
+      </div>
+    </div>
+  </section>
+
+
+
+  <!-- Product Category Sections with Cards -->
+  <% Object.keys(categorizedProducts).forEach(category=> { %>
+    <section class="p-4 md:px-16 mt-8">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <div class="w-2 h-6 bg-[var(--color-red-500)] rounded"></div>
+          <p class="text-[var(--color-red-500)] font-semibold">
+            <%= category %>
+          </p>
+        </div>
+      </div>
+      <div class="flex items-center justify-between flex-col md:flex-row">
+        <h2 class="text-3xl font-bold text-center md:text-left">
+          <%= category.replace(/-/g, ' ' ) %>
+        </h2>
+        <div class="flex md:justify-end justify-center items-center mt-4 space-x-4 mr-4">
+          <button class="slider-button left-button bg-[var(--color-gray-50)] p-3 rounded-full transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-arrow-left text-[var(--color-red-500)]" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 0 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8" />
+            </svg>
+          </button>
+          <button class="slider-button right-button bg-[var(--color-gray-50)] p-3 rounded-full transition duration-300">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-arrow-right text-[var(--color-red-500)]" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="relative ">
+        <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
+          <% categorizedProducts[category].forEach(product=> { %>
+            <div
+              class="bg-[var(--color-white)] h-[28rem] md:w-72 w-64 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-all duration-500 hover:scale-105">
+              <div class="relative h-2/3 w-full">
+                <img src="<%= product.image %>" alt="<%= product.name %>"
+                  class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 group-hover:opacity-80">
+                <div
+                  class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                  <button
+                    class="wishlist-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
+                    data-product-id="<%= product._id %>" data-wishlist="false">
+                    <i class="bi bi-heart"></i>
+                  </button>
+                  <button class="quick-view-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" data-name="<%= product.name %>" data-image="<%= product.image %>" data-price="<%= product.price %>" data-discountprice="<%= product.discountPrice %>" data-description="<%= product.description || 'No description available.' %>" data-product-id="<%= product._id %>">
+                    <i class="bi bi-eye"></i>
+                  </button>
+
+                  <button
+                    class="add-to-cart-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
+                    data-product-id="<%= product._id %>" data-cart="false">
+                    <i class="bi bi-cart"></i>
                   </button>
                 </div>
               </div>
-            </div>
-          <% }) %>
-        </div>
-
-        <button id="slider-button-left" class="swiper-button-prev group p-2 flex justify-center items-center border border-solid border-red-600 w-12 h-12 transition-all duration-500 rounded-full left-5 hover:bg-red-500">
-          <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
-            <path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
-        <button id="slider-button-right" class="swiper-button-next group p-2 flex justify-center items-center border border-solid border-red-600 w-12 h-12 transition-all duration-500 rounded-full right-5 hover:bg-red-500">
-          <svg class="h-5 w-5 text-red-600 group-hover:text-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="none">
-            <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
-        </button>
-
-        <div class="swiper-pagination"></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-
-
-
-
-
-
-
-<% Object.keys(categorizedProducts).forEach(category => { %>
-  <section class="p-4 md:px-16 mt-8">
-      <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-              <div class="w-2 h-6 bg-red-500 rounded"></div>
-              <p class="text-red-500 font-semibold"><%= category %></p>
-          </div>
-      </div>
-      <div class="flex items-center justify-between flex-col md:flex-row">
-          <h2 class="text-3xl font-bold text-center md:text-left"><%= category.replace(/-/g, ' ') %></h2>
-          
-          <% if (category === "Flash Sales") { %>
-              <!-- Timer for Flash Sales -->
-<!-- Timer for Flash Sales -->
-<div class="flex space-x-6 text-center mt-4 md:mt-0" id="flash-timer">
-  <div>
-    <span id="hours" class="text-2xl font-bold">24</span>
-    <p class="text-gray-500 text-sm">Hours</p>
-  </div>
-  <span class="text-red-500 text-2xl">:</span>
-  <div>
-    <span id="minutes" class="text-2xl font-bold">00</span>
-    <p class="text-gray-500 text-sm">Minutes</p>
-  </div>
-  <span class="text-red-500 text-2xl">:</span>
-  <div>
-    <span id="seconds" class="text-2xl text-red-500 font-bold">00</span>
-    <p class="text-red-500 text-sm">Seconds</p>
-  </div>
-</div>
-
-
-          <% } %>
-          <div class="flex md:justify-end justify-center items-center mt-4 space-x-4 mr-4">
-            <button class="slider-button left-button  bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left text-red-600" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8"/>
-              </svg>
-            </button>
-    
-            <button class="slider-button right-button bg-[#F5F5F5]  p-3 rounded-full transition duration-300">
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-right text-red-600" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
-              </svg>
-            </button>
-          </div>
-      </div>
-      <div class="relative border-b border-gray-500">
-          <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mt-6 mb-8">
-              <% categorizedProducts[category].forEach(product => { %>
-                  <div class="bg-[#F5F5F5] h-96 md:w-80 w-72 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg 
-                  opacity-0 translate-y-10 transition-all duration-700 hover:translate-y-[-10px]"  
-                  data-scroll>
-                      <img src="<%= product.image %>" alt="<%=product.name%>" class="h-full w-full object-cover ">
-                      
-                      <!-- Hover Buttons -->
-                    <div class="absolute top-4 right-4 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <button class="p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button wishlist-btn"
-                      data-product-id="<%= product._id %>"
-                      data-wishlist="false"> <!-- Default value, will be updated via JavaScript -->
-                      <i class="bi bi-heart" data-heart-icon></i>
-                      <span class="absolute left-[-61px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
-                          Add
-                      </span>
-                  </button>                  
-                  
-                  
-
-                  
-
-                      
-                        <button class="quick-view-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button"
-                                data-name="<%= product.name %>"
-                                data-image="<%= product.image %>"
-                                data-price="<%= product.price %>"
-                                data-discountprice="<%= product.discountPrice %>"
-                                data-description="<%= product.description || 'No description available.' %>">
-                                
-                          <i class="bi bi-eye"></i> <!-- Quick View Icon -->
-                          <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">Quick View</span>
-                        </button>
-                      
-                      
-                        <button class="add-to-cart-btn p-2 bg-white rounded-full shadow hover:bg-gray-100 dark:text-black transition duration-300 relative group/button"
-                          data-product-id="<%= product._id %>"
-                          data-cart="false"> <!-- Default value, will be updated via JavaScript -->
-                          <i class="bi bi-cart"></i> <!-- Add to Cart Icon -->
-                          <span class="absolute left-[-80px] top-1/2 -translate-y-1/2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover/button:opacity-100 transition-opacity duration-300">
-                              Add to Cart
-                          </span>
-                      </button>
-
-                
-                    </div>
-                    <!-- product info -->
-                      <div class="absolute bottom-0 left-0 right-0 bg-white/90 dark:text-black p-4 translate-y-20 group-hover:translate-y-0 transition-all duration-300">
-                          <h3 class="font-bold mb-2"><%= product.name %></h3>
-                          <div class="flex justify-between items-center">
-                            <div>
-                              <span class="font-bold">Rs : <%= product.price %></span>
-                              <span class="text-sm line-through ml-2">Rs<%= product.discountPrice %></span>
-                            </div>
-                          </div>
-                      </div>
+              <div
+                class="p-4 h-1/3 flex flex-col justify-between bg-gradient-to-t from-[var(--color-gray-50)] to-[var(--color-white)]">
+                <h3 class="font-semibold text-base truncate">
+                  <%= product.name %>
+                </h3>
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-[var(--color-red-500)] text-lg">Rs <%= product.price %></span>
+                    <span class="text-sm text-[var(--color-gray-400)] line-through">Rs <%= product.discountPrice %>
+                        </span>
                   </div>
-              <% }); %>
-          </div>
+                </div>
+              </div>
+            </div>
+            <% }); %>
+        </div>
       </div>
-  </section>
-<% }); %>
+    </section>
+    <% }); %>
 
 
-
+    <!-- Quick View Modal (Updated Design) -->
 <div id="quickViewModal"
-  class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center opacity-0 pointer-events-none transition-all duration-300 z-50">
-  <div class="bg-white w-96 p-6 rounded-lg relative">
-    <button onclick="closeQuickView()"
-      class="absolute top-4 right-4 text-xl font-bold dark:text-black text-gray-600">X</button>
-    <h3 id="modalProductName" class="font-bold mb-4 dark:text-black"></h3>
-    <img id="modalProductImage" src="" alt="Product" class="w-full h-60 object-cover mb-4">
-    <div class="flex justify-between mb-4 dark:text-black">
-      <span id="modalProductPrice" class="font-bold"></span>
-      <span id="modalProductOldPrice" class="text-sm line-through"></span>
+class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center opacity-0 pointer-events-none transition-all duration-500 z-50">
+<div
+  class="bg-[var(--color-white)] w-full max-w-[32rem] md:max-w-[40rem] p-8 rounded-xl shadow-2xl relative transform scale-95 transition-all duration-300">
+  <!-- Close Button -->
+  <button onclick="closeQuickView()"
+    class="absolute top-4 right-4 w-10 h-10 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-full flex items-center justify-center hover:bg-[var(--color-red-700)] transition-all duration-300">
+    <i class="bi bi-x-lg text-xl"></i>
+  </button>
+
+  <!-- Product Content -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <!-- Product Image -->
+    <div>
+      <img id="modalProductImage" src="" alt="Product" class="w-full h-80 object-cover rounded-lg">
     </div>
-    <p id="modalProductDesc" class="text-sm text-gray-600 dark:text-black"></p>
+
+    <!-- Product Details -->
+    <div class="flex flex-col justify-between">
+      <div>
+        <h3 id="modalProductName" class="text-2xl font-bold text-[var(--color-black)] mb-4"></h3>
+        <div class="flex items-center gap-4 mb-4">
+          <span id="modalProductPrice" class="text-xl font-semibold text-[var(--color-red-500)]"></span>
+          <span id="modalProductOldPrice" class="text-base text-[var(--color-gray-400)] line-through"></span>
+        </div>
+        <p id="modalProductDesc" class="text-[var(--color-gray-600)] text-sm leading-relaxed"></p>
+      </div>
+      <!-- Action Buttons -->
+      <div class="mt-6 flex gap-4">
+        <button
+          class="wishlist-btn p-3 bg-[var(--color-white)] text-[var(--color-red-500)] border border-[var(--color-red-500)] rounded-full hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
+          data-wishlist="false">
+          <i class="bi bi-heart"></i>
+        </button>
+        <button
+          class="add-to-cart-btn-modal flex-1 py-3 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-full hover:bg-[var(--color-red-700)] transition-all duration-300">
+          Add to Cart
+        </button>
+      </div>
+    </div>
   </div>
 </div>
+</div>
+      <%- include('./shared/footer') %>
 
 
+        <script>
+          document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".quick-view-btn").forEach(button => {
+              button.addEventListener("click", function () {
+                const modal = document.getElementById("quickViewModal");
+                const productName = document.getElementById("modalProductName");
+                const productImage = document.getElementById("modalProductImage");
+                const productPrice = document.getElementById("modalProductPrice");
+                const productOldPrice = document.getElementById("modalProductOldPrice");
+                const productDesc = document.getElementById("modalProductDesc");
 
-  
-  
+                // Update modal content using data attributes
+                productName.innerText = this.getAttribute("data-name");
+                productImage.src = this.getAttribute("data-image");
+                productPrice.innerText = `Rs : ${this.getAttribute("data-price")}`;
+                productOldPrice.innerText = `Rs : ${this.getAttribute("data-discountprice")}`;
+                productDesc.innerText = this.getAttribute("data-description");
 
-
-
-
-
-
-  
-  <%- include('./shared/footer') %>
-
- 
- <script>
- document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll(".quick-view-btn").forEach(button => {
-    button.addEventListener("click", function () {
-      const modal = document.getElementById("quickViewModal");
-      const productName = document.getElementById("modalProductName");
-      const productImage = document.getElementById("modalProductImage");
-      const productPrice = document.getElementById("modalProductPrice");
-      const productOldPrice = document.getElementById("modalProductOldPrice");
-      const productDesc = document.getElementById("modalProductDesc");
-
-      // Update modal content using data attributes
-      productName.innerText = this.getAttribute("data-name");
-      productImage.src = this.getAttribute("data-image");
-      productPrice.innerText = `Rs : ${this.getAttribute("data-price")}`;
-      productOldPrice.innerText = `Rs : ${this.getAttribute("data-discountprice")}`;
-      productDesc.innerText = this.getAttribute("data-description");
-
-      // Show the modal
-      modal.classList.remove("opacity-0", "pointer-events-none");
-      modal.classList.add("opacity-100", "pointer-events-auto");
-    });
-  });
-});
-
-function closeQuickView() {
-  const modal = document.getElementById("quickViewModal");
-  modal.classList.remove("opacity-100", "pointer-events-auto");
-  modal.classList.add("opacity-0", "pointer-events-none");
-}
-
-
- </script>
-
-  
-
-
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const elements = document.querySelectorAll("[data-scroll]");
-  
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("opacity-100", "translate-y-0");
-              entry.target.classList.remove("opacity-0", "translate-y-10");
-            }
+                // Show the modal
+                modal.classList.remove("opacity-0", "pointer-events-none");
+                modal.classList.add("opacity-100", "pointer-events-auto");
+              });
+            });
           });
-        },
-        { threshold: 0.1 }
-      );
-  
-      elements.forEach((el) => observer.observe(el));
-    });
-  </script>
-  
+
+          function closeQuickView() {
+            const modal = document.getElementById("quickViewModal");
+            modal.classList.remove("opacity-100", "pointer-events-auto");
+            modal.classList.add("opacity-0", "pointer-events-none");
+          }
 
 
-    <script>
-
-let swiper = new Swiper(".default-carousel", {
-        loop: true, // Enables infinite loop
-        autoplay: {
-        delay: 4000, // Auto-slide every 3 seconds
-        disableOnInteraction: false,
-        },
-        pagination: {
-          el: ".swiper-pagination",
-          clickable: true,
-        },
-        navigation: {
-          nextEl: ".swiper-button-next",
-          prevEl: ".swiper-button-prev",
-        },
-      });
-
-      // Select all left and right buttons
-const leftButtons = document.querySelectorAll('.left-button');
-const rightButtons = document.querySelectorAll('.right-button');
-const sliders = document.querySelectorAll('.slider-container');
-
-// Loop through all left and right buttons and add event listeners
-leftButtons.forEach((button, index) => {
-  button.addEventListener('click', function () {
-    sliders[index].scrollBy({ left: -300, behavior: 'smooth' });
-  });
-});
-
-rightButtons.forEach((button, index) => {
-  button.addEventListener('click', function () {
-    sliders[index].scrollBy({ left: 300, behavior: 'smooth' });
-  });
-});
-
-      // Check if dark mode preference is saved in localStorage
-      // if (localStorage.getItem('darkMode') === 'true') {
-      //   document.documentElement.classList.add('dark');
-      // }
-
-      // // Function to toggle dark mode
-      // const darkModeToggle = document.getElementById('darkModeToggle');
-      // darkModeToggle.addEventListener('click', () => {
-      //   document.documentElement.classList.toggle('dark');
-      //   // Save dark mode preference in localStorage
-      //   if (document.documentElement.classList.contains('dark')) {
-      //     localStorage.setItem('darkMode', 'true');
-      //   } else {
-      //     localStorage.setItem('darkMode', 'false');
-      //   }
-      // });
-
-    
-     
-    
-
-      // let currentIndex = 0;
-      // const carouselItems = document.getElementById('carousel-items');
-      // const totalItems = document.querySelectorAll('#carousel-items .flex-shrink-0').length;
-      // // Get the icon elements
-      // const prevIcon = document.getElementById('prev-icon');
-      // const nextIcon = document.getElementById('next-icon');
-
-      // // Add event listeners for hover
-      // prevIcon.addEventListener('mouseenter', () => {
-      //   prevIcon.classList.remove('bi-arrow-left-circle');
-      //   prevIcon.classList.add('bi-arrow-left-circle-fill');
-      // });
-
-      // prevIcon.addEventListener('mouseleave', () => {
-      //   prevIcon.classList.remove('bi-arrow-left-circle-fill');
-      //   prevIcon.classList.add('bi-arrow-left-circle');
-      // });
-
-      // nextIcon.addEventListener('mouseenter', () => {
-      //   nextIcon.classList.remove('bi-arrow-right-circle');
-      //   nextIcon.classList.add('bi-arrow-right-circle-fill');
-      // });
-
-      // nextIcon.addEventListener('mouseleave', () => {
-      //   nextIcon.classList.remove('bi-arrow-right-circle-fill');
-      //   nextIcon.classList.add('bi-arrow-right-circle');
-      // });
-
-      // prevIcon.addEventListener('click', () => {
-      //   currentIndex = (currentIndex - 1 + totalItems) % totalItems;
-      //   updateCarousel();
-      // });
-
-      // nextIcon.addEventListener('click', () => {
-      //   currentIndex = (currentIndex + 1) % totalItems;
-      //   updateCarousel();
-      // });
-
-      // function updateCarousel() {
-      //   carouselItems.style.transform = `translateX(-${currentIndex * 100}%)`;
-      // }
-    </script>
+        </script>
 
 
 
-<!-- Link the JavaScript file -->
-<script type="module" src="/js/wihlist.js"></script>
-
-<script type="module" src="/js/addCart.js"></script>
-
-<script type="module" src="/js/search.js"></script>
 
 
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    // Key for localStorage
-    const FLASH_SALE_END_KEY = "flashSaleEndDate";
+        
 
-    // Get or set the end date
-    let endDate = localStorage.getItem(FLASH_SALE_END_KEY);
-    if (!endDate) {
-      // Set end date to 24 hours from now if not stored
-      endDate = new Date();
-      endDate.setHours(endDate.getHours() + 24);
-      localStorage.setItem(FLASH_SALE_END_KEY, endDate.toISOString());
-    } else {
-      endDate = new Date(endDate); // Use stored end date
-    }
 
-    // Start the timer
-    const timer = setInterval(updateTimer, 1000);
 
-    function updateTimer() {
-      const now = new Date();
-      const timeLeft = endDate - now;
+        <script>
 
-      if (timeLeft <= 0) {
-        // Reset to 24 hours when it reaches zero
-        endDate = new Date();
-        endDate.setHours(endDate.getHours() + 24);
-        localStorage.setItem(FLASH_SALE_END_KEY, endDate.toISOString());
-      }
+          let swiper = new Swiper(".default-carousel", {
+            loop: true, // Enables infinite loop
+            autoplay: {
+              delay: 4000, // Auto-slide every 3 seconds
+              disableOnInteraction: false,
+            },
+            pagination: {
+              el: ".swiper-pagination",
+              clickable: true,
+            },
+            navigation: {
+              nextEl: ".swiper-button-next",
+              prevEl: ".swiper-button-prev",
+            },
+          });
 
-      const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-      const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+          // Select all left and right buttons
+          const leftButtons = document.querySelectorAll('.left-button');
+          const rightButtons = document.querySelectorAll('.right-button');
+          const sliders = document.querySelectorAll('.slider-container');
 
-      document.getElementById("hours").textContent = String(hours).padStart(2, "0");
-      document.getElementById("minutes").textContent = String(minutes).padStart(2, "0");
-      document.getElementById("seconds").textContent = String(seconds).padStart(2, "0");
-    }
+          // Loop through all left and right buttons and add event listeners
+          leftButtons.forEach((button, index) => {
+            button.addEventListener('click', function () {
+              sliders[index].scrollBy({ left: -300, behavior: 'smooth' });
+            });
+          });
 
-    // Initial call to set the timer immediately
-    updateTimer();
-  });
-</script>
+          rightButtons.forEach((button, index) => {
+            button.addEventListener('click', function () {
+              sliders[index].scrollBy({ left: 300, behavior: 'smooth' });
+            });
+          });
+
+
+        </script>
+
+
+
+        <!-- Link the JavaScript file -->
+        <!-- <script type="module" src="/js/wishlist.js"></script> -->
+
+        <!-- <script type="module" src="/js/addCart.js"></script> -->
+
+        <script type="module" src="/js/search.js"></script>

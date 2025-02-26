@@ -1,59 +1,49 @@
 <%- include('../shared/asideBar') %>
 
+<main class="flex-grow px-4 sm:px-8 py-12 ml-0 sm:ml-20 lg:ml-64">
+  <h1 class="text-3xl font-bold text-[var(--color-black)] mb-8 mt-9 sm:mt-7">Canceled Orders</h1>
 
-<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
-    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Canceled Orders</h1>
-
-
-    <!-- Canceled Orders Table -->
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
-        <table class="min-w-full table-fixed" id="canceledOrdersTable">
-          <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+  <!-- Canceled Orders Table -->
+  <div class="max-w-7xl mx-auto bg-[var(--color-white)] p-6 rounded-lg shadow-lg">
+    <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-[var(--color-gray-400)] scrollbar-track-[var(--color-gray-100)]">
+      <table class="min-w-full table-fixed" id="canceledOrdersTable">
+        <thead class="bg-[var(--color-gray-50)] text-[var(--color-gray-700)]">
+          <tr>
+            <th class="px-4 py-3 text-left w-1/6">Order ID</th>
+            <th class="px-4 py-3 text-left w-1/6">Customer Name</th>
+            <th class="px-4 py-3 text-left w-1/6">Amount</th>
+            <th class="px-4 py-3 text-left w-1/6">Cancellation Reason</th>
+            <th class="px-4 py-3 text-left w-1/6">Action</th>
+          </tr>
+        </thead>
+        <tbody class="text-[var(--color-gray-700)]" id="canceledOrdersList">
+          <% if (canceledOrders && canceledOrders.length > 0) { %>
+            <% canceledOrders.forEach(order => { %>
+              <tr class="border-t border-[var(--color-gray-200)]" data-order-id="<%= order._id %>">
+                <td class="px-4 py-3"><%= order.orderId %></td>
+                <td class="px-4 py-3"><%= order.customerName %></td>
+                <td class="px-4 py-3">Rs <%= order.amount.toFixed(2) %></td>
+                <td class="px-4 py-3"><%= order.cancellationReason %></td>
+                <td class="px-4 py-3">
+                  <button 
+                    class="delete-order px-4 py-2 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg" 
+                    data-order-id="<%= order._id %>">
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            <% }) %>
+          <% } else { %>
             <tr>
-              <th class="px-4 py-2 text-left w-1/6">Order ID</th>
-              <th class="px-4 py-2 text-left w-1/6">Customer Name</th>
-              <th class="px-4 py-2 text-left w-1/6">Amount</th>
-              <th class="px-4 py-2 text-left w-1/6">Cancellation Reason</th>
-              <th class="px-4 py-2 text-left w-1/6">Action</th>
+              <td colspan="5" class="px-4 py-3 text-center text-[var(--color-gray-600)]">No canceled orders found.</td>
             </tr>
-          </thead>
-          <tbody class="text-gray-700 dark:text-gray-300" id="canceledOrdersList">
-            <!-- Example Row -->
-            <tr class="border-t border-gray-200 dark:border-gray-600" data-order-id="101">
-              <td class="px-4 py-2">101</td>
-              <td class="px-4 py-2">John Doe</td>
-              <td class="px-4 py-2">$299.99</td>
-              <td class="px-4 py-2">Customer changed mind</td>
-              <td class="px-4 py-2">
-                <button id="deleteOrder101" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition">
-                  Delete
-                </button>
-              </td>
-            </tr>
-            <tr class="border-t border-gray-200 dark:border-gray-600" data-order-id="102">
-              <td class="px-4 py-2">102</td>
-              <td class="px-4 py-2">Jane Smith</td>
-              <td class="px-4 py-2">$150.00</td>
-              <td class="px-4 py-2">Order was delayed</td>
-              <td class="px-4 py-2">
-                <button id="deleteOrder102" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-700 transition">
-                  Delete
-                </button>
-              </td>
-            </tr>
-            
-            <!-- Add more rows dynamically here -->
-          </tbody>
-        </table>
-      </div>
+          <% } %>
+        </tbody>
+      </table>
     </div>
-  </main>
+  </div>
+</main>
 
-</div>
+<script type="module" src="/js/canceledOrders.js"></script>
 
-     <!-- Link the JavaScript file -->
-     <script src="/js/main.js"></script>
-</body>
-
-</html>
+<%- include('../shared/footer') %>

@@ -1,116 +1,64 @@
 <%- include('../shared/header') %>
 
+<main class="bg-[var(--color-gray-50)]">
+  <div class="flex min-h-screen items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md bg-[var(--color-white)] p-8 rounded-xl shadow-lg">
+      <h1 class="text-3xl font-bold text-[var(--color-black)] text-center mb-4">Login</h1>
+      <p class="text-sm text-[var(--color-gray-600)] text-center mb-6">Enter your credentials below</p>
 
-<body class="dark:bg-gray-900 dark:text-white overflow-hidden">
-  <div class="flex min-h-screen">
-    <div class="w-full flex items-center justify-center bg-white dark:bg-gray-800 p-8 lg:px-12">
-      <div class="w-full max-w-md lg:mb-40">
-        <h1 class="text-2xl font-semibold text-gray-800 dark:text-white text-center mb-4">Login to your account</h1>
-        <p class="text-sm text-gray-500 dark:text-gray-300 text-center mb-6">Enter your credentials below</p>
+      <!-- General Error Message (From Backend) -->
+      <% if (error) { %>
+        <div class="text-[var(--color-red-500)] text-center font-medium mb-4 bg-[var(--color-red-100)] p-2 rounded-md"><%= error %></div>
+      <% } %>
 
-        <!-- General Error Message (From Backend) -->
-        <% if (error) { %>
-          <div class="text-red-500 text-center font-medium mb-4"><%= error %></div>
-        <% } %>
-
-        <form id="loginFrom" action="/auth/login" method="POST" class="space-y-4">
-          <!-- Email -->
-          <div>
-            <label for="email" class="sr-only">Email</label>
-            <input id="email" name="email" type="email" placeholder="Email"
-              class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
-            <div id="emailError" class="hidden text-red-500 text-sm mt-1"></div>
-          </div>
-
-          <!-- Password -->
-          <div class="relative">
-            <label for="password" class="sr-only">Password</label>
-            <input id="password" name="password" type="password" placeholder="Password"
-              class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400" />
-            <div id="passwordError" class="hidden text-red-500 text-sm mt-1"></div>
-          </div>
-
-          <!-- Login Button -->
-          <button type="submit"
-            class="w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-600 dark:hover:bg-red-700">
-            Login
-          </button>
-        </form>
-
-        <!-- Forgot Password -->
-        <div class="text-center mt-4">
-          <a href="/auth/forgot-password" class="text-red-500 font-medium hover:underline dark:text-red-400">Forgot Password?</a>
+      <form id="loginForm" action="/auth/login" method="POST" class="space-y-6">
+        <!-- Email -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-[var(--color-black)]">Email</label>
+          <input 
+            id="email" 
+            name="email" 
+            type="email" 
+            placeholder="Email" 
+            class="w-full px-4 py-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" 
+            required />
+          <div id="emailError" class="hidden text-[var(--color-red-500)] text-sm mt-1"></div>
         </div>
 
-        <!-- Sign-Up Link -->
-        <p class="text-sm text-center text-gray-500 dark:text-gray-300 mt-6">
-          Don't have an account?
-          <a href="/auth/register" class="text-red-500 font-medium hover:underline dark:text-red-400">Create one</a>
-        </p>
+        <!-- Password -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-[var(--color-black)]">Password</label>
+          <input 
+            id="password" 
+            name="password" 
+            type="password" 
+            placeholder="Password" 
+            class="w-full px-4 py-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" 
+            required />
+          <div id="passwordError" class="hidden text-[var(--color-red-500)] text-sm mt-1"></div>
+        </div>
+
+        <!-- Login Button -->
+        <button 
+          type="submit" 
+          class="w-full py-3 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-md hover:bg-[var(--color-red-700)] focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-md hover:shadow-lg">
+          Login
+        </button>
+      </form>
+
+      <!-- Forgot Password -->
+      <div class="text-center mt-4">
+        <a href="/auth/forgot-password" class="text-[var(--color-red-500)] font-medium hover:underline">Forgot Password?</a>
       </div>
+
+      <!-- Sign-Up Link -->
+      <p class="text-sm text-center text-[var(--color-gray-600)] mt-6">
+        Don't have an account? <a href="/auth/register" class="text-[var(--color-red-500)] font-medium hover:underline">Create one</a>
+      </p>
     </div>
   </div>
 
-  <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("loginFrom");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const emailError = document.getElementById("emailError");
-    const passwordError = document.getElementById("passwordError");
+  <script src="/js/emailPasswordValidation.js"></script>
+</main>
 
-    function validateEmail() {
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-        const emailValue = emailInput.value.trim();
-
-        if (emailValue.length === 0) {
-            emailError.classList.add("hidden"); // Hide error when empty
-            return false;
-        }
-        if (!emailPattern.test(emailValue)) {
-            emailError.textContent = "Enter a valid Gmail address.";
-            emailError.classList.remove("hidden");
-            return false;
-        }
-        emailError.classList.add("hidden");
-        return true;
-    }
-
-    function validatePassword() {
-        const passwordValue = passwordInput.value.trim();
-
-        if (passwordValue.length === 0) {
-            passwordError.classList.add("hidden"); // Hide error when empty
-            return false;
-        }
-        if (passwordValue.length < 6) {
-            passwordError.textContent = "Password must be at least 6 characters long.";
-            passwordError.classList.remove("hidden");
-            return false;
-        }
-        passwordError.classList.add("hidden");
-        return true;
-    }
-
-    // ✅ Live Validation
-    emailInput.addEventListener("input", validateEmail);
-    passwordInput.addEventListener("input", validatePassword);
-
-    form.addEventListener("submit", function (event) {
-        const isEmailValid = validateEmail();
-        const isPasswordValid = validatePassword();
-
-        if (!isEmailValid || !isPasswordValid) {
-            event.preventDefault(); // Prevent form submission if any validation fails
-        }
-    });
-});
-
- 
- </script>
-
-</body>
 <%- include('../shared/footer') %>
-
- 
- 

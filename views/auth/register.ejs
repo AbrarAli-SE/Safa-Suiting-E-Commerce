@@ -1,143 +1,78 @@
 <%- include('../shared/header') %>
 
-<body class="transition-all duration-300  text-gray-900 dark:bg-gray-900  ">
-    <div class="flex min-h-screen">
-        <div class="w-full lg:mt-auto flex items-center justify-center bg-white dark:bg-gray-800 p-8 lg:px-12">
-            <div class="w-full max-w-md lg:mb-44">
-                <h1 class="text-2xl font-semibold text-gray-800 dark:text-white text-center mb-4">Create an account</h1>
-                <p class="text-sm text-gray-500 dark:text-gray-300 text-center mb-6">Enter your details below</p>
-    
-                <!-- Registration Form -->
-                <form id="signupForm" action="/auth/register" method="POST" class="space-y-4">
-                    
-                    <!-- Name Field -->
-                    <div class="relative">
-                        <label for="name" class="sr-only">Full Name</label>
-                        <input id="name" name="name" type="text" placeholder="Full Name" required
-                            class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
-                        <div id="nameError" class="text-red-500 text-sm mt-1 hidden"></div>
-                    </div>
-    
-                    <!-- Email Field -->
-                    <div class="relative">
-                        <label for="email" class="sr-only">Email</label>
-                        <input id="email" name="email" type="email" placeholder="Email" required
-                            class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
-                        <div id="emailError" class="text-red-500 text-sm mt-1 hidden"></div>
-                    </div>
-    
-                    <!-- Password Field -->
-                    <div class="relative">
-                        <label for="password" class="sr-only">Password</label>
-                        <input id="password" name="password" type="password" placeholder="Password" required
-                            class="w-full px-4 py-2 border-2 border-gray-300 dark:border-gray-700 rounded-md focus:outline-none focus:ring-0 focus:border-red-500 dark:focus:border-red-400 dark:bg-gray-700 text-gray-900 dark:text-gray-300">
-                        <div id="passwordError" class="text-red-500 text-sm mt-1 hidden"></div>
-                    </div>
-    
-                    <!-- Create Account Button (Submit Form) -->
-                    <button type="submit" id="registerBtn"
-                        class="w-full py-2 bg-red-500 text-white font-semibold rounded-md hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 dark:bg-red-600 dark:hover:bg-red-700">
-                        Create Account
-                    </button>
-                </form>
-    
-                <!-- Google Sign-Up -->
-                <div class="flex items-center justify-center mt-4">
-                    <a href="/auth/google"
-                        class="w-full flex items-center justify-center gap-2 py-2 border border-gray-300 dark:border-gray-700 text-gray-700 font-semibold rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-300 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
-                        <img src="/assests/googleIcon.png" alt="Google Icon" class="h-5 w-5 object-contain">
-                        Sign up with Google
-                    </a>
-                </div>
-    
-                <!-- Login Link -->
-                <p class="text-sm text-center text-gray-500 dark:text-gray-300 mt-6">
-                    Already have an account?
-                    <a href="/auth/login" class="text-red-500 font-medium hover:underline dark:text-red-400">Log in</a>
-                </p>
-            </div>
+<main class="bg-[var(--color-gray-50)]">
+  <div class="flex min-h-screen items-center justify-center px-4 py-12">
+    <div class="w-full max-w-md bg-[var(--color-white)] p-8 rounded-xl shadow-lg">
+      <h1 class="text-3xl font-bold text-[var(--color-black)] text-center mb-4">Sign Up</h1>
+      <p class="text-sm text-[var(--color-gray-600)] text-center mb-6">Enter your details below</p>
+
+      <form id="signupForm" action="/auth/register" method="POST" class="space-y-6">
+        <!-- Name Field -->
+        <div>
+          <label for="name" class="block text-sm font-medium text-[var(--color-black)]">Full Name</label>
+          <input 
+            id="name" 
+            name="name" 
+            type="text" 
+            placeholder="Full Name" 
+            required 
+            class="w-full px-4 py-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          <div id="nameError" class="hidden text-[var(--color-red-500)] text-sm mt-1"></div>
         </div>
+
+        <!-- Email Field -->
+        <div>
+          <label for="email" class="block text-sm font-medium text-[var(--color-black)]">Email</label>
+          <input 
+            id="email" 
+            name="email" 
+            type="email" 
+            placeholder="Email" 
+            required 
+            class="w-full px-4 py-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          <div id="emailError" class="hidden text-[var(--color-red-500)] text-sm mt-1"></div>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label for="password" class="block text-sm font-medium text-[var(--color-black)]">Password</label>
+          <input 
+            id="password" 
+            name="password" 
+            type="password" 
+            placeholder="Password" 
+            required 
+            class="w-full px-4 py-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          <div id="passwordError" class="hidden text-[var(--color-red-500)] text-sm mt-1"></div>
+        </div>
+
+        <!-- Create Account Button -->
+        <button 
+          type="submit" 
+          class="w-full py-3 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-md hover:bg-[var(--color-red-700)] focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-md hover:shadow-lg">
+          Create Account
+        </button>
+      </form>
+
+      <!-- Google Sign-Up -->
+      <div class="flex items-center justify-center mt-4">
+        <a 
+          href="/auth/google" 
+          class="w-full flex items-center justify-center gap-2 py-2 border border-[var(--color-gray-300)] text-[var(--color-black)] font-semibold rounded-md hover:bg-[var(--color-gray-100)] focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300">
+          <img src="/assests/googleIcon.png" alt="Google Icon" class="h-5 w-5 object-contain">
+          Sign up with Google
+        </a>
+      </div>
+
+      <!-- Login Link -->
+      <p class="text-sm text-center text-[var(--color-gray-600)] mt-6">
+        Already have an account? <a href="/auth/login" class="text-[var(--color-red-500)] font-medium hover:underline">Log in</a>
+      </p>
     </div>
-    
-    <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const form = document.getElementById("signupForm");
-    const nameInput = document.getElementById("name");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
-    const nameError = document.getElementById("nameError");
-    const emailError = document.getElementById("emailError");
-    const passwordError = document.getElementById("passwordError");
+  </div>
 
-    function validateName() {
-        const nameValue = nameInput.value.trim();
-
-        if (nameValue.length === 0) {
-            nameError.classList.add("hidden"); // Hide error when empty
-            return false;
-        }
-        if (nameValue.length < 3) {
-            nameError.textContent = "Name must be at least 3 characters long.";
-            nameError.classList.remove("hidden");
-            return false;
-        }
-        nameError.classList.add("hidden");
-        return true;
-    }
-
-    function validateEmail() {
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-        const emailValue = emailInput.value.trim();
-
-        if (emailValue.length === 0) {
-            emailError.classList.add("hidden"); // Hide error when empty
-            return false;
-        }
-        if (!emailPattern.test(emailValue)) {
-            emailError.textContent = "Enter a valid Gmail address.";
-            emailError.classList.remove("hidden");
-            return false;
-        }
-        emailError.classList.add("hidden");
-        return true;
-    }
-
-    function validatePassword() {
-        const passwordValue = passwordInput.value.trim();
-
-        if (passwordValue.length === 0) {
-            passwordError.classList.add("hidden"); // Hide error when empty
-            return false;
-        }
-        if (passwordValue.length < 6) {
-            passwordError.textContent = "Password must be at least 6 characters long.";
-            passwordError.classList.remove("hidden");
-            return false;
-        }
-        passwordError.classList.add("hidden");
-        return true;
-    }
-
-    // ✅ Live Validation
-    nameInput.addEventListener("input", validateName);
-    emailInput.addEventListener("input", validateEmail);
-    passwordInput.addEventListener("input", validatePassword);
-
-    form.addEventListener("submit", function (event) {
-        const isNameValid = validateName();
-        const isEmailValid = validateEmail();
-        const isPasswordValid = validatePassword();
-
-        if (!isNameValid || !isEmailValid || !isPasswordValid) {
-            event.preventDefault(); // Prevent form submission if any validation fails
-        }
-    });
-});
-
-   
-   </script>
-    
-
-</body>
+  <script src="/js/authValidation.js"></script>
+  <script src="/js/emailPasswordValidation.js"></script>
+</main>
 
 <%- include('../shared/footer') %>

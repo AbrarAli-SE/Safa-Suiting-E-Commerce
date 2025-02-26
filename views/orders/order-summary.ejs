@@ -1,198 +1,118 @@
 <%- include('../shared/header') %>
-<!-- Orders Table (Responsive) -->
-<main class="flex-grow p-8 ml-0  mt-[74px] mb-8 overflow-hidden">
 
-    <!-- Breadcrumb -->
-    <div class="text-sm text-gray-700 m-10 mr-3">
-        <nav class="flex space-x-2 text-sm text-gray-500">
-            <a href="/" class="hover:text-gray-900">Home</a>
-            <span>/</span>
-            <span class="text-gray-900">My Orders</span>
-        </nav>
-    </div>
-    <!-- <h1 class="text-4xl font-bold   ">Products List</h1> -->
- <!-- Main Content -->
- <div class="container mx-auto p-6 mt-8">
-    <!-- Product Table (Responsive) -->
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-        <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
-            <table class="min-w-full table-fixed" id="productTable">
-                <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-                    <tr>
-                        <th class="px-4 py-2 text-left w-1/6">Product Image</th>
-                        <th class="px-4 py-2 text-left w-1/6">Product Name</th>
-                        <th class="px-4 py-2 text-left w-1/6">Category</th>
-                        <th class="px-4 py-2 text-left w-1/6">Quantity</th>
-                        <th class="px-4 py-2 text-left w-1/6">Price</th>
-                        <th class="px-4 py-2 text-left w-1/12">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="text-gray-700 dark:text-gray-300" id="productList">
-                    <!-- Example Row -->
-                    <tr class="border-t border-gray-200 dark:border-gray-600">
-                        <td class="px-4 py-2">
-                            <img src="/assests/pics (3).jpeg" alt="Product Image" class="w-16 h-16 object-cover rounded">
-                        </td>
-                        <td class="px-4 py-2">Product Name</td>
-                        <td class="px-4 py-2">New Arrival</td>
-                        <td class="px-4 py-2">23</td>
-                        <td class="px-4 py-2">$99.99</td>
-                        <td class="pr-5 py-2 flex items-center gap-3 mt-3">
-                            <a href="#" class="px-4 py-2 text-blue-600 view-btn" data-product-id="1">View</a>
-                            <a href="/delete-product/1" class="px-4 py-2 text-red-600">Delete</a>
-                        </td>
-                    </tr>
-                    <!-- Add more rows dynamically here -->
-                </tbody>
-            </table>
-        </div>
-    </div>
-</div>
-
-<!-- Product Modal (Popup) -->
-<div id="productModal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center opacity-0 pointer-events-none transition-opacity duration-300 z-50">
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md max-w-lg w-full relative">
-        <!-- Close Button -->
-        <button id="closeModal" class="absolute top-4 right-4 text-xl font-bold text-gray-600 dark:text-gray-400">
-            &times;
-        </button>
-
-        <!-- Modal Title -->
-        <h3 id="modalTitle" class="text-xl font-semibold text-gray-900 dark:text-gray-100 mb-4">Product Details</h3>
-
-        <!-- Product Content -->
-        <div id="modalContent" class="mt-4">
-            <!-- Product details will be dynamically inserted here -->
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="mt-4 flex justify-end space-x-4">
-            <button id="closeModalBtn" class="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300">
-                Close
-            </button>
-        </div>
-    </div>
-</div>
-
-  
-  <!-- Pagination or Entries Bar -->
-  <div class="mt-4 flex justify-center">
-    <nav aria-label="Page navigation example">
-      <ul class="flex items-center space-x-2 h-8 text-sm">
-        <!-- Previous Button -->
-        <li>
-          <a href="#"
-            class="pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <span class="sr-only">Previous</span>
-            <i class="bi bi-arrow-bar-left"></i>
-          </a>
-        </li>
-        <!-- Pagination Links -->
-        <li>
-          <a href="#"
-            class="pagination-link flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-        </li>
-        <li>
-          <a href="#"
-            class="pagination-link flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-        </li>
-        <li>
-          <a href="#"
-            class="pagination-link z-10 flex items-center justify-center px-3 h-8 leading-tight text-red-600 border border-red-300 bg-red-50 hover:bg-red-100 hover:text-red-400 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-        </li>
-        <li>
-          <a href="#"
-            class="pagination-link flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-        </li>
-        <li>
-          <a href="#"
-            class="pagination-link flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-        </li>
-        <!-- Next Button -->
-        <li>
-          <a href="#"
-            class="pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-            <span class="sr-only">Next</span>
-            <i class="bi bi-arrow-bar-right"></i>
-          </a>
-        </li>
-      </ul>
+<main class="container mx-auto px-4 py-12 mt-14 flex-grow">
+  <!-- Breadcrumb -->
+  <div class="text-sm text-[var(--color-gray-600)] mb-8">
+    <nav class="flex space-x-2">
+      <a href="/" class="hover:text-[var(--color-black)] transition-colors duration-300">Home</a>
+      <span>/</span>
+      <span class="text-[var(--color-black)] font-semibold">My Orders</span>
     </nav>
+  </div>
+
+  <!-- Main Content -->
+  <div class="max-w-7xl mx-auto">
+    <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg">
+      <h1 class="text-3xl font-bold text-[var(--color-black)] mb-6">My Orders</h1>
+      <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-[var(--color-gray-400)] scrollbar-track-[var(--color-gray-100)]">
+        <table class="min-w-full table-fixed" id="productTable">
+          <thead class="bg-[var(--color-gray-50)] text-[var(--color-gray-700)]">
+            <tr>
+              <th class="px-4 py-3 text-left w-1/6">Product Image</th>
+              <th class="px-4 py-3 text-left w-1/6">Product Name</th>
+              <th class="px-4 py-3 text-left w-1/6">Category</th>
+              <th class="px-4 py-3 text-left w-1/6">Quantity</th>
+              <th class="px-4 py-3 text-left w-1/6">Price</th>
+              <th class="px-4 py-3 text-left w-1/12">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="text-[var(--color-gray-700)]" id="productList">
+            <% if (orders && orders.length > 0) { %>
+              <% orders.forEach(order => { %>
+                <tr class="border-t border-[var(--color-gray-200)]" data-order-id="<%= order._id %>">
+                  <td class="px-4 py-3">
+                    <img src="<%= order.product.image %>" alt="<%= order.product.name %>" class="w-16 h-16 object-cover rounded">
+                  </td>
+                  <td class="px-4 py-3"><%= order.product.name %></td>
+                  <td class="px-4 py-3"><%= order.product.category %></td>
+                  <td class="px-4 py-3"><%= order.quantity || 1 %></td>
+                  <td class="px-4 py-3">Rs <%= order.price.toFixed(2) %></td>
+                  <td class="px-4 py-3 flex items-center gap-3">
+                    <button 
+                      class="view-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" 
+                      data-product-id="<%= order._id %>">View</button>
+                    <button 
+                      class="delete-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" 
+                      data-product-id="<%= order._id %>">Delete</button>
+                  </td>
+                </tr>
+              <% }) %>
+            <% } else { %>
+              <tr>
+                <td colspan="6" class="px-4 py-3 text-center text-[var(--color-gray-600)]">No orders found.</td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="mt-6 flex justify-center">
+      <nav aria-label="Page navigation">
+        <ul class="flex items-center space-x-2 text-sm">
+          <li>
+            <a 
+              href="#" 
+              class="pagination-btn flex items-center justify-center px-3 h-8 text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-l-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300">
+              <span class="sr-only">Previous</span>
+              <i class="bi bi-arrow-bar-left"></i>
+            </a>
+          </li>
+          <li>
+            <a 
+              href="#" 
+              class="pagination-link flex items-center justify-center px-3 h-8 text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300">1</a>
+          </li>
+          <li>
+            <a 
+              href="#" 
+              class="pagination-link flex items-center justify-center px-3 h-8 text-[var(--color-red-500)] bg-[var(--color-red-50)] border border-[var(--color-red-300)] hover:bg-[var(--color-red-100)] hover:text-[var(--color-red-700)] transition-all duration-300">2</a>
+          </li>
+          <li>
+            <a 
+              href="#" 
+              class="pagination-btn flex items-center justify-center px-3 h-8 text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-r-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300">
+              <span class="sr-only">Next</span>
+              <i class="bi bi-arrow-bar-right"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Product Modal (Popup) -->
+  <div id="productModal" class="fixed inset-0 bg-[var(--color-black)] bg-opacity-60 flex justify-center items-center opacity-0 pointer-events-none transition-all duration-500 z-50">
+    <div class="bg-[var(--color-white)] p-6 rounded-xl shadow-2xl max-w-lg w-full relative transform scale-95 transition-all duration-300">
+      <button 
+        id="closeModal" 
+        class="absolute top-4 right-4 w-10 h-10 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-full flex items-center justify-center hover:bg-[var(--color-red-700)] transition-all duration-300">
+        <i class="bi bi-x-lg text-xl"></i>
+      </button>
+      <h3 id="modalTitle" class="text-xl font-semibold text-[var(--color-black)] mb-4">Order Details</h3>
+      <div id="modalContent" class="mt-4 text-[var(--color-gray-600)]"></div>
+      <div class="mt-6 flex justify-end">
+        <button 
+          id="closeModalBtn" 
+          class="px-4 py-2 text-[var(--color-gray-600)] bg-[var(--color-gray-200)] rounded-lg hover:bg-[var(--color-gray-300)] transition-all duration-300">
+          Close
+        </button>
+      </div>
+    </div>
   </div>
 </main>
 
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const viewButtons = document.querySelectorAll(".view-btn");
-        const modal = document.getElementById("productModal");
-        const closeModalBtn = document.getElementById("closeModalBtn");
-        const closeModal = document.getElementById("closeModal");
-        const modalTitle = document.getElementById("modalTitle");
-        const modalContent = document.getElementById("modalContent");
-
-        // Sample product data (Replace this with actual product data from API or database)
-        const products = [
-            {
-                id: 1,
-                name: "Designer Chair",
-                category: "Furniture",
-                quantity: 23,
-                price: "$99.99",
-                description: "A stylish and comfortable chair, perfect for home or office.",
-                image: "/assests/pics (3).jpeg"
-            },
-            {
-                id: 2,
-                name: "New Shirt",
-                category: "Fashion",
-                quantity: 15,
-                price: "$49.99",
-                description: "A high-quality, stylish shirt suitable for all occasions.",
-                image: "/assests/pics (3).jpeg"
-            }
-        ];
-
-        // Function to open modal and populate with product details
-        function openModal(productId) {
-            const product = products.find(p => p.id === productId);
-            if (product) {
-                modalTitle.textContent = product.name;
-                modalContent.innerHTML = `
-                    <div class="flex gap-4">
-                        <img src="${product.image}" alt="${product.name}" class="w-32 h-32 object-cover rounded">
-                        <div>
-                            <p><strong>Category:</strong> ${product.category}</p>
-                            <p><strong>Quantity:</strong> ${product.quantity}</p>
-                            <p><strong>Price:</strong> ${product.price}</p>
-                            <p><strong>Description:</strong> ${product.description}</p>
-                        </div>
-                    </div>
-                `;
-
-                // Show modal with smooth transition
-                modal.classList.remove("opacity-0", "pointer-events-none");
-            }
-        }
-
-        // Function to close modal
-        function closeModalFunction() {
-            // Hide modal with smooth transition
-            modal.classList.add("opacity-0", "pointer-events-none");
-        }
-
-        // Close modal on button click
-        closeModalBtn.addEventListener("click", closeModalFunction);
-        closeModal.addEventListener("click", closeModalFunction);
-
-        // Add event listeners to "View" buttons
-        viewButtons.forEach(button => {
-            button.addEventListener("click", function () {
-                const productId = parseInt(this.getAttribute("data-product-id"));
-                openModal(productId);
-            });
-        });
-    });
-</script>
+<script type="module" src="/js/myOrders.js"></script>
 
 <%- include('../shared/footer') %>
