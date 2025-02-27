@@ -27,11 +27,12 @@ document.addEventListener("DOMContentLoaded", function () {
   const uploadButton = document.getElementById("uploadButton");
   const messageContainer = document.getElementById("message-container");
   const carouselPreview = document.getElementById("carouselPreview");
+  const imageInputs = document.querySelectorAll(".image-upload");
 
   // Initialize Swiper
-  const swiper = new Swiper(".default-carousel", {
+  const swiper = new Swiper(".thumbnail-carousel", {
     loop: true,
-    autoplay: { delay: 3000, disableOnInteraction: true }, // Disable auto-play on interaction
+    autoplay: { delay: 3000, disableOnInteraction: true },
     navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
     pagination: { el: ".swiper-pagination", clickable: true },
     slidesPerView: 1,
@@ -40,6 +41,14 @@ document.addEventListener("DOMContentLoaded", function () {
     observeParents: true,
     observeSlideChildren: true
   });
+
+  // Add event listeners for image inputs
+  imageInputs.forEach((input, index) => {
+    input.addEventListener("change", (event) => previewImage(event, index));
+  });
+
+  // Initial button state check
+  checkUploadButton();
 
   form.addEventListener("submit", async function (e) {
     e.preventDefault();
@@ -71,13 +80,8 @@ document.addEventListener("DOMContentLoaded", function () {
           carouselData.slides.forEach(slide => {
             const slideHtml = `
               <div class="swiper-slide">
-                <div class="relative w-full h-[60vh] overflow-hidden">
-                  <img src="${slide.image}" class="w-full h-full object-cover transition-transform duration-700 hover:scale-105 border-4 border-[var(--color-red-500)]" alt="Carousel Slide">
-                  <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-gray-900)]/80 via-transparent to-transparent flex items-end p-6">
-                    <button class="px-6 py-2 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
-                      Shop Now
-                    </button>
-                  </div>
+                <div class="relative w-full h-[60vh]">
+                  <img src="${slide.image}" class="w-full h-full object-cover" alt="Carousel Slide">
                 </div>
               </div>`;
             carouselPreview.insertAdjacentHTML("beforeend", slideHtml);
@@ -106,15 +110,20 @@ document.addEventListener("DOMContentLoaded", function () {
               <img 
                 id="preview-${i}" 
                 class="mt-2 rounded-lg shadow-lg w-full h-40 object-cover border-4 border-[var(--color-red-500)]" 
-                src="<%= (carouselData.slides[i] && carouselData.slides[i].image) ? carouselData.slides[i].image : '' %>" 
+                src="${carouselData.slides[i] && carouselData.slides[i].image ? carouselData.slides[i].image : ''}" 
                 alt="Preview ${i + 1}" 
-                style="display: <%= (carouselData.slides[i] && carouselData.slides[i].image) ? 'block' : 'none' %>;">
+                style="display: ${carouselData.slides[i] && carouselData.slides[i].image ? 'block' : 'none'};">
             </div>`;
           slidesContainer.insertAdjacentHTML("beforeend", slideHtml);
         }
-        checkUploadButton();
 
-        // Reinitialize Swiper after DOM update
+        // Reattach event listeners to new inputs
+        const newInputs = document.querySelectorAll(".image-upload");
+        newInputs.forEach((input, index) => {
+          input.addEventListener("change", (event) => previewImage(event, index));
+        });
+
+        checkUploadButton();
         swiper.update();
       } else {
         showMessage(result.error || "An error occurred.", "error");
@@ -137,4 +146,12 @@ document.addEventListener("DOMContentLoaded", function () {
     messageContainer.appendChild(div);
     setTimeout(() => div.remove(), 5000);
   }
+
+  // Thumbnail Click Handling
+  const thumbnails = document.getElementsByClassName("swiper-thumbnail");
+  Array.from(thumbnails).forEach(thumbnail => {
+    thumbnail.addEventListener("click", function () {
+      swiper.slideTo(parseInt(this.dataset.slide));
+    });
+  });
 });

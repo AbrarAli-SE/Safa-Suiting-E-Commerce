@@ -35,52 +35,63 @@
 <body class="transition-all duration-300 bg-[var(--color-white)] text-[var(--color-black)] !scroll-smooth">
 
 
-<header id="mainHeader" class="border-b border-[var(--color-gray-300)] bg-[var(--color-white)] text-[var(--color-black)] fixed top-0 left-0 w-full z-50 transition-all duration-300">
-  <div id="headerContent" class="flex justify-between items-center py-3 px-4 lg:px-16 md:px-6">
-    <a href="/" id="logo">
-      <img src="/assests/safaLogo.png" alt="Safa Suiting" class="w-10 h-6 hover:opacity-80 transition-opacity">
-    </a>
-    <nav id="desktopNav" class="hidden md:flex md:space-x-4 text-sm font-semibold tracking-wide">
-      <a href="/" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Home</a>
-      <a href="/pages/contact" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Contact</a>
-      <a href="/pages/about" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">About</a>
-      <% if (!user) { %>
-        <a href="/auth/register" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Sign Up</a>
-      <% } %>
-    </nav>
-    <div id="icons" class="flex items-center space-x-3">
-      <button id="desktopSearchIcon" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors p-1.5"><i class="bi bi-search text-lg"></i></button>
-      <button id="hamburgerBtn" class="md:hidden text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"><i class="bi bi-list text-2xl"></i></button>
-      <% if (user) { %>
-        <button><a href="/user/wishlist" class="relative hidden md:block cursor-pointer" id="js-wishlist"><i class="bi bi-heart text-lg text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"></i><span id="js-wishlist-qunatiy" class="absolute -top-1 -right-1 bg-[var(--color-red-500)] text-[var(--color-white)] text-xs rounded-full px-1">3</span></a></button>
-        <button><a href="/user/cart" class="relative hidden md:block cursor-pointer" id="js-cart"><i class="bi bi-cart3 text-lg text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"></i><span id="js-cart-qunatiy" class="absolute -top-1 -right-1 bg-[var(--color-red-500)] text-[var(--color-white)] text-xs rounded-full px-1">5</span></a></button>
-        <button><a href="/user/dashboard" class="relative hidden md:block cursor-pointer" id="accountIcon"><i class="bi bi-person text-xl text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"></i></a></button>
-      <% } %>
+  <header id="mainHeader" class="border-b border-[var(--color-gray-300)] bg-[var(--color-white)] text-[var(--color-black)] fixed top-0 left-0 w-full z-50 transition-all duration-300">
+    <div id="headerContent" class="flex justify-between items-center py-3 px-4 lg:px-16 md:px-6">
+        <a href="/" id="logo" class="flex items-center space-x-2">
+            <span class="text-2xl md:text-3xl font-bold text-[var(--color-red-500)]">SA</span>
+            <span class="text-2xl md:text-3xl font-bold text-[var(--color-white)] bg-[var(--color-red-500)] px-2 rounded">FA</span>
+            <!-- <div class="hidden md:block w-12 h-1 bg-[var(--color-red-500)] mt-1 rounded"></div> -->
+        </a>
+        <nav id="desktopNav" class="hidden md:flex md:space-x-4 text-sm font-semibold tracking-wide">
+            <a href="/" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Home</a>
+            <a href="/pages/contact" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Contact</a>
+            <a href="/pages/about" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">About</a>
+            <% if (!user) { %>
+                <a href="/auth/register" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Sign Up</a>
+            <% } %>
+        </nav>
+        <div id="icons" class="flex items-center space-x-3">
+            <button id="desktopSearchIcon" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors p-1.5"><i class="bi bi-search text-lg"></i></button>
+            <% if (user) { %>
+                <button><a href="/user/cart" class="relative block cursor-pointer" id="js-cart"><i class="bi bi-cart3 text-lg text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"></i><span id="js-cart-qunatiy" class="absolute -top-1 -right-1 bg-[var(--color-red-500)] text-[var(--color-white)] text-xs rounded-full px-1">5</span></a></button>
+            <% } %>
+            <button id="hamburgerBtn" class="md:hidden text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"><i class="bi bi-list text-2xl"></i></button>
+            <% if (user) { %>
+                <button><a href="/user/wishlist" class="relative hidden md:block cursor-pointer" id="js-wishlist"><i class="bi bi-heart text-lg text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"></i><span id="js-wishlist-qunatiy" class="absolute -top-1 -right-1 bg-[var(--color-red-500)] text-[var(--color-white)] text-xs rounded-full px-1">3</span></a></button>
+                <button><a href="/user/dashboard" class="relative hidden md:block cursor-pointer" id="accountIcon"><i class="bi bi-person text-xl text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors"></i></a></button>
+            <% } %>
+        </div>
     </div>
-  </div>
-  <div id="expandedSearchBar" class="hidden px-4 py-3 w-full bg-[var(--color-white)] border-b border-[var(--color-gray-300)]">
-    <div class="flex items-center space-x-1">
-      <div class="relative w-full">
-        <input type="text" id="expandedSearchInput" placeholder="Search..." autocomplete="off" class="block p-2 w-full text-[var(--color-black)] border-2 border-[var(--color-black)] bg-[var(--color-white)] focus:outline-none focus:ring-1 focus:ring-[var(--color-red-500)] rounded-md pl-2 pr-8">
-        <button id="closeSearch" class="absolute top-1/2 right-2 transform -translate-y-1/2 text-[var(--color-black)] hover:text-[var(--color-red-500)] text-lg transition-colors"><i class="bi bi-x-lg"></i></button>
-      </div>
+    <div id="expandedSearchBar" class="hidden px-4 py-3 w-full bg-[var(--color-white)] border-b border-[var(--color-gray-300)]">
+        <div class="flex items-center space-x-1">
+            <div class="relative w-full">
+                <input type="text" id="expandedSearchInput" placeholder="Search..." autocomplete="off" class="block p-2 w-full text-[var(--color-black)] border-2 border-[var(--color-black)] bg-[var(--color<|control340|>)] focus:outline-none focus:ring-1 focus:ring-[var(--color-red-500)] rounded-md pl-2 pr-8">
+                <button id="closeSearch" class="absolute top-1/2 right-2 transform -translate-y-1/2 text-[var(--color-black)] hover:text-[var(--color-red-500)] text-lg transition-colors"><i class="bi bi-x-lg"></i></button>
+            </div>
+        </div>
+        <div id="expandedSearchResults" class="hidden mt-1 bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-md shadow-md"></div>
     </div>
-    <div id="expandedSearchResults" class="hidden mt-1 bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-md shadow-md"></div>
-  </div>
-  <div id="fullScreenNav" class="fixed inset-0 bg-[var(--color-white)] z-[100] flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
-    <button id="closeNavBtn" class="absolute top-4 right-4 text-[var(--color-black)] hover:text-[var(--color-red-500)] text-2xl transition-colors"><i class="bi bi-x-lg"></i></button>
-    <nav class="flex flex-col items-center space-y-8 text-2xl font-semibold">
-      <a href="/" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Home</a>
-      <a href="/pages/contact" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Contact</a>
-      <a href="/pages/about" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">About</a>
-      <% if (!user) { %>
-        <a href="/auth/register" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Sign Up</a>
-      <% } else { %>
-        <a href="/user/wishlist" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Wishlist</a>
-        <a href="/user/cart" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Cart</a>
-        <a href="/user/dashboard" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Account</a>
-      <% } %>
-    </nav>
-  </div>
+    <div id="fullScreenNav" class="fixed inset-0 bg-[var(--color-white)] z-[100] flex flex-col items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300">
+        <button id="closeNavBtn" class="absolute top-4 right-4 text-[var(--color-black)] hover:text-[var(--color-red-500)] text-2xl transition-colors"><i class="bi bi-x-lg"></i></button>
+        <!-- SAFA Logo with Red and White Design -->
+        <div class="mb-12 flex flex-col items-center">
+            <a href="/" class="flex items-center space-x-2">
+                <span class="text-4xl font-bold text-[var(--color-red-500)]">SA</span>
+                <span class="text-4xl font-bold text-[var(--color-white)] bg-[var(--color-red-500)] px-2 rounded">FA</span>
+            </a>
+            <!-- <div class="w-16 h-1 bg-[var(--color-red-500)] mt-2 rounded"></div> -->
+        </div>
+        <nav class="flex flex-col items-center space-y-8 text-2xl font-semibold">
+            <a href="/" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Home</a>
+            <a href="/pages/contact" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Contact</a>
+            <a href="/pages/about" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">About</a>
+            <% if (!user) { %>
+                <a href="/auth/register" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Sign Up</a>
+            <% } else { %>
+                <a href="/user/wishlist" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Wishlist</a>
+                <a href="/user/dashboard" class="text-[var(--color-black)] hover:text-[var(--color-red-500)] transition-colors">Account</a>
+            <% } %>
+        </nav>
+    </div>
 </header>
 
