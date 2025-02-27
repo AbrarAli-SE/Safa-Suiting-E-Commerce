@@ -8,243 +8,452 @@
   <link rel="shortcut icon" href="/assests/safaLogo.png" type="image/x-icon">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="/styles/global.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- Swiper CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
-  <!-- Swiper JS -->
-<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
+    body {
+      background-color: var(--color-white); /* White background */
+      color: var(--color-black); /* Black text */
+      height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Drawer (Sidebar) */
+    .drawer {
+      width: 250px;
+      background-color: var(--color-white); /* White drawer */
+      border-right: 2px solid var(--color-red-500); /* Red border */
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: -260px; /* Slightly more off-screen for effect */
+      transition: left 0.4s ease-in-out; /* Smoother animation */
+      padding: 20px;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+      z-index: 1000; /* Above overlay */
+    }
+
+    .drawer.open {
+      left: 0; /* Slide in */
+    }
+
+    .drawer h2 {
+      color: var(--color-red-500); /* Red title */
+      margin-bottom: 30px;
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .drawer ul {
+      list-style: none;
+    }
+
+    .drawer ul li {
+      margin: 20px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .drawer ul li a {
+      text-decoration: none;
+      color: var(--color-black); /* Black links */
+      font-weight: bold;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
+
+    .drawer ul li a:hover,
+    .drawer ul li a.active {
+      color: var(--color-red-500); /* Red on hover or active */
+    }
+
+    .drawer ul li i {
+      margin-right: 8px;
+      font-size: 1.1rem;
+    }
+
+    /* Overlay */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black */
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.4s ease-in-out;
+      z-index: 999; /* Behind drawer, above content */
+    }
+
+    .overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Main content */
+    .main-content {
+      padding: 20px;
+      width: 100%;
+      margin-left: 0;
+      transition: filter 0.4s ease-in-out, margin-left 0.4s ease-in-out; /* Blur and margin transition */
+    }
+
+    .main-content.dimmed {
+      filter: blur(2px); /* Slight blur when drawer is open */
+      margin-left: 250px; /* Shift content to accommodate drawer */
+    }
+
+    .header {
+      background-color: var(--color-white); /* White header */
+      padding: 10px 20px;
+      border-bottom: 1px solid var(--color-black); /* Black border */
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      color: var(--color-black); /* Black title */
+      font-size: 1.5rem;
+      font-weight: bold;
+      flex-grow: 1;
+    }
+
+    /* Hamburger Menu Button */
+    .menu-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: var(--color-black); /* Black icon */
+      cursor: pointer;
+      padding: 10px;
+      transition: color 0.3s ease;
+    }
+
+    .menu-btn:hover {
+      color: var(--color-red-500); /* Red on hover */
+    }
+
+    .content {
+      background-color: var(--color-white); /* White content area */
+      padding: 20px;
+      border: 1px solid var(--color-red-500); /* Red border */
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .content h2 {
+      color: var(--color-red-500); /* Red subtitle */
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+      font-weight: bold;
+    }
+
+    .content p {
+      color: var(--color-black); /* Black text */
+      font-size: 1rem;
+    }
+
+    /* Analytics Cards */
+    .analytics-card {
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .analytics-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Charts Grid */
+    .charts-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    @media (min-width: 640px) {
+      .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .charts-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 639px) {
+      .drawer {
+        width: 200px; /* Narrower drawer on mobile */
+      }
+
+      .main-content.dimmed {
+        margin-left: 200px; /* Adjust for narrower drawer */
+      }
+
+      .header h1 {
+        font-size: 1.25rem; /* Smaller title on mobile */
+      }
+
+      .menu-btn {
+        font-size: 1.25rem; /* Smaller hamburger icon on mobile */
+      }
+
+      .analytics-card {
+        padding: 1rem;
+      }
+
+      .content h2 {
+        font-size: 1rem;
+      }
+
+      .content p {
+        font-size: 0.875rem;
+      }
+    }
+  </style>
 </head>
 
-<body class="transition-all duration-300 bg-gray-100 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-  <header
-    class="fixed top-0 left-0 right-0 z-10 flex items-center justify-end dark:bg-gray-800 bg-gray-100 text-white p-2 transition-all shadow-md">
-    <!-- Notification Bar -->
-    <div class="flex items-center gap-4 mr-4 text-black dark:text-white transition-all">
-      <!-- Bell Icon -->
-      <button class="relative" id="notification" onclick="openNotifications()">
-        <i class="bi bi-bell text-2xl"></i>
-        <span id="notificationCount"
-            class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full px-1 hidden">
-        </span>
-      </button>
+<body class="bg-[var(--color-white)] text-[var(--color-black)]">
+  <div class="drawer" id="drawer">
+    <h2>Admin Panel</h2>
+    <ul>
+      <li><a href="/admin/product/add-product"><i class="bi bi-plus-circle"></i> Add Product</a></li>
+      <li><a href="/admin/product/product-list"><i class="bi bi-list-ul"></i> Product List</a></li>
+      <li><a href="/admin/manage-carousel"><i class="bi bi-images"></i> Manage Carousel</a></li>
+      <li><a href="/admin/coupon-code"><i class="bi bi-ticket"></i> Manage Coupon</a></li>
+      <li><a href="/admin/assign-id"><i class="bi bi-key"></i> Assign ID</a></li>
+      <li><a href="/admin/payment"><i class="bi bi-credit-card"></i> Payment Record</a></li>
+      <li><a href="/admin/cancel-order"><i class="bi bi-x-circle"></i> Cancel Orders</a></li>
+      <li><a href="/admin/users"><i class="bi bi-people"></i> Manage Users</a></li>
+      <li><a href="/admin/contacts"><i class="bi bi-envelope"></i> User Contacts</a></li>
+      <li><a href="/admin/setting"><i class="bi bi-gear"></i> Settings</a></li>
+      <li><a href="/auth/logout"><i class="bi bi-box-arrow-right"></i> Logout</a></li>
+    </ul>
+  </div>
+  <div class="overlay" id="overlay"></div>
 
-      <!-- Notification Dropdown -->
-      <div id="notificationDropdown"
-        class="hidden absolute right-7 mt-56 min-w-56 bg-white border border-gray-300 rounded-lg shadow-lg dark:bg-gray-800 dark:border-gray-600 max-h-48 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
-        <ul id="notificationList" class="list-none p-2">
-            <li class="py-2 px-4 text-gray-500">No new notifications</li>
-        </ul>
+  <div class="main-content" id="mainContent">
+    <div class="header">
+      <button class="menu-btn" id="menuToggle"><i class="bi bi-list"></i></button>
+      <h1>Welcome, Admin</h1>
+    </div>
+    <div class="content">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div class="analytics-card bg-blue-500 text-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+          <h2 class="text-lg font-semibold">Total Revenue</h2>
+          <p class="text-3xl font-bold">$45,000</p>
+        </div>
+        <div class="analytics-card bg-green-500 text-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+          <h2 class="text-lg font-semibold">Total Orders</h2>
+          <p class="text-3xl font-bold">1,200</p>
+        </div>
+        <div class="analytics-card bg-yellow-500 text-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+          <h2 class="text-lg font-semibold">New Customers</h2>
+          <p class="text-3xl font-bold">300</p>
+        </div>
+        <div class="analytics-card bg-red-500 text-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+          <h2 class="text-lg font-semibold">Products Sold</h2>
+          <p class="text-3xl font-bold">2,450</p>
+        </div>
       </div>
 
-    
-
-
-
-
-      <!-- Hamburger Menu -->
-      <button id="hamburgerMenu" class="sm:hidden block p-2 rounded-md text-black dark:text-white transition-all">
-        <i class="bi bi-list text-2xl"></i>
-      </button>
-    </div>
-  </header>
-
-
-  <div class="flex">
-    <!-- Sidebar -->
-    <aside id="sidebar"
-      class="h-screen z-20 p-4 bg-gray-100 dark:bg-gray-800 fixed top-0 left-0 flex flex-col transition-all duration-300 transform -translate-x-full sm:translate-x-0 sm:w-20 lg:w-64 border-r-2 border-gray-200 dark:border-gray-700">
-      <h2 class="sidebar-heading text-gray-900 dark:text-gray-100">Admin Panel</h2>
-      <hr class="sidebar-divider border-gray-400 dark:border-gray-600">
-
-      <nav class="leading-2 tracking-tighter space-y-4">
-        <!-- Manage Products with Dropdown -->
-        <div class="relative text-gray-900 dark:text-gray-100">
-          <!-- Main Button -->
-          <button
-            class="sidebar-link text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none w-full"
-            id="manageProductsButton">
-            <span class="flex items-center">
-              <i class="bi bi-box"></i>
-              <span class="hidden lg:inline ml-4">Manage Products</span>
-            </span>
-            <i class="bi bi-chevron-down"></i>
-          </button>
-
-
-          <!-- Dropdown Menu -->
-          <ul id="manageProductsDropdown"
-            class="hidden flex-col items-start  z-10 transition-all duration-500 ease-in-out opacity-0 translate-y-5 mt-2">
-            <li class="w-full group relative py-1">
-              <a href="/admin/product/add-product"
-                class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-                <i class="bi bi-plus-circle"></i>
-                <span class="hidden lg:inline">Add Products</span>
-                <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Add Prodcuts</span>
-              </a>
-            </li>
-            <li class="w-full group relative py-1">
-              <a href="/admin/product/product-list"
-                class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-                <i class="bi bi-list-ul"></i>
-                <span class="hidden lg:inline">Products List</span>
-                <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Products List</span>
-              </a>
-            </li>
-            <li class="w-full group relative py-1">
-              <a href="/admin/manage-carousel"
-                class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-                <i class="bi bi-sliders"></i>
-                <span class="hidden lg:inline">Update Coursel</span>
-                <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Update Coursel</span>
-              </a>
-            </li>
-
-          </ul>
+      <!-- Grid Layout for Charts (2x2 for larger screens) -->
+      <div class="charts-grid">
+        <!-- Order Analytics -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Order Analytics</h2>
+          <canvas id="orderChart"></canvas>
         </div>
-        <a href="/admin/coupon-code"
-          class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-          <i class="bi bi-tag"></i>
-          <span class="hidden lg:inline">Apply Coupon Codes</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Apply Coupon Codes</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </a>
-        <a href="/admin/assign-id"
-          class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-          <i class="bi bi-truck"></i>
-          <span class="hidden lg:inline">Track Orders</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Track Orders</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </a>
-        <a href="/admin/payment"
-          class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-          <i class="bi bi-credit-card"></i>
-          <span class="hidden lg:inline">View Payments</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">View Payments</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </a>
-        <a href="/admin/cancel-order"
-          class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-          <i class="bi bi-x-circle"></i>
-          <span class="hidden lg:inline">Cancel Orders</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Cancel Orders</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </a>
-        <a href="/admin/users"
-          class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-          <i class="bi bi-people"></i>
-          <span class="hidden lg:inline">Manage Users</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Manage Users</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </a>
-        <a href="/admin/analytical"
-          class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-          <i class="bi bi-bar-chart"></i>
-          <span class="hidden lg:inline">Analytics</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Analytics</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </a>
-        <a href="/admin/contacts"
-          class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-          <i class="bi bi-person-rolodex"></i>
-          <span class="hidden lg:inline">Contacts</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Contacts</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </a>
-        <a href="/admin/setting"
-          class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-          <i class="bi bi-gear"></i>
-          <span class="hidden lg:inline">Settings</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Settings</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </a>
-        <a href="/auth/logout"
-          class="sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none">
-          <i class="bi bi-box-arrow-right"></i>
-          <span class="hidden lg:inline">Logout</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden">Logout</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </a>
-        <buton
-          class="cursor-pointer sidebar-link group text-gray-900 dark:text-gray-100 focus:outline-none sm:focus:outline-none md:focus:outline-none -ml-1 "
-          id="darkModeToggle">
-          <i class="bi bi-moon text-xl dark:hidden"></i>
-          <i class="bi bi-sun text-xl hidden dark:inline"></i>
-          <span class="hidden lg:inline">Dark Mode</span>
-          <span class="sidebar-tooltip hidden sm:inline md:inline lg:hidden focus:outline-none">Toggle Dark
-            Mode</span>
-          <!-- Visible on sm and md, hidden on lg -->
-        </buton>
-      </nav>
-    </aside>
 
+        <!-- Revenue Analytics -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Revenue Analytics</h2>
+          <canvas id="revenueChart"></canvas>
+        </div>
 
-    <!-- <script>
-      document.addEventListener("DOMContentLoaded", function () {
-          fetchNotifications();
+        <!-- Product Categories -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Product Categories</h2>
+          <canvas id="categoryChart"></canvas>
+        </div>
+
+        <!-- Customer Growth -->
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+          <h2 class="text-xl font-semibold mb-4">Customer Growth</h2>
+          <canvas id="growthChart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menuToggle');
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+    const mainContent = document.getElementById('mainContent');
+
+    menuToggle.addEventListener('click', () => {
+      drawer.classList.toggle('open');
+      overlay.classList.toggle('active');
+      mainContent.classList.toggle('dimmed');
+    });
+
+    overlay.addEventListener('click', () => {
+      drawer.classList.remove('open');
+      overlay.classList.remove('active');
+      mainContent.classList.remove('dimmed');
+    });
+
+    // Sample Data for Charts
+    const orderData = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [{
+        label: 'Incoming Orders',
+        data: [120, 150, 200, 250, 300, 350, 400],
+        backgroundColor: '#6EE7B7',
+        borderColor: '#6EE7B7',
+        borderWidth: 1,
+        fill: true
+      }, {
+        label: 'Outgoing Orders',
+        data: [50, 70, 100, 120, 150, 180, 200],
+        backgroundColor: '#DB4444',
+        borderColor: '#DB4444',
+        borderWidth: 1,
+        fill: true
+      }]
+    };
+
+    const revenueData = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [{
+        label: 'Revenue',
+        data: [1000, 2000, 2500, 3000, 3500, 4000, 4500],
+        backgroundColor: '#4ADE80',
+        borderColor: '#4ADE80',
+        borderWidth: 1,
+        fill: true
+      }]
+    };
+
+    const categoryData = {
+      labels: ['Electronics', 'Clothing', 'Accessories', 'Footwear', 'Home'],
+      datasets: [{
+        label: 'Products Sold',
+        data: [300, 450, 100, 150, 200],
+        backgroundColor: '#DB4444',
+        borderColor: '#DB4444',
+        borderWidth: 1
+      }]
+    };
+
+    const growthData = {
+      labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+      datasets: [{
+        label: 'Customer Growth',
+        data: [100, 200, 300, 400, 500, 600, 700],
+        backgroundColor: '#FDBA74',
+        borderColor: '#FDBA74',
+        borderWidth: 1,
+        fill: true
+      }]
+    };
+
+    // Common Chart Options
+    const commonOptions = {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', display: true },
+        tooltip: {
+          callbacks: { label: function (context) { return context.dataset.label + ': ' + context.raw + (context.dataset.label.includes('Revenue') ? '$' : ' Items'); } }
+        }
+      },
+      scales: {
+        y: { beginAtZero: true, ticks: { stepSize: 50 } }
+      }
+    };
+
+    // Function to Initialize Charts
+    function initializeChart(chartId, chartType, chartData, chartOptions) {
+      const chartElement = document.getElementById(chartId);
+      if (!chartElement) {
+        console.warn(`${chartId} not found.`);
+        return;
+      }
+
+      try {
+        const ctx = chartElement.getContext('2d');
+        new Chart(ctx, {
+          type: chartType,
+          data: chartData,
+          options: chartOptions,
+        });
+      } catch (error) {
+        console.error(`Error initializing chart for ${chartId}:`, error);
+      }
+    }
+
+    // Initialize All Charts
+    document.addEventListener('DOMContentLoaded', () => {
+      const charts = [
+        { id: 'orderChart', type: 'line', data: orderData, options: commonOptions },
+        { id: 'revenueChart', type: 'line', data: revenueData, options: commonOptions },
+        { id: 'categoryChart', type: 'bar', data: categoryData, options: { ...commonOptions, scales: { y: { beginAtZero: true, ticks: { stepSize: 50 } } } } },
+        { id: 'growthChart', type: 'line', data: growthData, options: commonOptions },
+      ];
+
+      charts.forEach(({ id, type, data, options }) => {
+        initializeChart(id, type, data, options);
       });
-  
-      // ✅ Fetch Notifications
-      async function fetchNotifications() {
-          try {
-              const res = await fetch("/admin/notifications");
-              const data = await res.json();
-  
-              if (data.success) {
-                  const totalCount = data.totalNotifications;
-                  const notificationCount = document.getElementById("notificationCount");
-  
-                  if (totalCount > 0) {
-                      notificationCount.textContent = totalCount;
-                      notificationCount.classList.remove("hidden");
-                  } else {
-                      notificationCount.classList.add("hidden");
-                  }
-  
-                  const notificationList = document.getElementById("notificationList");
-                  notificationList.innerHTML = "";
-  
-                  if (data.newUsers > 0) {
-                      notificationList.innerHTML += `
-                          <li class="py-2 px-4 text-gray-700 hover:bg-gray-100 cursor-pointer dark:text-gray-300 dark:hover:bg-gray-700">
-                              <p>${data.newUsers} new user(s) registered.</p>
-                              <span class="text-xs text-gray-500 dark:text-gray-400 block mt-1">Just now</span>
-                          </li>`;
-                  }
-  
-                  if (data.newContacts > 0) {
-                      notificationList.innerHTML += `
-                          <li class="py-2 px-4 text-gray-700 hover:bg-gray-100 cursor-pointer dark:text-gray-300 dark:hover:bg-gray-700">
-                              <p>${data.newContacts} new contact message(s) received.</p>
-                              <span class="text-xs text-gray-500 dark:text-gray-400 block mt-1">Just now</span>
-                          </li>`;
-                  }
-  
-                  if (data.newUsers === 0 && data.newContacts === 0) {
-                      notificationList.innerHTML = `<li class="py-2 px-4 text-gray-500">No new notifications</li>`;
-                  }
-              }
-          } catch (error) {
-              console.error("❌ Error fetching notifications:", error);
-          }
-      }
-  
-      // ✅ Mark Notifications as Read when Bell is Clicked
-      function openNotifications() {
-          fetch("/admin/notifications/mark-read", { method: "POST" })
-              .then(() => {
-                  document.getElementById("notificationCount").classList.add("hidden");
-                  fetchNotifications();
-              })
-              .catch(error => console.error("❌ Error marking notifications as read:", error));
-  
-          const dropdown = document.getElementById("notificationDropdown");
-          dropdown.classList.toggle("hidden");
-      }
-  
-      // ✅ Refresh notifications every 10 seconds
-      setInterval(fetchNotifications, 10000);
-  </script> -->
-  
-      
+    });
+  </script>
+
+  <!-- Link the JavaScript file -->
+  <script src="/js/main.js"></script>
+  <script>
+    // Function to highlight the active link in the drawer
+    function highlightActiveLink() {
+      const currentPath = window.location.pathname;
+      const links = document.querySelectorAll('.drawer ul li a');
+
+      links.forEach(link => {
+        const href = link.getAttribute('href');
+        if (href === currentPath) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+
+    // Call the function when the page loads
+    document.addEventListener('DOMContentLoaded', highlightActiveLink);
+
+    // Update active link when navigating (if using client-side navigation)
+    window.addEventListener('popstate', highlightActiveLink);
+  </script>
+</body>
+
+</html>
