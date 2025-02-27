@@ -198,18 +198,7 @@ exports.deleteContact = async (req, res) => {
   }
 };
 
-// ✅ Render Admin Dashboard
-exports.renderAdminDashboard = async (req, res) => {
-    try {
-        // Render dashboard with user data and messages
-        res.render("admin/intro", { 
-            user: req.user, 
-        });
-    } catch (error) {
-        console.error("❌ Dashboard Error:", error);
-        res.status(500).send("Server error");
-    }
-};
+
 
 exports.renderCouponCode = async(req, res) =>{
     try {

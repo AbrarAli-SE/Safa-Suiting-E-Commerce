@@ -122,7 +122,7 @@ exports.login = async (req, res) => {
         );
 
         res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
-        return res.redirect(user.role === "admin" ? "/admin/intro" : "/");
+        return res.redirect(user.role === "admin" ? "/admin/analytical" : "/");
 
     } catch (err) {
         console.error("Login Error:", err);
@@ -198,7 +198,7 @@ exports.verifyOTP = async (req, res) => {
         );
 
         res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
-        return res.redirect(user.role === "admin" ? "/admin/intro" : "/");
+        return res.redirect(user.role === "admin" ? "/admin/analytical" : "/");
     } catch (err) {
         console.error("OTP Verification Error:", err);
         return res.render("auth/verify-otp", { email, error: "Server error. Please try again later." });

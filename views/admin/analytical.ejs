@@ -1,60 +1,182 @@
-<%- include('../shared/asideBar') %>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel with Enhanced Drawer - Light Mode</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
-    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Analytical Dashboard</h1>
+        body {
+            background-color: #ffffff; /* White background */
+            color: #000000; /* Black text */
+            height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      <div class="bg-blue-500 text-white p-4 rounded-lg shadow-md dark:bg-blue-700">
-        <h2 class="text-lg font-semibold">Total Revenue</h2>
-        <p class="text-3xl font-bold">$45,000</p>
-      </div>
-      <div class="bg-green-500 text-white p-4 rounded-lg shadow-md dark:bg-green-700">
-        <h2 class="text-lg font-semibold">Total Orders</h2>
-        <p class="text-3xl font-bold">1,200</p>
-      </div>
-      <div class="bg-yellow-500 text-white p-4 rounded-lg shadow-md dark:bg-yellow-700">
-        <h2 class="text-lg font-semibold">New Customers</h2>
-        <p class="text-3xl font-bold">300</p>
-      </div>
-      <div class="bg-red-500 text-white p-4 rounded-lg shadow-md dark:bg-red-700">
-        <h2 class="text-lg font-semibold">Products Sold</h2>
-        <p class="text-3xl font-bold">2,450</p>
-      </div>
+        /* Drawer (Sidebar) */
+        .drawer {
+            width: 250px;
+            background-color: #ffffff; /* White drawer */
+            border-right: 2px solid #ff0000; /* Red border */
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: -260px; /* Slightly more off-screen for effect */
+            transition: left 0.4s ease-in-out; /* Smoother animation */
+            padding: 20px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Shadow for depth */
+            z-index: 1000; /* Above overlay */
+        }
+
+        .drawer.open {
+            left: 0; /* Slide in */
+        }
+
+        .drawer h2 {
+            color: #ff0000; /* Red title */
+            margin-bottom: 30px;
+        }
+
+        .drawer ul {
+            list-style: none;
+        }
+
+        .drawer ul li {
+            margin: 20px 0;
+        }
+
+        .drawer ul li a {
+            text-decoration: none;
+            color: #000000; /* Black links */
+            font-weight: bold;
+        }
+
+        .drawer ul li a:hover {
+            color: #ff0000; /* Red on hover */
+        }
+
+        /* Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3); /* Semi-transparent black */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s ease-in-out;
+            z-index: 999; /* Behind drawer, above content */
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Main content */
+        .main-content {
+            padding: 20px;
+            width: 100%;
+            transition: filter 0.4s ease-in-out; /* Blur effect */
+        }
+
+        .main-content.dimmed {
+            filter: blur(2px); /* Slight blur when drawer is open */
+        }
+
+        .header {
+            background-color: #ffffff; /* White header */
+            padding: 10px 20px;
+            border-bottom: 1px solid #000000; /* Black border */
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            color: #000000; /* Black title */
+            font-size: 24px;
+            flex-grow: 1;
+        }
+
+        /* Hamburger Menu Button */
+        .menu-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #000000; /* Black icon */
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .menu-btn:hover {
+            color: #ff0000; /* Red on hover */
+        }
+
+        .content {
+            background-color: #ffffff; /* White content area */
+            padding: 20px;
+            border: 1px solid #ff0000; /* Red border */
+        }
+
+        .content h2 {
+            color: #ff0000; /* Red subtitle */
+            margin-bottom: 10px;
+        }
+
+        .content p {
+            color: #000000; /* Black text */
+        }
+    </style>
+</head>
+<body>
+    <div class="drawer" id="drawer">
+        <h2>Admin Panel</h2>
+        <ul>
+            <li><a href="#">Dashboard</a></li>
+            <li><a href="#">Users</a></li>
+            <li><a href="#">Settings</a></li>
+            <li><a href="#">Logout</a></li>
+        </ul>
+    </div>
+    <div class="overlay" id="overlay"></div>
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <button class="menu-btn" id="menuToggle">☰</button>
+            <h1>Welcome, Admin</h1>
+        </div>
+        <div class="content">
+            <h2>Dashboard Overview</h2>
+            <p>This is your admin panel. Click the menu button to reveal the drawer.</p>
+        </div>
     </div>
 
+    <script>
+        const menuToggle = document.getElementById('menuToggle');
+        const drawer = document.getElementById('drawer');
+        const overlay = document.getElementById('overlay');
+        const mainContent = document.getElementById('mainContent');
 
-    <!-- Grid Layout for Charts (2x2 for larger screens) -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8">
-      <!-- Order Analytics -->
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold mb-4">Order Analytics</h2>
-        <canvas id="orderChart"></canvas>
-      </div>
+        menuToggle.addEventListener('click', () => {
+            drawer.classList.toggle('open');
+            overlay.classList.toggle('active');
+            mainContent.classList.toggle('dimmed');
+        });
 
-      <!-- Revenue Analytics -->
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold mb-4">Revenue Analytics</h2>
-        <canvas id="revenueChart"></canvas>
-      </div>
-
-      <!-- Product Categories -->
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold mb-4">Product Categories</h2>
-        <canvas id="categoryChart"></canvas>
-      </div>
-
-      <!-- New Chart (e.g., Customer Growth) -->
-      <div class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-        <h2 class="text-xl font-semibold mb-4">Customer Growth</h2>
-        <canvas id="growthChart"></canvas>
-      </div>
-    </div>
-
-  </main>
-</div>
-     <!-- Link the JavaScript file -->
-     <script src="/js/main.js"></script>
+        overlay.addEventListener('click', () => {
+            drawer.classList.remove('open');
+            overlay.classList.remove('active');
+            mainContent.classList.remove('dimmed');
+        });
+    </script>
 </body>
-
 </html>

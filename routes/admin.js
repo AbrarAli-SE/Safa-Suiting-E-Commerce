@@ -14,8 +14,6 @@ router.get("/notifications", authenticateUser, adminAuth, adminController.getNot
 // ✅ Mark Notifications as Read
 router.post("/notifications/mark-read", authenticateUser, adminAuth, adminController.markNotificationsAsRead);
 
-// ✅ User Dashboard Route
-router.get("/intro", authenticateUser, adminAuth, adminController.renderAdminDashboard);
 
 router.get("/users", authenticateUser, adminAuth, adminController.renderManageUsers);
 

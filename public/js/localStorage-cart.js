@@ -34,17 +34,16 @@ function removeFromCart(productId) {
 }
 
 // Function to update cart quantity on both screens with enhanced debugging
+// public/js/localStorage-cart.js (Ensure this matches)
 function updateCartQuantity() {
   const cart = getCart();
-  console.log("Updating cart quantity. Current cart:", cart); // Debug log
   const cartIcon = document.querySelector("#js-cart");
 
   if (cartIcon) {
     const cartQuantity = cartIcon.querySelector("#js-cart-qunatiy");
     if (cartQuantity) {
-      const cartQuantityValue = cart.reduce((sum, item) => sum + (item.quantity || 0), 0); // Handle potential undefined quantity
-      console.log("Cart quantity value:", cartQuantityValue); // Debug log
-      cartQuantity.textContent = cartQuantityValue > 0 ? cartQuantityValue : ''; // Only show if > 0
+      const cartQuantityValue = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+      cartQuantity.textContent = cartQuantityValue > 0 ? cartQuantityValue : '';
     } else {
       console.warn("Cart quantity element (#js-cart-qunatiy) not found.");
     }

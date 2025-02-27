@@ -28,7 +28,8 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateItemSubtotal(item) {
       try {
         const price = parseFloat(item.querySelector('.price').dataset.price);
-        const quantity = parseInt(item.querySelector('.quantity').value) || 1; // Default to 1 if invalid
+        const quantityElement = item.querySelector('.quantity-value');
+        const quantity = parseInt(quantityElement.textContent) || 1; // Get quantity from the span
         const subtotalElement = item.querySelector('.subtotal');
         const subtotal = price * quantity;
         subtotalElement.textContent = `Rs ${subtotal.toFixed(2)}`;
@@ -53,17 +54,40 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     }
 
-    // Handle quantity input change (live update)
+    // Handle quantity changes with plus and minus buttons
+    function updateQuantity(itemId, change) {
+      const quantityElement = document.querySelector(`.quantity-value[data-item-id="${itemId}"]`);
+      if (quantityElement) {
+        let quantity = parseInt(quantityElement.textContent) || 1;
+        quantity = Math.max(1, quantity + change); // Ensure quantity doesn’t go below 1
+        quantityElement.textContent = quantity;
+        updateCartTotal();
+      }
+    }
+
+    // Add event listeners for quantity buttons
     cartItems.forEach(item => {
-      const quantityInput = item.querySelector('.quantity');
-      if (quantityInput) {
-        quantityInput.addEventListener('input', function (e) {
+      const decreaseButton = item.querySelector('.quantity-decrease');
+      const increaseButton = item.querySelector('.quantity-increase');
+
+      if (decreaseButton) {
+        decreaseButton.addEventListener('click', function () {
           try {
-            const quantity = parseInt(this.value) || 1; // Ensure minimum quantity of 1
-            if (quantity < 1) this.value = 1; // Enforce minimum quantity
-            updateCartTotal();
+            const itemId = this.dataset.itemId;
+            updateQuantity(itemId, -1);
           } catch (error) {
-            console.error("Error handling quantity input change:", error);
+            console.error("Error decreasing quantity:", error);
+          }
+        });
+      }
+
+      if (increaseButton) {
+        increaseButton.addEventListener('click', function () {
+          try {
+            const itemId = this.dataset.itemId;
+            updateQuantity(itemId, 1);
+          } catch (error) {
+            console.error("Error increasing quantity:", error);
           }
         });
       }
@@ -73,10 +97,12 @@ document.addEventListener("DOMContentLoaded", function () {
     if (updateCartButton) {
       updateCartButton.addEventListener('click', async function () {
         try {
-          const cartData = Array.from(cartItems).map(item => ({
-            itemId: item.dataset.itemId,
-            quantity: parseInt(item.querySelector('.quantity').value) || 1
-          }));
+          const cartData = Array.from(cartItems).map(item => {
+            const itemId = item.dataset.itemId;
+            const quantityElement = item.querySelector('.quantity-value');
+            const quantity = parseInt(quantityElement.textContent) || 1;
+            return { itemId, quantity };
+          });
 
           if (!cartData || cartData.length === 0) {
             console.warn("No cart items to update.");
@@ -107,9 +133,9 @@ document.addEventListener("DOMContentLoaded", function () {
             result.cart.items.forEach(updatedItem => {
               const itemRow = document.querySelector(`.cart-item[data-item-id='${updatedItem._id}']`);
               if (itemRow) {
-                const quantityInput = itemRow.querySelector('.quantity');
+                const quantityElement = itemRow.querySelector('.quantity-value');
                 const subtotal = itemRow.querySelector('.subtotal');
-                quantityInput.value = updatedItem.quantity;
+                quantityElement.textContent = updatedItem.quantity;
                 subtotal.textContent = `Rs ${(updatedItem.price * updatedItem.quantity).toFixed(2)}`;
               }
             });
