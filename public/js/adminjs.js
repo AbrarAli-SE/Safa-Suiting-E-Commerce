@@ -147,3 +147,15 @@ overlay.addEventListener('click', () => {
   overlay.classList.add('opacity-0', 'invisible');
   mainContent.classList.remove('blur-sm');
 });
+
+const links = document.querySelectorAll(".active-link");
+
+  // Highlight active link based on current URL
+  const currentPath = window.location.pathname;
+  links.forEach(link => {
+    if (link.getAttribute("href") === currentPath) {
+      link.classList.add("bg-[var(--color-red-500)]", "text-[var(--color-white)]");
+    } else {
+      link.classList.remove("bg-[var(--color-red-500)]", "text-[var(--color-white)]");
+    }
+  });

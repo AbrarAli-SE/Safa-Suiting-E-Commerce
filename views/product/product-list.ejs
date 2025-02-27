@@ -1,31 +1,28 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel with Enhanced Drawer - Light Mode</title>
-  <!-- Include Tailwind CSS (Assumes you've built it with your config) -->
+  <title>Admin - Product List</title>
   <link rel="stylesheet" href="/styles/global.css">
-  <!-- Include Bootstrap Icons via CDN -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <!-- Include Chart.js via CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
-<body class="bg-[var(--color-white)] text-[var(--color-black)] h-screen overflow-x-hidden relative font-sans">
-    
-    <%- include('../shared/asideBar') %>
+<body class="bg-[var(--color-gray-50)] text-[var(--color-black)] h-screen overflow-x-hidden relative font-sans">
+  <%- include('../shared/asideBar') %>
+
   <!-- Main Content -->
-  <div id="mainContent" class="p-root-5 w-full transition-filter duration-300 ease-in-out">
+  <div id="mainContent" class="p-5 w-full transition-all duration-300 ease-in-out">
     <!-- Header -->
-    <div class="flex items-center bg-[var(--color-white)] p-root-3 border-b border-[var(--color-black)] mb-5">
-      <button id="menuToggle" class="text-[var(--color-black)] text-2xl p-2 hover:text-[var(--color-red-500)] transition-colors bg-transparent border-none cursor-pointer">☰</button>
-      <h1 class="text-[var(--color-black)] text-2xl flex-grow">Welcome, Admin</h1>
+    <div class="flex items-center bg-[var(--color-white)] p-3 border-b border-[var(--color-gray-300)] mb-6 shadow-sm">
+      <button 
+        id="menuToggle" 
+        class="text-[var(--color-black)] text-2xl p-2 hover:text-[var(--color-red-500)] transition-colors duration-300 bg-transparent border-none cursor-pointer ">
+        ☰
+      </button>
+      <h1 class="text-[var(--color-black)] text-2xl  flex-grow">Welcome, Admin</h1>
     </div>
-    <!-- Content -->
+
     <div class="max-w-7xl mx-auto">
       <!-- Add New Product Button -->
       <div class="w-full sm:w-auto mb-6 sm:mb-8 sm:ml-auto flex justify-end">
@@ -68,65 +65,64 @@
         <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
       </div>
     </div>
-  </main>
+  </div>
 
-  <script type="module" src="/js/adminjs.js"></script>
-  <script>
- document.addEventListener("DOMContentLoaded", function () {
-  const productList = document.getElementById('productList');
-  const noResults = document.getElementById('noResults');
-  const pagination = document.getElementById('pagination');
-  const messageContainer = document.getElementById('message-container');
-  let currentPage = 1;
+  <script type="module">
+    document.addEventListener("DOMContentLoaded", function () {
+      const productList = document.getElementById('productList');
+      const noResults = document.getElementById('noResults');
+      const pagination = document.getElementById('pagination');
+      const messageContainer = document.getElementById('message-container');
+      let currentPage = 1;
 
-  // Fetch products function
-  async function fetchProducts(page) {
-    try {
-      const response = await fetch(`/admin/product/product-list?page=${page}`, {
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-      });
+      // Fetch products function
+      async function fetchProducts(page) {
+        try {
+          const response = await fetch(`/admin/product/product-list?page=${page}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+          });
 
-      const result = await response.json();
+          const result = await response.json();
 
-      if (response.ok) {
-        updateProductTable(result.products);
-        updatePagination(result.currentPage, result.totalPages);
-        currentPage = result.currentPage;
-      } else {
-        console.error("❌ Fetch Products Error:", result.error);
-        showMessage("Error fetching products.", "error");
+          if (response.ok) {
+            updateProductTable(result.products);
+            updatePagination(result.currentPage, result.totalPages);
+            currentPage = result.currentPage;
+          } else {
+            console.error("❌ Fetch Products Error:", result.error);
+            showMessage("Error fetching products.", "error");
+          }
+        } catch (error) {
+          console.error("❌ AJAX Fetch Error:", error);
+          showMessage("Network error. Please try again.", "error");
+        }
       }
-    } catch (error) {
-      console.error("❌ AJAX Fetch Error:", error);
-      showMessage("Network error. Please try again.", "error");
-    }
-  }
 
-  // Update product table
-  function updateProductTable(products) {
-    productList.innerHTML = "";
-    if (!products || products.length === 0) {
-      productList.innerHTML = '<tr><td colspan="7" class="text-center text-[var(--color-red-500)] font-semibold py-4">No products found.</td></tr>';
-      noResults.classList.remove('hidden');
-    } else {
-      products.forEach(product => {
-        const row = `
-          <tr class="border-t border-[var(--color-gray-200)] product-row" data-product-id="${product._id}">
-            <td class="px-4 py-2"><img src="${product.image}" alt="${product.name}" class="w-16 h-16 object-cover rounded"></td>
-            <td class="px-4 py-2 product-name">${product.name}</td>
-            <td class="px-4 py-2 category-name">${product.category}</td>
-            <td class="px-4 py-2 brand-name">${product.brand}</td>
-            <td class="px-4 py-2">${product.quantity}</td>
-            <td class="px-4 py-2">Rs ${product.price}</td>
-            <td class="px-4 py-2 flex items-center gap-3">
-              <a href="/admin/product/edit/${product._id}" class="text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300">Edit</a>
-              <button class="delete-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-product-id="${product._id}" data-page="${currentPage}">Delete</button>
-            </td>
-          </tr>`;
-        productList.insertAdjacentHTML("beforeend", row);
-      });
-      noResults.classList.add('hidden');
-    }
+      // Update product table
+      function updateProductTable(products) {
+        productList.innerHTML = "";
+        if (!products || products.length === 0) {
+          productList.innerHTML = '<tr><td colspan="7" class="text-center text-[var(--color-red-500)] font-semibold py-4">No products found.</td></tr>';
+          noResults.classList.remove('hidden');
+        } else {
+          products.forEach(product => {
+            const row = `
+              <tr class="border-t border-[var(--color-gray-200)] product-row" data-product-id="${product._id}">
+                <td class="px-4 py-2"><img src="${product.image}" alt="${product.name}" class="w-16 h-16 object-cover rounded"></td>
+                <td class="px-4 py-2 product-name">${product.name}</td>
+                <td class="px-4 py-2 category-name">${product.category}</td>
+                <td class="px-4 py-2 brand-name">${product.brand}</td>
+                <td class="px-4 py-2">${product.quantity}</td>
+                <td class="px-4 py-2">Rs ${product.price}</td>
+                <td class="px-4 py-2 flex items-center gap-3">
+                  <a href="/admin/product/edit/${product._id}" class="text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300">Edit</a>
+                  <button class="delete-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-product-id="${product._id}" data-page="${currentPage}">Delete</button>
+                </td>
+              </tr>`;
+            productList.insertAdjacentHTML("beforeend", row);
+          });
+          noResults.classList.add('hidden');
+        }
 
     // Add Delete Event Listeners
     document.querySelectorAll('.delete-btn').forEach(button => {
@@ -155,65 +151,66 @@
     });
   }
 
-  // Update pagination
-  function updatePagination(currentPage, totalPages) {
-    const maxVisiblePages = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
+      // Update pagination
+      function updatePagination(currentPage, totalPages) {
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        if (endPage - startPage + 1 < maxVisiblePages) {
+          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
 
-    pagination.innerHTML = '';
+        pagination.innerHTML = '';
 
-    // Previous Button
-    const prevButton = document.createElement('a');
-    prevButton.href = '#';
-    prevButton.className = 'pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-l-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
-    prevButton.innerHTML = '<span class="sr-only">Previous</span><i class="bi bi-arrow-bar-left"></i>';
-    prevButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (currentPage > 1) fetchProducts(currentPage - 1);
+        // Previous Button
+        const prevButton = document.createElement('a');
+        prevButton.href = '#';
+        prevButton.className = 'pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-l-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
+        prevButton.innerHTML = '<span class="sr-only">Previous</span><i class="bi bi-arrow-bar-left"></i>';
+        prevButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (currentPage > 1) fetchProducts(currentPage - 1);
+        });
+        pagination.appendChild(prevButton);
+
+        // Page Numbers
+        for (let i = startPage; i <= endPage; i++) {
+          const pageLink = document.createElement('a');
+          pageLink.href = '#';
+          pageLink.className = `pagination-link flex items-center justify-center px-3 h-8 leading-tight border border-[var(--color-gray-300)] transition-all duration-300 ${i === currentPage ? 'text-[var(--color-red-500)] bg-[var(--color-red-50)] hover:bg-[var(--color-red-100)] hover:text-[var(--color-red-700)]' : 'text-[var(--color-gray-500)] bg-[var(--color-white)] hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)]'}`;
+          pageLink.textContent = i;
+          pageLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            fetchProducts(i);
+          });
+          pagination.appendChild(pageLink);
+        }
+
+        // Next Button
+        const nextButton = document.createElement('a');
+        nextButton.href = '#';
+        nextButton.className = 'pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-r-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
+        nextButton.innerHTML = '<span class="sr-only">Next</span><i class="bi bi-arrow-bar-right"></i>';
+        nextButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (currentPage < totalPages) fetchProducts(currentPage + 1);
+        });
+        pagination.appendChild(nextButton);
+      }
+
+      // Show Message
+      function showMessage(text, type) {
+        const div = document.createElement("div");
+        div.className = `p-4 rounded-md text-center font-medium ${type === "success" ? "bg-[var(--color-green-100)] text-[var(--color-green-500)]" : "bg-[var(--color-red-100)] text-[var(--color-red-500)]"}`;
+        div.textContent = text;
+        messageContainer.appendChild(div);
+        setTimeout(() => div.remove(), 5000);
+      }
+
+      // Initial Fetch
+      fetchProducts(currentPage);
     });
-    pagination.appendChild(prevButton);
-
-    // Page Numbers
-    for (let i = startPage; i <= endPage; i++) {
-      const pageLink = document.createElement('a');
-      pageLink.href = '#';
-      pageLink.className = `pagination-link flex items-center justify-center px-3 h-8 leading-tight border border-[var(--color-gray-300)] transition-all duration-300 ${i === currentPage ? 'text-[var(--color-red-500)] bg-[var(--color-red-50)] hover:bg-[var(--color-red-100)] hover:text-[var(--color-red-700)]' : 'text-[var(--color-gray-500)] bg-[var(--color-white)] hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)]'}`;
-      pageLink.textContent = i;
-      pageLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        fetchProducts(i);
-      });
-      pagination.appendChild(pageLink);
-    }
-
-    // Next Button
-    const nextButton = document.createElement('a');
-    nextButton.href = '#';
-    nextButton.className = 'pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-r-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
-    nextButton.innerHTML = '<span class="sr-only">Next</span><i class="bi bi-arrow-bar-right"></i>';
-    nextButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (currentPage < totalPages) fetchProducts(currentPage + 1);
-    });
-    pagination.appendChild(nextButton);
-  }
-
-  // Show Message
-  function showMessage(text, type) {
-    const div = document.createElement("div");
-    div.className = `p-4 rounded-md text-center font-medium ${type === "success" ? "bg-[var(--color-green-100)] text-[var(--color-green-500)]" : "bg-[var(--color-red-100)] text-[var(--color-red-500)]"}`;
-    div.textContent = text;
-    messageContainer.appendChild(div);
-    setTimeout(() => div.remove(), 5000);
-  }
-
-  // Initial Fetch
-  fetchProducts(currentPage);
-});
   </script>
+  <script src="/js/adminjs.js"></script>
 </body>
-
+</html>

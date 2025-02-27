@@ -1,84 +1,261 @@
-<%- include('../shared/asideBar') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Order Management</title>
+  <link rel="stylesheet" href="/styles/global.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+</head>
 
+<body class="bg-[var(--color-gray-50)] text-[var(--color-black)] h-screen overflow-x-hidden relative font-sans">
+  <%- include('../shared/asideBar') %>
 
-<main class="flex-grow p-8 ml-0 sm:ml-20 lg:ml-64 overflow-hidden">
-    <h1 class="text-4xl font-bold mb-8  sm:mt-7 mt-9">Order Tracking</h1>
-  
-    <!-- Search and Status Filter Section -->
-<div class="mb-4 flex flex-col sm:flex-row items-center sm:items-center space-y-4 sm:space-y-0">
-  <!-- Search Input -->
-  <div class="flex items-center space-x-4 w-full sm:w-auto">
-    <input type="text" id="searchOrderId" placeholder="Search by Order ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-               dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-    <button id="orderSearchBtn" class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition">
-      Search
-    </button>
-  </div>
+  <!-- Main Content -->
+  <div id="mainContent" class="p-5 w-full transition-all duration-300 ease-in-out">
+    <!-- Header -->
+    <div class="flex items-center bg-[var(--color-white)] p-3 border-b border-[var(--color-gray-300)] mb-6 shadow-sm">
+      <button 
+        id="menuToggle" 
+        class="text-[var(--color-black)] text-2xl p-2 hover:text-[var(--color-red-500)] transition-colors duration-300 bg-transparent border-none cursor-pointer ">
+        ☰
+      </button>
+      <h1 class="text-[var(--color-black)] text-2xl  flex-grow">Welcome, Admin</h1>
+    </div>
 
-  <!-- Status Filter Dropdown -->
-  <div class="flex items-center space-x-4 w-full sm:w-auto">
-    <select id="statusFilter" class="px-4 py-2 sm:ml-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-               dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-      <option value="">Filter by Status</option>
-      <option value="Pending">Pending</option>
-      <option value="Shipped">Shipped</option>
-    </select>
-  </div>
-</div>
+    <div class="max-w-7xl mx-auto">
+      <!-- Search and Status Filter Section -->
+      <div class="mb-6 flex flex-col sm:flex-row items-center gap-4">
+        <div class="flex items-center gap-4 w-full sm:w-auto">
+          <select 
+            id="statusFilter" 
+            class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-auto">
+            <option value="">Filter by Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Shipped">Shipped</option>
+          </select>
+        </div>
+      </div>
 
-<!-- Order Tracking Section -->
-<div class="mb-4 flex flex-col sm:flex-row items-center sm:items-center">
-  <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
-    <input type="text" id="orderId" placeholder="Enter Order ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-               dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-    <input type="text" id="trackingId" placeholder="Enter Tracking ID" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-400 focus:outline-none w-full sm:w-auto
-               dark:border-gray-600 dark:bg-gray-800 dark:text-white dark:placeholder-gray-400">
-    <button class="px-4 py-2 bg-[#DB4444] text-white rounded-lg hover:bg-[#de2d2d] transition sm:mt-0">
-      Assign Tracking ID
-    </button>
-  </div>
-</div>
+      <!-- Order Tracking Section -->
+      <div class="mb-6 flex flex-col sm:flex-row items-center gap-4">
+        <input 
+          type="text" 
+          id="orderId" 
+          placeholder="Enter Order ID" 
+          class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-64" />
+        <input 
+          type="text" 
+          id="trackingId" 
+          placeholder="Enter Tracking ID" 
+          class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-64" />
+        <button 
+          id="assignTrackingBtn" 
+          class="px-6 py-2 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg w-full sm:w-auto">
+          Assign Tracking ID
+        </button>
+      </div>
 
-  
-    <!-- Orders Table -->
-    <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-700">
-        <table class="min-w-full table-fixed" id="ordersTable">
-          <thead class="bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
-            <tr>
-              <th class="px-4 py-2 text-left w-1/6">Order ID</th>
-              <th class="px-4 py-2 text-left w-1/6">Customer Name</th>
-              <th class="px-4 py-2 text-left w-1/6">Total Price</th>
-              <th class="px-4 py-2 text-left w-1/6">Tracking ID</th>
-              <th class="px-4 py-2 text-left w-1/6">Status</th>
-            </tr>
-          </thead>
-          <tbody class="text-gray-700 dark:text-gray-300" id="ordersList">
-            <!-- Example Row -->
-            <tr class="border-t border-gray-200 dark:border-gray-600" data-order-id="1" data-status="Pending">
-              <td class="px-4 py-2">1</td>
-              <td class="px-4 py-2">Jane Doe</td>
-              <td class="px-4 py-2">$199.99</td>
-              <td class="px-4 py-2">None</td>
-              <td class="px-4 py-2 text-yellow-500">Pending</td>
-            </tr>
-            <tr class="border-t border-gray-200 dark:border-gray-600" data-order-id="2" data-status="Shipped">
-              <td class="px-4 py-2">2</td>
-              <td class="px-4 py-2">John Smith</td>
-              <td class="px-4 py-2">$99.99</td>
-              <td class="px-4 py-2">123ABC</td>
-              <td class="px-4 py-2 text-green-500">Shipped</td>
-            </tr>
-            <!-- Add more rows dynamically here -->
-          </tbody>
-        </table>
+      <!-- Messages -->
+      <div id="message-container" class="mb-6"></div>
+
+      <!-- Orders Table -->
+      <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold text-[var(--color-black)] mb-4">Orders List</h2>
+        <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-[var(--color-gray-400)] scrollbar-track-[var(--color-gray-100)]">
+          <table class="min-w-full table-fixed" id="ordersTable">
+            <thead class="bg-[var(--color-gray-50)] text-[var(--color-gray-700)]">
+              <tr>
+                <th class="px-4 py-3 text-left w-1/5">Order ID</th>
+                <th class="px-4 py-3 text-left w-1/5">Customer Name</th>
+                <th class="px-4 py-3 text-left w-1/5">Total Price</th>
+                <th class="px-4 py-3 text-left w-1/5">Tracking ID</th>
+                <th class="px-4 py-3 text-left w-1/5">Status</th>
+              </tr>
+            </thead>
+            <tbody class="text-[var(--color-gray-700)]" id="ordersList">
+              <!-- Populated via AJAX -->
+            </tbody>
+          </table>
+          <p id="noResults" class="text-center text-[var(--color-red-500)] font-semibold hidden mt-4">No orders found</p>
+        </div>
+      </div>
+
+      <!-- Pagination Controls -->
+      <div class="flex justify-center mt-6">
+        <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
       </div>
     </div>
-  </main>
+  </div>
 
-</div>
-     <!-- Link the JavaScript file -->
-     <script src="/js/main.js"></script>
+  <!-- <script type="module" src="/js/adminOrders.js"></script> -->
+  <script type="module" src="/js/adminjs.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+  const ordersList = document.getElementById("ordersList");
+  const noResults = document.getElementById("noResults");
+  const pagination = document.getElementById("pagination");
+  const messageContainer = document.getElementById("message-container");
+  const statusFilter = document.getElementById("statusFilter");
+  const orderIdInput = document.getElementById("orderId");
+  const trackingIdInput = document.getElementById("trackingId");
+  const assignTrackingBtn = document.getElementById("assignTrackingBtn");
+  let currentPage = 1;
+
+  // Fetch initial orders
+  fetchOrders(currentPage);
+
+  // Filter functionality
+  statusFilter.addEventListener("change", function () {
+    fetchOrders(1); // Reset to page 1 on filter change
+  });
+
+  // Assign Tracking ID functionality
+  assignTrackingBtn.addEventListener("click", async function () {
+    const orderId = orderIdInput.value.trim();
+    const trackingId = trackingIdInput.value.trim();
+
+    if (!orderId || !trackingId) {
+      showMessage("Please enter both Order ID and Tracking ID.", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch("/admin/orders/assign-tracking", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId, trackingId }),
+      });
+
+      const result = await response.json();
+      messageContainer.innerHTML = "";
+
+      if (response.ok) {
+        showMessage(result.message, "success");
+        orderIdInput.value = "";
+        trackingIdInput.value = "";
+        fetchOrders(currentPage); // Refresh the order list
+      } else {
+        showMessage(result.error || "An error occurred.", "error");
+      }
+    } catch (error) {
+      console.error("❌ AJAX Assign Tracking Error:", error);
+      showMessage("Network error. Please try again.", "error");
+    }
+  });
+
+  // AJAX Pagination
+  pagination.addEventListener("click", async function (e) {
+    const target = e.target.closest(".page-link");
+    if (!target) return;
+
+    e.preventDefault();
+    const page = parseInt(target.dataset.page);
+    fetchOrders(page);
+  });
+
+  // Fetch orders function
+  async function fetchOrders(page) {
+    const filter = statusFilter.value;
+    try {
+      const response = await fetch(`/admin/orders?page=${page}&filter=${filter}`, {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        updateOrdersTable(result.orders);
+        updatePagination(result.currentPage, result.totalPages);
+        currentPage = result.currentPage;
+      } else {
+        console.error("❌ Fetch Orders Error:", result.error);
+        showMessage("Error fetching orders.", "error");
+      }
+    } catch (error) {
+      console.error("❌ AJAX Fetch Error:", error);
+      showMessage("Network error. Please try again.", "error");
+    }
+  }
+
+  // Update orders table
+  function updateOrdersTable(orders) {
+    ordersList.innerHTML = "";
+    if (!orders || orders.length === 0) {
+      ordersList.innerHTML = '<tr><td colspan="5" class="text-center text-[var(--color-red-500)] font-semibold py-4">No orders found.</td></tr>';
+      noResults.classList.remove("hidden");
+    } else {
+      orders.forEach(order => {
+        const row = `
+          <tr class="border-t border-[var(--color-gray-200)]" data-order-id="${order._id}" data-status="${order.status}">
+            <td class="px-4 py-2">${order._id}</td>
+            <td class="px-4 py-2">${order.customerName}</td>
+            <td class="px-4 py-2">$${order.totalPrice.toFixed(2)}</td>
+            <td class="px-4 py-2">${order.trackingId || 'None'}</td>
+            <td class="px-4 py-2 ${order.status === 'Shipped' ? 'text-[var(--color-green-500)]' : 'text-[var(--color-yellow-500)]'}">${order.status}</td>
+          </tr>`;
+        ordersList.insertAdjacentHTML("beforeend", row);
+      });
+      noResults.classList.add("hidden");
+    }
+  }
+
+  // Update pagination
+  function updatePagination(currentPage, totalPages) {
+    const maxVisiblePages = 5;
+    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+    if (endPage - startPage + 1 < maxVisiblePages) {
+      startPage = Math.max(1, endPage - maxVisiblePages + 1);
+    }
+
+    pagination.innerHTML = '';
+
+    // Previous Button
+    const prevButton = document.createElement('a');
+    prevButton.href = '#';
+    prevButton.className = 'page-link flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-l-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
+    prevButton.innerHTML = '<span class="sr-only">Previous</span><i class="bi bi-arrow-bar-left"></i>';
+    prevButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentPage > 1) fetchOrders(currentPage - 1);
+    });
+    pagination.appendChild(prevButton);
+
+    // Page Numbers
+    for (let i = startPage; i <= endPage; i++) {
+      const pageLink = document.createElement('a');
+      pageLink.href = '#';
+      pageLink.className = `page-link flex items-center justify-center px-3 h-8 leading-tight border border-[var(--color-gray-300)] transition-all duration-300 ${i === currentPage ? 'text-[var(--color-red-500)] bg-[var(--color-red-50)] hover:bg-[var(--color-red-100)] hover:text-[var(--color-red-700)]' : 'text-[var(--color-gray-500)] bg-[var(--color-white)] hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)]'}`;
+      pageLink.textContent = i;
+      pageLink.addEventListener('click', (e) => {
+        e.preventDefault();
+        fetchOrders(i);
+      });
+      pagination.appendChild(pageLink);
+    }
+
+    // Next Button
+    const nextButton = document.createElement('a');
+    nextButton.href = '#';
+    nextButton.className = 'page-link flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-r-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
+    nextButton.innerHTML = '<span class="sr-only">Next</span><i class="bi bi-arrow-bar-right"></i>';
+    nextButton.addEventListener('click', (e) => {
+      e.preventDefault();
+      if (currentPage < totalPages) fetchOrders(currentPage + 1);
+    });
+    pagination.appendChild(nextButton);
+  }
+
+  // Show message helper
+  function showMessage(text, type) {
+    const div = document.createElement("div");
+    div.className = `p-4 rounded-md text-center font-medium ${type === "success" ? "bg-[var(--color-green-100)] text-[var(--color-green-500)]" : "bg-[var(--color-red-100)] text-[var(--color-red-500)]"}`;
+    div.textContent = text;
+    messageContainer.appendChild(div);
+    setTimeout(() => div.remove(), 5000);
+  }
+});
+  </script>
 </body>
-
 </html>

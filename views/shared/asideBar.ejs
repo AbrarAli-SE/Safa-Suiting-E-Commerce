@@ -1,22 +1,20 @@
+<!-- Drawer (Sidebar) -->
+<div id="drawer" class="fixed top-0 left-[-260px] w-[250px] h-full bg-[var(--color-white)] border-r-2 border-[var(--color-red-500)] p-4 shadow-2xl transition-all duration-300 ease-in-out z-[1000]">
+  <h2 class="text-[var(--color-red-500)] text-2xl font-extrabold mb-8 bg-gradient-to-r from-[var(--color-red-500)] to-[var(--color-red-700)] text-transparent bg-clip-text">Admin Panel</h2>
+  <ul class="space-y-3">
+    <li><a href="/admin/product/add-product" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-plus-circle text-lg"></i><span>Add Product</span></a></li>
+    <li><a href="/admin/product/product-list" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-list-ul text-lg"></i><span>Product List</span></a></li>
+    <li><a href="/admin/manage-carousel" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-image text-lg"></i><span>Manage Carousel</span></a></li>
+    <li><a href="/admin/coupon-code" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-ticket-perforated text-lg"></i><span>Manage Coupon</span></a></li>
+    <li><a href="/admin/assign-id" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-person-plus text-lg"></i><span>Assign Id</span></a></li>
+    <li><a href="/admin/payment" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-currency-dollar text-lg"></i><span>Payment Record</span></a></li>
+    <li><a href="/admin/cancel-order" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-x-circle text-lg"></i><span>Cancel Orders</span></a></li>
+    <li><a href="/admin/users" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-people text-lg"></i><span>Manage User</span></a></li>
+    <li><a href="/admin/contacts" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-envelope text-lg"></i><span>User Contact</span></a></li>
+    <li><a href="/admin/setting" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-gear text-lg"></i><span>Setting</span></a></li>
+    <li><a href="/auth/logout" class="flex items-center space-x-3 text-[var(--color-black)] font-semibold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 px-3 py-2 rounded-lg active-link"><i class="bi bi-box-arrow-right text-lg"></i><span>Logout</span></a></li>
+  </ul>
+</div>
 
-
-  <!-- Drawer (Sidebar) -->
-  <div id="drawer" class="fixed top-0 left-[-260px] w-[250px] h-full bg-[var(--color-white)] border-r-2 border-[var(--color-red-500)] p-root-4 shadow-lg transition-all duration-300 ease-in-out z-[1000]">
-    <h2 class="text-[var(--color-red-500)] text-xl font-bold mb-8">Admin Panel</h2>
-    <ul class="space-y-5">
-      <li><a href="/admin/product/add-product" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-plus-circle"></i><span>Add Product</span></a></li>
-      <li><a href="/admin/product/product-list" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-list-ul"></i><span>Product List</span></a></li>
-      <li><a href="/admin/manage-carousel" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-image"></i><span>Manage Carousel</span></a></li>
-      <li><a href="/admin/coupon-code" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-ticket-perforated"></i><span>Manage Coupon</span></a></li>
-      <li><a href="/admin/assign-id" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-person-plus"></i><span>Assign Id</span></a></li>
-      <li><a href="/admin/payment" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-currency-dollar"></i><span>Payment Record</span></a></li>
-      <li><a href="/admin/cancel-order" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-x-circle"></i><span>Cancel Orders</span></a></li>
-      <li><a href="/admin/users" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-people"></i><span>Manage User</span></a></li>
-      <li><a href="/admin/contacts" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-envelope"></i><span>User Contact</span></a></li>
-      <li><a href="/admin/setting" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-gear"></i><span>Setting</span></a></li>
-      <li><a href="/auth/logout" class="flex items-center space-x-2 text-[var(--color-black)] font-bold hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-colors px-2 py-1 rounded"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a></li>
-    </ul>
-  </div>
-
-  <!-- Overlay (Blur Effect) -->
-  <div id="overlay" class="fixed inset-0 backdrop-blur-md opacity-0 invisible transition-opacity duration-300 ease-in-out z-[999]"></div>
+<!-- Overlay (Blur Effect) -->
+<div id="overlay" class="fixed inset-0 backdrop-blur-sm bg-[var(--color-gray-900)]/50 opacity-0 invisible transition-opacity duration-300 ease-in-out z-[999]"></div>
