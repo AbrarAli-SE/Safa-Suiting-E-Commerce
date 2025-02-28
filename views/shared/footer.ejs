@@ -129,7 +129,22 @@
     observeParents: true,
     observeSlideChildren: true
   });
+
+
+  const navLinks = document.querySelectorAll('.nav-link');
+
+
+// Highlight Active Link
+const currentPath = window.location.pathname;
+navLinks.forEach(link => {
+    if (link.getAttribute('href') === currentPath) {
+        link.classList.add('text-[var(--color-red-500)]');
+        link.classList.remove('text-[var(--color-black)]');
+    }
 });
+
+});
+
   </script>
 
 

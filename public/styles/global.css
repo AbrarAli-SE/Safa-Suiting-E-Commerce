@@ -640,11 +640,60 @@ body {
 
 /* Nav Link underline Effect */
 
+.nav-link {
+  position: relative;
+  cursor: pointer;
+  color: var(--color-black);
+  transition-property: all;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-link:hover {
+  color: var(--color-black);
+}
+
+.nav-link:is(.dark *) {
+  color: var(--color-white);
+}
+
 /* Pseudo-elements for underline */
+
+.nav-link::before,
+  .nav-link::after {
+  content: "";
+  position: absolute;
+  background-color: black;
+  height: 1px;
+  width: 0;
+  transition: width 0.1s ease-in;
+  bottom: 0;
+}
 
 /* Dark mode underline (white for dark mode) */
 
+.dark .nav-link::before,
+  .dark .nav-link::after {
+  background-color: white !important;
+}
+
+.nav-link::before {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.nav-link::after {
+  right: 50%;
+  transform: translateX(50%);
+}
+
 /* Hover effect */
+
+.nav-link:hover::before,
+  .nav-link:hover::after {
+  width: 100%;
+}
 
 /* Active link underline effect */
 
@@ -768,6 +817,10 @@ body {
 
 .top-\[60px\] {
   top: 60px;
+}
+
+.left-3 {
+  left: 0.75rem;
 }
 
 .z-10 {
@@ -1795,6 +1848,10 @@ body {
   padding-top: 1.5rem;
 }
 
+.pl-10 {
+  padding-left: 2.5rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -2244,8 +2301,29 @@ body {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+.group:hover .group-hover\:rounded {
+  border-radius: 0.25rem;
+}
+
+.group:hover .group-hover\:bg-\[var\(--color-red-500\)\] {
+  background-color: var(--color-red-500);
+}
+
+.group:hover .group-hover\:bg-transparent {
+  background-color: transparent;
+}
+
+.group:hover .group-hover\:px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
 .group:hover .group-hover\:text-\[var\(--color-red-500\)\] {
   color: var(--color-red-500);
+}
+
+.group:hover .group-hover\:text-\[var\(--color-white\)\] {
+  color: var(--color-white);
 }
 
 .group:hover .group-hover\:opacity-100 {
@@ -2620,10 +2698,6 @@ body {
 
   .lg\:ml-64 {
     margin-left: 16rem;
-  }
-
-  .lg\:hidden {
-    display: none;
   }
 
   .lg\:w-1\/3 {
