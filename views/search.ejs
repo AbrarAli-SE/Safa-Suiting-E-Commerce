@@ -1,16 +1,21 @@
 <%- include('./shared/header') %>
 
+<!-- views/searchResults.ejs -->
 <main class="container mx-auto px-4 py-12 mt-14">
   <div class="max-w-7xl mx-auto">
+    <!-- Search Title Section -->
     <div class="flex items-center justify-between px-4 sm:px-6 lg:px-8 mb-6">
       <div class="flex items-center gap-2">
         <div class="w-2 h-6 bg-[var(--color-red-500)] rounded"></div>
-        <p class="text-[var(--color-red-500)] font-semibold">Search Result</p>
+        <p class="text-[var(--color-red-500)] font-semibold">Search Results</p>
       </div>
     </div>
 
+    <!-- Header with Slider Buttons -->
     <div class="flex items-center justify-between flex-col md:flex-row px-4 sm:px-6 lg:px-8 mb-8">
-      <h2 class="text-3xl font-bold text-[var(--color-black)] text-center md:text-left capitalize"><%= searchQuery %></h2>
+      <h2 class="text-3xl font-bold text-[var(--color-black)] text-center md:text-left">
+        Results for "<%= searchQuery %>"
+      </h2>
       <div class="flex md:justify-end justify-center items-center mt-4 space-x-4">
         <button class="slider-button left-button bg-[var(--color-gray-50)] p-3 rounded-full transition-all duration-300 hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)]">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left text-[var(--color-red-500)] hover:text-[var(--color-white)]" viewBox="0 0 16 16">
@@ -25,67 +30,64 @@
       </div>
     </div>
 
-    <!-- Cards Slider Container -->
+    <!-- Search Results Container -->
     <div class="relative px-4 sm:px-6 lg:px-8">
-      <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mb-8">
-        <% if (results.length > 0) { %>
-          <% results.forEach(function(product) { %>
-            <div class="bg-[var(--color-white)] h-[28rem] md:w-72 w-64 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-all duration-500 hover:scale-105">
+      <% if (results.length === 0) { %>
+        <p class="text-[var(--color-gray-600)] text-center mt-10 mb-8 text-lg">No results found for "<%= searchQuery %>". Try a different search term!</p>
+      <% } else { %>
+        <div class="slider-container flex overflow-x-scroll scrollbar-hide space-x-6 p-4 mb-8 snap-x snap-mandatory">
+          <% results.forEach(product => { %>
+            <div class="bg-[var(--color-white)] h-[28rem] md:w-72 w-64 flex-shrink-0 relative group overflow-hidden rounded-lg shadow-lg transition-all duration-500 hover:scale-105 snap-center">
               <!-- Product Image -->
               <div class="relative h-2/3 w-full">
-                <img src="<%= product.image %>" alt="<%= product.name %>" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 group-hover:opacity-75">
-                <!-- Hover Buttons -->
-                <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <button 
-                    class="wishlist-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" 
-                    data-product-id="<%= product._id %>">
+                <img src="<%= product.image %>" alt="<%= product.name %>" class="h-full w-full object-cover rounded-t-lg transition-opacity duration-500 group-hover:opacity-80 md:group-hover:opacity-80">
+                <!-- Hover Buttons (Visible only on md and larger screens) -->
+                <div class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 hidden md:flex">
+                  <button class="wishlist-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" data-product-id="<%= product._id %>" data-wishlist="false">
                     <i class="bi bi-heart"></i>
                   </button>
-                  <button 
-                    class="quick-view-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" 
-                    data-name="<%= product.name %>"
-                    data-image="<%= product.image %>"
-                    data-price="<%= product.price %>"
-                    data-discountprice="<%= product.discountPrice %>"
-                    data-description="<%= product.description || 'No description available.' %>">
+                  <button class="quick-view-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" data-name="<%= product.name %>" data-image="<%= product.image %>" data-price="<%= product.price %>" data-discountprice="<%= product.discountPrice %>" data-description="<%= product.description || 'No description available.' %>" data-product-id="<%= product._id %>">
                     <i class="bi bi-eye"></i>
                   </button>
-                  <button 
-                    class="add-to-cart-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" 
-                    data-product-id="<%= product._id %>">
+                  <button class="add-to-cart-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" data-product-id="<%= product._id %>" data-cart="false">
                     <i class="bi bi-cart"></i>
                   </button>
                 </div>
               </div>
-
               <!-- Product Info -->
               <div class="p-4 h-1/3 flex flex-col justify-between bg-gradient-to-t from-[var(--color-gray-50)] to-[var(--color-white)]">
-                <h3 class="font-semibold text-base text-[var(--color-black)] truncate"><%= product.name %></h3>
+                <h3 class="font-semibold text-base truncate">
+                  <%= product.name %>
+                </h3>
                 <div class="flex justify-between items-center">
                   <div class="flex items-center gap-2">
                     <span class="font-bold text-[var(--color-red-500)] text-lg">Rs <%= product.price %></span>
-                    <% if (product.discountPrice > 0) { %>
-                      <span class="text-sm text-[var(--color-gray-400)] line-through">Rs <%= product.discountPrice %></span>
-                    <% } %>
+                    <span class="text-sm text-[var(--color-gray-400)] line-through">Rs <%= product.discountPrice %></span>
                   </div>
+                </div>
+                <!-- Mobile Buttons (Visible only on mobile screens) -->
+                <div class="flex justify-between items-center gap-2 mt-2 md:hidden">
+                  <button class="wishlist-btn flex-1 p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" data-product-id="<%= product._id %>" data-wishlist="false">
+                    <i class="bi bi-heart"></i>
+                  </button>
+                  <button class="quick-view-btn flex-1 p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" data-name="<%= product.name %>" data-image="<%= product.image %>" data-price="<%= product.price %>" data-discountprice="<%= product.discountPrice %>" data-description="<%= product.description || 'No description available.' %>" data-product-id="<%= product._id %>">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="add-to-cart-btn flex-1 p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" data-product-id="<%= product._id %>" data-cart="false">
+                    <i class="bi bi-cart"></i>
+                  </button>
                 </div>
               </div>
             </div>
-          <% }) %>
-        <% } else { %>
-          <div class="flex justify-center items-center w-full h-40">
-            <p class="text-center text-[var(--color-gray-600)] text-lg">No products found.</p>
-          </div>
-        <% } %>
-      </div>
+          <% }); %>
+        </div>
+      <% } %>
     </div>
 
     <!-- Quick View Modal -->
     <div id="quickViewModal" class="fixed inset-0 bg-[var(--color-black)] bg-opacity-60 flex justify-center items-center opacity-0 pointer-events-none transition-all duration-500 z-50">
       <div class="bg-[var(--color-white)] w-full max-w-[32rem] md:max-w-[40rem] p-8 rounded-xl shadow-2xl relative transform scale-95 transition-all duration-300">
-        <button 
-          onclick="closeQuickView()" 
-          class="absolute top-4 right-4 w-10 h-10 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-full flex items-center justify-center hover:bg-[var(--color-red-700)] transition-all duration-300">
+        <button onclick="closeQuickView()" class="absolute top-4 right-4 w-10 h-10 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-full flex items-center justify-center hover:bg-[var(--color-red-700)] transition-all duration-300">
           <i class="bi bi-x-lg text-xl"></i>
         </button>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -101,11 +103,11 @@
               </div>
               <p id="modalProductDesc" class="text-[var(--color-gray-600)] text-sm leading-relaxed"></p>
             </div>
-            <div class="mt-6 flex gap-4">
-              <button class="wishlist-btn p-3 bg-[var(--color-white)] text-[var(--color-red-500)] border border-[var(--color-red-500)] rounded-full hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300">
+            <div class="mt-6 flex flex-col md:flex-row gap-3 md:gap-4">
+              <button class="wishlist-btn w-full md:w-auto p-2 md:p-3 bg-[var(--color-white)] text-[var(--color-red-500)] border border-[var(--color-red-500)] rounded-full hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300">
                 <i class="bi bi-heart"></i>
               </button>
-              <button class="add-to-cart-btn flex-1 py-3 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-full hover:bg-[var(--color-red-700)] transition-all duration-300">
+              <button class="add-to-cart-btn-modal w-full md:flex-1 py-2 md:py-3 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-full hover:bg-[var(--color-red-700)] transition-all duration-300">
                 Add to Cart
               </button>
             </div>
@@ -116,7 +118,6 @@
   </div>
 </main>
 
-<script src="/js/search.js"></script>
 <script src="/js/search2.js"></script>
 
 <%- include('./shared/footer') %>
