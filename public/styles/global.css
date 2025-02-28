@@ -823,6 +823,10 @@ body {
   top: 60px;
 }
 
+.z-10 {
+  z-index: 10;
+}
+
 .z-20 {
   z-index: 20;
 }
@@ -845,10 +849,6 @@ body {
 
 .z-\[999\] {
   z-index: 999;
-}
-
-.z-10 {
-  z-index: 10;
 }
 
 .col-span-2 {
@@ -924,6 +924,10 @@ body {
   margin-right: 1rem;
 }
 
+.mt-0 {
+  margin-top: 0px;
+}
+
 .mt-1 {
   margin-top: 0.25rem;
 }
@@ -972,14 +976,6 @@ body {
   margin-top: 110px;
 }
 
-.mt-\[60px\] {
-  margin-top: 60px;
-}
-
-.mt-0 {
-  margin-top: 0px;
-}
-
 .block {
   display: block;
 }
@@ -1002,6 +998,10 @@ body {
 
 .grid {
   display: grid;
+}
+
+.contents {
+  display: contents;
 }
 
 .hidden {
@@ -1648,10 +1648,6 @@ body {
   background-color: var(--color-black);
 }
 
-.bg-transparent {
-  background-color: transparent;
-}
-
 .bg-gray-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
@@ -1664,6 +1660,10 @@ body {
 
 .bg-red-500 {
   background-color: var(--color-red-500);
+}
+
+.bg-transparent {
+  background-color: transparent;
 }
 
 .bg-white {
@@ -1998,10 +1998,6 @@ body {
   color: var(--color-yellow-800);
 }
 
-.text-transparent {
-  color: transparent;
-}
-
 .text-gray-500 {
   color: var(--color-gray-500);
 }
@@ -2020,6 +2016,10 @@ body {
   color: rgb(220 38 38 / var(--tw-text-opacity, 1));
 }
 
+.text-transparent {
+  color: transparent;
+}
+
 .text-white {
   color: var(--color-white);
 }
@@ -2027,10 +2027,6 @@ body {
 .text-yellow-500 {
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity, 1));
-}
-
-.text-red-500 {
-  color: var(--color-red-500);
 }
 
 .line-through {
@@ -2368,11 +2364,6 @@ body {
   background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
 }
 
-.hover\:bg-gray-100:hover {
-  --tw-bg-opacity: 1;
-  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1));
-}
-
 .hover\:text-\[var\(--color-black\)\]:hover {
   color: var(--color-black);
 }
@@ -2477,11 +2468,6 @@ body {
   background-color: var(--color-gray-700);
 }
 
-.dark\:hover\:bg-gray-700:hover:is(.dark *) {
-  --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity, 1));
-}
-
 @media (min-width: 640px) {
   .sm\:mb-0 {
     margin-bottom: 0px;
@@ -2507,8 +2493,16 @@ body {
     margin-top: 1.75rem;
   }
 
+  .sm\:mt-\[4\.5rem\] {
+    margin-top: 4.5rem;
+  }
+
   .sm\:h-24 {
     height: 6rem;
+  }
+
+  .sm\:h-\[87vh\] {
+    height: 87vh;
   }
 
   .sm\:w-24 {
@@ -2591,6 +2585,10 @@ body {
 
   .md\:hidden {
     display: none;
+  }
+
+  .md\:h-\[87vh\] {
+    height: 87vh;
   }
 
   .md\:w-72 {

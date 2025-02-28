@@ -70,9 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
                       expandedSearchResults.appendChild(resultItem);
                   });
                   expandedSearchResults.classList.remove("hidden");
-              } else {
-                  expandedSearchResults.innerHTML = '<div class="p-2 text-[var(--color-gray-500)]">No results found</div>';
-                  expandedSearchResults.classList.remove("hidden");
               }
           } catch (error) {
               console.error("Error fetching search results:", error);

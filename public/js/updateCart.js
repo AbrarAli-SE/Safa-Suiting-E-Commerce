@@ -1,25 +1,24 @@
 // public/js/updateCart.js
 import { removeFromCart, updateCartQuantity } from './localStorage-cart.js';
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
   try {
     // Cart Icon and Quantity Elements
-    const cart_Icon = document.getElementById('js-cart');
-    const cart_Qunatity = cart_Icon ? cart_Icon.querySelector('#js-cart-qunatiy') : null;
+    const cartIcon = document.getElementById('js-cart');
+    const cartQuantity = cartIcon ? cartIcon.querySelector('#js-cart-quantity') : null;
 
-    if (!cart_Icon || !cart_Qunatity) {
+    if (!cartIcon || !cartQuantity) {
       console.warn("Cart icon or quantity element not found, skipping cart functionality.");
-      return; // Exit if critical elements are missing
+      return;
     }
 
     // Cart Elements
-    const cartItems = document.querySelectorAll('.cart-item');
+    let cartItems = document.querySelectorAll('.cart-item');
     const updateCartButton = document.getElementById('updateCart');
     const cartSubtotal = document.getElementById('cartSubtotal');
     const cartTotal = document.getElementById('cartTotal');
-    const removeButtons = document.querySelectorAll('.remove-item');
 
-    if (cartItems.length === 0 && !updateCartButton && !cartSubtotal && !cartTotal && removeButtons.length === 0) {
+    if (cartItems.length === 0 && !updateCartButton && !cartSubtotal && !cartTotal) {
       console.warn("No cart elements found, skipping cart setup.");
       return;
     }
@@ -29,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
       try {
         const price = parseFloat(item.querySelector('.price').dataset.price);
         const quantityElement = item.querySelector('.quantity-value');
-        const quantity = parseInt(quantityElement.textContent) || 1; // Get quantity from the span
+        const quantity = parseInt(quantityElement.textContent) || 1;
         const subtotalElement = item.querySelector('.subtotal');
         const subtotal = price * quantity;
         subtotalElement.textContent = `Rs ${subtotal.toFixed(2)}`;
@@ -43,12 +42,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // Calculate and update total cart amount
     function updateCartTotal() {
       try {
+        cartItems = document.querySelectorAll('.cart-item');
         let total = 0;
         cartItems.forEach(item => {
           total += updateItemSubtotal(item);
         });
         if (cartSubtotal) cartSubtotal.textContent = `Rs ${total.toFixed(2)}`;
-        if (cartTotal) cartTotal.textContent = `Rs ${total.toFixed(2)}`; // Add shipping or other fees here if applicable
+        if (cartTotal) cartTotal.textContent = `Rs ${total.toFixed(2)}`;
       } catch (error) {
         console.error("Error updating cart total:", error);
       }
@@ -56,47 +56,59 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Handle quantity changes with plus and minus buttons
     function updateQuantity(itemId, change) {
-      const quantityElement = document.querySelector(`.quantity-value[data-item-id="${itemId}"]`);
-      if (quantityElement) {
+      try {
+        const quantityElement = document.querySelector(`.quantity-value[data-item-id="${itemId}"]`);
+        if (!quantityElement) {
+          console.warn(`Quantity element not found for itemId: ${itemId}`);
+          return;
+        }
         let quantity = parseInt(quantityElement.textContent) || 1;
-        quantity = Math.max(1, quantity + change); // Ensure quantity doesn’t go below 1
+        quantity = Math.max(1, quantity + change);
         quantityElement.textContent = quantity;
         updateCartTotal();
+      } catch (error) {
+        console.error("Error updating quantity:", error);
       }
     }
 
-    // Add event listeners for quantity buttons
-    cartItems.forEach(item => {
-      const decreaseButton = item.querySelector('.quantity-decrease');
-      const increaseButton = item.querySelector('.quantity-increase');
+    // Setup quantity button listeners
+    function setupQuantityListeners() {
+      cartItems = document.querySelectorAll('.cart-item');
+      cartItems.forEach(item => {
+        const decreaseButton = item.querySelector('.quantity-decrease');
+        const increaseButton = item.querySelector('.quantity-increase');
 
-      if (decreaseButton) {
-        decreaseButton.addEventListener('click', function () {
-          try {
-            const itemId = this.dataset.itemId;
-            updateQuantity(itemId, -1);
-          } catch (error) {
-            console.error("Error decreasing quantity:", error);
-          }
-        });
-      }
+        if (decreaseButton) {
+          decreaseButton.addEventListener('click', function () {
+            try {
+              const itemId = this.dataset.itemId;
+              console.log(`Decrease clicked for itemId: ${itemId}`);
+              updateQuantity(itemId, -1);
+            } catch (error) {
+              console.error("Error decreasing quantity:", error);
+            }
+          });
+        }
 
-      if (increaseButton) {
-        increaseButton.addEventListener('click', function () {
-          try {
-            const itemId = this.dataset.itemId;
-            updateQuantity(itemId, 1);
-          } catch (error) {
-            console.error("Error increasing quantity:", error);
-          }
-        });
-      }
-    });
+        if (increaseButton) {
+          increaseButton.addEventListener('click', function () {
+            try {
+              const itemId = this.dataset.itemId;
+              console.log(`Increase clicked for itemId: ${itemId}`);
+              updateQuantity(itemId, 1);
+            } catch (error) {
+              console.error("Error increasing quantity:", error);
+            }
+          });
+        }
+      });
+    }
 
     // Handle Update Cart button click
     if (updateCartButton) {
       updateCartButton.addEventListener('click', async function () {
         try {
+          cartItems = document.querySelectorAll('.cart-item');
           const cartData = Array.from(cartItems).map(item => {
             const itemId = item.dataset.itemId;
             const quantityElement = item.querySelector('.quantity-value');
@@ -110,26 +122,21 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
           }
 
-          console.log("Sending cart data to server:", JSON.stringify({ updatedItems: cartData }, null, 2)); // Debug log
-
+          console.log("Sending cart data to server:", JSON.stringify({ updatedItems: cartData }, null, 2));
           const response = await fetch('/user/cart/update', {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ updatedItems: cartData }) // Ensure updatedItems is sent
+            body: JSON.stringify({ updatedItems: cartData })
           });
 
           const result = await response.json();
           if (response.ok) {
             alert('Cart updated successfully!');
-            
-            // Update localStorage with server data
             localStorage.setItem('cart', JSON.stringify(result.cart.items.map(item => ({
               productId: item._id,
               quantity: item.quantity,
               price: item.price
             }))));
-
-            // Update UI with server data
             result.cart.items.forEach(updatedItem => {
               const itemRow = document.querySelector(`.cart-item[data-item-id='${updatedItem._id}']`);
               if (itemRow) {
@@ -139,13 +146,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 subtotal.textContent = `Rs ${(updatedItem.price * updatedItem.quantity).toFixed(2)}`;
               }
             });
-
-            // Update cart total
             updateCartTotal();
-
-            // Update cart quantity in header
-            updateCartQuantity();
+            await updateCartQuantity();
           } else {
+            console.error("Server error updating cart:", result.message);
             alert(result.message || 'Error updating cart.');
           }
         } catch (error) {
@@ -155,13 +159,19 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     }
 
-    // Handle Remove Item button click
-    removeButtons.forEach(button => {
-      button.addEventListener('click', async function (e) {
+    // Handle Remove Item with event delegation
+    document.addEventListener('click', async function (e) {
+      const removeButton = e.target.closest('.remove-item');
+      if (removeButton) {
         try {
-          const itemId = this.dataset.itemId;
-          const cartItem = this.closest('.cart-item');
+          const itemId = removeButton.dataset.itemId;
+          console.log(`Remove clicked for itemId: ${itemId}`);
+          if (!itemId) {
+            console.error("Item ID not found on remove button.");
+            return;
+          }
 
+          const cartItem = removeButton.closest('.cart-item');
           const response = await fetch(`/user/cart/remove/${itemId}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
@@ -169,19 +179,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
           const result = await response.json();
           if (result.success) {
-            // Remove from localStorage
-            removeFromCart(itemId);
-
-            // Remove from DOM
+            console.log(`Item ${itemId} removed successfully from server`);
+            await removeFromCart(itemId);
             if (cartItem) {
               cartItem.remove();
+              console.log(`Item ${itemId} removed from DOM`);
             }
 
-            // Update cart total
+            // Sync localStorage with remaining cart items
+  cartItems = document.querySelectorAll('.cart-item');
+  const updatedCart = Array.from(cartItems).map(item => ({
+    productId: item.dataset.itemId,
+    quantity: parseInt(item.querySelector('.quantity-value').textContent) || 1,
+    price: parseFloat(item.querySelector('.price').dataset.price) || 0
+  }));
+  localStorage.setItem('cart', JSON.stringify(updatedCart));
+  console.log("Synced localStorage with DOM:", updatedCart);
             updateCartTotal();
 
-            // If cart is empty, update UI
-            if (document.querySelectorAll('.cart-item').length === 0) {
+            if (cartItems.length === 0) {
               const cartSection = document.querySelector('.md\\:col-span-2.space-y-6');
               const cartTotalSection = document.querySelector('.cart-total-section');
               if (cartSection) {
@@ -192,25 +208,27 @@ document.addEventListener("DOMContentLoaded", function () {
               }
             }
 
-            // Update cart quantity in header
-            updateCartQuantity();
+            await updateCartQuantity();
           } else {
+            console.error("Server error removing item:", result.message);
             alert(result.message || 'Error removing item.');
           }
         } catch (error) {
           console.error('Error removing item:', error);
           alert('Network error. Please try again.');
         }
-      });
+      }
     });
 
-    // Initial cart total calculation
+    // Initial setup
     updateCartTotal();
+    setupQuantityListeners();
+    await updateCartQuantity();
 
-    // Re-sync cart quantity when returning to the page
-    window.addEventListener("focus", () => {
+    // Re-sync cart quantity on focus
+    window.addEventListener("focus", async () => {
       try {
-        updateCartQuantity();
+        await updateCartQuantity();
       } catch (error) {
         console.error("Error updating cart quantity on focus:", error);
       }
