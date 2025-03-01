@@ -27,16 +27,50 @@
   .carousel-design-3 .swiper-thumbnail:hover {
     transform: scale(1.1);
   }
-  .wishlist-btn i, .wishlist-btn-modal i {
-  transition: color 0.2s ease;
+
+ /* Smooth transitions */
+.wishlist-btn, .wishlist-btn-modal {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.wishlist-btn:hover i:not(.bi-heart-fill),
-.wishlist-btn-modal:hover i:not(.bi-heart-fill) {
-  color: #000; /* or your default color */
+.wishlist-btn i, .wishlist-btn-modal i {
+  transition: color 0.3s ease;
 }
 
-/* Remove any rules that make the entire button red on hover */
+/* Base state for wishlist=true (red filled heart) */
+.wishlist-btn[data-wishlist="true"] i.bi-heart-fill,
+.wishlist-btn-modal[data-wishlist="true"] i.bi-heart-fill {
+  color: var(--color-red-500);
+}
+
+/* Base state for wishlist=false (empty heart, no color unless hovered) */
+.wishlist-btn[data-wishlist="false"] i.bi-heart,
+.wishlist-btn-modal[data-wishlist="false"] i.bi-heart {
+  color:red ; /* Default color, typically black or gray */
+}
+
+/* Hover state for wishlist=true (white heart, red background) */
+.wishlist-btn[data-wishlist="true"]:hover,
+.wishlist-btn-modal[data-wishlist="true"]:hover {
+  background-color: var(--color-red-500);
+}
+
+.wishlist-btn[data-wishlist="true"]:hover i.bi-heart-fill,
+.wishlist-btn-modal[data-wishlist="true"]:hover i.bi-heart-fill {
+  color: var(--color-white) !important;
+}
+
+/* Hover state for wishlist=false (red heart, red background) */
+.wishlist-btn[data-wishlist="false"]:hover,
+.wishlist-btn-modal[data-wishlist="false"]:hover {
+  background-color: var(--color-red-500);
+}
+
+.wishlist-btn[data-wishlist="false"]:hover i.bi-heart,
+.wishlist-btn-modal[data-wishlist="false"]:hover i.bi-heart {
+  color: var(--color-white) !important; /* White heart on red background */
+}
+
 </style>
 
 

@@ -39,7 +39,7 @@ exports.handleContactForm = async (req, res) => {
         }
 
          // ✅ Save contact form data to the database
-         await Contact.create({ name, email, phone, message, isNotified: false });
+         await Contact.create({ name, email, phone, message});
 
         // ✅ Simulate email sending (Replace this with your email service)
         console.log(`📧 Contact Form Submission: Name: ${name}, Email: ${email}, Message: ${message}`);

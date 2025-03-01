@@ -11,17 +11,12 @@
 <body class="bg-[var(--color-gray-50)] text-[var(--color-black)] h-screen overflow-x-hidden relative font-sans">
   <%- include('../shared/asideBar') %>
 
+  <%- include('../shared/adminheader') %>
   <!-- Main Content -->
-  <div id="mainContent" class="p-5 w-full transition-all duration-300 ease-in-out">
-    <!-- Header -->
-    <div class="flex items-center bg-[var(--color-white)] p-3 border-b border-[var(--color-gray-300)] mb-6 shadow-sm">
-      <button 
-        id="menuToggle" 
-        class="text-[var(--color-black)] text-2xl p-2 hover:text-[var(--color-red-500)] transition-colors duration-300 bg-transparent border-none cursor-pointer ">
-        ☰
-      </button>
-      <h1 class="text-[var(--color-black)] text-2xl  flex-grow">Welcome, Admin</h1>
-    </div>
+  <div id="mainContent" class="p-root-5 w-full transition-filter duration-300 ease-in-out">
+    
+
+    <div class="pt-16">
 
     <div class="max-w-7xl mx-auto">
       <!-- Messages -->
@@ -162,6 +157,7 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
 
   <!-- <script type="module" src="/js/adminCoupons.js"></script> -->

@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // Close modal
-    const closeModalBtn = document.querySelector("#quickViewModal button[onclick='closeQuickView()']");
+    const closeModalBtn = document.getElementById("closeQuickViewBtn");
     if (closeModalBtn) {
       closeModalBtn.addEventListener("click", closeQuickView);
     }
@@ -131,7 +131,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       button.setAttribute("data-wishlist", isInWishlist);
       const heartIcon = button.querySelector("i");
       if (heartIcon) {
-        heartIcon.classList.remove("bi-heart", "bi-heart-fill", "text-[var(--color-red-500)]");
+        heartIcon.classList.remove("bi-heart", "bi-heart-fill", "text-[var(--color-red-500)]", "text-[var(--color-white)]");
         heartIcon.classList.add(isInWishlist ? "bi-heart-fill" : "bi-heart");
         if (isInWishlist) {
           heartIcon.classList.add("text-[var(--color-red-500)]");

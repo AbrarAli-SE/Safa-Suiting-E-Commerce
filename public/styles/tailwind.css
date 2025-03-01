@@ -2,7 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
+
 @layer utilities {
+  /* Custom media query for screens up to 912px width (e.g., iPad portrait and smaller) */
+  @media (max-width: 912px) {
+    .cart-item {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: start !important;
+      justify-content: space-between !important;
+    }
+
+    .cart-item .flex.items-center.gap-4.w-full.sm\\:w-auto {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 1rem !important;
+      width: 100% !important;
+    }
+
+    .cart-item .flex-1.text-center.sm\\:text-left.mt-2.sm\\:mt-0 {
+      flex: 1 !important;
+      text-align: center !important;
+      margin-top: 0.5rem !important;
+      width: 100% !important;
+    }
+
+    .cart-item .flex.flex-col.sm\\:flex-row.items-center.gap-4.mt-4.sm\\:mt-0.w-full.sm\\:w-auto.justify-center.sm\\:justify-end {
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      gap: 1rem !important;
+      margin-top: 1rem !important;
+      width: 100% !important;
+      justify-content: center !important;
+    }
+
+    .cart-item img {
+      width: 5rem !important;
+      height: 5rem !important;
+    }
+
+    .cart-item .quantity-value {
+      width: 3rem !important;
+      
+    }
+
+    .cart-item  .quantity-section{
+      margin-left: auto ;
+    }
+    /* Ensure text alignment and spacing match mobile */
+    .cart-item .flex-1.text-center {
+      text-align: center !important;
+    }
+
+    .cart-item .subtotal {
+      text-align: center !important;
+    }
+  }
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -103,3 +163,4 @@
 
  
 }
+

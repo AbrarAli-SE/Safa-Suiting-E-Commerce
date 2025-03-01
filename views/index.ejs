@@ -74,7 +74,7 @@
               <div
                 class="absolute inset-0 flex items-center justify-center gap-3 opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 hidden md:flex">
                 <button
-                  class="wishlist-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
+                  class="wishlist-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow transition-all duration-300 data-[wishlist=true]:hover:bg-[var(--color-red-500)] data-[wishlist=true]:hover:text-[var(--color-white)]"
                   data-product-id="<%= product._id %>" data-wishlist="false">
                   <i class="bi bi-heart"></i>
                 </button>
@@ -97,31 +97,40 @@
               <h3 class="font-semibold text-base truncate">
                 <%= product.name %>
               </h3>
-              <div class="flex justify-between items-center">
+              <!-- Mobile Layout: Price with icons on right, cart at bottom -->
+              <div class="md:hidden flex flex-col h-full justify-between">
+                <div class="flex justify-between items-center">
+                  <div class="flex items-center gap-2">
+                    <span class="font-bold text-[var(--color-red-500)] text-lg">Rs <%= product.price %></span>
+                    <span class="text-sm text-[var(--color-gray-400)] line-through">Rs <%= product.discountPrice %></span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <button
+                      class="wishlist-btn p-2 bg-[var(--color-white)] rounded-full shadow transition-all duration-300 hover:bg-[var(--color-red-500)]"
+                      data-product-id="<%= product._id %>" data-wishlist="false">
+                      <i class="bi bi-heart"></i>
+                    </button>
+                    <button
+                      class="quick-view-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
+                      data-name="<%= product.name %>" data-image="<%= product.image %>" data-price="<%= product.price %>"
+                      data-discountprice="<%= product.discountPrice %>" data-description="<%= product.description || 'No description available.' %>"
+                      data-product-id="<%= product._id %>">
+                      <i class="bi bi-eye"></i>
+                    </button>
+                  </div>
+                </div>
+                <button
+                  class="add-to-cart-btn w-full p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 mt-2"
+                  data-product-id="<%= product._id %>" data-cart="false">
+                  <i class="bi bi-cart"></i>
+                </button>
+              </div>
+              <!-- Desktop Layout: Price only (buttons are in hover state above) -->
+              <div class="hidden md:flex justify-between items-center">
                 <div class="flex items-center gap-2">
                   <span class="font-bold text-[var(--color-red-500)] text-lg">Rs <%= product.price %></span>
                   <span class="text-sm text-[var(--color-gray-400)] line-through">Rs <%= product.discountPrice %></span>
                 </div>
-              </div>
-              <!-- Mobile Buttons (Visible only on mobile screens) -->
-              <div class="flex justify-between items-center gap-2 mt-2 md:hidden">
-                <button
-                  class="wishlist-btn flex-1 p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
-                  data-product-id="<%= product._id %>" data-wishlist="false">
-                  <i class="bi bi-heart"></i>
-                </button>
-                <button
-                  class="quick-view-btn flex-1 p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
-                  data-name="<%= product.name %>" data-image="<%= product.image %>" data-price="<%= product.price %>"
-                  data-discountprice="<%= product.discountPrice %>" data-description="<%= product.description || 'No description available.' %>"
-                  data-product-id="<%= product._id %>">
-                  <i class="bi bi-eye"></i>
-                </button>
-                <button
-                  class="add-to-cart-btn flex-1 p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
-                  data-product-id="<%= product._id %>" data-cart="false">
-                  <i class="bi bi-cart"></i>
-                </button>
               </div>
             </div>
           </div>
@@ -131,42 +140,9 @@
   </section>
 <% }); %>
 
-<!-- Quick View Modal (Unchanged) -->
-<div id="quickViewModal"
-  class="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center opacity-0 pointer-events-none transition-all duration-500 z-50">
-  <div
-    class="bg-[var(--color-white)] w-full max-w-[32rem] md:max-w-[40rem] p-8 rounded-xl shadow-2xl relative transform scale-95 transition-all duration-300">
-    <button onclick="closeQuickView()"
-      class="absolute top-4 right-4 w-10 h-10 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-full flex items-center justify-center hover:bg-[var(--color-red-700)] transition-all duration-300">
-      <i class="bi bi-x-lg text-xl"></i>
-    </button>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <div>
-        <img id="modalProductImage" src="" alt="Product" class="w-full h-80 object-cover rounded-lg">
-      </div>
-      <div class="flex flex-col justify-between">
-        <div>
-          <h3 id="modalProductName" class="text-2xl font-bold text-[var(--color-black)] mb-4"></h3>
-          <div class="flex items-center gap-4 mb-4">
-            <span id="modalProductPrice" class="text-xl font-semibold text-[var(--color-red-500)]"></span>
-            <span id="modalProductOldPrice" class="text-base text-[var(--color-gray-400)] line-through"></span>
-          </div>
-          <p id="modalProductDesc" class="text-[var(--color-gray-600)] text-sm leading-relaxed"></p>
-        </div>
-        <div class="mt-6 flex flex-col md:flex-row gap-3 md:gap-4">
-          <button class="wishlist-btn-modal w-full md:w-auto p-2 md:p-3 bg-[var(--color-white)] text-[var(--color-red-500)] border border-[var(--color-red-500)] rounded-full hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300">
-            <i class="bi bi-heart"></i>
-          </button>
-          <button
-            class="add-to-cart-btn-modal w-full md:flex-1 py-2 md:py-3 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-full hover:bg-[var(--color-red-700)] transition-all duration-300">
-            Add to Cart
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
+
+<%- include('./shared/viewModel') %>
 <%- include('./shared/footer') %>
 <script type="module" src="/js/addCart.js"></script>
 

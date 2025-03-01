@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 
     // Add close button functionality
-    const closeModalBtn = document.querySelector("#quickViewModal button[onclick='closeQuickView()']");
+    const closeModalBtn = document.getElementById("closeQuickViewBtn");
     if (closeModalBtn) {
       closeModalBtn.addEventListener("click", closeQuickView);
     }

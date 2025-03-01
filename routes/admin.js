@@ -8,11 +8,6 @@ router.get("/carousel/get", authenticateUser, adminAuth, adminController.getCaro
 router.get("/manage-carousel", authenticateUser, adminAuth, adminController.renderCoursel); // Fixed typo: "coursel" -> "carousel"
 
 
-// ✅ Fetch Unread Notifications
-router.get("/notifications", authenticateUser, adminAuth, adminController.getNotifications);
-
-// ✅ Mark Notifications as Read
-router.post("/notifications/mark-read", authenticateUser, adminAuth, adminController.markNotificationsAsRead);
 
 
 router.get("/users", authenticateUser, adminAuth, adminController.renderManageUsers);

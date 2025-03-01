@@ -4,3 +4,5 @@ package-lock.json
 sldier.html
 .env
 dashboardhtml.ejs
+
+SQL.js

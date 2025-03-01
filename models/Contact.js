@@ -22,11 +22,6 @@ const contactSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
-    isNotified: 
-    { 
-        type: Boolean, 
-        default: false 
-    } // ✅ New Field for Notification
 
 });
 

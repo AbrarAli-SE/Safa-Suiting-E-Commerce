@@ -16,13 +16,12 @@
 <body class="bg-[var(--color-white)] text-[var(--color-black)] h-screen overflow-x-hidden relative font-sans">
     
     <%- include('../shared/asideBar') %>
+    <%- include('../shared/adminheader') %>
   <!-- Main Content -->
   <div id="mainContent" class="p-root-5 w-full transition-filter duration-300 ease-in-out">
-    <!-- Header -->
-    <div class="flex items-center bg-[var(--color-white)] p-root-3 border-b border-[var(--color-black)] mb-5">
-      <button id="menuToggle" class="text-[var(--color-black)] text-2xl p-2 hover:text-[var(--color-red-500)] transition-colors bg-transparent border-none cursor-pointer">☰</button>
-      <h1 class="text-[var(--color-black)] text-2xl flex-grow">Welcome, Admin</h1>
-    </div>
+    
+
+    <div class="pt-16">
     <div class="max-w-5xl mx-auto">
       <% if (error) { %>
         <div class="bg-[var(--color-red-100)] border-l-8 border-[var(--color-red-500)] text-[var(--color-red-700)] p-6 rounded-lg shadow-md flex items-center animate-fade-in">
@@ -46,7 +45,19 @@
               <div class="flex items-center group">
                 <i class="bi bi-envelope mr-4 text-[var(--color-gray-500)] text-xl group-hover:text-[var(--color-red-500)] transition-colors duration-200"></i>
                 <span class="font-semibold text-[var(--color-gray-700)]">Email:</span>
-                <span class="ml-3 text-[var(--color-gray-900)] font-medium"><%= user.email %></span>
+                <span class="ml-3 text-[var(--color-gray-900)] font-medium">
+                  <!-- Truncated email on mobile, full email on larger screens -->
+                  <span class="block sm:hidden">
+                    <% 
+                      const maxLength = 15; // Adjust this number as needed
+                      const truncatedEmail = user.email.length > maxLength 
+                        ? user.email.substring(0, maxLength) + '....' 
+                        : user.email;
+                    %>
+                    <%= truncatedEmail %>
+                  </span>
+                  <span class="hidden sm:block"><%= user.email %></span>
+                </span>
               </div>
               <div class="flex items-center group">
                 <i class="bi bi-shield-lock mr-4 text-[var(--color-gray-500)] text-xl group-hover:text-[var(--color-red-500)] transition-colors duration-200"></i>
@@ -109,6 +120,7 @@
           <i class="bi bi-arrow-left-circle mr-2 text-lg"></i> Back to Manage Users
         </a>
       </div>
+    </div>
     </div>
   </div>
 

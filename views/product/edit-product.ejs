@@ -16,13 +16,12 @@
 <body class="bg-[var(--color-white)] text-[var(--color-black)] h-screen overflow-x-hidden relative font-sans">
     
     <%- include('../shared/asideBar') %>
-  <!-- Main Content -->
-  <div id="mainContent" class="p-root-5 w-full transition-filter duration-300 ease-in-out">
-    <!-- Header -->
-    <div class="flex items-center bg-[var(--color-white)] p-root-3 border-b border-[var(--color-black)] mb-5">
-      <button id="menuToggle" class="text-[var(--color-black)] text-2xl p-2 hover:text-[var(--color-red-500)] transition-colors bg-transparent border-none cursor-pointer">☰</button>
-      <h1 class="text-[var(--color-black)] text-2xl flex-grow">Welcome, Admin</h1>
-    </div>
+    <%- include('../shared/adminheader') %>
+    <!-- Main Content -->
+    <div id="mainContent" class="p-root-5 w-full transition-filter duration-300 ease-in-out">
+      
+  
+      <div class="pt-16">
     <div class="content">
     <!-- Success & Error Messages -->
     <div id="message-container" class="mb-6">
@@ -196,6 +195,7 @@
       </div>
     </form>
   </div>
+</div>
   </div>
 
   <!-- <script type="module" src="/js/editProduct.js"></script> -->
