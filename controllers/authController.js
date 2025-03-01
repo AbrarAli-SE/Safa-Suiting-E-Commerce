@@ -6,7 +6,7 @@ const sendEmail = require('../utils/emailConfig');
 const { secretKey, expiresIn } = require("../config/jwtConfig");
 
 // Generate OTP Function
-const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
+// const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 
 // ✅ Function to Generate Secure Random Password
 const generateRandomPassword = () => {

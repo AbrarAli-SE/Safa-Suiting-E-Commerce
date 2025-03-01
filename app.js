@@ -18,6 +18,7 @@ const fs = require("fs");
   const cartRoutes = require("./routes/cart"); // ✅ Import Cart Routes
   const productRoutes = require("./routes/product"); // ✅ Import Cart Routes
   const orderRoutes = require("./routes/orders"); // ✅ Import Cart Routes
+  const ContactInfo = require("./models/info"); // Adjust path as needed
   const {authenticateUser} = require("./middleware/authMiddleware");
   
 
@@ -80,7 +81,26 @@ const fs = require("fs");
 // app.use('/adminusers',(req,res) => {
 //   res.render('admin/setting');
 // })
-
+// Middleware to fetch contactInfo for all routes
+app.use(async (req, res, next) => {
+  try {
+    const contactInfo = await ContactInfo.findOne({}).lean();
+    res.locals.contactInfo = contactInfo || {
+      phoneNumber: "Not set",
+      supportEmail: "Not set",
+      city: "Not set"
+    }; // Default values if no document exists
+    next();
+  } catch (error) {
+    console.error("❌ Middleware Error fetching contactInfo:", error);
+    res.locals.contactInfo = {
+      phoneNumber: "Not set",
+      supportEmail: "Not set",
+      city: "Not set"
+    };
+    next();
+  }
+});
 
 
 // Routes

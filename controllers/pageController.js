@@ -1,29 +1,65 @@
 const Contact = require("../models/Contact");
+const ContactInfo = require("../models/info");
 
 // ✅ Render About Page
-exports.renderAboutPage = (req, res) => {
-    try
-    {
-        res.render("pages/about", { user: req.user || null }); // ✅ Pass user to EJS
+exports.renderAboutPage = async (req, res) => {
+    try {
+      // Fetch the contact details from the database
+      const contactInfo = await ContactInfo.findOne({}).lean(); // Use lean() for plain JS object
+  
+      // Provide default values if contactInfo is null
+      const contactData = contactInfo || {
+        phoneNumber: "Not set",
+        supportEmail: "Not set",
+        aboutUs: "Information not available yet."
+      };
+  
+      // Pass user and contact details to the EJS template
+      res.render("pages/about", { 
+        user: req.user || null, 
+        contactInfo: {
+          phoneNumber: contactData.phoneNumber,
+          supportEmail: contactData.supportEmail,
+          aboutUs: contactData.aboutUs
+        }
+      });
+    } catch (error) {
+      console.error("❌ About Page Error:", error);
+      res.status(500).send("Server error");
     }
-    catch(error)
-    {
-        console.error("❌ About Page Error:", error);
-        res.status(500).send("Server error");
-    }
-};
+  };
 
 // ✅ Render Contact Page
-exports.renderContactPage = (req, res) => {
-    try
-    {
-        res.render("pages/contact", { user: req.user || null, successMessage: null, errorMessage: null });
-    }catch(error)
-    {
+
+
+exports.renderContactPage = async (req, res) => {
+    try {
+        // Fetch the contact data (you can adjust the query as per your requirements)
+        const contactInfo = await ContactInfo.findOne({}).lean();
+        // Provide default values if contactInfo is null
+      const contactData = contactInfo || {
+        customerEmail: "Not set",
+        supportEmail: "Not set",
+        phoneNumber: "Not set"
+      };
+
+        // Render the page and pass the data
+        res.render("pages/contact", { 
+            user: req.user || null, 
+            successMessage: null, 
+            errorMessage: null, 
+            contactInfo: {
+                customerEmail: contactData.customerEmail,
+                supportEmail: contactData.supportEmail,
+                phoneNumber: contactData.phoneNumber
+              }
+        });
+    } catch (error) {
         console.error("❌ Contact Page Error:", error);
         res.status(500).send("Server error");
     }
 };
+
 
 // ✅ Handle Contact Form Submission
 exports.handleContactForm = async (req, res) => {

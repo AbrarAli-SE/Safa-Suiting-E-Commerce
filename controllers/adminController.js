@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Wishlist = require("../models/Wishlist");
 const Contact = require("../models/Contact");
+const ContactInfo = require("../models/info");
 const bcrypt = require("bcryptjs");
 const Carousel = require("../models/Carousel");
 const { uploadCarousel } = require("../config/multer-config");
@@ -419,20 +420,70 @@ exports.renderManageUsers = async (req, res) => {
       return res.status(500).json({ error: "Server error. Try again." });
     }
   };
-  
-  // Ensure renderSettings is present if not already
-  exports.renderSettings = async (req, res) => {
-    try {
-      const user = await User.findById(req.user.userId);
-      res.render("admin/setting", {
-        user: user || {},
-        error: null,
-        passwordError: null,
-        passwordSuccess: null,
-        successMessage: null,
-      });
-    } catch (error) {
-      console.error("❌ Render Settings Error:", error);
-      res.status(500).send("Server error");
+
+// Update Contact Details
+exports.updateContactDetails = async (req, res) => {
+  try {
+    const { phoneNumber, customerEmail, supportEmail, aboutUs, city } = req.body;
+
+    if (!phoneNumber || !customerEmail || !supportEmail || !aboutUs || !city) {
+      return res.status(400).json({ error: "All fields are required" });
     }
-  };
+
+    let updatedContact = await ContactInfo.findOne({});
+    if (updatedContact) {
+      updatedContact = await ContactInfo.findOneAndUpdate(
+        {},
+        { phoneNumber, customerEmail, supportEmail, aboutUs, city },
+        { new: true, runValidators: true }
+      );
+    } else {
+      updatedContact = new ContactInfo({
+        phoneNumber,
+        customerEmail,
+        supportEmail,
+        aboutUs,
+        city
+      });
+      await updatedContact.save();
+    }
+
+    console.log("✅ Contact details updated:", updatedContact);
+    return res.status(200).json({
+      message: "Contact details updated successfully!",
+      contact: {
+        phoneNumber: updatedContact.phoneNumber,
+        customerEmail: updatedContact.customerEmail,
+        supportEmail: updatedContact.supportEmail,
+        aboutUs: updatedContact.aboutUs,
+        city: updatedContact.city
+      }
+    });
+  } catch (error) {
+    console.error("❌ Update Contact Error:", error);
+    return res.status(500).json({ error: "Server error. Try again." });
+  }
+};
+
+
+  
+  // Render Settings Page
+exports.renderSettings = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+    const contactInfo = await ContactInfo.findOne({}).lean(); // Fetch contact details
+
+    // Render the settings page with user and contact data
+    res.render("admin/setting", {
+      user: user || {},
+      contactInfo: contactInfo || {}, // Pass empty object if no contact exists
+      error: null,
+      passwordError: null,
+      passwordSuccess: null,
+      successMessage: null
+    });
+  } catch (error) {
+    console.error("❌ Render Settings Error:", error);
+    res.status(500).send("Server error");
+  }
+};

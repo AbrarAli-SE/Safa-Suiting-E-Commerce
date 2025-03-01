@@ -17,7 +17,7 @@
           <h2 class="text-2xl font-semibold text-[var(--color-black)]">Call Us</h2>
         </div>
         <p class="text-[var(--color-gray-600)] mb-3 text-sm">Available 24/7, 7 days a week.</p>
-        <p class="text-[var(--color-black)] font-medium text-lg">+880161111222</p>
+        <p class="text-[var(--color-black)] font-medium text-lg"><%= contactInfo.phoneNumber || "Not Available" %></p> <!-- Display phone number -->
       </div>
 
       <!-- Write To Us Section -->
@@ -31,10 +31,11 @@
           <h2 class="text-2xl font-semibold text-[var(--color-black)]">Write To Us</h2>
         </div>
         <p class="text-[var(--color-gray-600)] mb-3 text-sm">Response within 24 hours.</p>
-        <p class="text-[var(--color-black)] font-medium text-lg">customer@exclusive.com</p>
-        <p class="text-[var(--color-black)] font-medium text-lg">support@exclusive.com</p>
+        <p class="text-[var(--color-black)] font-medium text-lg"><%= contactInfo.customerEmail|| "Not Available" %></p> <!-- Display customer email -->
+        <p class="text-[var(--color-black)] font-medium text-lg"><%= contactInfo.supportEmail || "Not Available" %></p> <!-- Display support email -->
       </div>
     </div>
+
 
     <!-- Right Column - Form -->
     <div class="w-full lg:w-2/3 p-8 bg-[var(--color-white)] rounded-2xl shadow-xl">

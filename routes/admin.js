@@ -19,6 +19,7 @@ router.put("/users/update-role", authenticateUser, adminAuth, adminController.up
 
 router.put("/update-profile", authenticateUser, adminAuth, adminController.updateProfile);
 router.put("/change-password", authenticateUser, adminAuth, adminController.changePassword);
+router.put("/update-contact", authenticateUser, adminAuth, adminController.updateContactDetails);
 router.get("/setting", authenticateUser, adminAuth, adminController.renderSettings);
 
 

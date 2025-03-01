@@ -5,8 +5,8 @@
   <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 mt-14">
     <div class="space-y-6 text-center">
       <h1 class="text-5xl md:text-6xl font-bold text-[var(--color-black)] animate-fade-in">About Us</h1>
-      <p class="text-lg text-[var(--color-gray-600)] leading-relaxed max-w-3xl mx-auto">
-        Launched in 2015, Exclusive is South Asia's premier online shopping marketplace, serving 3 million customers with over 1 million products.
+      <p class="text-lg text-[var(--color-gray-600)] leading-relaxed max-w-3xl mx-auto"> <%- contactInfo.aboutUs ||"Launched in 2015, Exclusive is South Asia's premier online shopping marketplace, serving 3 million customers with over 1 million products." %>
+        
       </p>
     </div>
   </section>
@@ -42,12 +42,12 @@
       <div class="text-center">
         <h3 class="text-xl font-semibold text-[var(--color-black)] mb-2">Call Us</h3>
         <p class="text-[var(--color-gray-600)] text-sm mb-2">Available 24/7</p>
-        <p class="text-[var(--color-black)] font-medium text-lg">+880161111222</p>
+        <p class="text-[var(--color-black)] font-medium text-lg"><%= contactInfo.phoneNumber ||"+880161111222" %></p>
       </div>
       <div class="text-center">
         <h3 class="text-xl font-semibold text-[var(--color-black)] mb-2">Email Us</h3>
         <p class="text-[var(--color-gray-600)] text-sm mb-2">Response within 24 hours</p>
-        <p class="text-[var(--color-black)] font-medium text-lg">support@exclusive.com</p>
+        <p class="text-[var(--color-black)] font-medium text-lg"><%= contactInfo.supportEmail||"support@exclusive.com" %></p>
       </div>
     </div>
   </section>
