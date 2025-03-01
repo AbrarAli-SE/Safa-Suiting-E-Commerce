@@ -1,4 +1,4 @@
-// <!-- JavaScript (Updated for Scroll Effect with Root Colors) -->
+
 
   window.addEventListener('scroll', function() {
     const header = document.getElementById('mainHeader');
@@ -47,17 +47,32 @@
 
 
   document.addEventListener("DOMContentLoaded", function () {
-const swiper = new Swiper(".default-carousel", {
-  loop: true,
-  autoplay: { delay: 5000, disableOnInteraction: false },
-  navigation: { nextEl: ".swiper-button-next", prevEl: ".swiper-button-prev" },
-  pagination: { el: ".swiper-pagination", clickable: true, bulletClass: "swiper-pagination-bullet", bulletActiveClass: "swiper-pagination-bullet-active" },
-  slidesPerView: 1,
-  spaceBetween: 0,
-  observer: true,
-  observeParents: true,
-  observeSlideChildren: true
+  // Initialize Swiper with fade effect
+const swiper = new Swiper('.thumbnail-carousel', {
+    // Core settings
+    effect: 'creative', // Set fade transition effect
+    speed: 1000,    // Transition duration in milliseconds (1 second for slow motion)
+    loop: true,     // Enable continuous loop
+    autoplay: {
+        delay: 2000, // Time between transitions (5 seconds)
+        // disableOnInteraction: true, // Continue autoplay after user interaction
+    },
+    
+    creativeEffect: {
+  prev: { translate: [0, 0, -400] },
+  next: { translate: ['100%', 0, 0] }
+}
+    
+    
 });
+
+// Thumbnail click handler
+document.querySelectorAll('.swiper-thumbnail').forEach((thumbnail, index) => {
+    thumbnail.addEventListener('click', () => {
+        swiper.slideTo(index); // Go to clicked thumbnail's slide
+    });
+});
+
 
 
 const navLinks = document.querySelectorAll('.nav-link');
@@ -74,16 +89,6 @@ navLinks.forEach(link => {
 
 });
 
-const swiper = new Swiper('.thumbnail-carousel', {
-  loop: true,
-  navigation: {
-    nextEl: '.swiper-button-next',
-    prevEl: '.swiper-button-prev',
-  },
-});
-document.querySelectorAll('.swiper-thumbnail').forEach((thumb, index) => {
-  thumb.addEventListener('click', () => swiper.slideTo(index));
-});
 
 
 

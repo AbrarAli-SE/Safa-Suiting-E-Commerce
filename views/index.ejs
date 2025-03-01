@@ -5,9 +5,9 @@
   <div class="swiper thumbnail-carousel">
     <div class="swiper-wrapper">
       <% carouselSlides.forEach((slide) => { %>
-        <div class="swiper-slide">
-          <div class="relative w-full h-[90vh] md:h-[87vh]">
-            <img src="<%= slide.image %>" class="w-full h-full object-cover" alt="Carousel Slide">
+        <div class="swiper-slide ">
+          <div class="relative w-full h-[90vh] md:h-[87vh] ">
+            <img src="<%= slide.image %>" class="w-full h-full object-cover " alt="Carousel Slide">
           </div>
         </div>
       <% }) %>
@@ -29,7 +29,6 @@
 
 
 
-
 <!-- Product Category Sections with Cards -->
 <% Object.keys(categorizedProducts).forEach(category => { %>
   <section class="p-4 md:px-16 mt-8">
@@ -42,7 +41,7 @@
       </div>
     </div>
     <div class="flex items-center justify-between flex-col md:flex-row">
-      <h2 class="text-3xl font-bold text-center md:text-left">
+      <h2 class="text-3xl font-bold text-center md:text-left capitalize">
         <%= category.replace(/-/g, ' ') %>
       </h2>
       <div class="flex md:justify-end justify-center items-center mt-4 space-x-4 mr-4">

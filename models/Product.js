@@ -28,12 +28,7 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: [
-        "Flash Sales",
-        "New Arrival",
-        "Explore our Products",
-        "Best Selling Products",
-      ],
+      trim: true, // ✅ Allow any category, including custom ones, and trim whitespace
     },
     brand: {
       type: String,
@@ -41,7 +36,7 @@ const productSchema = new mongoose.Schema(
       trim: true,
     },
     image: {
-      type: String, // ✅ Cloudinary URL for product image
+      type: String, // ✅ Cloudinary URL or local path for product image
       required: true,
     },
     keywords: [

@@ -1922,6 +1922,10 @@ body {
   font-weight: 600;
 }
 
+.capitalize {
+  text-transform: capitalize;
+}
+
 .leading-relaxed {
   line-height: 1.625;
 }
@@ -2031,6 +2035,10 @@ body {
 .text-yellow-500 {
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity, 1));
+}
+
+.text-\[var\(--color-black-500\)\] {
+  color: var(--color-black-500);
 }
 
 .line-through {

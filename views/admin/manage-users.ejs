@@ -178,10 +178,10 @@
                 <option value="user" ${user.role === "user" ? "selected" : ""}>User</option>
                 <option value="admin" ${user.role === "admin" ? "selected" : ""}>Admin</option>
               </select>
-              <button class="update-role-btn ml-2 text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-user-id="${user._id}">Update</button>
+              <button class="update-role-btn ml-2 text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-user-id="${user._id}"><i class="bi bi-pencil-square"></i></button>
             </td>
             <td class="px-4 py-2 flex items-center gap-3">
-              <a href="/admin/users/${user._id}" class="text-[var(--color-blue-500)] hover:text-[var(--color-blue-700)] transition-colors duration-300">View</a>
+              <a href="/admin/users/${user._id}" class="text-[var(--color-blue-500)] hover:text-[var(--color-blue-700)] transition-colors duration-300"><i class="bi bi-eye"></i></a>
             </td>
           </tr>`;
         userList.insertAdjacentHTML("beforeend", row);

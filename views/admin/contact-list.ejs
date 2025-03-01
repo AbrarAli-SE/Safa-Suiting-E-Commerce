@@ -127,14 +127,14 @@ document.addEventListener("DOMContentLoaded", function () {
             <td class="px-4 py-2">${contact.message.substring(0, 20)}...</td>
             <td class="px-4 py-2">${new Date(contact.createdAt).toLocaleString()}</td>
             <td class="px-4 py-2 flex items-center gap-3">
-              <button class="view-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300"
+              <button class="view-btn text-[var(--color-black-500)] hover:text-[var(--color-red-700)] transition-colors duration-300"
                 data-contact-id="${contact._id}"
                 data-name="${contact.name}"
                 data-email="${contact.email}"
                 data-phone="${contact.phone}"
                 data-message="${contact.message}"
-                data-date="${new Date(contact.createdAt).toLocaleString()}">View</button>
-              <button class="delete-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-contact-id="${contact._id}" data-page="${currentPage}">Delete</button>
+                data-date="${new Date(contact.createdAt).toLocaleString()}"><i class="bi bi-eye"></i></button>
+              <button class="delete-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-contact-id="${contact._id}" data-page="${currentPage}"><i class="bi bi-trash"></i></button>
             </td>
           </tr>`;
         contactList.insertAdjacentHTML("beforeend", row);

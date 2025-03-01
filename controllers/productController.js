@@ -13,12 +13,21 @@ exports.addProduct = async (req, res) => {
         return res.status(400).json({ error: err.message });
       }
 
-      const { name, description, price, discountPrice, quantity, category, brand, keywords } = req.body;
+      const { name, description, price, discountPrice, quantity, category, brand, keywords ,newCategory } = req.body;
 
       if (!req.file) {
         return res.status(400).json({ error: "Product image is required." });
       }
 
+      // Determine the final category to use
+      let finalCategory = category;
+      if (newCategory && newCategory.trim() !== "") {
+        finalCategory = newCategory.trim(); // Use newCategory if provided
+      }
+
+      if (!finalCategory) {
+        return res.status(400).json({ error: "Category is required." });
+      }
       // Create product object
       const product = new Product({
         name,
@@ -26,7 +35,7 @@ exports.addProduct = async (req, res) => {
         price,
         discountPrice: discountPrice || 0,
         quantity,
-        category,
+        category: finalCategory,
         brand,
         image: `/uploads/products/${req.file.filename}`,
         keywords: keywords.split(",").map(k => k.trim().toLowerCase()),
@@ -51,11 +60,45 @@ exports.addProduct = async (req, res) => {
   });
 };
 
-// Placeholder for renderAddProduct (if needed)
-exports.renderAddProduct = (req, res) => {
-  res.render("product/product-details", { errorMessage: null, successMessage: null });
-};
 
+
+// Render Add Product Page Controller
+exports.renderAddProduct = async (req, res) => {
+  try {
+    // Fetch distinct categories from the Product collection
+    const categories = await Product.distinct("category");
+
+    // Default categories to always include
+    const defaultCategories = [
+      "Flash Sales",
+      "New Arrival",
+      "Explore our Products",
+      "Best Selling Products",
+    ];
+
+    // Combine default categories with custom ones, avoiding duplicates
+    const allCategories = [...new Set([...defaultCategories, ...categories])];
+
+    res.render("product/product-details", { 
+      errorMessage: null, 
+      successMessage: null,
+      categories: allCategories // Pass combined categories to the template
+    });
+  } catch (error) {
+    console.error("❌ Render Add Product Error:", error);
+    // Fallback to default categories if there's an error
+    res.render("product/product-details", { 
+      errorMessage: "Error loading categories",
+      successMessage: null,
+      categories: [
+        "Flash Sales",
+        "New Arrival",
+        "Explore our Products",
+        "Best Selling Products",
+      ]
+    });
+  }
+};
 // Other exports (updateProduct, deleteProduct) remain unchanged for now
 
 
@@ -138,11 +181,33 @@ exports.renderEditProduct = async (req, res) => {
     if (!product) {
       return res.status(404).render('error-page', { message: "Product Not Found." });
     }
+    // Fetch distinct categories from the Product collection
+    const categories = await Product.distinct("category");
 
-    res.render("product/edit-product", { product, errorMessage: null, successMessage: null });
+    // Default categories to always include
+    const defaultCategories = [
+      "Flash Sales",
+      "New Arrival",
+      "Explore our Products",
+      "Best Selling Products",
+    ];
+     // Combine default categories with custom ones, avoiding duplicates
+     const allCategories = [...new Set([...defaultCategories, ...categories])];
+
+
+    res.render("product/edit-product", { product, errorMessage: null, successMessage: null, categories: allCategories // Pass combined categories to the template
+      
+     });
   } catch (error) {
     console.error("❌ Render Edit Product Error:", error);
-    res.status(500).render('error-page', { message: "Server error" });
+    res.status(500).render('error-page', { message: "Server error" ,
+      categories: [
+        "Flash Sales",
+        "New Arrival",
+        "Explore our Products",
+        "Best Selling Products",
+      ]
+    });
   }
 };
 
