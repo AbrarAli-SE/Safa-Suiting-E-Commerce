@@ -61,6 +61,7 @@ module.exports = {
           '--color-gray-500': '#6b7280',
           '--color-gray-600': '#4b5563',
           '--color-gray-900': '#111827',
+          '--color-green-500': '#22c55e', /* Matches the tailwind.config.js value */
         },
       });
 

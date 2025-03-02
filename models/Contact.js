@@ -22,6 +22,9 @@ const contactSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    replyStatus: { type: String, default: 'Pending', enum: ['Pending', 'replied'] },
+    replyMessage: { type: String },
+    replyDate: { type: Date },
 
 });
 

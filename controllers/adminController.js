@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Wishlist = require("../models/Wishlist");
 const Contact = require("../models/Contact");
+const sendEmail = require('../utils/emailConfig');
 const ContactInfo = require("../models/info");
 const bcrypt = require("bcryptjs");
 const Carousel = require("../models/Carousel");
@@ -485,5 +486,66 @@ exports.renderSettings = async (req, res) => {
   } catch (error) {
     console.error("❌ Render Settings Error:", error);
     res.status(500).send("Server error");
+  }
+};
+
+// Reply to contact
+exports.replyToContact = async (req, res) => {
+  try {
+    const { contactId, replyMessage, email } = req.body;
+
+    // Validate input
+    if (!contactId || !replyMessage || !email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Contact ID, reply message, and email are required'
+      });
+    }
+
+    // Find the contact in the database
+    const contact = await Contact.findById(contactId);
+    if (!contact) {
+      return res.status(404).json({
+        success: false,
+        message: 'Contact not found'
+      });
+    }
+
+    // Prepare email content
+    const subject = `Response to Your Contact Request`;
+    const html = `
+      <h2>Hello ${contact.name},</h2>
+      <p>We have received your message:</p>
+      <blockquote style="background: #f9f9f9; padding: 10px; border-left: 3px solid #ccc;">
+        ${contact.message}
+      </blockquote>
+      <p>Our response:</p>
+      <div style="background: #f0f0f0; padding: 15px; border-radius: 5px;">
+        ${replyMessage}
+      </div>
+      <p>Best regards,<br>The Admin Team</p>
+    `;
+
+    // Send email using the utility function
+    await sendEmail(email, subject, html);
+
+    // Update contact status in database
+    contact.replyStatus = 'replied';
+    contact.replyMessage = replyMessage;
+    contact.replyDate = new Date();
+    await contact.save();
+
+    return res.status(200).json({
+      success: true,
+      message: 'Reply sent successfully'
+    });
+
+  } catch (error) {
+    console.error('Error in replyToContact:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to send reply',
+      error: error.message
+    });
   }
 };

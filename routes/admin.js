@@ -48,6 +48,7 @@ router.get("/contacts", authenticateUser, adminAuth, adminController.renderConta
 
 // ✅ Delete Contact Message
 router.delete("/contacts/delete", authenticateUser, adminAuth, adminController.deleteContact);
+router.post("/contacts/reply", authenticateUser, adminAuth, adminController.replyToContact);
 
 
 
