@@ -95,6 +95,24 @@
     border-color: var(--color-red-500);
 }
 
+/* Base styles using Tailwind custom variables */
+.search-result-item {
+  background-color: var(--color-white); /* #ffffff */
+  color: var(--color-black); /* #000000 */
+}
+
+/* Hover effect using red-500 from Tailwind config */
+.search-result-item:hover {
+  background-color: var(--color-red-500); /* #ff0000 */
+  color: var(--color-white); /* #ffffff */
+}
+
+/* Active state for keyboard navigation using same red-500 */
+.search-result-item.active-keyboard {
+  background-color: var(--color-red-500); /* #ff0000 */
+  color: var(--color-white); /* #ffffff */
+}
+
 </style>
 
 

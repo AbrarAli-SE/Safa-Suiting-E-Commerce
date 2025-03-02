@@ -1,0 +1,38 @@
+<%- include('../shared/header') %>
+
+<!-- Main Content -->
+<main class="pt-24 pb-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-red-500)] mb-8">Privacy Policy</h1>
+    <section class="space-y-6 text-[var(--color-black)]">
+      <div>
+        <h2 class="text-xl font-semibold mb-3">Introduction</h2>
+        <p class="text-sm leading-relaxed">
+          At Safa Suiting, we value your privacy and are committed to protecting your personal information. This Privacy Policy outlines how we collect, use, and safeguard your data when you visit our website or make a purchase.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-xl font-semibold mb-3">Information We Collect</h2>
+        <p class="text-sm leading-relaxed">
+          We may collect personal information such as your name, email address, shipping address, and payment details when you register, place an order, or contact us. We also collect browsing data via cookies to improve your experience.
+        </p>
+      </div>
+      <div>
+        <h2 class="text-xl font-semibold mb-3">How We Use Your Information</h2>
+        <ul class="list-disc list-inside text-sm leading-relaxed space-y-2">
+          <li>To process and fulfill your orders</li>
+          <li>To communicate with you about your account or purchases</li>
+          <li>To improve our website and services</li>
+          <li>To send promotional offers (with your consent)</li>
+        </ul>
+      </div>
+      <div>
+        <h2 class="text-xl font-semibold mb-3">Contact Us</h2>
+        <p class="text-sm leading-relaxed">
+          If you have any questions about this Privacy Policy, please contact us at <a href="mailto:<%= contactInfo.supportEmail %>" class="text-[var(--color-red-500)] hover:underline"><%= contactInfo.supportEmail %></a>.
+        </p>
+      </div>
+    </section>
+  </main>
+
+
+  <%- include('../shared/footer') %>

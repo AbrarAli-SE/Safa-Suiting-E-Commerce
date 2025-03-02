@@ -1,0 +1,47 @@
+<%- include('../shared/header') %>
+
+<!-- Main Content -->
+<main class="pt-24 pb-12 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h1 class="text-3xl md:text-4xl font-bold text-[var(--color-red-500)] mb-8">FAQ & Terms of Use</h1>
+    
+    <!-- FAQ Section -->
+    <section class="space-y-6 text-[var(--color-black)] mb-12">
+      <h2 class="text-2xl font-semibold text-[var(--color-red-500)] mb-4">Frequently Asked Questions</h2>
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-lg font-semibold mb-2">What is your return policy?</h3>
+          <p class="text-sm leading-relaxed">We offer a 30-day return policy for unused items in their original condition. Contact us at <%= contactInfo.supportEmail %> to initiate a return.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2">How long does shipping take?</h3>
+          <p class="text-sm leading-relaxed">Shipping typically takes 5-7 business days within <%= contactInfo.city %>. International orders may take longer.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2">How can I track my order?</h3>
+          <p class="text-sm leading-relaxed">Once your order ships, you’ll receive a tracking number via email. Check your account dashboard for updates.</p>
+        </div>
+      </div>
+    </section>
+  
+    <!-- Terms of Use Section -->
+    <section class="space-y-6 text-[var(--color-black)]">
+      <h2 class="text-2xl font-semibold text-[var(--color-red-500)] mb-4">Terms of Use</h2>
+      <div class="space-y-4">
+        <div>
+          <h3 class="text-lg font-semibold mb-2">Acceptance of Terms</h3>
+          <p class="text-sm leading-relaxed">By using our website, you agree to these Terms of Use. We reserve the right to update them at any time without prior notice.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2">Use of Content</h3>
+          <p class="text-sm leading-relaxed">All content on this site (images, text, etc.) is property of Safa Suiting and may not be reproduced without permission.</p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2">Limitation of Liability</h3>
+          <p class="text-sm leading-relaxed">Safa Suiting is not liable for any damages arising from the use of our website or products beyond the purchase price.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+
+  <%- include('../shared/footer') %>

@@ -860,6 +860,10 @@ body {
   margin-right: auto;
 }
 
+.mb-1 {
+  margin-bottom: 0.25rem;
+}
+
 .mb-10 {
   margin-bottom: 2.5rem;
 }
@@ -974,6 +978,10 @@ body {
 
 .mt-\[110px\] {
   margin-top: 110px;
+}
+
+.mt-auto {
+  margin-top: auto;
 }
 
 .block {
@@ -1306,6 +1314,14 @@ body {
 
 .snap-center {
   scroll-snap-align: center;
+}
+
+.list-inside {
+  list-style-position: inside;
+}
+
+.list-disc {
+  list-style-type: disc;
 }
 
 .grid-cols-1 {
@@ -1761,6 +1777,10 @@ body {
   padding: var(--spacing-5);
 }
 
+.p-5 {
+  padding: 1.25rem;
+}
+
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
@@ -1821,6 +1841,10 @@ body {
   padding-bottom: 1rem;
 }
 
+.pb-12 {
+  padding-bottom: 3rem;
+}
+
 .pl-10 {
   padding-left: 2.5rem;
 }
@@ -1835,6 +1859,14 @@ body {
 
 .pt-16 {
   padding-top: 4rem;
+}
+
+.pt-20 {
+  padding-top: 5rem;
+}
+
+.pt-24 {
+  padding-top: 6rem;
 }
 
 .pt-3 {
@@ -1942,6 +1974,10 @@ body {
   color: var(--color-black);
 }
 
+.text-\[var\(--color-black-500\)\] {
+  color: var(--color-black-500);
+}
+
 .text-\[var\(--color-blue-500\)\] {
   color: var(--color-blue-500);
 }
@@ -2035,10 +2071,6 @@ body {
 .text-yellow-500 {
   --tw-text-opacity: 1;
   color: rgb(234 179 8 / var(--tw-text-opacity, 1));
-}
-
-.text-\[var\(--color-black-500\)\] {
-  color: var(--color-black-500);
 }
 
 .line-through {
@@ -2543,10 +2575,6 @@ body {
   color: var(--color-white);
 }
 
-.dark\:hover\:bg-\[var\(--color-gray-700\)\]:hover:is(.dark *) {
-  background-color: var(--color-gray-700);
-}
-
 @media (min-width: 640px) {
   .sm\:mb-0 {
     margin-bottom: 0px;
@@ -2763,6 +2791,11 @@ body {
     line-height: 2.25rem;
   }
 
+  .md\:text-4xl {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+
   .md\:text-6xl {
     font-size: 3.75rem;
     line-height: 1;
@@ -2896,6 +2929,10 @@ body {
 }
 
 @media (min-width: 1024px) {
+  .lg\:col-span-1 {
+    grid-column: span 1 / span 1;
+  }
+
   .lg\:mb-16 {
     margin-bottom: 4rem;
   }
@@ -2945,6 +2982,10 @@ body {
   .lg\:px-8 {
     padding-left: 2rem;
     padding-right: 2rem;
+  }
+
+  .lg\:pt-24 {
+    padding-top: 6rem;
   }
 
   .lg\:text-left {

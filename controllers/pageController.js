@@ -95,3 +95,45 @@ exports.handleContactForm = async (req, res) => {
         });
     }
 };
+
+
+
+exports.renderPolicyPage = async (req, res) => {
+  try {
+      // Fetch the contact data (you can adjust the query as per your requirements)
+      const contactInfo = await ContactInfo.findOne({}).lean();
+      // Provide default values if contactInfo is null
+    const contactData = contactInfo || {
+     
+      supportEmail: "Not set"
+    };
+
+      // Render the page and pass the data
+      res.render("pages/policy", { 
+          user: req.user || null, 
+           
+          contactInfo: {
+
+              supportEmail: contactData.supportEmail,
+
+            }
+      });
+  } catch (error) {
+      console.error("❌ Contact Page Error:", error);
+      res.status(500).send("Server error");
+  }
+};
+
+
+exports.renderFaqPage =  (req, res) => {
+  try {
+      // Render the page and pass the data
+      res.render("pages/faq", { 
+          user: req.user || null, 
+           
+      });
+  } catch (error) {
+      console.error("❌ Contact Page Error:", error);
+      res.status(500).send("Server error");
+  }
+};

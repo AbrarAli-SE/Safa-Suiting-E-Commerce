@@ -10,66 +10,65 @@
 
 <body class="bg-[var(--color-gray-50)] text-[var(--color-black)] h-screen overflow-x-hidden relative font-sans">
   <%- include('../shared/asideBar') %>
-
   <%- include('../shared/adminheader') %>
+
   <!-- Main Content -->
-  <div id="mainContent" class="p-root-5 w-full transition-filter duration-300 ease-in-out">
-    
-
-    <div class="pt-16">
-
-      <div class="max-w-7xl mx-auto">
-        <!-- Messages -->
-        <div id="message-container" class="mb-6"></div>
-
+  <div id="mainContent" class="p-5 w-full transition-filter duration-300 ease-in-out">
+    <div class="pt-20 lg:pt-24 max-w-7xl mx-auto">
+      <!-- Messages -->
+      <div id="message-container" class="mb-6"></div>
+  
+      <!-- Grid Layout for Forms -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         <!-- Profile Update Form -->
-        <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg mb-8">
-          <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-4 flex items-center">
+        <div class="bg-[var(--color-white)] p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+          <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-6 flex items-center">
             <i class="bi bi-person-fill mr-2 text-[var(--color-red-500)]"></i> Update Profile
           </h2>
-            <form id="profileForm" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                  <label for="name" class="block text-sm font-medium text-[var(--color-black)]">Full Name</label>
-                  <input 
-                    type="text" 
-                    id="name" 
-                    name="name" 
-                    value="<%= user.name %>" 
-                    class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                    required />
-                  <div id="nameError" class="text-[var(--color-red-500)] text-sm hidden"></div>
-                </div>
-                <div class="space-y-2">
-                  <label for="email" class="block text-sm font-medium text-[var(--color-black)]">Email</label>
-                  <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    value="<%= user.email %>" 
-                    class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                    required />
-                  <div id="emailError" class="text-[var(--color-red-500)] text-sm hidden"></div>
-                </div>
+          <form id="profileForm" class="space-y-6 flex-grow">
+            <div class="space-y-4">
+              <div>
+                <label for="name" class="block text-sm font-medium text-[var(--color-black)] mb-1">Full Name</label>
+                <input 
+                  type="text" 
+                  id="name" 
+                  name="name" 
+                  value="<%= user.name %>" 
+                  class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
+                  required />
+                <div id="nameError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
               </div>
-              <div class="flex justify-end space-x-4">
-                <button type="reset" class="px-4 py-2 text-sm text-[var(--color-gray-600)] hover:text-[var(--color-gray-900)] transition-colors duration-300">Cancel</button>
-                <button 
-                  type="submit" 
-                  class="px-4 py-2 text-sm text-[var(--color-white)] bg-[var(--color-red-500)] rounded-md hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
-                  Save Changes
-                </button>
+              <div>
+                <label for="email" class="block text-sm font-medium text-[var(--color-black)] mb-1">Email</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  value="<%= user.email %>" 
+                  class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
+                  required />
+                <div id="emailError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
               </div>
-            </form>
+            </div>
+            <div class="flex justify-end space-x-4 mt-auto">
+              <button type="reset" class="px-4 py-2 text-sm text-[var(--color-gray-600)] hover:text-[var(--color-gray-900)] transition-colors duration-300">Cancel</button>
+              <button 
+                type="submit" 
+                class="px-4 py-2 text-sm text-[var(--color-white)] bg-[var(--color-red-500)] rounded-md hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
+                Save Changes
+              </button>
+            </div>
+          </form>
         </div>
-
+  
         <!-- Password Change Form -->
-        <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg mb-8">
-          <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-4 flex items-center">
+        <div class="bg-[var(--color-white)] p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
+          <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-6 flex items-center">
             <i class="bi bi-lock-fill mr-2 text-[var(--color-red-500)]"></i> Change Password
           </h2>
-            <form id="passwordForm" class="space-y-6">
-              <div class="space-y-4">
+          <form id="passwordForm" class="space-y-6 flex-grow">
+            <div class="space-y-4">
+              <div>
                 <input 
                   type="password" 
                   id="currentPassword" 
@@ -77,7 +76,9 @@
                   placeholder="Current Password" 
                   class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
                   required />
-                <div id="currentPasswordError" class="text-[var(--color-red-500)] text-sm hidden"></div>
+                <div id="currentPasswordError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
+              </div>
+              <div>
                 <input 
                   type="password" 
                   id="newPassword" 
@@ -85,7 +86,9 @@
                   placeholder="New Password" 
                   class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
                   required />
-                <div id="newPasswordError" class="text-[var(--color-red-500)] text-sm hidden"></div>
+                <div id="newPasswordError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
+              </div>
+              <div>
                 <input 
                   type="password" 
                   id="confirmPassword" 
@@ -93,100 +96,98 @@
                   placeholder="Confirm New Password" 
                   class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
                   required />
-                <div id="confirmPasswordError" class="text-[var(--color-red-500)] text-sm hidden"></div>
+                <div id="confirmPasswordError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
               </div>
-              <div class="flex justify-end">
-                <button 
-                  type="submit" 
-                  class="px-4 py-2 text-sm text-[var(--color-white)] bg-[var(--color-red-500)] rounded-md hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
-                  Change Password
-                </button>
-              </div>
-            </form>
+            </div>
+            <div class="flex justify-end mt-auto">
+              <button 
+                type="submit" 
+                class="px-4 py-2 text-sm text-[var(--color-white)] bg-[var(--color-red-500)] rounded-md hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
+                Change Password
+              </button>
+            </div>
+          </form>
         </div>
-
+  
         <!-- Contact Form -->
-        <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg mb-8">
-          <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-4 flex items-center">
-            <i class="bi bi-telephone-fill mr-2 text-[var(--color-red-500)]"></i> Contact Form
+        <div class="bg-[var(--color-white)] p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col lg:col-span-1 md:col-span-2">
+          <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-6 flex items-center">
+            <i class="bi bi-telephone-fill mr-2 text-[var(--color-red-500)]"></i> Contact Info
           </h2>
-            <form id="contactForm" class="space-y-6">
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="space-y-2">
-                  <label for="phoneNumber" class="block text-sm font-medium text-[var(--color-black)]">Phone Number</label>
-                  <input 
-                    type="tel" 
-                    id="phoneNumber" 
-                    name="phoneNumber" 
-                    value="<%= contactInfo.phoneNumber || '' %>"
-                    placeholder="Enter phone number" 
-                    class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                    required />
-                  <div id="phoneNumberError" class="text-[var(--color-red-500)] text-sm hidden"></div>
-                </div>
-                <div class="space-y-2">
-                  <label for="customerEmail" class="block text-sm font-medium text-[var(--color-black)]">Customer Email</label>
-                  <input 
-                    type="email" 
-                    id="customerEmail" 
-                    name="customerEmail" 
-                    value="<%= contactInfo.customerEmail || '' %>"
-                    placeholder="Enter customer email" 
-                    class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                    required />
-                  <div id="customerEmailError" class="text-[var(--color-red-500)] text-sm hidden"></div>
-                </div>
+          <form id="contactForm" class="space-y-6 flex-grow">
+            <div class="space-y-4">
+              <div>
+                <label for="phoneNumber" class="block text-sm font-medium text-[var(--color-black)] mb-1">Phone Number</label>
+                <input 
+                  type="tel" 
+                  id="phoneNumber" 
+                  name="phoneNumber" 
+                  value="<%= contactInfo.phoneNumber || '' %>"
+                  placeholder="Enter phone number" 
+                  class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
+                  required />
+                <div id="phoneNumberError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
               </div>
-              <div class="space-y-4">
-                <div class="space-y-2">
-                  <label for="supportEmail" class="block text-sm font-medium text-[var(--color-black)]">Support Email</label>
-                  <input 
-                    type="email" 
-                    id="supportEmail" 
-                    name="supportEmail" 
-                    value="<%= contactInfo.supportEmail || '' %>"
-                    placeholder="Enter support email" 
-                    class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                    required />
-                  <div id="supportEmailError" class="text-[var(--color-red-500)] text-sm hidden"></div>
-                </div>
-                <div class="space-y-2">
-                  <label for="aboutUs" class="block text-sm font-medium text-[var(--color-black)]">About Us</label>
-                  <textarea 
-                    id="aboutUs" 
-                    name="aboutUs" 
-                    value="<%= contactInfo.aboutUs || '' %>"
-                    placeholder="Tell us about yourself (minimum 10 characters)" 
-                    class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md min-h-[100px]" 
-                    required></textarea>
-                  <div id="aboutUsError" class="text-[var(--color-red-500)] text-sm hidden"></div>
-                </div>
-                <div class="space-y-2">
-                  <label for="city" class="block text-sm font-medium text-[var(--color-black)]">City</label>
-                  <input 
-                    type="text" 
-                    id="city" 
-                    name="city" 
-                    value="<%= contactInfo.city || '' %>"
-                    placeholder="Enter your city (minimum 3 characters)" 
-                    class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                    required />
-                  <div id="cityError" class="text-[var(--color-red-500)] text-sm hidden"></div>
-                </div>
+              <div>
+                <label for="customerEmail" class="block text-sm font-medium text-[var(--color-black)] mb-1">Customer Email</label>
+                <input 
+                  type="email" 
+                  id="customerEmail" 
+                  name="customerEmail" 
+                  value="<%= contactInfo.customerEmail || '' %>"
+                  placeholder="Enter customer email" 
+                  class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
+                  required />
+                <div id="customerEmailError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
               </div>
-              <div class="flex justify-end space-x-4">
-                <button type="reset" class="px-4 py-2 text-sm text-[var(--color-gray-600)] hover:text-[var(--color-gray-900)] transition-colors duration-300">Cancel</button>
-                <button 
-                  type="submit" 
-                  class="px-4 py-2 text-sm text-[var(--color-white)] bg-[var(--color-red-500)] rounded-md hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
-                  Save Contact Info
-                </button>
+              <div>
+                <label for="supportEmail" class="block text-sm font-medium text-[var(--color-black)] mb-1">Support Email</label>
+                <input 
+                  type="email" 
+                  id="supportEmail" 
+                  name="supportEmail" 
+                  value="<%= contactInfo.supportEmail || '' %>"
+                  placeholder="Enter support email" 
+                  class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
+                  required />
+                <div id="supportEmailError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
               </div>
-            </form>
+              <div>
+                <label for="city" class="block text-sm font-medium text-[var(--color-black)] mb-1">City</label>
+                <input 
+                  type="text" 
+                  id="city" 
+                  name="city" 
+                  value="<%= contactInfo.city || '' %>"
+                  placeholder="Enter your city (min 3 chars)" 
+                  class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
+                  required />
+                <div id="cityError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
+              </div>
+              <div>
+                <label for="aboutUs" class="block text-sm font-medium text-[var(--color-black)] mb-1">About Us</label>
+                <textarea 
+                  id="aboutUs" 
+                  name="aboutUs" 
+                  placeholder="Tell us about yourself (min 10 chars)" 
+                  class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md min-h-[100px]" 
+                  required><%= contactInfo.aboutUs || '' %></textarea>
+                <div id="aboutUsError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
+              </div>
+            </div>
+            <div class="flex justify-end space-x-4 mt-auto">
+              <button type="reset" class="px-4 py-2 text-sm text-[var(--color-gray-600)] hover:text-[var(--color-gray-900)] transition-colors duration-300">Cancel</button>
+              <button 
+                type="submit" 
+                class="px-4 py-2 text-sm text-[var(--color-white)] bg-[var(--color-red-500)] rounded-md hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
+                Save Contact Info
+              </button>
+            </div>
+          </form>
         </div>
       </div>
+    </div>
   </div>
-</div>
 
   <!-- <script type="module" src="/js/adminProfile.js"></script> -->
    <script>
