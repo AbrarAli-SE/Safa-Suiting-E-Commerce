@@ -8,8 +8,14 @@ module.exports = {
     extend: {
       // Custom breakpoints
       screens: {
-        'smd': '685px',
-        'xlg': '1050px',
+        'xs': '475px',   // Extra small devices (e.g., small phones)
+        'sm': '640px',   // Small devices (default Tailwind)
+        'smd': '685px',  // Custom small-medium (your original)
+        'md': '768px',   // Medium devices (default Tailwind)
+        'lg': '1024px',  // Large devices (default Tailwind)
+        'xlg': '1050px', // Custom extra-large (your original)
+        'xl': '1280px',  // Extra large (default Tailwind)
+        '2xl': '1536px', // 2x large (default Tailwind)
       },
       // Custom colors mapped to root variables
       colors: {

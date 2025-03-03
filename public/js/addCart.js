@@ -40,20 +40,6 @@ document.addEventListener("DOMContentLoaded", async function () {
             document.getElementById("modalProductOldPrice").textContent = `Rs ${this.dataset.discountprice || '0'}`;
             document.getElementById("modalProductDesc").textContent = this.dataset.description || "No description available.";
       
-            // Update stock status
-            const quantity = parseInt(this.dataset.quantity) || 0; // Assuming quantity is in dataset
-            const stockStatus = document.getElementById("modalStockStatus");
-            if (quantity === 0) {
-              stockStatus.textContent = "Out of Stock";
-              stockStatus.classList.add("animate-blink");
-            } else if (quantity > 0 && quantity <= 5) { // Fixed condition
-              stockStatus.textContent = `Only ${quantity} piece${quantity === 1 ? '' : 's'} left`;
-              stockStatus.classList.add("animate-blink");
-            } else {
-              stockStatus.textContent = "";
-              stockStatus.classList.remove("animate-blink");
-            }
-      
             modal.classList.remove("opacity-0", "pointer-events-none");
             modal.classList.add("opacity-100", "pointer-events-auto");
             modal.querySelector('.bg-\\[var\\(--color-white\\)\\]').classList.remove('scale-95');
