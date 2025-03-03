@@ -26,18 +26,13 @@ const fs = require("fs");
   app.use(express.json());
   app.use(cookieParser());  // ✅ Enable Cookie Parser
 
-  // ✅ Enable session
-  app.use(
-    session({
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false, // ✅ Avoid saving empty sessions
-    })
-  );
-  
-  // ✅ Initialize Passport.js
-  app.use(passport.initialize());
-  app.use(passport.session());
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'fallback-secret',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
   // Database Connection
   dbConfig();

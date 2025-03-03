@@ -10,32 +10,37 @@ passport.use(new GoogleStrategy({
   },
   async (accessToken, refreshToken, profile, done) => {
     try {
-      // Find or create user based on Google profile
+      console.log('Google Profile:', profile); // Debug log
       let user = await User.findOne({ email: profile.emails[0].value });
       if (!user) {
         user = new User({
           email: profile.emails[0].value,
           name: profile.displayName,
-          password: null, // No password for Google users
+          password: null,
           role: 'user',
-          verified: true, // Google verifies email
+          verified: true,
           lastActive: new Date()
         });
         await user.save();
+        console.log('New user created:', user);
       } else {
-        // Update lastActive for existing user
         user.lastActive = new Date();
         await user.save();
+        console.log('User updated:', user);
       }
       return done(null, user);
     } catch (err) {
+      console.error('Passport Google Strategy Error:', err);
       return done(err, null);
     }
   }
-));
+), {
+    scope: ['openid', 'profile', 'email'] // Updated scope to include openid
+});
 
 // Serialize user to session
 passport.serializeUser((user, done) => {
+  console.log('Serializing user:', user.id);
   done(null, user.id);
 });
 
@@ -43,8 +48,10 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   try {
     const user = await User.findById(id);
+    console.log('Deserialized user:', user);
     done(null, user);
   } catch (err) {
+    console.error('Deserialize Error:', err);
     done(err, null);
   }
 });

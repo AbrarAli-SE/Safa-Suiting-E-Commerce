@@ -69,24 +69,27 @@ exports.renderForgotPasswordPage = (req, res) => {
 // Google OAuth Routes
 exports.googleAuth = passport.authenticate('google', { scope: ['profile', 'email'] });
 
+// controllers/authController.js
 exports.googleAuthCallback = passport.authenticate('google', { failureRedirect: '/auth/login' }),
   async (req, res) => {
     try {
-      // Generate JWT for Google user
+      console.log('Google Callback - User:', req.user);
       const token = jwt.sign(
         { userId: req.user._id, name: req.user.name, email: req.user.email, role: req.user.role },
         process.env.JWT_SECRET,
         { expiresIn: '24h' }
       );
+      console.log('JWT Token Generated:', token);
 
       res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
-      return res.redirect(req.user.role === "admin" ? "/admin/analytical" : "/");
+      const redirectUrl = req.user.role === "admin" ? "/admin/analytical" : "/";
+      console.log('Redirecting to:', redirectUrl);
+      return res.redirect(redirectUrl);
     } catch (err) {
       console.error("Google Auth Callback Error:", err);
       res.redirect("/auth/login");
     }
   };
-
 
 
 

@@ -961,10 +961,6 @@ body {
   margin-top: 3.5rem;
 }
 
-.mt-16 {
-  margin-top: 4rem;
-}
-
 .mt-2 {
   margin-top: 0.5rem;
 }
@@ -999,6 +995,10 @@ body {
 
 .mt-auto {
   margin-top: auto;
+}
+
+.mt-16 {
+  margin-top: 4rem;
 }
 
 .block {
@@ -1647,6 +1647,10 @@ body {
 
 .bg-\[var\(--color-gray-50\)\] {
   background-color: var(--color-gray-50);
+}
+
+.bg-\[var\(--color-gray-500\)\] {
+  background-color: var(--color-gray-500);
 }
 
 .bg-\[var\(--color-gray-600\)\] {
@@ -2481,6 +2485,10 @@ body {
   background-color: var(--color-gray-300);
 }
 
+.hover\:bg-\[var\(--color-gray-600\)\]:hover {
+  background-color: var(--color-gray-600);
+}
+
 .hover\:bg-\[var\(--color-red-100\)\]:hover {
   background-color: var(--color-red-100);
 }
@@ -2791,6 +2799,11 @@ body {
 
   .md\:p-3 {
     padding: 0.75rem;
+  }
+
+  .md\:px-0 {
+    padding-left: 0px;
+    padding-right: 0px;
   }
 
   .md\:px-10 {
