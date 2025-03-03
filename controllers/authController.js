@@ -1,8 +1,8 @@
-const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 const Cart = require("../models/Cart");
+const passport = require("../config/passport");
 const Wishlist = require("../models/Wishlist");
 const sendEmail = require('../utils/emailConfig');
 const { secretKey, expiresIn } = require("../config/jwtConfig");
@@ -66,35 +66,26 @@ exports.renderForgotPasswordPage = (req, res) => {
 
 
 
-// ✅ Google Authentication Route
-exports.googleAuth = passport.authenticate("google", { scope: ["profile", "email"] });
+// Google OAuth Routes
+exports.googleAuth = passport.authenticate('google', { scope: ['profile', 'email'] });
 
-// ✅ Google Authentication Callback
-exports.googleAuthCallback = (req, res, next) => {
-    passport.authenticate("google", { failureRedirect: "/auth/login" }, async (err, user) => {
-        if (err || !user) {
-            console.error("Google Authentication Failed:", err);
-            return res.redirect("/auth/login");
-        }
+exports.googleAuthCallback = passport.authenticate('google', { failureRedirect: '/auth/login' }),
+  async (req, res) => {
+    try {
+      // Generate JWT for Google user
+      const token = jwt.sign(
+        { userId: req.user._id, name: req.user.name, email: req.user.email, role: req.user.role },
+        process.env.JWT_SECRET,
+        { expiresIn: '24h' }
+      );
 
-        try {
-            // ✅ Set cookie for session (Ensure token is correctly assigned)
-            res.cookie("authToken", user.token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
-
-            console.log("✅ Google Authentication Successful! User:", user);
-
-            // ✅ Redirect user based on role
-            if (user.role === "admin") {
-                res.redirect("/admin");
-            } else {
-                res.redirect("/user/dashboard");
-            }
-        } catch (error) {
-            console.error("Error during authentication:", error);
-            res.redirect("/auth/login");
-        }
-    })(req, res, next);
-};
+      res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
+      return res.redirect(req.user.role === "admin" ? "/admin/analytical" : "/");
+    } catch (err) {
+      console.error("Google Auth Callback Error:", err);
+      res.redirect("/auth/login");
+    }
+  };
 
 
 

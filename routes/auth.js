@@ -8,9 +8,9 @@ const router = express.Router();
 
 router.get("/get-token",authenticateUser,  authController.getToken); 
 
-// ✅ Google OAuth Routes
-router.get("/google", authController.googleAuth);
-router.get("/google/callback", authController.googleAuthCallback);
+// Google OAuth Routes
+router.get('/google', authController.googleAuth); // Initiates Google OAuth
+router.get('/google/callback', authController.googleAuthCallback); // Handles Google callback
 
 // ✅ Prevent logged-in users from accessing register, login, verify OTP, and resend OTP
 router.get("/register", authRestrictionMiddleware.restrictAuthRoutesForLoggedInUsers, authController.renderRegisterPage);
