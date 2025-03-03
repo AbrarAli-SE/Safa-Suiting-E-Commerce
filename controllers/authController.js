@@ -100,7 +100,6 @@ exports.googleAuthCallback = (req, res, next) => {
 
 
 
-
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -122,55 +121,6 @@ exports.login = async (req, res) => {
         // Update lastActive after successful authentication
         user.lastActive = new Date();
         await user.save();
-        // Check for existing guestId and merge cart/wishlist if present
-        const guestId = req.cookies.guestId;
-        if (guestId) {
-            // Merge guest cart
-            const guestCart = await Cart.findOne({ guestId });
-            if (guestCart) {
-                let userCart = await Cart.findOne({ user: user._id });
-                if (!userCart) {
-                    userCart = new Cart({ user: user._id, items: [], totalPrice: 0 });
-                }
-                guestCart.items.forEach(guestItem => {
-                    const existingItem = userCart.items.find(item => 
-                        item.product.toString() === guestItem.product.toString()
-                    );
-                    if (existingItem) {
-                        existingItem.quantity += guestItem.quantity;
-                    } else {
-                        userCart.items.push(guestItem);
-                    }
-                });
-                userCart.totalPrice = userCart.items.reduce((sum, item) => 
-                    sum + item.price * item.quantity, 0
-                );
-                await userCart.save();
-                await Cart.deleteOne({ guestId }); // Remove guest cart
-            }
-
-            // Merge guest wishlist
-            const guestWishlist = await Wishlist.findOne({ guestId });
-            if (guestWishlist) {
-                let userWishlist = await Wishlist.findOne({ user: user._id });
-                if (!userWishlist) {
-                    userWishlist = new Wishlist({ user: user._id, items: [] });
-                }
-                guestWishlist.items.forEach(guestItem => {
-                    const existingItem = userWishlist.items.find(item => 
-                        item.product.toString() === guestItem.product.toString()
-                    );
-                    if (!existingItem) {
-                        userWishlist.items.push(guestItem);
-                    }
-                });
-                await userWishlist.save();
-                await Wishlist.deleteOne({ guestId }); // Remove guest wishlist
-            }
-
-            // Clear the guestId cookie after merging
-            res.clearCookie("guestId");
-        }
 
         // Generate and set JWT
         const token = jwt.sign(
@@ -187,7 +137,6 @@ exports.login = async (req, res) => {
         res.render("auth/login", { error: "Server error. Please try again later." });
     }
 };
-
 // Register Controller
 exports.register = async (req, res) => {
     const { name, email, password } = req.body;

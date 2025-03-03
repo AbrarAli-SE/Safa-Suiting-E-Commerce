@@ -30,9 +30,8 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
 
           addToWishlistModalBtn.dataset.productId = productId;
-          updateButtonState(addToWishlistModalBtn, isProductInWishlist(productId)); // Set initial state
+          updateButtonState(addToWishlistModalBtn, isProductInWishlist(productId));
 
-          // Fill modal content
           document.getElementById("modalProductName").textContent = this.dataset.name || "Unknown Product";
           document.getElementById("modalProductImage").src = this.dataset.image || "";
           document.getElementById("modalProductPrice").textContent = `Rs ${this.dataset.price || '0'}`;
@@ -45,6 +44,32 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       });
     });
+
+    // Function to show custom message
+    function showMessage(text) {
+      let messageBox = document.getElementById('wishlist-message-box');
+      if (messageBox) {
+        messageBox.remove(); // Remove existing message if present
+      }
+
+      messageBox = document.createElement('div');
+      messageBox.id = 'wishlist-message-box';
+      messageBox.textContent = text;
+      messageBox.className = `
+        fixed top-[12%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+        bg-gradient-to-r from-red-500 to-red-700 text-white text-center font-medium 
+        px-4 py-2 rounded-lg shadow-lg card-shadow animate-fade-in z-[1000] 
+        whitespace-nowrap overflow-hidden text-ellipsis max-w-[90vw]
+      `;
+      document.body.appendChild(messageBox);
+
+      // Fade out and remove after 2 seconds
+      setTimeout(() => {
+        messageBox.classList.remove('animate-fade-in');
+        messageBox.classList.add('animate-fade-out');
+        setTimeout(() => messageBox.remove(), 500); // Match fade-out duration
+      }, 2000);
+    }
 
     // Card wishlist buttons
     const wishlistButtons = document.querySelectorAll(".wishlist-btn");
@@ -79,14 +104,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
         if (!productId) {
           console.error("Product ID missing.");
-          alert("Error: Product ID missing.");
+          showMessage("Error: Product ID is missing.");
           return;
         }
 
         const response = await fetch("/user/wishlist/add", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ productId })
+          body: JSON.stringify({ productId }),
+          credentials: "include" // Ensure authToken is sent
         });
         const data = await response.json();
 
@@ -94,14 +120,18 @@ document.addEventListener("DOMContentLoaded", async function () {
           await addToWishlist(productId);
           updateAllButtonsForProduct(productId, true);
           await updateWishlistQuantity();
-          alert("Item added to wishlist!");
+          alert("Item added to wishlist!"); // Kept alert for success
         } else {
           console.error("Server error adding to wishlist:", data.message);
-          alert(data.message || "Failed to add item to wishlist.");
+          if (data.message === "Please log in to add items to your wishlist." || data.success === "false") {
+            showMessage("Please log in first to add items to your wishlist");
+          } else {
+            showMessage(data.message || "Failed to add item to wishlist");
+          }
         }
       } catch (error) {
         console.error("Error in wishlist toggle:", error);
-        alert("An error occurred while adding to wishlist.");
+        showMessage("An error occurred while adding to wishlist");
       }
     }
 

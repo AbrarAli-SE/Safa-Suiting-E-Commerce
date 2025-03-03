@@ -820,6 +820,10 @@ body {
   top: 1rem;
 }
 
+.top-\[12\%\] {
+  top: 12%;
+}
+
 .top-\[60px\] {
   top: 60px;
 }
@@ -1233,6 +1237,10 @@ body {
   max-width: 32rem;
 }
 
+.max-w-\[90vw\] {
+  max-width: 90vw;
+}
+
 .max-w-lg {
   max-width: 32rem;
 }
@@ -1493,6 +1501,10 @@ body {
   white-space: nowrap;
 }
 
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
+
 .whitespace-nowrap {
   white-space: nowrap;
 }
@@ -1727,12 +1739,22 @@ body {
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
 }
 
+.from-red-500 {
+  --tw-gradient-from: var(--color-red-500) var(--tw-gradient-from-position);
+  --tw-gradient-to: rgb(255 255 255 / 0) var(--tw-gradient-to-position);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
 .to-\[var\(--color-red-700\)\] {
   --tw-gradient-to: var(--color-red-700) var(--tw-gradient-to-position);
 }
 
 .to-\[var\(--color-white\)\] {
   --tw-gradient-to: var(--color-white) var(--tw-gradient-to-position);
+}
+
+.to-red-700 {
+  --tw-gradient-to: var(--color-red-700) var(--tw-gradient-to-position);
 }
 
 .bg-clip-text {

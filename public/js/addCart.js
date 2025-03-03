@@ -52,6 +52,32 @@ document.addEventListener("DOMContentLoaded", async function () {
       });
     }
 
+    // Function to show custom message
+    function showMessage(text) {
+      let messageBox = document.getElementById('cart-message-box');
+      if (messageBox) {
+        messageBox.remove(); // Remove existing message if present
+      }
+
+      messageBox = document.createElement('div');
+      messageBox.id = 'cart-message-box';
+      messageBox.textContent = text;
+      messageBox.className = `
+        fixed top-[12%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+        bg-gradient-to-r from-red-500 to-red-700 text-white text-center font-medium 
+        px-4 py-2 rounded-lg shadow-lg card-shadow animate-fade-in z-[1000] 
+        whitespace-nowrap overflow-hidden text-ellipsis max-w-[90vw]
+      `;
+      document.body.appendChild(messageBox);
+
+      // Fade out and remove after 2 seconds
+      setTimeout(() => {
+        messageBox.classList.remove('animate-fade-in');
+        messageBox.classList.add('animate-fade-out');
+        setTimeout(() => messageBox.remove(), 500); // Match fade-out duration
+      }, 2000);
+    }
+
     // Handle Add to Cart from Product Cards
     const cartButtons = document.querySelectorAll(".add-to-cart-btn");
     if (cartButtons.length === 0) {
@@ -65,14 +91,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (!productId) {
               console.error("Product ID not found in add-to-cart button data.");
-              alert("Error: Product ID missing.");
+              showMessage("Error: Product ID is missing.");
               return;
             }
 
             const response = await fetch("/user/cart/add", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ productId })
+              body: JSON.stringify({ productId }),
+              credentials: "include"
             });
             const data = await response.json();
 
@@ -80,15 +107,19 @@ document.addEventListener("DOMContentLoaded", async function () {
               const price = data.cart.items.find(item => item.product.toString() === productId)?.price || 0;
               console.log("Server response for product card:", data);
               await addToCart(productId, 1, price);
-              await updateCartQuantity(); // Update quantity after adding
+              await updateCartQuantity();
               alert("Item added to cart!");
             } else {
               console.error("Server error adding to cart from product card:", data.message);
-              alert(data.message || "Failed to add item to cart.");
+              if (data.message === "Please log in to add items to your cart." || data.success === "false") {
+                showMessage("Please log in first to add items to your cart");
+              } else {
+                showMessage(data.message || "Failed to add item to cart");
+              }
             }
           } catch (error) {
             console.error("Error in cart button click handler for product card:", error);
-            alert("An error occurred while adding to cart.");
+            showMessage("An error occurred while adding to cart");
           }
         });
       });
@@ -104,14 +135,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
           if (!productId) {
             console.error("Product ID not found in Quick View modal button data.");
-            alert("Error: Product ID missing in quick view.");
+            showMessage("Error: Product ID is missing.");
             return;
           }
 
           const response = await fetch("/user/cart/add", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ productId })
+            body: JSON.stringify({ productId }),
+            credentials: "include"
           });
           const data = await response.json();
 
@@ -119,16 +151,20 @@ document.addEventListener("DOMContentLoaded", async function () {
             const price = data.cart.items.find(item => item.product.toString() === productId)?.price || 0;
             console.log("Server response for Quick View:", data);
             await addToCart(productId, 1, price);
-            await updateCartQuantity(); // Update quantity after adding
-            closeQuickView();
+            await updateCartQuantity();
+            closeQuickView(); // Auto-close modal on success
             alert("Item added to cart!");
           } else {
             console.error("Server error adding to cart from quick view:", data.message);
-            alert(data.message || "Failed to add item to cart.");
+            if (data.message === "Please log in to add items to your cart." || data.success === "false") {
+              showMessage("Please log in first to add items to your cart");
+            } else {
+              showMessage(data.message || "Failed to add item to cart");
+            }
           }
         } catch (error) {
           console.error("Error in add to cart from quick view modal:", error);
-            alert("An error occurred while adding to cart.");
+          showMessage("An error occurred while adding to cart");
         }
       });
     } else {
