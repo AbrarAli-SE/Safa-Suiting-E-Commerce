@@ -19,7 +19,9 @@
             <span id="modalProductPrice" class="text-xl font-semibold text-[var(--color-red-500)]"></span>
             <span id="modalProductOldPrice" class="text-base text-[var(--color-gray-400)] line-through"></span>
           </div>
-          <p id="modalProductDesc" class="text-[var(--color-gray-600)] text-sm leading-relaxed"></p>
+          <p id="modalProductDesc" class="text-[var(--color-gray-600)] text-sm leading-relaxed mb-4"></p>
+          <!-- Stock Status -->
+          <div id="modalStockStatus" class="text-[var(--color-red-500)] font-semibold"></div>
         </div>
         <div class="mt-6 flex flex-col md:flex-row gap-3 md:gap-4">
           <button
@@ -36,3 +38,15 @@
     </div>
   </div>
 </div>
+
+<!-- Inline CSS for Blink Animation -->
+<style>
+  .animate-blink {
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+  }
+</style>

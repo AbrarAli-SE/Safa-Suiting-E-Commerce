@@ -118,11 +118,18 @@
                     </button>
                   </div>
                 </div>
-                <button
-                  class="add-to-cart-btn w-full p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300 mt-2"
-                  data-product-id="<%= product._id %>" data-cart="false">
-                  <i class="bi bi-cart"></i>
-                </button>
+                <div class="flex items-center justify-between mt-2">
+                  <button
+                    class="add-to-cart-btn w-full p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
+                    data-product-id="<%= product._id %>" data-cart="false">
+                    <i class="bi bi-cart"></i>
+                  </button>
+                  <% if (product.quantity === 0) { %>
+                    <span class="text-[var(--color-red-500)] font-semibold animate-blink">Out of Stock</span>
+                  <% } else if (product.quantity <= 5) { %>
+                    <span class="text-[var(--color-red-500)] font-semibold animate-blink">Only <%= product.quantity %> piece<%= product.quantity === 1 ? '' : 's' %> left</span>
+                  <% } %>
+                </div>
               </div>
               <!-- Desktop Layout: Price only (buttons are in hover state above) -->
               <div class="hidden md:flex justify-between items-center">
@@ -130,6 +137,11 @@
                   <span class="font-bold text-[var(--color-red-500)] text-lg">Rs <%= product.price %></span>
                   <span class="text-sm text-[var(--color-gray-400)] line-through">Rs <%= product.discountPrice %></span>
                 </div>
+                <% if (product.quantity === 0) { %>
+                  <span class="text-[var(--color-red-500)] font-semibold animate-blink">Out of Stock</span>
+                <% } else if (product.quantity <= 5) { %>
+                  <span class="text-[var(--color-red-500)] font-semibold animate-blink">Only <%= product.quantity %> piece<%= product.quantity === 1 ? '' : 's' %> left</span>
+                <% } %>
               </div>
             </div>
           </div>
@@ -138,6 +150,18 @@
     </div>
   </section>
 <% }); %>
+
+<!-- Inline CSS for Blink Animation -->
+<style>
+  .animate-blink {
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+  }
+</style>
 
 
 
