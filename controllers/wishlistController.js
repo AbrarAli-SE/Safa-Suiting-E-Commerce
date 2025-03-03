@@ -1,3 +1,4 @@
+const User = require("../models/User");
 const Wishlist = require("../models/Wishlist");
 const Product = require("../models/Product");
 const { getOrCreateGuestId } = require('../utils/guestId');
@@ -10,6 +11,12 @@ exports.addToWishlist = async (req, res) => {
         let identifier;
         if (req.user) {
             identifier = { user: req.user.userId }; // Assuming req.user.userId is correct from your auth middleware
+            // Update lastActive for authenticated user
+            const user = await User.findById(req.user.userId);
+            if (user) {
+                user.lastActive = new Date();
+                await user.save();
+            }
         } else {
             const guestId = req.cookies.guestId || getOrCreateGuestId(req, res); // Use existing or create new
             identifier = { guestId };
@@ -74,6 +81,12 @@ exports.removeFromWishlist = async (req, res) => {
     let identifier = {};
     if (req.user) {
       identifier = { user: req.user.userId };
+      // Update lastActive for authenticated user
+      const user = await User.findById(req.user.userId);
+      if (user) {
+          user.lastActive = new Date();
+          await user.save();
+      }
     } else if (req.cookies.guestId) {
       identifier = { guestId: req.cookies.guestId };
     } else {

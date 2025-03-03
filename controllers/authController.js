@@ -119,6 +119,9 @@ exports.login = async (req, res) => {
             return res.render("auth/login", { error: "Account not verified. Please verify your email with OTP." });
         }
 
+        // Update lastActive after successful authentication
+        user.lastActive = new Date();
+        await user.save();
         // Check for existing guestId and merge cart/wishlist if present
         const guestId = req.cookies.guestId;
         if (guestId) {
@@ -200,7 +203,7 @@ exports.register = async (req, res) => {
         const adminEmails = process.env.ADMIN_EMAILS?.split(",") || [];
         const role = adminEmails.includes(email) ? "admin" : "user";
 
-        const newUser = new User({ name, email, password: hashedPassword, otp, otpExpires, role, isNotified: false });
+        const newUser = new User({ name, email, password: hashedPassword, otp, otpExpires, role });
         await newUser.save();
 
         req.session.tempUser = { email };

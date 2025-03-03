@@ -1,3 +1,4 @@
+const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const { getOrCreateGuestId } = require('../utils/guestId');
@@ -10,6 +11,12 @@ exports.addToCart = async (req, res) => {
         let identifier;
         if (req.user) {
             identifier = { user: req.user.userId };
+            // Update lastActive for authenticated user
+            const user = await User.findById(req.user.userId);
+            if (user) {
+                user.lastActive = new Date();
+                await user.save();
+            }
         } else {
             const guestId = req.cookies.guestId || getOrCreateGuestId(req, res); // Use existing or create new
             identifier = { guestId };
@@ -159,6 +166,13 @@ exports.updateCart = async (req, res) => {
         let identifier = {};
         if (req.user) {
             identifier = { user: req.user.userId };
+
+            // Update lastActive for authenticated user
+            const user = await User.findById(req.user.userId);
+            if (user) {
+                user.lastActive = new Date();
+                await user.save();
+            }
         } else if (req.cookies.guestId) {
             identifier = { guestId: req.cookies.guestId };
         } else {
@@ -211,6 +225,13 @@ exports.deleteItem = async (req, res) => {
         let identifier = {};
         if (req.user) {
             identifier = { user: req.user.userId };
+
+            // Update lastActive for authenticated user
+            const user = await User.findById(req.user.userId);
+            if (user) {
+                user.lastActive = new Date();
+                await user.save();
+            }
         } else if (req.cookies.guestId) {
             identifier = { guestId: req.cookies.guestId };
         } else {

@@ -3,250 +3,239 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin - Contact Management</title>
+  <title>Admin - User Management</title>
   <link rel="stylesheet" href="/styles/global.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <body class="bg-[var(--color-gray-50)] text-[var(--color-black)] h-screen overflow-x-hidden relative font-sans">
   <%- include('../shared/asideBar') %>
-
   <%- include('../shared/adminheader') %>
+
   <!-- Main Content -->
   <div id="mainContent" class="p-root-5 w-full transition-filter duration-300 ease-in-out">
-    
-
     <div class="pt-16 ml-11 mr-11">
-    <div class="max-w-7xl mx-auto">
-      <!-- Role Filter Dropdown -->
-      <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
-        <label for="userFilter" class="text-[var(--color-gray-700)]">Filter By:</label>
-        <select 
-          id="userFilter" 
-          class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-auto">
-          <option value="all">All</option>
-          <option value="user">Users</option>
-          <option value="admin">Admins</option>
-        </select>
+      <div class="max-w-7xl mx-auto">
+        <!-- Role Filter Dropdown -->
+        <div class="flex items-center space-x-4 w-full sm:w-auto mb-4 sm:mb-0">
+          <label for="userFilter" class="text-[var(--color-gray-700)]">Filter By:</label>
+          <select 
+            id="userFilter" 
+            class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-auto">
+            <option value="all">All</option>
+            <option value="user">Users</option>
+            <option value="admin">Admins</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div id="message-container" class="mb-6">
+        <% if (successMessage) { %>
+          <div class="bg-[var(--color-green-100)] text-[var(--color-green-700)] p-3 rounded-lg text-center"><%= successMessage %></div>
+        <% } %>
+        <% if (errorMessage) { %>
+          <div class="bg-[var(--color-red-100)] text-[var(--color-red-700)] p-3 rounded-lg text-center"><%= errorMessage %></div>
+        <% } %>
+      </div>
+
+      <!-- User Table -->
+      <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold text-[var(--color-black)] mb-4">Manage Users</h2>
+        <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-[var(--color-gray-400)] scrollbar-track-[var(--color-gray-100)]">
+          <table class="min-w-full table-fixed">
+            <thead class="bg-[var(--color-gray-50)] text-[var(--color-gray-700)]">
+              <tr>
+                <th class="px-4 py-3 text-left w-1/6">Name</th>
+                <th class="px-4 py-3 text-left w-1/6">Email</th>
+                <th class="px-4 py-3 text-left w-1/6">Role</th>
+                <th class="px-4 py-3 text-left w-1/6">Last Active</th>
+                <th class="px-4 py-3 text-left w-1/6">Actions</th>
+              </tr>
+            </thead>
+            <tbody id="userList" class="text-[var(--color-gray-700)]">
+              <!-- Populated via AJAX -->
+            </tbody>
+          </table>
+          <p id="noResults" class="text-center text-[var(--color-red-500)] font-semibold hidden mt-4">No users found</p>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="flex justify-center mt-6">
+        <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
       </div>
     </div>
-
-    <!-- Messages -->
-    <div id="message-container" class="mb-6">
-      <% if (successMessage) { %>
-        <div class="bg-[var(--color-green-100)] text-[var(--color-green-700)] p-3 rounded-lg text-center"><%= successMessage %></div>
-      <% } %>
-      <% if (errorMessage) { %>
-        <div class="bg-[var(--color-red-100)] text-[var(--color-red-700)] p-3 rounded-lg text-center"><%= errorMessage %></div>
-      <% } %>
-    </div>
-
-    <!-- User Table -->
-    <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg  ">
-      <h2 class="text-xl font-semibold text-[var(--color-black)] mb-4">Manage Users</h2>
-      <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-[var(--color-gray-400)] scrollbar-track-[var(--color-gray-100)]">
-        <table class="min-w-full table-fixed">
-          <thead class="bg-[var(--color-gray-50)] text-[var(--color-gray-700)]">
-            <tr>
-              <th class="px-4 py-3 text-left w-1/6">Name</th>
-              <th class="px-4 py-3 text-left w-1/6">Email</th>
-              <th class="px-4 py-3 text-left w-1/6">Role</th>
-              <th class="px-4 py-3 text-left w-1/6">Actions</th>
-            </tr>
-          </thead>
-          <tbody id="userList" class="text-[var(--color-gray-700)]">
-            <!-- Populated via AJAX -->
-          </tbody>
-        </table>
-        <p id="noResults" class="text-center text-[var(--color-red-500)] font-semibold hidden mt-4">No users found</p>
-      </div>
-    </div>
-
-    <!-- Pagination -->
-    <div class="flex justify-center mt-6">
-      <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
-    </div>
-    </div>
-    
   </div>
 
   <script type="module" src="/js/adminjs.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-  const userList = document.getElementById("userList");
-  const messageContainer = document.getElementById("message-container");
-  const pagination = document.getElementById("pagination");
-  const noResults = document.getElementById("noResults");
-  const userFilter = document.getElementById("userFilter");
-  let currentPage = 1;
-  const currentUserId = "<%= user && user._id ? user._id : '' %>"; // Handle null req.user gracefully
+      const userList = document.getElementById("userList");
+      const messageContainer = document.getElementById("message-container");
+      const pagination = document.getElementById("pagination");
+      const noResults = document.getElementById("noResults");
+      const userFilter = document.getElementById("userFilter");
+      let currentPage = 1;
+      const currentUserId = "<%= user && user._id ? user._id : '' %>";
 
-  // Fetch initial users
-  fetchUsers(currentPage);
+      fetchUsers(currentPage);
 
-  // Filter functionality
-  userFilter.addEventListener("change", function () {
-    fetchUsers(1); // Reset to page 1 on filter change
-  });
-
-  // AJAX Role Update
-  userList.addEventListener("click", async function (e) {
-    const button = e.target.closest(".update-role-btn");
-    if (!button) return;
-
-    const userId = button.dataset.userId;
-    const role = button.previousElementSibling.value;
-
-    if (userId === currentUserId) {
-      showMessage("You cannot change your own role.", "error");
-      return;
-    }
-
-    try {
-      const response = await fetch("/admin/users/update-role", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId, role, page: currentPage }),
-        credentials: "include",
+      userFilter.addEventListener("change", function () {
+        fetchUsers(1);
       });
 
-      const result = await response.json();
-      messageContainer.innerHTML = "";
+      userList.addEventListener("click", async function (e) {
+        const button = e.target.closest(".update-role-btn");
+        if (!button) return;
 
-      if (response.ok) {
-        showMessage(result.message, "success");
-        updateUserTable(result.users);
-        updatePagination(result.currentPage, result.totalPages);
-        currentPage = result.currentPage;
-      } else {
-        showMessage(result.error || "An error occurred.", "error");
-      }
-    } catch (error) {
-      console.error("❌ AJAX Role Update Error:", error);
-      showMessage("Network error. Please try again.", "error");
-    }
-  });
+        const userId = button.dataset.userId;
+        const role = button.previousElementSibling.value;
 
-  // AJAX Pagination
-  pagination.addEventListener("click", async function (e) {
-    const target = e.target.closest(".page-link");
-    if (!target) return;
+        if (userId === currentUserId) {
+          showMessage("You cannot change your own role.", "error");
+          return;
+        }
 
-    e.preventDefault();
-    const page = parseInt(target.dataset.page);
-    fetchUsers(page);
-  });
+        try {
+          const response = await fetch("/admin/users/update-role", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId, role, page: currentPage }),
+            credentials: "include",
+          });
 
-  // Fetch users function
-  async function fetchUsers(page) {
-    const filter = userFilter.value;
-    try {
-      const response = await fetch(`/admin/users?page=${page}&filter=${filter}`, {
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-        credentials: "include",
+          const result = await response.json();
+          messageContainer.innerHTML = "";
+
+          if (response.ok) {
+            showMessage(result.message, "success");
+            updateUserTable(result.users);
+            updatePagination(result.currentPage, result.totalPages);
+            currentPage = result.currentPage;
+          } else {
+            showMessage(result.error || "An error occurred.", "error");
+          }
+        } catch (error) {
+          console.error("❌ AJAX Role Update Error:", error);
+          showMessage("Network error. Please try again.", "error");
+        }
       });
 
-      const result = await response.json();
+      pagination.addEventListener("click", async function (e) {
+        const target = e.target.closest(".pagination-link");
+        if (!target) return;
 
-      if (response.ok) {
-        updateUserTable(result.users);
-        updatePagination(result.currentPage, result.totalPages);
-        currentPage = result.currentPage;
-      } else {
-        console.error("❌ Fetch Users Error:", result.error);
-        showMessage("Error fetching users.", "error");
-      }
-    } catch (error) {
-      console.error("❌ AJAX Fetch Error:", error);
-      showMessage("Network error. Please try again.", "error");
-    }
-  }
-
-  // Update user table
-  function updateUserTable(users) {
-    userList.innerHTML = "";
-    if (!users || users.length === 0) {
-      userList.innerHTML = '<tr><td colspan="4" class="text-center text-[var(--color-red-500)] font-semibold py-4">No users found.</td></tr>';
-      noResults.classList.remove("hidden");
-    } else {
-      users.forEach(user => {
-        const row = `
-          <tr class="border-t border-[var(--color-gray-200)] user-row" data-role="${user.role}">
-            <td class="px-4 py-2 user-name">${user.name}</td>
-            <td class="px-4 py-2 user-email">${user.email}</td>
-            <td class="px-4 py-2">
-              <select class="bg-[var(--color-gray-50)] text-[var(--color-gray-700)] p-2 rounded-md border border-[var(--color-gray-300)] focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md">
-                <option value="user" ${user.role === "user" ? "selected" : ""}>User</option>
-                <option value="admin" ${user.role === "admin" ? "selected" : ""}>Admin</option>
-              </select>
-              <button class="update-role-btn ml-2 text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-user-id="${user._id}"><i class="bi bi-pencil-square"></i></button>
-            </td>
-            <td class="px-4 py-2 flex items-center gap-3">
-              <a href="/admin/users/${user._id}" class="text-[var(--color-blue-500)] hover:text-[var(--color-blue-700)] transition-colors duration-300"><i class="bi bi-eye"></i></a>
-            </td>
-          </tr>`;
-        userList.insertAdjacentHTML("beforeend", row);
-      });
-      noResults.classList.add("hidden");
-    }
-  }
-
-  // Update pagination
-  function updatePagination(currentPage, totalPages) {
-    const maxVisiblePages = 5;
-    let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-    let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-    if (endPage - startPage + 1 < maxVisiblePages) {
-      startPage = Math.max(1, endPage - maxVisiblePages + 1);
-    }
-
-    pagination.innerHTML = '';
-
-    // Previous Button
-    const prevButton = document.createElement('a');
-    prevButton.href = '#';
-    prevButton.className = 'pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-l-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
-    prevButton.innerHTML = '<span class="sr-only">Previous</span><i class="bi bi-arrow-bar-left"></i>';
-    prevButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (currentPage > 1) fetchUsers(currentPage - 1);
-    });
-    pagination.appendChild(prevButton);
-
-    // Page Numbers
-    for (let i = startPage; i <= endPage; i++) {
-      const pageLink = document.createElement('a');
-      pageLink.href = '#';
-      pageLink.className = `pagination-link flex items-center justify-center px-3 h-8 leading-tight border border-[var(--color-gray-300)] transition-all duration-300 ${i === currentPage ? 'text-[var(--color-red-500)] bg-[var(--color-red-50)] hover:bg-[var(--color-red-100)] hover:text-[var(--color-red-700)]' : 'text-[var(--color-gray-500)] bg-[var(--color-white)] hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)]'}`;
-      pageLink.textContent = i;
-      pageLink.addEventListener('click', (e) => {
         e.preventDefault();
-        fetchUsers(i);
+        const page = parseInt(target.dataset.page);
+        fetchUsers(page);
       });
-      pagination.appendChild(pageLink);
-    }
 
-    // Next Button
-    const nextButton = document.createElement('a');
-    nextButton.href = '#';
-    nextButton.className = 'pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-r-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
-    nextButton.innerHTML = '<span class="sr-only">Next</span><i class="bi bi-arrow-bar-right"></i>';
-    nextButton.addEventListener('click', (e) => {
-      e.preventDefault();
-      if (currentPage < totalPages) fetchUsers(currentPage + 1);
+      async function fetchUsers(page) {
+        const filter = userFilter.value;
+        try {
+          const response = await fetch(`/admin/users?page=${page}&filter=${filter}`, {
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+            credentials: "include",
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            updateUserTable(result.users);
+            updatePagination(result.currentPage, result.totalPages);
+            currentPage = result.currentPage;
+          } else {
+            console.error("❌ Fetch Users Error:", result.error);
+            showMessage("Error fetching users.", "error");
+          }
+        } catch (error) {
+          console.error("❌ AJAX Fetch Error:", error);
+          showMessage("Network error. Please try again.", "error");
+        }
+      }
+
+      function updateUserTable(users) {
+        userList.innerHTML = "";
+        if (!users || users.length === 0) {
+          userList.innerHTML = '<tr><td colspan="5" class="text-center text-[var(--color-red-500)] font-semibold py-4">No users found.</td></tr>';
+          noResults.classList.remove("hidden");
+        } else {
+          users.forEach(user => {
+            const row = `
+              <tr class="border-t border-[var(--color-gray-200)] user-row" data-role="${user.role}">
+                <td class="px-4 py-2 user-name">${user.name}</td>
+                <td class="px-4 py-2 user-email">${user.email}</td>
+                <td class="px-4 py-2">
+                  <select class="bg-[var(--color-gray-50)] text-[var(--color-gray-700)] p-2 rounded-md border border-[var(--color-gray-300)] focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md">
+                    <option value="user" ${user.role === "user" ? "selected" : ""}>User</option>
+                    <option value="admin" ${user.role === "admin" ? "selected" : ""}>Admin</option>
+                  </select>
+                  <button class="update-role-btn ml-2 text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-user-id="${user._id}"><i class="bi bi-pencil-square"></i></button>
+                </td>
+                <td class="px-4 py-2">${user.lastActive ? new Date(user.lastActive).toLocaleString() : 'N/A'}</td>
+                <td class="px-4 py-2 flex items-center gap-3">
+                  <a href="/admin/users/${user._id}" class="text-[var(--color-blue-500)] hover:text-[var(--color-blue-700)] transition-colors duration-300"><i class="bi bi-eye"></i></a>
+                </td>
+              </tr>`;
+            userList.insertAdjacentHTML("beforeend", row);
+          });
+          noResults.classList.add("hidden");
+        }
+      }
+
+      function updatePagination(currentPage, totalPages) {
+        const maxVisiblePages = 5;
+        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+        if (endPage - startPage + 1 < maxVisiblePages) {
+          startPage = Math.max(1, endPage - maxVisiblePages + 1);
+        }
+
+        pagination.innerHTML = '';
+
+        const prevButton = document.createElement('a');
+        prevButton.href = '#';
+        prevButton.className = 'pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-l-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
+        prevButton.innerHTML = '<span class="sr-only">Previous</span><i class="bi bi-arrow-bar-left"></i>';
+        prevButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (currentPage > 1) fetchUsers(currentPage - 1);
+        });
+        pagination.appendChild(prevButton);
+
+        for (let i = startPage; i <= endPage; i++) {
+          const pageLink = document.createElement('a');
+          pageLink.href = '#';
+          pageLink.className = `pagination-link flex items-center justify-center px-3 h-8 leading-tight border border-[var(--color-gray-300)] transition-all duration-300 ${i === currentPage ? 'text-[var(--color-red-500)] bg-[var(--color-red-50)] hover:bg-[var(--color-red-100)] hover:text-[var(--color-red-700)]' : 'text-[var(--color-gray-500)] bg-[var(--color-white)] hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)]'}`;
+          pageLink.dataset.page = i;
+          pageLink.textContent = i;
+          pageLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            fetchUsers(i);
+          });
+          pagination.appendChild(pageLink);
+        }
+
+        const nextButton = document.createElement('a');
+        nextButton.href = '#';
+        nextButton.className = 'pagination-btn flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-r-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
+        nextButton.innerHTML = '<span class="sr-only">Next</span><i class="bi bi-arrow-bar-right"></i>';
+        nextButton.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (currentPage < totalPages) fetchUsers(currentPage + 1);
+        });
+        pagination.appendChild(nextButton);
+      }
+
+      function showMessage(text, type) {
+        const div = document.createElement("div");
+        div.className = `bg-[var(--color-${type === "success" ? "green" : "red"}-100)] text-[var(--color-${type === "success" ? "green" : "red"}-700)] p-3 rounded-lg text-center`;
+        div.textContent = text;
+        messageContainer.appendChild(div);
+        setTimeout(() => div.remove(), 5000);
+      }
     });
-    pagination.appendChild(nextButton);
-  }
-
-  // Show message helper
-  function showMessage(text, type) {
-    const div = document.createElement("div");
-    div.className = `bg-[var(--color-${type === "success" ? "green" : "red"}-100)] text-[var(--color-${type === "success" ? "green" : "red"}-700)] p-3 rounded-lg text-center`;
-    div.textContent = text;
-    messageContainer.appendChild(div);
-    setTimeout(() => div.remove(), 5000);
-  }
-});
   </script>
 </body>
 </html>

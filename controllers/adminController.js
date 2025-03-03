@@ -223,49 +223,51 @@ exports.renderAnalytical = async(req, res) =>{
 
 
 
+
 exports.renderManageUsers = async (req, res) => {
-    try {
-      let page = parseInt(req.query.page) || 1;
-      const limit = 10;
-      const skip = (page - 1) * limit;
-      const filter = req.query.filter || "all";
-  
-      let query = {};
-      if (filter !== "all") {
-        query.role = filter;
-      }
-  
-      const totalUsers = await User.countDocuments(query);
-      const users = await User.find(query, "name email role")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
-  
-      if (req.headers["x-requested-with"] === "XMLHttpRequest") {
-        res.status(200).json({
-          users,
-          currentPage: page,
-          totalPages: Math.ceil(totalUsers / limit),
-        });
-      } else {
-        res.render("admin/manage-users", {
-          user: req.user,
-          users: [],
-          currentPage: 1,
-          totalPages: 1,
-          successMessage: req.query.successMessage || null,
-          errorMessage: req.query.errorMessage || null,
-        });
-      }
-    } catch (error) {
-      console.error("❌ Manage Users Page Error:", error);
-      if (req.headers["x-requested-with"] === "XMLHttpRequest") {
-        res.status(500).json({ error: "Server error" });
-      } else {
-        res.status(500).send("Server error");
-      }
+  try {
+    let page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const filter = req.query.filter || "all";
+
+    let query = {};
+    if (filter !== "all") {
+      query.role = filter;
     }
-  };
+
+    const totalUsers = await User.countDocuments(query);
+    const users = await User.find(query, "name email role lastActive")
+      .sort({ lastActive: -1, createdAt: -1 }) // Sort by lastActive descending, then createdAt
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+      res.status(200).json({
+        users,
+        currentPage: page,
+        totalPages: Math.ceil(totalUsers / limit),
+      });
+    } else {
+      res.render("admin/manage-users", {
+        user: req.user,
+        users: [],
+        currentPage: 1,
+        totalPages: 1,
+        successMessage: req.query.successMessage || null,
+        errorMessage: req.query.errorMessage || null,
+      });
+    }
+  } catch (error) {
+    console.error("❌ Manage Users Page Error:", error);
+    if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+      res.status(500).json({ error: "Server error" });
+    } else {
+      res.status(500).send("Server error");
+    }
+  }
+};
   
   exports.updateUserRole = async (req, res) => {
     try {

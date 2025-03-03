@@ -20,22 +20,21 @@ const userSchema = new mongoose.Schema(
       enum: ['user', 'admin'],
       default: 'user',
     },
-    isNotified: 
-    { 
-      type: Boolean, 
-      default: false 
-    }, // ✅ New Field for Notification
     otp: {
       type: String,
       default: null,
     },
     otpExpires: {
-      type: Date, // OTP expiration time
+      type: Date,
       default: null,
     },
     verified: {
       type: Boolean,
       default: false,
+    },
+    lastActive: {
+      type: Date,
+      default: null, // Updated when user logs in or performs actions
     }
   },
   { timestamps: true } // Adds createdAt & updatedAt
