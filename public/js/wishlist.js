@@ -90,18 +90,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         });
         const data = await response.json();
 
-        if (data.message === "Please log in to modify your wishlist.") {
-          window.location.href = '/auth/login';
-        } else if (data.success) {
+        if (data.success) {
           await addToWishlist(productId);
           updateAllButtonsForProduct(productId, true);
           await updateWishlistQuantity();
           alert("Item added to wishlist!");
         } else {
+          console.error("Server error adding to wishlist:", data.message);
           alert(data.message || "Failed to add item to wishlist.");
         }
       } catch (error) {
         console.error("Error in wishlist toggle:", error);
+        alert("An error occurred while adding to wishlist.");
       }
     }
 

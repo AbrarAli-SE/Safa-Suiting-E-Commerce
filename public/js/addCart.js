@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         button.addEventListener("click", async function () {
           try {
             const productId = this.dataset.productId;
-            console.log("Adding productId from product card:", productId); // Logging added here
+            console.log("Adding productId from product card:", productId);
 
             if (!productId) {
               console.error("Product ID not found in add-to-cart button data.");
@@ -76,13 +76,11 @@ document.addEventListener("DOMContentLoaded", async function () {
             });
             const data = await response.json();
 
-            if (data.message === "User not authenticated.") {
-              window.location.href = '/auth/login';
-            } else if (data.success) {
-              const price = data.price || 0;
-              // const serverProductId = data.productId || productId; // Use server-provided ID if available
-              console.log("Server response for product card:", data); // Additional logging
+            if (data.success) {
+              const price = data.cart.items.find(item => item.product.toString() === productId)?.price || 0;
+              console.log("Server response for product card:", data);
               await addToCart(productId, 1, price);
+              await updateCartQuantity(); // Update quantity after adding
               alert("Item added to cart!");
             } else {
               console.error("Server error adding to cart from product card:", data.message);
@@ -90,6 +88,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             }
           } catch (error) {
             console.error("Error in cart button click handler for product card:", error);
+            alert("An error occurred while adding to cart.");
           }
         });
       });
@@ -101,7 +100,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       addToCartModalBtn.addEventListener("click", async function () {
         try {
           const productId = this.dataset.productId;
-          console.log("Adding productId from Quick View:", productId); // Logging added here
+          console.log("Adding productId from Quick View:", productId);
 
           if (!productId) {
             console.error("Product ID not found in Quick View modal button data.");
@@ -116,12 +115,11 @@ document.addEventListener("DOMContentLoaded", async function () {
           });
           const data = await response.json();
 
-          if (data.message === "User not authenticated.") {
-            window.location.href = '/auth/login';
-          } else if (data.success) {
-            const price = data.price || 0;
-            console.log("Server response for Quick View:", data); // Additional logging
+          if (data.success) {
+            const price = data.cart.items.find(item => item.product.toString() === productId)?.price || 0;
+            console.log("Server response for Quick View:", data);
             await addToCart(productId, 1, price);
+            await updateCartQuantity(); // Update quantity after adding
             closeQuickView();
             alert("Item added to cart!");
           } else {
@@ -130,6 +128,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           }
         } catch (error) {
           console.error("Error in add to cart from quick view modal:", error);
+            alert("An error occurred while adding to cart.");
         }
       });
     } else {

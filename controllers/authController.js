@@ -2,6 +2,8 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const Cart = require("../models/Cart");
+const Wishlist = require("../models/Wishlist");
 const sendEmail = require('../utils/emailConfig');
 const { secretKey, expiresIn } = require("../config/jwtConfig");
 
@@ -96,7 +98,9 @@ exports.googleAuthCallback = (req, res, next) => {
 
 
 
-// Login Controller
+
+
+
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
@@ -115,6 +119,57 @@ exports.login = async (req, res) => {
             return res.render("auth/login", { error: "Account not verified. Please verify your email with OTP." });
         }
 
+        // Check for existing guestId and merge cart/wishlist if present
+        const guestId = req.cookies.guestId;
+        if (guestId) {
+            // Merge guest cart
+            const guestCart = await Cart.findOne({ guestId });
+            if (guestCart) {
+                let userCart = await Cart.findOne({ user: user._id });
+                if (!userCart) {
+                    userCart = new Cart({ user: user._id, items: [], totalPrice: 0 });
+                }
+                guestCart.items.forEach(guestItem => {
+                    const existingItem = userCart.items.find(item => 
+                        item.product.toString() === guestItem.product.toString()
+                    );
+                    if (existingItem) {
+                        existingItem.quantity += guestItem.quantity;
+                    } else {
+                        userCart.items.push(guestItem);
+                    }
+                });
+                userCart.totalPrice = userCart.items.reduce((sum, item) => 
+                    sum + item.price * item.quantity, 0
+                );
+                await userCart.save();
+                await Cart.deleteOne({ guestId }); // Remove guest cart
+            }
+
+            // Merge guest wishlist
+            const guestWishlist = await Wishlist.findOne({ guestId });
+            if (guestWishlist) {
+                let userWishlist = await Wishlist.findOne({ user: user._id });
+                if (!userWishlist) {
+                    userWishlist = new Wishlist({ user: user._id, items: [] });
+                }
+                guestWishlist.items.forEach(guestItem => {
+                    const existingItem = userWishlist.items.find(item => 
+                        item.product.toString() === guestItem.product.toString()
+                    );
+                    if (!existingItem) {
+                        userWishlist.items.push(guestItem);
+                    }
+                });
+                await userWishlist.save();
+                await Wishlist.deleteOne({ guestId }); // Remove guest wishlist
+            }
+
+            // Clear the guestId cookie after merging
+            res.clearCookie("guestId");
+        }
+
+        // Generate and set JWT
         const token = jwt.sign(
             { userId: user._id, name: user.name, email: user.email, role: user.role },
             process.env.JWT_SECRET,

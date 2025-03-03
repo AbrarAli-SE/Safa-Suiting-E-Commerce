@@ -4,7 +4,7 @@ const { authenticateUser, verifyUser } = require("../middleware/authMiddleware")
 const cartController = require("../controllers/cartController");
 
 // ✅ Cart Page Route
-router.get("/", authenticateUser, verifyUser, cartController.renderCart);
+router.get("/", authenticateUser, cartController.renderCart);
 
 // ✅ Add to Cart Route
 router.post("/add", authenticateUser, cartController.addToCart);
@@ -16,7 +16,7 @@ router.put('/update', authenticateUser, cartController.updateCart);
 router.delete('/remove/:itemId', authenticateUser, cartController.deleteItem)
 
 // ✅ Render Checkout Page
-router.get("/checkout", authenticateUser, verifyUser, cartController.renderCheckout);
+router.get("/checkout", authenticateUser,  cartController.renderCheckout);
 
 module.exports = router;
 

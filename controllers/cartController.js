@@ -1,29 +1,33 @@
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
-
+const { getOrCreateGuestId } = require('../utils/guestId');
 
 exports.addToCart = async (req, res) => {
     const { productId } = req.body; // Get product ID from AJAX request
 
-    // Check if user is logged in
-    if (!req.user) {
-      return res.status(401).json({ success: false, message: "User not authenticated." });
-    }
-
     try {
+        // Determine the identifier (user ID or guest ID)
+        let identifier;
+        if (req.user) {
+            identifier = { user: req.user.userId };
+        } else {
+            const guestId = req.cookies.guestId || getOrCreateGuestId(req, res); // Use existing or create new
+            identifier = { guestId };
+        }
+
         // Find the product by ID
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ success: false, message: "Product not found." });
         }
 
-        // Find the user's cart
-        let cart = await Cart.findOne({ user: req.user.userId });
+        // Find the cart using the identifier
+        let cart = await Cart.findOne(identifier);
 
         // If the cart does not exist, create a new one
         if (!cart) {
             cart = new Cart({
-                user: req.user.userId,
+                ...identifier, // Spread the identifier (either { user } or { guestId })
                 items: [],
                 totalPrice: 0
             });
@@ -39,10 +43,10 @@ exports.addToCart = async (req, res) => {
             // If product is not in the cart, add it as a new item
             cart.items.push({
                 product: product._id,
-                name: product.name,  // Store product name
-                img: product.image,    // Store product image
-                price: product.price, // Store product price
-                quantity: 1           // Default quantity to 1
+                name: product.name,
+                img: product.image,
+                price: product.price,
+                quantity: 1
             });
         }
 
@@ -51,9 +55,14 @@ exports.addToCart = async (req, res) => {
 
         // Save the updated cart to the database
         await cart.save();
-        
+
         // Send response back to frontend
-        return res.json({ success: true, message: "Product added to cart successfully!", cart });
+        return res.json({
+            success: true,
+            message: "Product added to cart successfully!",
+            cart,
+            isGuest: !req.user // Indicate if this is a guest cart
+        });
 
     } catch (error) {
         console.error("Add to Cart Error:", error);
@@ -63,41 +72,59 @@ exports.addToCart = async (req, res) => {
 
 
 
+
 // ✅ Get User Cart
+
+
 exports.renderCart = async (req, res) => {
   try {
-      // Fetch cart with populated product details
-      const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
-
-      // Handle empty cart case
-      if (!cart || cart.items.length === 0) {
-          return res.render("cart/cart", { 
-              user: req.user, 
-              cart: [], 
-              totalAmount: 0 
-          });
-      }
-
-      // Calculate total cart amount (sum of product price * quantity)
-      const totalAmount = cart.items.reduce((total, item) => {
-          return total + item.product.price * item.quantity;
-      }, 0);
-
-      // Render cart page with data
-      res.render("cart/cart", { 
-          user: req.user, 
-          cart: cart.items, 
-          totalAmount 
+    // Determine the identifier (user ID or existing guest ID)
+    let identifier = {};
+    if (req.user) {
+      identifier = { user: req.user.userId };
+    } else if (req.cookies.guestId) {
+      identifier = { guestId: req.cookies.guestId };
+    } else {
+      // No guestId exists, render empty cart without creating one
+      return res.render("cart/cart", { 
+        user: null, 
+        cart: [], 
+        totalAmount: 0 
       });
+    }
+
+    // Fetch cart with populated product details
+    const cart = await Cart.findOne(identifier).populate("items.product");
+
+    // Handle empty cart case
+    if (!cart || cart.items.length === 0) {
+      return res.render("cart/cart", { 
+        user: req.user || null, // Pass null if no user
+        cart: [], 
+        totalAmount: 0 
+      });
+    }
+
+    // Calculate total cart amount (sum of product price * quantity)
+    const totalAmount = cart.items.reduce((total, item) => {
+      return total + item.product.price * item.quantity;
+    }, 0);
+
+    // Render cart page with data
+    res.render("cart/cart", { 
+      user: req.user || null, 
+      cart: cart.items, 
+      totalAmount 
+    });
 
   } catch (error) {
-      console.error("❌ Cart Page Error:", error);
-      res.status(500).render("cart/cart", { 
-          user: req.user, 
-          cart: [], 
-          totalAmount: 0, 
-          errorMessage: "Server error. Please try again." 
-      });
+    console.error("❌ Cart Page Error:", error);
+    res.status(500).render("cart/cart", { 
+      user: req.user || null, 
+      cart: [], 
+      totalAmount: 0, 
+      errorMessage: "Server error. Please try again." 
+    });
   }
 };
 
@@ -122,16 +149,24 @@ exports.renderCheckout = async (req, res) => {
 
 
 
+
+
 exports.updateCart = async (req, res) => {
     const { updatedItems } = req.body; // Array of updated items with itemId and quantity
 
-    if (!req.user) {
-        return res.status(401).json({ success: false, message: "User not authenticated." });
-    }
-
     try {
-        // Find the user's cart
-        let cart = await Cart.findOne({ user: req.user.userId });
+        // Determine the identifier (user ID or existing guest ID)
+        let identifier = {};
+        if (req.user) {
+            identifier = { user: req.user.userId };
+        } else if (req.cookies.guestId) {
+            identifier = { guestId: req.cookies.guestId };
+        } else {
+            return res.status(404).json({ success: false, message: "No cart available. Please add items first." });
+        }
+
+        // Find the cart
+        let cart = await Cart.findOne(identifier);
 
         if (!cart) {
             return res.status(404).json({ success: false, message: "Cart not found." });
@@ -171,13 +206,19 @@ exports.updateCart = async (req, res) => {
 exports.deleteItem = async (req, res) => {
     const { itemId } = req.params; // The item ID to be removed
 
-    if (!req.user) {
-        return res.status(401).json({ success: false, message: "User not authenticated." });
-    }
-
     try {
-        // Find the user's cart
-        let cart = await Cart.findOne({ user: req.user.userId });
+        // Determine the identifier (user ID or existing guest ID)
+        let identifier = {};
+        if (req.user) {
+            identifier = { user: req.user.userId };
+        } else if (req.cookies.guestId) {
+            identifier = { guestId: req.cookies.guestId };
+        } else {
+            return res.status(404).json({ success: false, message: "No cart available. Please add items first." });
+        }
+
+        // Find the cart
+        let cart = await Cart.findOne(identifier);
 
         if (!cart) {
             return res.status(404).json({ success: false, message: "Cart not found." });
@@ -199,5 +240,3 @@ exports.deleteItem = async (req, res) => {
         return res.status(500).json({ success: false, message: "Server error. Please try again." });
     }
 };
-
-

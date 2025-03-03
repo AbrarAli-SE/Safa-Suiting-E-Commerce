@@ -4,7 +4,7 @@ const {authenticateUser , verifyUser } = require("../middleware/authMiddleware")
 const wishlistController = require("../controllers/wishlistController");
 
 // ✅ Render Wishlist Page
-router.get("/", authenticateUser,verifyUser ,wishlistController.renderWishlist);
+router.get("/", authenticateUser,wishlistController.renderWishlist);
 
 // ✅ Add to Wishlist
 router.post("/add", authenticateUser, wishlistController.addToWishlist);
