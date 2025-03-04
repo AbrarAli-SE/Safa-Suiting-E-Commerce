@@ -22,270 +22,189 @@
       <!-- Messages -->
       <div id="message-container" class="mb-6"></div>
 
-      <!-- Coupon Creation Form -->
-      <form id="couponForm" class="space-y-6 bg-[var(--color-white)] p-6 rounded-lg shadow-lg">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          <!-- Left Side: Coupon Details Section -->
-          <div class="space-y-6">
-            <h2 class="text-2xl font-semibold text-[var(--color-black)]">Coupon Details</h2>
-
-            <!-- Coupon Code -->
-            <div class="space-y-2">
-              <label for="coupon_code" class="block text-sm font-medium text-[var(--color-black)]">Coupon Code</label>
-              <input 
-                type="text" 
-                id="coupon_code" 
-                name="coupon_code" 
-                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                placeholder="e.g., WINTER2025" 
-                required />
-            </div>
-
-            <!-- Coupon Name -->
-            <div class="space-y-2">
-              <label for="coupon_name" class="block text-sm font-medium text-[var(--color-black)]">Coupon Name</label>
-              <input 
-                type="text" 
-                id="coupon_name" 
-                name="coupon_name" 
-                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                placeholder="e.g., Winter Sale Discount" 
-                required />
-            </div>
-
-            <!-- Specific Product -->
-            <div class="space-y-2">
-              <label for="specific_product" class="block text-sm font-medium text-[var(--color-black)]">Specific Product</label>
-              <input 
-                type="text" 
-                id="specific_product" 
-                name="specific_product" 
-                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                placeholder="e.g., Red Sweater" />
-            </div>
-
-            <!-- Coupon Type -->
-            <div class="space-y-2">
-              <label for="coupon_type" class="block text-sm font-medium text-[var(--color-black)]">Coupon Type</label>
-              <select 
-                id="coupon_type" 
-                name="coupon_type" 
-                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                required>
-                <option value="percentage">Percentage Off</option>
-                <option value="fixed">Fixed Amount Discount</option>
-              </select>
-            </div>
-
-            <!-- Discount Amount -->
-            <div class="space-y-2">
-              <label for="discount_amount" class="block text-sm font-medium text-[var(--color-black)]">Discount Amount</label>
-              <input 
-                type="text" 
-                id="discount_amount" 
-                name="discount_amount" 
-                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                placeholder="e.g., 10% or $5" 
-                required />
-            </div>
-
-            <!-- Minimum Order Value -->
-            <div class="space-y-2">
-              <label for="min_order_value" class="block text-sm font-medium text-[var(--color-black)]">Minimum Order Value</label>
-              <input 
-                type="number" 
-                id="min_order_value" 
-                name="min_order_value" 
-                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                placeholder="e.g., 50" />
-            </div>
+     <!-- Coupon Creation Form -->
+     <form id="couponForm" class="space-y-6 bg-[var(--color-white)] p-6 rounded-lg shadow-lg">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div class="space-y-6">
+          <h2 class="text-2xl font-semibold text-[var(--color-black)]">Coupon Details</h2>
+          <div class="space-y-2">
+            <label for="coupon_code" class="block text-sm font-medium text-[var(--color-black)]">Coupon Code</label>
+            <input type="text" id="coupon_code" name="coupon_code" class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" placeholder="e.g., WINTER2025" required />
           </div>
-
-          <!-- Right Side: Coupon Dates & Limit Section -->
-          <div class="space-y-6">
-            <h2 class="text-2xl font-semibold text-[var(--color-black)]">Coupon Validity & Limits</h2>
-
-            <!-- Coupon Expiry Date -->
-            <div class="space-y-2">
-              <label for="expiry_date" class="block text-sm font-medium text-[var(--color-black)]">Coupon Expiry Date</label>
-              <input 
-                type="date" 
-                id="expiry_date" 
-                name="expiry_date" 
-                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                required />
-            </div>
-
-            <!-- Start Date -->
-            <div class="space-y-2">
-              <label for="start_date" class="block text-sm font-medium text-[var(--color-black)]">Start Date</label>
-              <input 
-                type="date" 
-                id="start_date" 
-                name="start_date" 
-                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" />
-            </div>
-
-            <!-- Usage Limit -->
-            <div class="space-y-2">
-              <label for="usage_limit" class="block text-sm font-medium text-[var(--color-black)]">Usage Limit</label>
-              <input 
-                type="number" 
-                id="usage_limit" 
-                name="usage_limit" 
-                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
-                placeholder="e.g., 100" />
-            </div>
-
-            <!-- Submit Button -->
-            <div>
-              <button 
-                type="submit" 
-                class="w-full px-6 py-3 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
-                Create Coupon
-              </button>
-            </div>
+          <div class="space-y-2">
+            <label for="coupon_name" class="block text-sm font-medium text-[var(--color-black)]">Coupon Name</label>
+            <input type="text" id="coupon_name" name="coupon_name" class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" placeholder="e.g., Winter Sale Discount" required />
+          </div>
+          <div class="space-y-2">
+            <label for="coupon_type" class="block text-sm font-medium text-[var(--color-black)]">Coupon Type</label>
+            <select id="coupon_type" name="coupon_type" class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" required>
+              <option value="shipping_free">Shipping Free</option>
+              <option value="tax_free">Tax Free</option>
+              <option value="half_rate">Half Rate</option>
+            </select>
+          </div>
+          <div class="space-y-2">
+            <label for="discount_amount" class="block text-sm font-medium text-[var(--color-black)]">Discount Amount</label>
+            <input type="text" id="discount_amount" name="discount_amount" class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" placeholder="e.g., 10% or $5" required />
+          </div>
+          <div class="space-y-2">
+            <label for="min_order_value" class="block text-sm font-medium text-[var(--color-black)]">Minimum Order Value</label>
+            <input type="number" id="min_order_value" name="min_order_value" class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" placeholder="e.g., 50" />
           </div>
         </div>
-      </form>
-
-      <!-- Coupon Display Section -->
-      <div id="couponDisplay" class="mt-8">
-        <h2 class="text-xl font-semibold text-[var(--color-black)] mb-4">Created Coupons</h2>
-        <div id="couponList" class="space-y-4">
-          <!-- Dynamically added coupons will appear here -->
+        <div class="space-y-6">
+          <h2 class="text-2xl font-semibold text-[var(--color-black)]">Coupon Validity & Limits</h2>
+          <div class="space-y-2">
+            <label for="expiry_date" class="block text-sm font-medium text-[var(--color-black)]">Coupon Expiry Date</label>
+            <input type="date" id="expiry_date" name="expiry_date" class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" required />
+          </div>
+          <div class="space-y-2">
+            <label for="start_date" class="block text-sm font-medium text-[var(--color-black)]">Start Date</label>
+            <input type="date" id="start_date" name="start_date" class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" />
+          </div>
+          <div class="space-y-2">
+            <label for="usage_limit" class="block text-sm font-medium text-[var(--color-black)]">Usage Limit</label>
+            <input type="number" id="usage_limit" name="usage_limit" class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" placeholder="e.g., 100" />
+          </div>
+          <div>
+            <button type="submit" class="w-full px-6 py-3 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">Create Coupon</button>
+          </div>
         </div>
       </div>
+    </form>
+
+    <!-- Coupon Display Section -->
+    <div id="couponDisplay" class="mt-8">
+      <h2 class="text-xl font-semibold text-[var(--color-black)] mb-4">Created Coupons</h2>
+      <div id="couponList" class="space-y-4"></div>
     </div>
   </div>
-  </div>
-
+</div>
+</div>
   <!-- <script type="module" src="/js/adminCoupons.js"></script> -->
   <script type="module" src="/js/adminjs.js"></script>
   <script>
     document.addEventListener("DOMContentLoaded", function () {
-  const couponForm = document.getElementById("couponForm");
-  const messageContainer = document.getElementById("message-container");
-  const couponList = document.getElementById("couponList");
+      const couponForm = document.getElementById("couponForm");
+      const messageContainer = document.getElementById("message-container");
+      const couponList = document.getElementById("couponList");
 
-  // Fetch existing coupons on page load
-  fetchCoupons();
+      fetchCoupons();
 
-  // Form submission for creating a coupon
-  couponForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
+      couponForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
 
-    const formData = new FormData(couponForm);
-    const data = Object.fromEntries(formData);
+        const formData = new FormData(couponForm);
+        const data = Object.fromEntries(formData);
 
-    try {
-      const response = await fetch("/admin/coupons/create", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
+        try {
+          const response = await fetch("/admin/coupons/create", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
 
-      const result = await response.json();
-      messageContainer.innerHTML = "";
+          const result = await response.json();
+          messageContainer.innerHTML = "";
 
-      if (response.ok) {
-        showMessage(result.message, "success");
-        couponForm.reset();
-        fetchCoupons(); // Refresh the coupon list
-      } else {
-        showMessage(result.error || "An error occurred.", "error");
-      }
-    } catch (error) {
-      console.error("❌ AJAX Coupon Creation Error:", error);
-      showMessage("Network error. Please try again.", "error");
-    }
-  });
-
-  // Fetch coupons function
-  async function fetchCoupons() {
-    try {
-      const response = await fetch("/admin/coupons", {
-        headers: { "X-Requested-With": "XMLHttpRequest" },
-      });
-
-      const result = await response.json();
-
-      if (response.ok) {
-        updateCouponList(result.coupons);
-      } else {
-        console.error("❌ Fetch Coupons Error:", result.error);
-        showMessage("Error fetching coupons.", "error");
-      }
-    } catch (error) {
-      console.error("❌ AJAX Fetch Error:", error);
-      showMessage("Network error. Please try again.", "error");
-    }
-  }
-
-  // Update coupon list
-  function updateCouponList(coupons) {
-    couponList.innerHTML = "";
-    if (!coupons || coupons.length === 0) {
-      couponList.innerHTML = '<p class="text-[var(--color-gray-600)]">No coupons created yet.</p>';
-    } else {
-      coupons.forEach(coupon => {
-        const couponItem = `
-          <div class="bg-[var(--color-gray-50)] p-4 rounded-md shadow-md hover:shadow-lg transition-all duration-300">
-            <div class="flex justify-between items-center">
-              <div>
-                <p class="text-[var(--color-black)] font-semibold">${coupon.coupon_name} (${coupon.coupon_code})</p>
-                <p class="text-[var(--color-gray-700)]">Type: ${coupon.coupon_type === 'percentage' ? 'Percentage Off' : 'Fixed Amount'}</p>
-                <p class="text-[var(--color-gray-700)]">Discount: ${coupon.discount_amount}</p>
-                ${coupon.specific_product ? `<p class="text-[var(--color-gray-700)]">Product: ${coupon.specific_product}</p>` : ''}
-                ${coupon.min_order_value ? `<p class="text-[var(--color-gray-700)]">Min Order: $${coupon.min_order_value}</p>` : ''}
-                <p class="text-[var(--color-gray-700)]">Start: ${coupon.start_date ? new Date(coupon.start_date).toLocaleDateString() : 'N/A'}</p>
-                <p class="text-[var(--color-gray-700)]">Expires: ${new Date(coupon.expiry_date).toLocaleDateString()}</p>
-                ${coupon.usage_limit ? `<p class="text-[var(--color-gray-700)]">Usage Limit: ${coupon.usage_limit}</p>` : ''}
-              </div>
-              <button class="delete-coupon-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-coupon-id="${coupon._id}">
-                <i class="bi bi-trash"></i>
-              </button>
-            </div>
-          </div>`;
-        couponList.insertAdjacentHTML("beforeend", couponItem);
-      });
-
-      // Add Delete Event Listeners
-      document.querySelectorAll('.delete-coupon-btn').forEach(button => {
-        button.addEventListener('click', async function () {
-          const couponId = this.dataset.couponId;
-          if (confirm('Are you sure you want to delete this coupon?')) {
-            try {
-              const response = await fetch(`/admin/coupons/delete/${couponId}`, {
-                method: 'DELETE',
-                headers: { 'Content-Type': 'application/json' },
-              });
-              const result = await response.json();
-              if (response.ok) {
-                showMessage('Coupon deleted successfully!', 'success');
-                fetchCoupons(); // Refresh the coupon list
-              } else {
-                showMessage(result.message || 'Error deleting coupon', 'error');
-              }
-            } catch (error) {
-              console.error('Error deleting coupon:', error);
-              showMessage('Network error. Please try again.', 'error');
-            }
+          if (response.ok) {
+            showMessage(result.message, "success");
+            couponForm.reset();
+            fetchCoupons();
+          } else {
+            showMessage(result.error || "An error occurred.", "error");
           }
-        });
+        } catch (error) {
+          console.error("❌ AJAX Coupon Creation Error:", error);
+          showMessage("Network error. Please try again.", "error");
+        }
       });
-    }
-  }
 
-  // Show message helper
-  function showMessage(text, type) {
-    const div = document.createElement("div");
-    div.className = `p-4 rounded-md text-center font-medium ${type === "success" ? "bg-[var(--color-green-100)] text-[var(--color-green-500)]" : "bg-[var(--color-red-100)] text-[var(--color-red-500)]"}`;
-    div.textContent = text;
-    messageContainer.appendChild(div);
-    setTimeout(() => div.remove(), 5000);
-  }
-});
+      async function fetchCoupons() {
+        try {
+          const response = await fetch("/admin/coupons", {
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+          });
+
+          const result = await response.json();
+
+          if (response.ok) {
+            updateCouponList(result.coupons);
+          } else {
+            console.error("❌ Fetch Coupons Error:", result.error);
+            showMessage("Error fetching coupons.", "error");
+          }
+        } catch (error) {
+          console.error("❌ AJAX Fetch Error:", error);
+          showMessage("Network error. Please try again.", "error");
+        }
+      }
+
+      function updateCouponList(coupons) {
+        couponList.innerHTML = "";
+        if (!coupons || coupons.length === 0) {
+          couponList.innerHTML = '<p class="text-[var(--color-gray-600)]">No coupons created yet.</p>';
+        } else {
+          coupons.forEach(coupon => {
+            const typeDisplay = {
+              'shipping_free': 'Shipping Free',
+              'tax_free': 'Tax Free',
+              'half_rate': 'Half Rate'
+            }[coupon.coupon_type] || coupon.coupon_type;
+            const couponItem = `
+              <div class="bg-[var(--color-gray-50)] p-4 rounded-md shadow-md hover:shadow-lg transition-all duration-300">
+                <div class="flex justify-between items-center">
+                  <div>
+                    <p class="text-[var(--color-black)] font-semibold">${coupon.coupon_name} (${coupon.coupon_code})</p>
+                    <p class="text-[var(--color-gray-700)]">Type: ${typeDisplay}</p>
+                    <p class="text-[var(--color-gray-700)]">Discount: ${coupon.discount_amount}</p>
+                    ${coupon.min_order_value ? `<p class="text-[var(--color-gray-700)]">Min Order: $${coupon.min_order_value}</p>` : ''}
+                    <p class="text-[var(--color-gray-700)]">Start: ${coupon.start_date ? new Date(coupon.start_date).toLocaleDateString() : 'N/A'}</p>
+                    <p class="text-[var(--color-gray-700)]">Expires: ${new Date(coupon.expiry_date).toLocaleDateString()}</p>
+                    ${coupon.usage_limit ? `<p class="text-[var(--color-gray-700)]">Usage Limit: ${coupon.usage_limit}</p>` : ''}
+                  </div>
+                  <button class="delete-coupon-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-coupon-id="${coupon._id}">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </div>`;
+            couponList.insertAdjacentHTML("beforeend", couponItem);
+          });
+
+          document.querySelectorAll('.delete-coupon-btn').forEach(button => {
+            button.addEventListener('click', async function () {
+              const couponId = this.dataset.couponId;
+              if (confirm('Are you sure you want to delete this coupon?')) {
+                try {
+                  const response = await fetch(`/admin/coupons/delete/${couponId}`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                  });
+                  const result = await response.json();
+                  if (response.ok) {
+                    showMessage('Coupon deleted successfully!', 'success');
+                    fetchCoupons();
+                  } else {
+                    showMessage(result.message || 'Error deleting coupon', 'error');
+                  }
+                } catch (error) {
+                  console.error('Error deleting coupon:', error);
+                  showMessage('Network error. Please try again.', 'error');
+                }
+              }
+            });
+          });
+        }
+      }
+
+      function showMessage(text, type) {
+        const div = document.createElement("div");
+        div.className = `p-4 rounded-md text-center font-medium ${type === "success" ? "bg-[var(--color-green-100)] text-[var(--color-green-500)]" : "bg-[var(--color-red-100)] text-[var(--color-red-500)]"}`;
+        div.textContent = text;
+        messageContainer.appendChild(div);
+        setTimeout(() => div.remove(), 5000);
+      }
+    });
   </script>
 </body>
 </html>

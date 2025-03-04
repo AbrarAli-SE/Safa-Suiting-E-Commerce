@@ -3,6 +3,7 @@ const Cart = require("../models/Cart");
 const Wishlist = require("../models/Wishlist");
 const Contact = require("../models/Contact");
 const ShippingSettings = require('../models/Shipping'); //
+const Coupon = require('../models/Coupon');
 const sendEmail = require('../utils/emailConfig');
 const ContactInfo = require("../models/info");
 const bcrypt = require("bcryptjs");
@@ -173,7 +174,7 @@ exports.deleteContact = async (req, res) => {
 
 
 
-exports.renderCouponCode = async(req, res) =>{
+exports.getCouponPage = async(req, res) =>{
     try {
         res.render("admin/CouponCode");
     } catch (error) {
@@ -181,6 +182,68 @@ exports.renderCouponCode = async(req, res) =>{
         res.status(500).send("Server error");
     }
 }
+
+// Fetch all coupons (API)
+exports.getCoupons = async (req, res) => {
+  try {
+    const coupons = await Coupon.find();
+    res.status(200).json({ coupons });
+  } catch (error) {
+    console.error('Error fetching coupons:', error);
+    res.status(500).json({ error: 'Server error fetching coupons' });
+  }
+};
+
+// Create a new coupon (API)
+exports.createCoupon = async (req, res) => {
+  try {
+    const {
+      coupon_code,
+      coupon_name,
+      coupon_type,
+      discount_amount,
+      min_order_value,
+      expiry_date,
+      start_date,
+      usage_limit
+    } = req.body;
+
+    const coupon = new Coupon({
+      coupon_code,
+      coupon_name,
+      coupon_type,
+      discount_amount,
+      min_order_value,
+      expiry_date,
+      start_date,
+      usage_limit
+    });
+
+    await coupon.save();
+    res.status(201).json({ message: 'Coupon created successfully!' });
+  } catch (error) {
+    console.error('Error creating coupon:', error);
+    res.status(400).json({ error: 'Error creating coupon' });
+  }
+};
+
+
+// Delete a coupon (API)
+exports.deleteCoupon = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const coupon = await Coupon.findByIdAndDelete(id);
+
+    if (!coupon) {
+      return res.status(404).json({ message: 'Coupon not found' });
+    }
+
+    res.status(200).json({ message: 'Coupon deleted successfully!' });
+  } catch (error) {
+    console.error('Error deleting coupon:', error);
+    res.status(500).json({ error: 'Server error deleting coupon' });
+  }
+};
 
 
 exports.renderPayment = async(req, res) =>{
