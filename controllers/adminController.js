@@ -199,7 +199,6 @@ exports.createCoupon = async (req, res) => {
   try {
     const {
       coupon_code,
-      coupon_name,
       coupon_type,
       discount_amount,
       min_order_value,
@@ -210,7 +209,6 @@ exports.createCoupon = async (req, res) => {
 
     const coupon = new Coupon({
       coupon_code,
-      coupon_name,
       coupon_type,
       discount_amount,
       min_order_value,

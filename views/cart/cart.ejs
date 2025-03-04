@@ -60,6 +60,16 @@
       <% if (cart.length > 0) { %>
         <div class="cart-total-section border border-[var(--color-gray-300)] rounded-lg p-6 bg-[var(--color-white)] shadow-lg w-full md:sticky md:top-24 self-start flex flex-col">
           <h2 class="text-lg xs:text-xl font-semibold text-[var(--color-black)] mb-6 text-center md:text-left">Cart Total</h2>
+          
+          <!-- Coupon Code Section -->
+          <div class="mb-6">
+            <div class="flex flex-col sm:flex-row gap-2">
+              <input type="text" id="couponCode" placeholder="Enter coupon code" class="w-full sm:flex-1 p-2 border border-[var(--color-gray-300)] rounded-lg text-sm focus:outline-none focus:border-[var(--color-red-500)] transition-all duration-300">
+              <button id="applyCoupon" class="w-full sm:w-auto p-2 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 text-sm font-medium">Apply Coupon</button>
+            </div>
+            <p id="couponMessage" class="text-xs text-[var(--color-gray-600)] mt-2 hidden">Coupon applied successfully!</p>
+          </div>
+
           <div class="space-y-4 flex-grow">
             <div class="flex justify-between items-center py-3 border-t border-[var(--color-gray-200)]">
               <span class="text-[var(--color-gray-600)] text-xs xs:text-sm sm:text-base">Subtotal:</span>
@@ -88,6 +98,57 @@
     </div>
   </div>
 </main>
+<script>
+// In updateCart.js
+document.getElementById('applyCoupon')?.addEventListener('click', async () => {
+  const couponCode = document.getElementById('couponCode').value;
+  const messageElement = document.getElementById('couponMessage');
+  const subtotalElement = document.getElementById('cartSubtotal');
+  const shippingElement = document.getElementById('cartShipping');
+  const taxElement = document.getElementById('cartTax');
+  const totalElement = document.getElementById('cartTotal');
+
+  try {
+    const response = await fetch('/user/cart/apply-coupon', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ couponCode })
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      // Update UI with new values
+      messageElement.textContent = data.message;
+      messageElement.classList.remove('hidden', 'text-[var(--color-red-500)]');
+      messageElement.classList.add('text-[var(--color-green-500)]');
+
+      // Update cart totals
+      subtotalElement.textContent = `Rs ${data.cart.subtotal}`;
+      shippingElement.textContent = `Rs ${data.cart.shipping}`;
+      taxElement.textContent = `Rs ${data.cart.tax}`;
+      totalElement.textContent = `Rs ${data.cart.total}`;
+
+    } else {
+      messageElement.textContent = data.message;
+      messageElement.classList.remove('hidden', 'text-[var(--color-green-500)]');
+      messageElement.classList.add('text-[var(--color-red-500)]');
+    }
+
+    // Clear message after 5 seconds
+    setTimeout(() => {
+      messageElement.classList.add('hidden');
+    }, 5000);
+
+  } catch (error) {
+    messageElement.textContent = 'Error applying coupon';
+    messageElement.classList.remove('hidden', 'text-[var(--color-green-500)]');
+    messageElement.classList.add('text-[var(--color-red-500)]');
+  }
+});
+</script>
 
 <%- include('../shared/footer') %>
 <script type="module" src="/js/updateCart.js"></script>

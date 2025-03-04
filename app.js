@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require("fs");
   const session = require("express-session");
   const cookieParser = require("cookie-parser");
-  const passport = require("./config/passport"); // ✅ Import configured passport
   const morgan = require('morgan');
   const createHttpErrors = require('http-errors');
   const dbConfig = require('./config/dbConfig');
@@ -31,8 +30,7 @@ app.use(session({
   resave: false,
   saveUninitialized: false
 }));
-app.use(passport.initialize());
-app.use(passport.session());
+
 
   // Database Connection
   dbConfig();
@@ -40,8 +38,6 @@ app.use(passport.session());
   app.use(morgan('dev'));
   
   
-  app.use(passport.initialize());
-  app.use(passport.session());
   
   const authRoutes = require('./routes/auth');
 

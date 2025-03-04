@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 
 const couponSchema = new mongoose.Schema({
   coupon_code: { type: String, required: true, unique: true },
-  coupon_name: { type: String, required: true },
   coupon_type: { 
     type: String, 
     enum: ['shipping_free', 'tax_free', 'half_rate'], 

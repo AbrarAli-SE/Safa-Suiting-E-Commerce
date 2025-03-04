@@ -1,9 +1,6 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
-const Cart = require("../models/Cart");
-const passport = require("../config/passport");
-const Wishlist = require("../models/Wishlist");
 const sendEmail = require('../utils/emailConfig');
 const { secretKey, expiresIn } = require("../config/jwtConfig");
 
@@ -65,31 +62,6 @@ exports.renderForgotPasswordPage = (req, res) => {
 
 
 
-
-// Google OAuth Routes
-exports.googleAuth = passport.authenticate('google', { scope: ['profile', 'email'] });
-
-// controllers/authController.js
-exports.googleAuthCallback = passport.authenticate('google', { failureRedirect: '/auth/login' }),
-  async (req, res) => {
-    try {
-      console.log('Google Callback - User:', req.user);
-      const token = jwt.sign(
-        { userId: req.user._id, name: req.user.name, email: req.user.email, role: req.user.role },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h' }
-      );
-      console.log('JWT Token Generated:', token);
-
-      res.cookie("authToken", token, { httpOnly: true, secure: false, maxAge: 24 * 60 * 60 * 1000 });
-      const redirectUrl = req.user.role === "admin" ? "/admin/analytical" : "/";
-      console.log('Redirecting to:', redirectUrl);
-      return res.redirect(redirectUrl);
-    } catch (err) {
-      console.error("Google Auth Callback Error:", err);
-      res.redirect("/auth/login");
-    }
-  };
 
 
 
@@ -293,24 +265,5 @@ exports.forgotPassword = async (req, res) => {
 };
 
 
-exports.getToken = async (req, res) => {
-    try {
-      const user = await User.findById(req.user._id);  // Assumes the `verifyToken` middleware sets `req.user`
-      if (!user) {
-        return res.status(401).json({ error: "Unauthorized" });
-      }
-      
-      // Check if the user has tokens and return the last token
-      if (!user.tokens || user.tokens.length === 0) {
-        return res.status(404).json({ error: "Token not found" });
-      }
-      
-      const latestToken = user.tokens[user.tokens.length - 1].token; // Get the last token from the array
-  
-      return res.status(200).json({ token: latestToken });
-    } catch (error) {
-      res.status(500).json({ error: "Error fetching token" });
-    }
-  };
-  
+
   

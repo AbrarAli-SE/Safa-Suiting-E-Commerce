@@ -13,7 +13,9 @@ router.post("/add", authenticateUser, cartController.addToCart);
 router.put('/update', authenticateUser, cartController.updateCart);
 
 // DELETE route to remove an item from the cart
-router.delete('/remove/:itemId', authenticateUser, cartController.deleteItem)
+router.delete('/remove/:itemId', authenticateUser, cartController.deleteItem);
+
+router.post('/apply-coupon', authenticateUser, cartController.applyCoupon);
 
 // ✅ Render Checkout Page
 router.get("/checkout", authenticateUser,  cartController.renderCheckout);
