@@ -19,7 +19,7 @@ router.put("/users/update-role", authenticateUser, adminAuth, adminController.up
 
 router.put("/update-profile", authenticateUser, adminAuth, adminController.updateProfile);
 router.put("/change-password", authenticateUser, adminAuth, adminController.changePassword);
-router.put("/update-contact", authenticateUser, adminAuth, adminController.updateContactDetails);
+router.put("/update-contact", authenticateUser, adminAuth, adminController.updateContact);
 router.get("/setting", authenticateUser, adminAuth, adminController.renderSettings);
 
 
@@ -49,6 +49,8 @@ router.get("/contacts", authenticateUser, adminAuth, adminController.renderConta
 // ✅ Delete Contact Message
 router.delete("/contacts/delete", authenticateUser, adminAuth, adminController.deleteContact);
 router.post("/contacts/reply", authenticateUser, adminAuth, adminController.replyToContact);
+router.put('/update-shipping-tax', authenticateUser,adminAuth , adminController.updateShippingTax);
+router.get('/shipping-settings',authenticateUser,adminAuth , adminController.getShippingSettings);
 
 
 

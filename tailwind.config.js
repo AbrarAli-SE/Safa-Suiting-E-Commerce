@@ -1,23 +1,22 @@
 module.exports = {
   content: [
-    "./views/**/*.ejs", // Include EJS templates
-    "./public/**/*.js", // Include any JS files in the public folder
+    "./views/**/*.ejs",
+    "./public/**/*.js",
   ],
-  darkMode: 'class', // Enable class-based dark mode
+  darkMode: 'class',
   theme: {
     extend: {
-      // Custom breakpoints
       screens: {
-        'xs': '475px',   // Extra small devices (e.g., small phones)
-        'sm': '640px',   // Small devices (default Tailwind)
-        'smd': '685px',  // Custom small-medium (your original)
-        'md': '768px',   // Medium devices (default Tailwind)
-        'lg': '1024px',  // Large devices (default Tailwind)
-        'xlg': '1050px', // Custom extra-large (your original)
-        'xl': '1280px',  // Extra large (default Tailwind)
-        '2xl': '1536px', // 2x large (default Tailwind)
+        'xs': '475px',
+        'sm': '640px',
+        'smd': '685px',
+        'md': '768px',
+        'tablet': '912px', // Custom tablet breakpoint
+        'lg': '1024px',
+        'xlg': '1050px',
+        'xl': '1280px',
+        '2xl': '1536px',
       },
-      // Custom colors mapped to root variables
       colors: {
         black: 'var(--color-black)',
         white: 'var(--color-white)',
@@ -29,7 +28,6 @@ module.exports = {
         'gray-600': 'var(--color-gray-600)',
         'gray-900': 'var(--color-gray-900)',
       },
-      // Custom spacing mapped to root variables
       spacing: {
         'root-1': 'var(--spacing-1)',
         'root-2': 'var(--spacing-2)',
@@ -40,24 +38,19 @@ module.exports = {
     },
   },
   corePlugins: {
-    preflight: true, // Ensure Tailwind's base styles (including :root) are included
+    preflight: true,
   },
   plugins: [
-    require('tailwind-scrollbar'), // Scrollbar plugin
-    require('tailwindcss-animate'), // Animation plugin
-    // Custom plugin for root variables and shortcuts
+    require('tailwind-scrollbar'),
+    require('tailwindcss-animate'),
     function ({ addBase, addUtilities }) {
-      // Define root-level CSS variables
       addBase({
         ':root': {
-          // Spacing variables (in rem)
-          '--spacing-1': '0.25rem', // 4px
-          '--spacing-2': '0.5rem',  // 8px
-          '--spacing-3': '0.75rem', // 12px
-          '--spacing-4': '1rem',    // 16px
-          '--spacing-5': '1.25rem', // 20px
-
-          // Color variables (matching your usage)
+          '--spacing-1': '0.25rem',
+          '--spacing-2': '0.5rem',
+          '--spacing-3': '0.75rem',
+          '--spacing-4': '1rem',
+          '--spacing-5': '1.25rem',
           '--color-black': '#000000',
           '--color-white': '#ffffff',
           '--color-red-500': '#ff0000',
@@ -67,13 +60,11 @@ module.exports = {
           '--color-gray-500': '#6b7280',
           '--color-gray-600': '#4b5563',
           '--color-gray-900': '#111827',
-          '--color-green-500': '#22c55e', /* Matches the tailwind.config.js value */
+          '--color-green-500': '#22c55e',
         },
       });
 
-      // Define shortcut utilities
       const shortcuts = {
-        // Spacing shortcuts
         '.p-root-1': { padding: 'var(--spacing-1)' },
         '.p-root-2': { padding: 'var(--spacing-2)' },
         '.p-root-3': { padding: 'var(--spacing-3)' },
@@ -84,16 +75,12 @@ module.exports = {
         '.m-root-3': { margin: 'var(--spacing-3)' },
         '.m-root-4': { margin: 'var(--spacing-4)' },
         '.m-root-5': { margin: 'var(--spacing-5)' },
-
-        // Color shortcuts
         '.bg-black-root': { backgroundColor: 'var(--color-black)' },
         '.bg-white-root': { backgroundColor: 'var(--color-white)' },
         '.bg-red-500-root': { backgroundColor: 'var(--color-red-500)' },
         '.text-black-root': { color: 'var(--color-black)' },
         '.text-white-root': { color: 'var(--color-white)' },
         '.text-red-500-root': { color: 'var(--color-red-500)' },
-
-        // Combined shortcuts
         '.btn-red': {
           backgroundColor: 'var(--color-red-500)',
           color: 'var(--color-white)',

@@ -1,7 +1,7 @@
 const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
-
+const ShippingSettings = require('../models/Shipping'); //
 exports.addToCart = async (req, res) => {
     const { productId } = req.body;
 
@@ -84,25 +84,47 @@ exports.renderCart = async (req, res) => {
         // Fetch cart with populated product details
         const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
 
+        // Fetch shipping and tax settings
+        const shippingSettings = await ShippingSettings.findOne() || {
+            shippingOption: 'free',
+            shippingRate: 0,
+            taxRate: 0
+        };
+
         // Handle empty cart case
         if (!cart || cart.items.length === 0) {
             return res.render("cart/cart", { 
                 user: req.user,
                 cart: [],
-                totalAmount: 0 
+                totalAmount: 0,
+                shippingSettings,
+                errorMessage: null
             });
         }
 
-        // Calculate total cart amount
-        const totalAmount = cart.items.reduce((total, item) => {
-            return total + item.product.price * item.quantity;
+        // Calculate subtotal (price * quantity for all items)
+        const subtotal = cart.items.reduce((total, item) => {
+            return total + (item.product.price * item.quantity);
         }, 0);
+
+        // Calculate tax (applied to subtotal)
+        const tax = subtotal * (shippingSettings.taxRate / 100);
+
+        // Calculate shipping (applied once)
+        const shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
+
+        // Calculate total amount (subtotal + tax + shipping)
+        const totalAmount = subtotal + tax + shipping;
 
         // Render cart page with data
         res.render("cart/cart", { 
             user: req.user,
             cart: cart.items,
-            totalAmount 
+            subtotal: subtotal.toFixed(2),  // Pass subtotal separately for display
+            shippingSettings,              // Pass shipping settings for display
+            tax: tax.toFixed(2),          // Pass tax for display
+            totalAmount: totalAmount.toFixed(2),
+            errorMessage: null
         });
 
     } catch (error) {
@@ -110,12 +132,14 @@ exports.renderCart = async (req, res) => {
         res.status(500).render("cart/cart", { 
             user: req.user,
             cart: [],
+            subtotal: 0,
+            shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
+            tax: 0,
             totalAmount: 0,
             errorMessage: "Server error. Please try again."
         });
     }
 };
-
 
 exports.renderCheckout = async (req, res) => {
     // Check if user is authenticated

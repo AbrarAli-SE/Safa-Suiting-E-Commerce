@@ -12,6 +12,7 @@
   <%- include('../shared/asideBar') %>
   <%- include('../shared/adminheader') %>
 
+
   <!-- Main Content -->
   <div id="mainContent" class="p-5 w-full transition-filter duration-300 ease-in-out">
     <div class="pt-20 lg:pt-24 max-w-7xl mx-auto">
@@ -19,7 +20,7 @@
       <div id="message-container" class="mb-6"></div>
   
       <!-- Grid Layout for Forms -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <!-- Profile Update Form -->
         <div class="bg-[var(--color-white)] p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col">
           <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-6 flex items-center">
@@ -185,220 +186,350 @@
             </div>
           </form>
         </div>
+  
+        <!-- Shipping & Tax Settings Form (New Form) -->
+        <div class="bg-[var(--color-white)] p-6 rounded-xl shadow-md hover:shadow-lg transition-all duration-300 flex flex-col lg:col-span-1 md:col-span-2">
+          <h2 class="text-2xl font-semibold text-[var(--color-black)] mb-6 flex items-center">
+            <i class="bi bi-truck mr-2 text-[var(--color-red-500)]"></i> Shipping & Tax Settings
+          </h2>
+          <form id="shippingTaxForm" class="space-y-6 flex-grow">
+            <div class="space-y-4">
+              <!-- Shipping Options -->
+              <div>
+                <label class="block text-sm font-medium text-[var(--color-black)] mb-1">Shipping Option</label>
+                <select 
+                id="shippingOption" 
+                name="shippingOption" 
+                class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
+                required>
+                <option value="free" <%= shippingSettings.shippingOption === 'free' ? 'selected' : '' %>>Free Shipping</option>
+                <option value="rate" <%= shippingSettings.shippingOption === 'rate' ? 'selected' : '' %>>Fixed Rate</option>
+              </select>
+              
+              <div id="shippingRateField" class="space-y-4 <%= shippingSettings.shippingOption === 'rate' ? '' : 'hidden' %>">
+                <label for="shippingRate" class="block text-sm font-medium text-[var(--color-black)] mb-1">Shipping Rate (Rs)</label>
+                <input 
+                  type="number" 
+                  id="shippingRate" 
+                  name="shippingRate" 
+                  value="<%= shippingSettings.shippingRate || '' %>" 
+                  step="0.01" 
+                  min="0" 
+                  class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
+                  <%= shippingSettings.shippingOption === 'rate' ? 'required' : '' %> />
+              </div>
+              
+              <div>
+                <label for="taxRate" class="block text-sm font-medium text-[var(--color-black)] mb-1">Tax Rate (%)</label>
+                <input 
+                  type="number" 
+                  id="taxRate" 
+                  name="taxRate" 
+                  value="<%= shippingSettings.taxRate || '' %>" 
+                  step="0.01" 
+                  min="0" 
+                  class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300 shadow-sm hover:shadow-md" 
+                  required />
+              </div>
+            </div>
+            <div class="flex justify-end space-x-4 mt-auto">
+              <button type="reset" class="px-4 py-2 text-sm text-[var(--color-gray-600)] hover:text-[var(--color-gray-900)] transition-colors duration-300">Cancel</button>
+              <button 
+                type="submit" 
+                class="px-4 py-2 text-sm text-[var(--color-white)] bg-[var(--color-red-500)] rounded-md hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
+                Save Settings
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const messageContainer = document.getElementById('message-container');
+        let isSubmitting = false; // Prevent multiple submissions
+    
+        // Show Message Helper
+        function showMessage(text, type) {
+            if (!messageContainer) return; // Ensure container exists
+            messageContainer.innerHTML = ''; // Clear previous messages
+            const div = document.createElement('div');
+            div.className = `p-4 rounded-md text-center font-medium ${
+                type === 'success' 
+                    ? 'bg-[var(--color-green-100)] text-[var(--color-green-500)]' 
+                    : 'bg-[var(--color-red-100)] text-[var(--color-red-500)]'
+            }`;
+            div.textContent = text;
+            messageContainer.appendChild(div);
+            setTimeout(() => div.remove(), 5000);
+        }
+    
+        // Shipping & Tax Form
+        const shippingOption = document.getElementById('shippingOption');
+        const shippingRateField = document.getElementById('shippingRateField');
+        const shippingRateInput = document.getElementById('shippingRate');
+        const shippingTaxForm = document.getElementById('shippingTaxForm');
+    
+        if (shippingOption && shippingRateField && shippingRateInput) {
+            shippingOption.addEventListener('change', (e) => {
+                shippingRateField.classList.toggle('hidden', e.target.value !== 'rate');
+                shippingRateInput.toggleAttribute('required', e.target.value === 'rate');
+            });
+        }
+    
+        shippingTaxForm?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (isSubmitting) return;
+            isSubmitting = true;
+    
+            const shippingOptionValue = shippingOption.value;
+            const shippingRate = shippingOptionValue === 'rate' ? shippingRateInput.value : 0;
+            const taxRate = document.getElementById('taxRate').value;
+    
+            try {
+                if (!shippingOptionValue) throw new Error('Please select a shipping option.');
+                if (shippingOptionValue === 'rate' && (!shippingRate || shippingRate === '')) 
+                    throw new Error('Please enter a shipping rate for fixed rate shipping.');
+                if (shippingOptionValue === 'rate' && parseFloat(shippingRate) < 0) 
+                    throw new Error('Shipping rate cannot be negative.');
+                if (!taxRate || taxRate === '') throw new Error('Please enter a tax rate.');
+                if (parseFloat(taxRate) < 0) throw new Error('Tax rate cannot be negative.');
+    
+                const data = {
+                    shippingOption: shippingOptionValue,
+                    shippingRate: shippingOptionValue === 'rate' ? parseFloat(shippingRate) : 0,
+                    taxRate: parseFloat(taxRate)
+                };
+    
+                const response = await fetch('/admin/update-shipping-tax', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    credentials: 'include'
+                });
+    
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'Failed to update settings.');
+    
+                showMessage(result.message || 'Shipping and tax settings updated successfully.', 'success');
+                shippingOption.value = result.shippingSettings.shippingOption;
+                shippingRateInput.value = result.shippingSettings.shippingRate;
+                document.getElementById('taxRate').value = result.shippingSettings.taxRate;
+                shippingRateField.classList.toggle('hidden', result.shippingSettings.shippingOption !== 'rate');
+                shippingRateInput.toggleAttribute('required', result.shippingSettings.shippingOption === 'rate');
+            } catch (error) {
+                console.error('❌ Shipping/Tax Error:', error);
+                showMessage(error.message || 'Network error. Please try again.', 'error');
+            } finally {
+                isSubmitting = false;
+            }
+        });
+    
+        // Profile Form
+        const profileForm = document.getElementById('profileForm');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const welcomeMessage = document.getElementById('welcome-message');
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+    
+        function validateName() {
+            const nameValue = nameInput.value.trim();
+            if (nameValue.length === 0) {
+                nameError.classList.add('hidden');
+                return false;
+            }
+            if (nameValue.length < 3) {
+                nameError.textContent = 'Name must be at least 3 characters long.';
+                nameError.classList.remove('hidden');
+                return false;
+            }
+            nameError.classList.add('hidden');
+            return true;
+        }
+    
+        function validateEmail() {
+            const emailValue = emailInput.value.trim();
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+            if (emailValue.length === 0) {
+                emailError.classList.add('hidden');
+                return false;
+            }
+            if (!emailPattern.test(emailValue)) {
+                emailError.textContent = 'Enter a valid Gmail address.';
+                emailError.classList.remove('hidden');
+                return false;
+            }
+            emailError.classList.add('hidden');
+            return true;
+        }
+    
+        if (nameInput) nameInput.addEventListener('input', validateName);
+        if (emailInput) emailInput.addEventListener('input', validateEmail);
+    
+        profileForm?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (isSubmitting || !validateName() || !validateEmail()) return;
+            isSubmitting = true;
+    
+            const formData = new FormData(profileForm);
+            const data = Object.fromEntries(formData);
+    
+            try {
+                const response = await fetch('/admin/update-profile', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    credentials: 'include',
+                });
+    
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'An error occurred.');
+    
+                showMessage(result.message || 'Profile updated successfully.', 'success');
+                nameInput.value = result.user.name;
+                emailInput.value = result.user.email;
+                if (welcomeMessage) welcomeMessage.textContent = result.user.name;
+            } catch (error) {
+                console.error('❌ Profile Update Error:', error);
+                showMessage(error.message || 'Network error. Please try again.', 'error');
+            } finally {
+                isSubmitting = false;
+            }
+        });
+    
+        // Password Form
+        const passwordForm = document.getElementById('passwordForm');
+        const currentPassword = document.getElementById('currentPassword');
+        const newPassword = document.getElementById('newPassword');
+        const confirmPassword = document.getElementById('confirmPassword');
+        const currentPasswordError = document.getElementById('currentPasswordError');
+        const newPasswordError = document.getElementById('newPasswordError');
+        const confirmPasswordError = document.getElementById('confirmPasswordError');
+    
+        function validateCurrentPassword() {
+            const value = currentPassword.value.trim();
+            if (value.length === 0) {
+                currentPasswordError.classList.add('hidden');
+                return false;
+            }
+            currentPasswordError.classList.add('hidden');
+            return true;
+        }
+    
+        function validateNewPassword() {
+            const value = newPassword.value.trim();
+            if (value.length === 0) {
+                newPasswordError.classList.add('hidden');
+                return false;
+            }
+            if (value.length < 6) {
+                newPasswordError.textContent = 'Password must be at least 6 characters long.';
+                newPasswordError.classList.remove('hidden');
+                return false;
+            }
+            newPasswordError.classList.add('hidden');
+            return true;
+        }
+    
+        function validateConfirmPassword() {
+            const value = confirmPassword.value.trim();
+            if (value.length === 0) {
+                confirmPasswordError.classList.add('hidden');
+                return false;
+            }
+            if (value !== newPassword.value) {
+                confirmPasswordError.textContent = 'Passwords do not match.';
+                confirmPasswordError.classList.remove('hidden');
+                return false;
+            }
+            confirmPasswordError.classList.add('hidden');
+            return true;
+        }
+    
+        if (currentPassword) currentPassword.addEventListener('input', validateCurrentPassword);
+        if (newPassword) newPassword.addEventListener('input', validateNewPassword);
+        if (confirmPassword) confirmPassword.addEventListener('input', validateConfirmPassword);
+    
+        passwordForm?.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (isSubmitting || !validateCurrentPassword() || !validateNewPassword() || !validateConfirmPassword()) return;
+            isSubmitting = true;
+    
+            const formData = new FormData(passwordForm);
+            const data = Object.fromEntries(formData);
+    
+            try {
+                const response = await fetch('/admin/change-password', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    credentials: 'include',
+                });
+    
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.error || 'An error occurred.');
+    
+                showMessage(result.message || 'Password changed successfully.', 'success');
+                passwordForm.reset();
+            } catch (error) {
+                console.error('❌ Password Change Error:', error);
+                showMessage(error.message || 'Network error. Please try again.', 'error');
+            } finally {
+                isSubmitting = false;
+            }
+        });
+    
+        // Contact Form
+        const contactForm = document.getElementById('contactForm');
+        const phoneNumber = document.getElementById('phoneNumber');
+        const customerEmail = document.getElementById('customerEmail');
+        const supportEmail = document.getElementById('supportEmail');
+        const aboutUs = document.getElementById('aboutUs');
+        const city = document.getElementById('city');
+    
+        contactForm?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (isSubmitting) return;
+        isSubmitting = true;
 
-  <!-- <script type="module" src="/js/adminProfile.js"></script> -->
-   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-  const profileForm = document.getElementById("profileForm");
-  const passwordForm = document.getElementById("passwordForm");
-  const contactForm = document.getElementById("contactForm");
-  const messageContainer = document.getElementById("message-container");
-  const welcomeMessage = document.getElementById("welcome-message");
-  const nameInput = document.getElementById("name");
-  const emailInput = document.getElementById("email");
-  const currentPassword = document.getElementById("currentPassword");
-  const newPassword = document.getElementById("newPassword");
-  const confirmPassword = document.getElementById("confirmPassword");
-  const nameError = document.getElementById("nameError");
-  const emailError = document.getElementById("emailError");
-  const currentPasswordError = document.getElementById("currentPasswordError");
-  const newPasswordError = document.getElementById("newPasswordError");
-  const confirmPasswordError = document.getElementById("confirmPasswordError");
+        const formData = new FormData(contactForm);
+        const data = Object.fromEntries(formData);
 
-  // Validation Functions
-  function validateName() {
-    const nameValue = nameInput.value.trim();
-    if (nameValue.length === 0) {
-      nameError.classList.add("hidden");
-      return false;
-    }
-    if (nameValue.length < 3) {
-      nameError.textContent = "Name must be at least 3 characters long.";
-      nameError.classList.remove("hidden");
-      return false;
-    }
-    nameError.classList.add("hidden");
-    return true;
-  }
+        try {
+            const response = await fetch('/admin/update-contact', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data),
+                credentials: 'include',
+            });
 
-  function validateEmail() {
-    const emailValue = emailInput.value.trim();
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-    if (emailValue.length === 0) {
-      emailError.classList.add("hidden");
-      return false;
-    }
-    if (!emailPattern.test(emailValue)) {
-      emailError.textContent = "Enter a valid Gmail address.";
-      emailError.classList.remove("hidden");
-      return false;
-    }
-    emailError.classList.add("hidden");
-    return true;
-  }
+            const result = await response.json();
+            if (!response.ok) throw new Error(result.error || 'An error occurred.');
 
-  function validateCurrentPassword() {
-    const value = currentPassword.value.trim();
-    if (value.length === 0) {
-      currentPasswordError.classList.add("hidden");
-      return false;
-    }
-    currentPasswordError.classList.add("hidden");
-    return true;
-  }
-
-  function validateNewPassword() {
-    const value = newPassword.value.trim();
-    if (value.length === 0) {
-      newPasswordError.classList.add("hidden");
-      return false;
-    }
-    if (value.length < 6) {
-      newPasswordError.textContent = "Password must be at least 6 characters long.";
-      newPasswordError.classList.remove("hidden");
-      return false;
-    }
-    newPasswordError.classList.add("hidden");
-    return true;
-  }
-
-  function validateConfirmPassword() {
-    const value = confirmPassword.value.trim();
-    if (value.length === 0) {
-      confirmPasswordError.classList.add("hidden");
-      return false;
-    }
-    if (value !== newPassword.value) {
-      confirmPasswordError.textContent = "Passwords do not match.";
-      confirmPasswordError.classList.remove("hidden");
-      return false;
-    }
-    confirmPasswordError.classList.add("hidden");
-    return true;
-  }
-
-  // Input Listeners
-  nameInput.addEventListener("input", validateName);
-  emailInput.addEventListener("input", validateEmail);
-  currentPassword.addEventListener("input", validateCurrentPassword);
-  newPassword.addEventListener("input", validateNewPassword);
-  confirmPassword.addEventListener("input", validateConfirmPassword);
-
-  // AJAX Profile Update
-  profileForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    if (!validateName() || !validateEmail()) return;
-
-    const formData = new FormData(profileForm);
-    const data = Object.fromEntries(formData);
-
-    try {
-      const response = await fetch("/admin/update-profile", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-
-      const result = await response.json();
-      messageContainer.innerHTML = "";
-
-      if (response.ok) {
-        showMessage(result.message, "success");
-        nameInput.value = result.user.name;
-        emailInput.value = result.user.email;
-        welcomeMessage.textContent = result.user.name;
-      } else {
-        showMessage(result.error || "An error occurred.", "error");
-      }
-    } catch (error) {
-      console.error("❌ AJAX Profile Update Error:", error);
-      showMessage("Network error. Please try again.", "error");
-    }
-  });
-
-  // AJAX Password Change
-  passwordForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    if (!validateCurrentPassword() || !validateNewPassword() || !validateConfirmPassword()) return;
-
-    const formData = new FormData(passwordForm);
-    const data = Object.fromEntries(formData);
-
-    try {
-      const response = await fetch("/admin/change-password", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-
-      const result = await response.json();
-      messageContainer.innerHTML = "";
-
-      if (response.ok) {
-        showMessage(result.message, "success");
-        passwordForm.reset();
-      } else {
-        showMessage(result.error || "An error occurred.", "error");
-      }
-    } catch (error) {
-      console.error("❌ AJAX Password Change Error:", error);
-      showMessage("Network error. Please try again.", "error");
-    }
-  });
-
-  // AJAX Contact Update
-  contactForm.addEventListener("submit", async function (e) {
-    e.preventDefault();
-    const formData = new FormData(contactForm);
-    const data = Object.fromEntries(formData);
-
-    try {
-      const response = await fetch("/admin/update-contact", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-        credentials: "include",
-      });
-
-      const result = await response.json();
-      messageContainer.innerHTML = "";
-
-      if (response.ok) {
-        showMessage(result.message, "success");
-        phoneNumber.value = result.contactInfo.phoneNumber;
-        customerEmail.value = result.contactInfo.customerEmail;
-        supportEmail.value = result.contactInfo.supportEmail;
-        aboutUs.value = result.contactInfo.aboutUs;
-        city.value = result.contactInfo.city;
-      } else {
-        showMessage(result.error || "An error occurred.", "error");
-      }
-    } catch (error) {
-      console.error("❌ AJAX Contact Update Error:", error);
-      showMessage("Network error. Please try again.", "error");
-    }
-  });
-
-  // Show Message Helper
-  function showMessage(text, type) {
-    const div = document.createElement("div");
-    div.className = `p-4 rounded-md text-center font-medium ${
-      type === "success" ? "bg-[var(--color-green-100)] text-[var(--color-green-500)]" : "bg-[var(--color-red-100)] text-[var(--color-red-500)]"
-    }`;
-    div.textContent = text;
-    messageContainer.appendChild(div);
-    setTimeout(() => div.remove(), 5000);
-  }
-});
-
-
-   </script>
-   
+            showMessage(result.message || 'Contact info updated successfully.', 'success');
+            
+            // Check if contactInfo exists before updating fields
+            if (result.contactInfo && typeof result.contactInfo === 'object') {
+                phoneNumber.value = result.contactInfo.phoneNumber || '';
+                customerEmail.value = result.contactInfo.customerEmail || '';
+                supportEmail.value = result.contactInfo.supportEmail || '';
+                aboutUs.value = result.contactInfo.aboutUs || '';
+                city.value = result.contactInfo.city || '';
+            } else {
+                console.warn('Contact info not found in response:', result);
+                showMessage('Contact info updated, but response data is incomplete.', 'error');
+            }
+        } catch (error) {
+            console.error('❌ Contact Update Error:', error);
+            showMessage(error.message || 'Network error. Please try again.', 'error');
+        } finally {
+            isSubmitting = false;
+        }
+    });
+    });
+    </script>
  <!-- Link the JavaScript file -->
  <script src="/js/adminjs.js"></script>
 </body>

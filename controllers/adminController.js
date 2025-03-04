@@ -2,6 +2,7 @@ const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Wishlist = require("../models/Wishlist");
 const Contact = require("../models/Contact");
+const ShippingSettings = require('../models/Shipping'); //
 const sendEmail = require('../utils/emailConfig');
 const ContactInfo = require("../models/info");
 const bcrypt = require("bcryptjs");
@@ -424,62 +425,65 @@ exports.renderManageUsers = async (req, res) => {
     }
   };
 
-// Update Contact Details
-exports.updateContactDetails = async (req, res) => {
-  try {
-    const { phoneNumber, customerEmail, supportEmail, aboutUs, city } = req.body;
+  exports.updateContact = async (req, res) => {
+    try {
+        const { phoneNumber, customerEmail, supportEmail, aboutUs, city } = req.body;
+        
+        let contactInfo = await ContactInfo.findOne();
+        if (contactInfo) {
+            contactInfo.phoneNumber = phoneNumber;
+            contactInfo.customerEmail = customerEmail;
+            contactInfo.supportEmail = supportEmail;
+            contactInfo.aboutUs = aboutUs;
+            contactInfo.city = city;
+            await contactInfo.save();
+        } else {
+            contactInfo = await ContactInfo.create({
+                phoneNumber,
+                customerEmail,
+                supportEmail,
+                aboutUs,
+                city
+            });
+        }
 
-    if (!phoneNumber || !customerEmail || !supportEmail || !aboutUs || !city) {
-      return res.status(400).json({ error: "All fields are required" });
+        res.status(200).json({
+            message: 'Contact info updated successfully',
+            contactInfo: {
+                phoneNumber: contactInfo.phoneNumber,
+                customerEmail: contactInfo.customerEmail,
+                supportEmail: contactInfo.supportEmail,
+                aboutUs: contactInfo.aboutUs,
+                city: contactInfo.city
+            }
+        });
+    } catch (error) {
+        console.error('❌ Update Contact Error:', error);
+        res.status(500).json({ error: 'Server error while updating contact info' });
     }
-
-    let updatedContact = await ContactInfo.findOne({});
-    if (updatedContact) {
-      updatedContact = await ContactInfo.findOneAndUpdate(
-        {},
-        { phoneNumber, customerEmail, supportEmail, aboutUs, city },
-        { new: true, runValidators: true }
-      );
-    } else {
-      updatedContact = new ContactInfo({
-        phoneNumber,
-        customerEmail,
-        supportEmail,
-        aboutUs,
-        city
-      });
-      await updatedContact.save();
-    }
-
-    console.log("✅ Contact details updated:", updatedContact);
-    return res.status(200).json({
-      message: "Contact details updated successfully!",
-      contact: {
-        phoneNumber: updatedContact.phoneNumber,
-        customerEmail: updatedContact.customerEmail,
-        supportEmail: updatedContact.supportEmail,
-        aboutUs: updatedContact.aboutUs,
-        city: updatedContact.city
-      }
-    });
-  } catch (error) {
-    console.error("❌ Update Contact Error:", error);
-    return res.status(500).json({ error: "Server error. Try again." });
-  }
 };
 
 
   
-  // Render Settings Page
+
+// Render Settings Page
 exports.renderSettings = async (req, res) => {
   try {
     const user = await User.findById(req.user.userId);
     const contactInfo = await ContactInfo.findOne({}).lean(); // Fetch contact details
 
-    // Render the settings page with user and contact data
+    // Fetch shipping and tax settings from ShippingSettings (or use defaults if none exist)
+    let shippingSettings = await ShippingSettings.findOne().lean() || {
+      shippingOption: 'free', // Default to free shipping
+      shippingRate: 0,       // Default shipping rate
+      taxRate: 0,           // Default tax rate
+    };
+
+    // Render the settings page with user, contact, and shipping/tax data
     res.render("admin/setting", {
       user: user || {},
       contactInfo: contactInfo || {}, // Pass empty object if no contact exists
+      shippingSettings: shippingSettings, // Pass shipping and tax settings
       error: null,
       passwordError: null,
       passwordSuccess: null,
@@ -488,6 +492,70 @@ exports.renderSettings = async (req, res) => {
   } catch (error) {
     console.error("❌ Render Settings Error:", error);
     res.status(500).send("Server error");
+  }
+};
+
+// Add this to your controllers file (e.g., adminController.js)
+
+// Update Shipping and Tax Settings
+exports.updateShippingTax = async (req, res) => {
+  try {
+      const { shippingOption, shippingRate, taxRate } = req.body;
+
+      // Validate input
+      if (!shippingOption || (shippingOption !== 'free' && shippingOption !== 'rate')) {
+          return res.status(400).json({ error: 'Invalid shipping option' });
+      }
+      if (typeof shippingRate !== 'number' || shippingRate < 0) {
+          return res.status(400).json({ error: 'Invalid shipping rate' });
+      }
+      if (typeof taxRate !== 'number' || taxRate < 0) {
+          return res.status(400).json({ error: 'Invalid tax rate' });
+      }
+
+      // Find existing settings or create new
+      let shippingSettings = await ShippingSettings.findOne();
+      
+      if (shippingSettings) {
+          // Update existing settings
+          shippingSettings.shippingOption = shippingOption;
+          shippingSettings.shippingRate = shippingOption === 'rate' ? shippingRate : 0;
+          shippingSettings.taxRate = taxRate;
+          await shippingSettings.save();
+      } else {
+          // Create new settings
+          shippingSettings = await ShippingSettings.create({
+              shippingOption,
+              shippingRate: shippingOption === 'rate' ? shippingRate : 0,
+              taxRate
+          });
+      }
+
+      res.status(200).json({
+          message: 'Shipping and tax settings updated successfully',
+          shippingSettings: {
+              shippingOption: shippingSettings.shippingOption,
+              shippingRate: shippingSettings.shippingRate,
+              taxRate: shippingSettings.taxRate
+          }
+      });
+  } catch (error) {
+      console.error('❌ Update Shipping/Tax Error:', error);
+      res.status(500).json({ error: 'Server error while updating settings' });
+  }
+};
+
+exports.getShippingSettings = async (req, res) => {
+  try {
+    const settings = await ShippingSettings.findOne() || {
+      shippingOption: 'free',
+      shippingRate: 0,
+      taxRate: 0
+    };
+    res.json(settings);
+  } catch (error) {
+    console.error('❌ Get Shipping Settings Error:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 };
 

@@ -6,63 +6,70 @@
 
 
 @layer utilities {
-  /* Custom media query for screens up to 912px width (e.g., iPad portrait and smaller) */
+  /* Custom media query for screens up to 912px (e.g., iPad portrait and smaller) */
   @media (max-width: 912px) {
+    /* Base cart item adjustments */
     .cart-item {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: start !important;
-      justify-content: space-between !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center; /* Center all items vertically */
+      justify-content: space-between;
+      padding: 1rem; /* Consistent padding */
+      gap: 1rem; /* Add vertical gap between sections */
     }
 
-    .cart-item .flex.items-center.gap-4.w-full.sm\\:w-auto {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      gap: 1rem !important;
-      width: 100% !important;
+    /* Image and remove button container */
+    .cart-item > div:first-child {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
     }
 
-    .cart-item .flex-1.text-center.sm\\:text-left.mt-2.sm\\:mt-0 {
-      flex: 1 !important;
-      text-align: center !important;
-      margin-top: 0.5rem !important;
-      width: 100% !important;
+    /* Product details section */
+    .cart-item > div:first-child > div:nth-child(2) {
+      flex: 1;
+      text-align: center;
+      margin-top: 0.5rem;
+      width: 100%;
     }
 
-    .cart-item .flex.flex-col.sm\\:flex-row.items-center.gap-4.mt-4.sm\\:mt-0.w-full.sm\\:w-auto.justify-center.sm\\:justify-end {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      gap: 1rem !important;
-      margin-top: 1rem !important;
-      width: 100% !important;
-      justify-content: center !important;
+    /* Quantity and subtotal section */
+    .cart-item > div:last-child {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 1rem;
+      width: 100%;
+      justify-content: center;
     }
 
+    /* Image size (smaller to prevent overlap) */
     .cart-item img {
-      width: 5rem !important;
-      height: 5rem !important;
+      width: 4rem; /* Reduced from 5rem */
+      height: 4rem; /* Reduced from 5rem */
     }
 
+    /* Quantity input width */
     .cart-item .quantity-value {
-      width: 3rem !important;
-      
+      width: 3rem;
     }
 
-    .cart-item  .quantity-section{
-      margin-left: auto ;
-    }
-    /* Ensure text alignment and spacing match mobile */
-    .cart-item .flex-1.text-center {
-      text-align: center !important;
+    /* Ensure text doesn’t overflow */
+    .cart-item .flex-1 {
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
 
+    /* Center subtotal text */
     .cart-item .subtotal {
-      text-align: center !important;
+      text-align: center;
     }
   }
 
+  /* Scrollbar hide utility (unchanged) */
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
