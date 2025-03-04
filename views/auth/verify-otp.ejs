@@ -10,9 +10,7 @@
       <% if (error) { %>
         <div class="text-[var(--color-red-500)] text-center font-medium mb-4 bg-[var(--color-red-100)] p-2 rounded-md"><%= error %></div>
       <% } %>
-      <% if (success) { %>
-        <div class="text-[var(--color-green-500)] text-center font-medium mb-4 bg-[var(--color-green-100)] p-2 rounded-md"><%= success %></div>
-      <% } %>
+      
 
       <form id="otpForm" action="/auth/verify-otp" method="POST" class="space-y-6">
         <input type="hidden" name="email" value="<%= email %>">
@@ -52,7 +50,7 @@
   </div>
 
   <script src="/js/authValidation.js"></script>
-  <script src="/js/otpValidation.js"></script>
+
 </main>
 
 <%- include('../shared/footer') %>
