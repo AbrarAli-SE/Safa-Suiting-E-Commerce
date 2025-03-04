@@ -715,19 +715,6 @@ body {
   width: 100%;
 }
 
-.swiper-button-prev::after,
-  .swiper-button-next::after {
-  content: none !important;
-  /* Removes default Swiper arrows */
-}
-
-.swiper {
-  border-radius: 20px;
-  /* Adjust as needed */
-  overflow: hidden;
-  /* Prevent content from breaking the rounded corners */
-}
-
 .swiper-pagination .swiper-pagination-bullet-active {
   background-color: red !important;
 }
