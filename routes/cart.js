@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { authenticateUser, verifyUser } = require("../middleware/authMiddleware");
+const { authenticateUser } = require("../middleware/authMiddleware");
 const cartController = require("../controllers/cartController");
 
 // ✅ Cart Page Route
@@ -17,8 +17,11 @@ router.delete('/remove/:itemId', authenticateUser, cartController.deleteItem);
 
 router.post('/apply-coupon', authenticateUser, cartController.applyCoupon);
 
-// ✅ Render Checkout Page
-router.get("/checkout", authenticateUser,  cartController.renderCheckout);
+// routes/user.js
+router.post('/remove-coupon',authenticateUser, cartController.removeCoupon);
+
+
+// router.get("/checkout", authenticateUser,  cartController.renderCheckout);
 
 module.exports = router;
 

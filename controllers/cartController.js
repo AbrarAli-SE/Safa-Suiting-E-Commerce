@@ -3,6 +3,7 @@ const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const ShippingSettings = require('../models/Shipping'); //
 const Coupon = require('../models/Coupon');
+
 exports.addToCart = async (req, res) => {
     const { productId } = req.body;
 
@@ -48,29 +49,30 @@ exports.addToCart = async (req, res) => {
         }
 
         cart.totalPrice = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-        // Recalculate final total if a coupon is applied
+    
+        const shippingSettings = await ShippingSettings.findOne() || {
+            shippingOption: 'free',
+            shippingRate: 0,
+            taxRate: 0
+        };
+        let shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
+        let tax = cart.totalPrice * (shippingSettings.taxRate / 100);
+        let discount = cart.discount || 0;
+    
         if (cart.coupon) {
-            const shippingSettings = await ShippingSettings.findOne() || { shippingOption: 'free', shippingRate: 0, taxRate: 0 };
             const coupon = await Coupon.findById(cart.coupon);
-            let shippingCost = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
-            let taxRate = shippingSettings.taxRate / 100;
-            let discount = cart.discount;
-
             if (coupon) {
                 switch (coupon.coupon_type) {
-                    case 'shipping_free': shippingCost = 0; break;
-                    case 'tax_free': taxRate = 0; break;
+                    case 'shipping_free': shipping = 0; break;
+                    case 'tax_free': tax = 0; break;
                     case 'half_rate': discount = cart.totalPrice * 0.5; break;
                 }
             }
-            const tax = cart.totalPrice * taxRate;
-            cart.finalTotal = cart.totalPrice + shippingCost + tax - discount;
-        } else {
-            cart.finalTotal = cart.totalPrice; // No coupon, finalTotal = totalPrice
         }
-
+    
+        cart.finalTotal = cart.totalPrice + shipping + tax - discount;
         await cart.save();
-
+    
         return res.json({
             success: true,
             message: "Product added to cart successfully!",
@@ -85,10 +87,9 @@ exports.addToCart = async (req, res) => {
 
 
 
-// ✅ Get User Cart
-
 exports.renderCart = async (req, res) => {
-    if (!req.user) {
+    if (!req.user || !req.user.userId) {
+        console.error("User not authenticated or userId missing");
         return res.status(401).render("auth/login", { error: "Please log in to view your cart." });
     }
 
@@ -100,68 +101,75 @@ exports.renderCart = async (req, res) => {
             taxRate: 0
         };
 
-        if (!cart || cart.items.length === 0) {
+        if (!cart || !cart.items || cart.items.length === 0) {
             return res.render("cart/cart", { 
                 user: req.user,
                 cart: [],
+                subtotal: 0,
+                shipping: 0,
+                tax: 0,
                 totalAmount: 0,
                 shippingSettings,
+                appliedCoupon: null,
                 errorMessage: null
             });
         }
 
-        const subtotal = cart.totalPrice; // Use stored subtotal
-        const tax = subtotal * (shippingSettings.taxRate / 100);
-        const shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
-        const totalAmount = cart.finalTotal || (subtotal + tax + shipping); // Use stored finalTotal if available
+        const subtotal = cart.totalPrice || 0;
+        let shipping = shippingSettings.shippingOption === 'rate' ? (shippingSettings.shippingRate || 0) : 0;
+        let tax = subtotal * ((shippingSettings.taxRate || 0) / 100);
+        let discount = cart.discount || 0;
+
+        if (cart.coupon) {
+            try {
+                const coupon = await Coupon.findById(cart.coupon);
+                if (coupon) {
+                    switch (coupon.coupon_type) {
+                        case 'shipping_free': shipping = 0; break;
+                        case 'tax_free': tax = 0; break;
+                        case 'half_rate': discount = subtotal * 0.5; break;
+                        default: console.warn(`Unknown coupon type: ${coupon.coupon_type}`);
+                    }
+                    cart.discount = discount;
+                    cart.finalTotal = subtotal + shipping + tax - discount;
+                    await cart.save();
+                } else {
+                    console.warn(`Coupon not found for ID: ${cart.coupon}`);
+                }
+            } catch (couponError) {
+                console.error("Error fetching coupon:", couponError);
+            }
+        }
+
+        const totalAmount = cart.finalTotal || (subtotal + shipping + tax - discount);
 
         res.render("cart/cart", { 
             user: req.user,
             cart: cart.items,
             subtotal: subtotal.toFixed(2),
-            shippingSettings,
+            shipping: shipping.toFixed(2),
             tax: tax.toFixed(2),
             totalAmount: totalAmount.toFixed(2),
+            shippingSettings,
+            appliedCoupon: cart.appliedCouponCode || null,
             errorMessage: null
         });
 
     } catch (error) {
-        console.error("❌ Cart Page Error:", error);
+        console.error("❌ Cart Page Error:", error.message, error.stack);
         res.status(500).render("cart/cart", { 
-            user: req.user,
+            user: req.user || null,
             cart: [],
             subtotal: 0,
-            shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
+            shipping: 0,
             tax: 0,
             totalAmount: 0,
+            shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
+            appliedCoupon: null,
             errorMessage: "Server error. Please try again."
         });
     }
 };
-
-exports.renderCheckout = async (req, res) => {
-    // Check if user is authenticated
-    if (!req.user) {
-        return res.status(401).render("auth/login", { error: "Please log in to proceed to checkout." });
-    }
-
-    try {
-        // Fetch user cart with populated product details
-        const cart = await Cart.findOne({ user: req.user._id }).populate("items.product");
-
-        if (!cart || cart.items.length === 0) {
-            return res.redirect("/user/cart"); // Redirect if cart is empty
-        }
-
-        res.render("user/checkout", { user: req.user, cart: cart.items });
-
-    } catch (error) {
-        console.error("❌ Checkout Render Error:", error);
-        res.status(500).send("Server error");
-    }
-};
-
-
 
 
 exports.updateCart = async (req, res) => {
@@ -257,72 +265,48 @@ exports.deleteItem = async (req, res) => {
     }
 };
 
+
+
 exports.applyCoupon = async (req, res) => {
     try {
         const { couponCode } = req.body;
-
-        if (!req.user) {
-            return res.status(401).json({
-                success: false,
-                message: "Please log in to apply a coupon."
-            });
+        if (!req.user || !req.user.userId) {
+            console.error("User not authenticated or userId missing");
+            return res.status(401).json({ success: false, message: "Please log in to apply a coupon." });
         }
 
-        const userId = req.user.userId;
+        console.log(`Applying coupon ${couponCode} for user ${req.user.userId}`);
+
+        const cart = await Cart.findOne({ user: req.user.userId }).populate('items.product');
+        if (!cart) {
+            console.warn(`Cart not found for user ${req.user.userId}`);
+            return res.status(404).json({ success: false, message: "Cart not found" });
+        }
+        if (!cart.items || cart.items.length === 0) {
+            return res.status(400).json({ success: false, message: "Your cart is empty" });
+        }
+
+        if (cart.appliedCouponCode === couponCode) {
+            return res.status(400).json({ success: false, message: "Coupon already applied to this cart" });
+        }
 
         const coupon = await Coupon.findOne({ coupon_code: couponCode });
         if (!coupon) {
-            return res.status(404).json({
-                success: false,
-                message: "Coupon code not found or has been deleted"
-            });
+            return res.status(404).json({ success: false, message: "Invalid coupon code" });
         }
 
         const currentDate = new Date();
         if (currentDate > new Date(coupon.expiry_date)) {
-            return res.status(400).json({
-                success: false,
-                message: "This coupon has expired"
-            });
+            return res.status(400).json({ success: false, message: "This coupon has expired" });
         }
-
-        if (currentDate < new Date(coupon.start_date)) {
-            return res.status(400).json({
-                success: false,
-                message: "This coupon is not valid yet"
-            });
+        if (coupon.start_date && currentDate < new Date(coupon.start_date)) {
+            return res.status(400).json({ success: false, message: "This coupon is not valid yet" });
         }
-
-        if (coupon.usage_limit !== null && coupon.used_count >= coupon.usage_limit) {
-            return res.status(400).json({
-                success: false,
-                message: "This coupon has reached its usage limit"
-            });
+        if (coupon.usage_limit && (coupon.usage_count || 0) >= coupon.usage_limit) {
+            return res.status(400).json({ success: false, message: "This coupon has reached its usage limit" });
         }
-
-        const cart = await Cart.findOne({ user: userId }).populate('items.product');
-        if (!cart) {
-            return res.status(404).json({
-                success: false,
-                message: "Cart not found for this user"
-            });
-        }
-
-        if (cart.items.length === 0) {
-            return res.status(400).json({
-                success: false,
-                message: "Your cart is empty"
-            });
-        }
-
-        const subtotal = cart.items.reduce((sum, item) => 
-            sum + (item.price * item.quantity), 0);
-
-        if (subtotal < coupon.min_order_value) {
-            return res.status(400).json({
-                success: false,
-                message: `Minimum order value of Rs ${coupon.min_order_value} required for this coupon`
-            });
+        if (coupon.min_order_value && (cart.totalPrice || 0) < coupon.min_order_value) {
+            return res.status(400).json({ success: false, message: `Minimum order value of Rs ${coupon.min_order_value} required` });
         }
 
         const shippingSettings = await ShippingSettings.findOne() || {
@@ -331,18 +315,19 @@ exports.applyCoupon = async (req, res) => {
             taxRate: 0
         };
 
+        const subtotal = cart.totalPrice || 0;
+        let shipping = shippingSettings.shippingOption === 'rate' ? (shippingSettings.shippingRate || 0) : 0;
+        let tax = subtotal * ((shippingSettings.taxRate || 0) / 100);
         let discount = 0;
-        let shippingCost = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
-        let taxRate = shippingSettings.taxRate / 100;
         let discountMessage = "";
 
         switch (coupon.coupon_type) {
             case 'shipping_free':
-                shippingCost = 0;
+                shipping = 0;
                 discountMessage = "Free shipping applied!";
                 break;
             case 'tax_free':
-                taxRate = 0;
+                tax = 0;
                 discountMessage = "Tax-free discount applied!";
                 break;
             case 'half_rate':
@@ -350,25 +335,21 @@ exports.applyCoupon = async (req, res) => {
                 discountMessage = "50% discount applied!";
                 break;
             default:
-                return res.status(400).json({
-                    success: false,
-                    message: "Invalid coupon type"
-                });
+                console.warn(`Unknown coupon type: ${coupon.coupon_type}`);
         }
 
-        const tax = subtotal * taxRate;
-        const totalBeforeDiscount = subtotal + shippingCost + tax;
-        const total = totalBeforeDiscount - discount;
+        const total = subtotal + shipping + tax - discount;
 
-        // Update coupon usage
-        coupon.used_count = (coupon.used_count || 0) + 1;
-        await coupon.save();
+        if (!cart.coupon) {
+            coupon.usage_count = (coupon.usage_count || 0) + 1;
+            await coupon.save();
+            console.log(`Coupon ${couponCode} usage_count updated to ${coupon.usage_count}`);
+        }
 
-        // Update cart with coupon info and totals
         cart.coupon = coupon._id;
+        cart.appliedCouponCode = couponCode;
         cart.discount = discount;
-        cart.totalPrice = subtotal;  // Store subtotal as totalPrice
-        cart.finalTotal = total;     // Store final total after discount
+        cart.finalTotal = total;
         await cart.save();
 
         res.status(200).json({
@@ -376,20 +357,147 @@ exports.applyCoupon = async (req, res) => {
             message: discountMessage,
             cart: {
                 subtotal: subtotal.toFixed(2),
-                shipping: shippingCost.toFixed(2),
+                shipping: shipping.toFixed(2),
                 tax: tax.toFixed(2),
                 discount: discount.toFixed(2),
                 total: total.toFixed(2),
-                appliedCoupon: coupon.coupon_code,
+                appliedCoupon: couponCode,
                 items: cart.items
-            }
+            },
+            remainingUses: coupon.usage_limit ? coupon.usage_limit - coupon.usage_count : 'Unlimited'
         });
 
     } catch (error) {
-        console.error('Error applying coupon:', error);
-        res.status(500).json({
-            success: false,
-            message: "Server error while applying coupon"
+        console.error('Error applying coupon:', error.message, error.stack);
+        res.status(500).json({ 
+            success: false, 
+            message: "Server error while applying coupon",
+            error: error.message // Include error message for debugging
         });
     }
 };
+
+
+
+
+// Update removeCoupon to not affect usage_count
+exports.removeCoupon = async (req, res) => {
+    try {
+        if (!req.user) {
+            return res.status(401).json({ success: false, message: "Please log in to remove coupon" });
+        }
+
+        const cart = await Cart.findOne({ user: req.user.userId }).populate('items.product');
+        if (!cart) {
+            return res.status(404).json({ success: false, message: "Cart not found" });
+        }
+
+        const shippingSettings = await ShippingSettings.findOne() || {
+            shippingOption: 'free',
+            shippingRate: 0,
+            taxRate: 0
+        };
+
+        const subtotal = cart.totalPrice;
+        const shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
+        const tax = subtotal * (shippingSettings.taxRate / 100);
+        const total = subtotal + shipping + tax;
+
+        // Reset cart coupon fields without affecting coupon usage_count
+        cart.coupon = null;
+        cart.appliedCouponCode = null;
+        cart.discount = 0;
+        cart.finalTotal = total;
+        await cart.save();
+
+        res.status(200).json({
+            success: true,
+            message: "Coupon removed successfully",
+            cart: {
+                subtotal: subtotal.toFixed(2),
+                shipping: shipping.toFixed(2),
+                tax: tax.toFixed(2),
+                discount: "0.00",
+                total: total.toFixed(2),
+                appliedCoupon: null,
+                items: cart.items
+            }
+        });
+    } catch (error) {
+        console.error('Error removing coupon:', error);
+        res.status(500).json({ success: false, message: "Server error while removing coupon" });
+    }
+};
+
+
+
+
+
+
+// controllers/cartController.js
+
+// ... (other imports and existing functions remain the same)
+
+// exports.renderCheckout = async (req, res) => {
+//     if (!req.user) {
+//         return res.status(401).render("auth/login", { error: "Please log in to proceed to checkout." });
+//     }
+
+//     try {
+//         const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
+//         const shippingSettings = await ShippingSettings.findOne() || {
+//             shippingOption: 'free',
+//             shippingRate: 0,
+//             taxRate: 0
+//         };
+
+//         if (!cart || cart.items.length === 0) {
+//             return res.redirect("/cart"); // Redirect to cart if empty
+//         }
+
+//         const subtotal = cart.totalPrice;
+//         let shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
+//         let tax = subtotal * (shippingSettings.taxRate / 100);
+//         let discount = cart.discount || 0;
+
+//         if (cart.coupon) {
+//             const coupon = await Coupon.findById(cart.coupon);
+//             if (coupon) {
+//                 switch (coupon.coupon_type) {
+//                     case 'shipping_free': shipping = 0; break;
+//                     case 'tax_free': tax = 0; break;
+//                     case 'half_rate': discount = subtotal * 0.5; break;
+//                 }
+//             }
+//         }
+
+//         const totalAmount = subtotal + shipping + tax - discount;
+
+//         res.render("cart/checkout", { 
+//             user: req.user,
+//             cart: cart.items,
+//             subtotal: subtotal.toFixed(2),
+//             shipping: shipping.toFixed(2),
+//             tax: tax.toFixed(2),
+//             totalAmount: totalAmount.toFixed(2),
+//             shippingSettings,
+//             appliedCoupon: cart.appliedCouponCode
+//         });
+
+//     } catch (error) {
+//         console.error("❌ Checkout Render Error:", error);
+//         res.status(500).render("cart/cart", { 
+//             user: req.user,
+//             cart: [],
+//             subtotal: 0,
+//             shipping: 0,
+//             tax: 0,
+//             totalAmount: 0,
+//             shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
+//             appliedCoupon: null,
+//             errorMessage: "Server error. Please try again."
+//         });
+//     }
+// };
+
+// ... (rest of your existing controller functions)

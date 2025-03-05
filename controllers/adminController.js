@@ -184,10 +184,16 @@ exports.getCouponPage = async(req, res) =>{
 }
 
 // Fetch all coupons (API)
+// Optional: Add this to admin controller to check coupon usage
 exports.getCoupons = async (req, res) => {
   try {
     const coupons = await Coupon.find();
-    res.status(200).json({ coupons });
+    res.status(200).json({ 
+      coupons: coupons.map(coupon => ({
+        ...coupon._doc,
+        remaining_uses: coupon.usage_limit ? coupon.usage_limit - coupon.usage_count : 'Unlimited'
+      }))
+    });
   } catch (error) {
     console.error('Error fetching coupons:', error);
     res.status(500).json({ error: 'Server error fetching coupons' });
