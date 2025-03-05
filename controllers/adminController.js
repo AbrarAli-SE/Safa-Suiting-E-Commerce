@@ -3,7 +3,6 @@ const Cart = require("../models/Cart");
 const Wishlist = require("../models/Wishlist");
 const Contact = require("../models/Contact");
 const ShippingSettings = require('../models/Shipping'); //
-const Coupon = require('../models/Coupon');
 const sendEmail = require('../utils/emailConfig');
 const ContactInfo = require("../models/info");
 const bcrypt = require("bcryptjs");
@@ -97,9 +96,6 @@ exports.renderCoursel = async (req, res) => {
   }
 };
 
-
-
-
 exports.renderContacts = async (req, res) => {
   try {
     let page = parseInt(req.query.page) || 1;
@@ -172,84 +168,6 @@ exports.deleteContact = async (req, res) => {
   }
 };
 
-
-
-exports.getCouponPage = async(req, res) =>{
-    try {
-        res.render("admin/CouponCode");
-    } catch (error) {
-        console.error("❌ CouponCode Error:", error);
-        res.status(500).send("Server error");
-    }
-}
-
-// Fetch all coupons (API)
-// Optional: Add this to admin controller to check coupon usage
-exports.getCoupons = async (req, res) => {
-  try {
-    const coupons = await Coupon.find();
-    res.status(200).json({ 
-      coupons: coupons.map(coupon => ({
-        ...coupon._doc,
-        remaining_uses: coupon.usage_limit ? coupon.usage_limit - coupon.usage_count : 'Unlimited'
-      }))
-    });
-  } catch (error) {
-    console.error('Error fetching coupons:', error);
-    res.status(500).json({ error: 'Server error fetching coupons' });
-  }
-};
-
-// Create a new coupon (API)
-exports.createCoupon = async (req, res) => {
-  try {
-    const {
-      coupon_code,
-      coupon_type,
-      discount_amount,
-      min_order_value,
-      expiry_date,
-      start_date,
-      usage_limit
-    } = req.body;
-
-    const coupon = new Coupon({
-      coupon_code,
-      coupon_type,
-      discount_amount,
-      min_order_value,
-      expiry_date,
-      start_date,
-      usage_limit
-    });
-
-    await coupon.save();
-    res.status(201).json({ message: 'Coupon created successfully!' });
-  } catch (error) {
-    console.error('Error creating coupon:', error);
-    res.status(400).json({ error: 'Error creating coupon' });
-  }
-};
-
-
-// Delete a coupon (API)
-exports.deleteCoupon = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const coupon = await Coupon.findByIdAndDelete(id);
-
-    if (!coupon) {
-      return res.status(404).json({ message: 'Coupon not found' });
-    }
-
-    res.status(200).json({ message: 'Coupon deleted successfully!' });
-  } catch (error) {
-    console.error('Error deleting coupon:', error);
-    res.status(500).json({ error: 'Server error deleting coupon' });
-  }
-};
-
-
 exports.renderPayment = async(req, res) =>{
     try {
         res.render("admin/payment");
@@ -286,11 +204,6 @@ exports.renderAnalytical = async(req, res) =>{
         res.status(500).send("Server error");
     }
 }
-
-
-
-
-
 
 exports.renderManageUsers = async (req, res) => {
   try {
@@ -337,202 +250,190 @@ exports.renderManageUsers = async (req, res) => {
   }
 };
   
-  exports.updateUserRole = async (req, res) => {
-    try {
-      const { userId, role } = req.body;
-      const page = req.query.page || 1;
-  
-      if (!["user", "admin"].includes(role)) {
-        return res.status(400).json({ error: "Invalid role selection." });
-      }
-  
-      // Check if req.user is set by authenticateUser
-      if (!req.user || !req.user.userId) {
-        return res.status(401).json({ error: "User not authenticated. Please log in." });
-      }
-  
-      if (req.user.userId.toString() === userId) {
-        return res.status(403).json({ error: "You cannot change your own role." });
-      }
-  
-      const user = await User.findById(userId);
-      if (!user) {
-        return res.status(404).json({ error: "User not found." });
-      }
-  
-      user.role = role;
-      await user.save();
-  
-      // Fetch updated user list for the current page
-      const limit = 10;
-      const skip = (page - 1) * limit;
-      const totalUsers = await User.countDocuments();
-      const users = await User.find({}, "name email role")
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
-  
-      res.status(200).json({
-        message: `Role updated successfully for ${user.email}`,
-        users,
-        currentPage: page,
-        totalPages: Math.ceil(totalUsers / limit),
-      });
-    } catch (error) {
-      console.error("❌ Update User Role Error:", error);
-      res.status(500).json({ error: "Server error. Please try again." });
+exports.updateUserRole = async (req, res) => {
+  try {
+    const { userId, role } = req.body;
+    const page = req.query.page || 1;
+
+    if (!["user", "admin"].includes(role)) {
+      return res.status(400).json({ error: "Invalid role selection." });
     }
-  };
-  
-  
 
- exports.renderUserDetails = async (req, res) => {
-    try {
-      const userId = req.params.userId;
-      console.log("Fetching User ID:", userId);
-  
-      if (!userId || userId.length !== 24) {
-        console.error("❌ Invalid User ID Format:", userId);
-        return res.status(400).render("admin/user-details", { error: "Invalid User ID", user: null });
-      }
-  
-      const user = await User.findById(userId);
-      console.log("Found User:", user);
-  
-      if (!user) {
-        console.error("❌ User Not Found for ID:", userId);
-        return res.status(404).render("admin/user-details", { error: "User not found", user: null });
-      }
-  
-      // Fetch cart details
-      const cart = await Cart.findOne({ user: userId });
-      const cartCount = cart ? cart.items.length : 0;
-      const cartTotalPrice = cart ? cart.totalPrice : 0;
-  
-      // Fetch wishlist details
-      const wishlist = await Wishlist.findOne({ user: userId });
-      const wishlistCount = wishlist ? wishlist.items.length : 0;
-  
-      res.render("admin/user-details", {
-        user: {
-          ...user._doc,
-          cartCount,
-          cartTotalPrice,
-          wishlistCount,
-        },
-        error: null,
-      });
-    } catch (error) {
-      console.error("❌ User Details Error:", error);
-      res.status(500).render("admin/user-details", { error: "Server error", user: null });
+    // Check if req.user is set by authenticateUser
+    if (!req.user || !req.user.userId) {
+      return res.status(401).json({ error: "User not authenticated. Please log in." });
     }
-  };
 
-
-
-
-
-
-  
-  exports.updateProfile = async (req, res) => {
-    try {
-      const userId = req.user.userId;
-  
-      let user = await User.findById(userId);
-      if (!user) {
-        return res.status(404).json({ error: "User not found." });
-      }
-  
-      if (user.email !== req.body.email) {
-        const existingUser = await User.findOne({ email: req.body.email });
-        if (existingUser) {
-          return res.status(400).json({ error: "Email already in use." });
-        }
-      }
-  
-      user.name = req.body.name;
-      user.email = req.body.email;
-      await user.save();
-  
-      return res.status(200).json({
-        message: "Profile updated successfully!",
-        user: { userId: user._id, name: user.name, email: user.email, role: user.role }, // Return full user data
-      });
-    } catch (error) {
-      console.error("❌ Profile Update Error:", error);
-      return res.status(500).json({ error: "Server error. Try again." });
+    if (req.user.userId.toString() === userId) {
+      return res.status(403).json({ error: "You cannot change your own role." });
     }
-  };
-  
-  exports.changePassword = async (req, res) => {
-    try {
-      const { currentPassword, newPassword, confirmPassword } = req.body;
-      const user = await User.findById(req.user.userId);
-  
-      if (!user) {
-        return res.status(404).json({ error: "User not found." });
-      }
-  
-      const isMatch = await bcrypt.compare(currentPassword, user.password);
-      if (!isMatch) {
-        return res.status(400).json({ error: "Current password is incorrect." });
-      }
-  
-      if (newPassword !== confirmPassword) {
-        return res.status(400).json({ error: "New passwords do not match." });
-      }
-  
-      user.password = await bcrypt.hash(newPassword, 10);
-      await user.save();
-  
-      return res.status(200).json({ message: "Password changed successfully!" });
-    } catch (error) {
-      console.error("❌ Password Change Error:", error);
-      return res.status(500).json({ error: "Server error. Try again." });
-    }
-  };
 
-  exports.updateContact = async (req, res) => {
-    try {
-        const { phoneNumber, customerEmail, supportEmail, aboutUs, city } = req.body;
-        
-        let contactInfo = await ContactInfo.findOne();
-        if (contactInfo) {
-            contactInfo.phoneNumber = phoneNumber;
-            contactInfo.customerEmail = customerEmail;
-            contactInfo.supportEmail = supportEmail;
-            contactInfo.aboutUs = aboutUs;
-            contactInfo.city = city;
-            await contactInfo.save();
-        } else {
-            contactInfo = await ContactInfo.create({
-                phoneNumber,
-                customerEmail,
-                supportEmail,
-                aboutUs,
-                city
-            });
-        }
-
-        res.status(200).json({
-            message: 'Contact info updated successfully',
-            contactInfo: {
-                phoneNumber: contactInfo.phoneNumber,
-                customerEmail: contactInfo.customerEmail,
-                supportEmail: contactInfo.supportEmail,
-                aboutUs: contactInfo.aboutUs,
-                city: contactInfo.city
-            }
-        });
-    } catch (error) {
-        console.error('❌ Update Contact Error:', error);
-        res.status(500).json({ error: 'Server error while updating contact info' });
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
     }
+
+    user.role = role;
+    await user.save();
+
+    // Fetch updated user list for the current page
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const totalUsers = await User.countDocuments();
+    const users = await User.find({}, "name email role")
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.status(200).json({
+      message: `Role updated successfully for ${user.email}`,
+      users,
+      currentPage: page,
+      totalPages: Math.ceil(totalUsers / limit),
+    });
+  } catch (error) {
+    console.error("❌ Update User Role Error:", error);
+    res.status(500).json({ error: "Server error. Please try again." });
+  }
 };
 
+exports.renderUserDetails = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    console.log("Fetching User ID:", userId);
 
+    if (!userId || userId.length !== 24) {
+      console.error("❌ Invalid User ID Format:", userId);
+      return res.status(400).render("admin/user-details", { error: "Invalid User ID", user: null });
+    }
+
+    const user = await User.findById(userId);
+    console.log("Found User:", user);
+
+    if (!user) {
+      console.error("❌ User Not Found for ID:", userId);
+      return res.status(404).render("admin/user-details", { error: "User not found", user: null });
+    }
+
+    // Fetch cart details
+    const cart = await Cart.findOne({ user: userId });
+    const cartCount = cart ? cart.items.length : 0;
+    const cartTotalPrice = cart ? cart.totalPrice : 0;
+
+    // Fetch wishlist details
+    const wishlist = await Wishlist.findOne({ user: userId });
+    const wishlistCount = wishlist ? wishlist.items.length : 0;
+
+    res.render("admin/user-details", {
+      user: {
+        ...user._doc,
+        cartCount,
+        cartTotalPrice,
+        wishlistCount,
+      },
+      error: null,
+    });
+  } catch (error) {
+    console.error("❌ User Details Error:", error);
+    res.status(500).render("admin/user-details", { error: "Server error", user: null });
+  }
+};
+
+exports.updateProfile = async (req, res) => {
+  try {
+    const userId = req.user.userId;
+
+    let user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    if (user.email !== req.body.email) {
+      const existingUser = await User.findOne({ email: req.body.email });
+      if (existingUser) {
+        return res.status(400).json({ error: "Email already in use." });
+      }
+    }
+
+    user.name = req.body.name;
+    user.email = req.body.email;
+    await user.save();
+
+    return res.status(200).json({
+      message: "Profile updated successfully!",
+      user: { userId: user._id, name: user.name, email: user.email, role: user.role }, // Return full user data
+    });
+  } catch (error) {
+    console.error("❌ Profile Update Error:", error);
+    return res.status(500).json({ error: "Server error. Try again." });
+  }
+};
   
+exports.changePassword = async (req, res) => {
+try {
+  const { currentPassword, newPassword, confirmPassword } = req.body;
+  const user = await User.findById(req.user.userId);
 
+  if (!user) {
+    return res.status(404).json({ error: "User not found." });
+  }
+
+  const isMatch = await bcrypt.compare(currentPassword, user.password);
+  if (!isMatch) {
+    return res.status(400).json({ error: "Current password is incorrect." });
+  }
+
+  if (newPassword !== confirmPassword) {
+    return res.status(400).json({ error: "New passwords do not match." });
+  }
+
+  user.password = await bcrypt.hash(newPassword, 10);
+  await user.save();
+
+  return res.status(200).json({ message: "Password changed successfully!" });
+} catch (error) {
+  console.error("❌ Password Change Error:", error);
+  return res.status(500).json({ error: "Server error. Try again." });
+}
+};
+
+exports.updateContact = async (req, res) => {
+  try {
+      const { phoneNumber, customerEmail, supportEmail, aboutUs, city } = req.body;
+      
+      let contactInfo = await ContactInfo.findOne();
+      if (contactInfo) {
+          contactInfo.phoneNumber = phoneNumber;
+          contactInfo.customerEmail = customerEmail;
+          contactInfo.supportEmail = supportEmail;
+          contactInfo.aboutUs = aboutUs;
+          contactInfo.city = city;
+          await contactInfo.save();
+      } else {
+          contactInfo = await ContactInfo.create({
+              phoneNumber,
+              customerEmail,
+              supportEmail,
+              aboutUs,
+              city
+          });
+      }
+
+      res.status(200).json({
+          message: 'Contact info updated successfully',
+          contactInfo: {
+              phoneNumber: contactInfo.phoneNumber,
+              customerEmail: contactInfo.customerEmail,
+              supportEmail: contactInfo.supportEmail,
+              aboutUs: contactInfo.aboutUs,
+              city: contactInfo.city
+          }
+      });
+  } catch (error) {
+      console.error('❌ Update Contact Error:', error);
+      res.status(500).json({ error: 'Server error while updating contact info' });
+  }
+};
 // Render Settings Page
 exports.renderSettings = async (req, res) => {
   try {
@@ -561,9 +462,6 @@ exports.renderSettings = async (req, res) => {
     res.status(500).send("Server error");
   }
 };
-
-// Add this to your controllers file (e.g., adminController.js)
-
 // Update Shipping and Tax Settings
 exports.updateShippingTax = async (req, res) => {
   try {
@@ -619,13 +517,13 @@ exports.getShippingSettings = async (req, res) => {
       shippingRate: 0,
       taxRate: 0
     };
+    console.log("Settings from getShippingSettings:", settings);
     res.json(settings);
   } catch (error) {
     console.error('❌ Get Shipping Settings Error:', error);
     res.status(500).json({ error: 'Server error' });
   }
 };
-
 // Reply to contact
 exports.replyToContact = async (req, res) => {
   try {

@@ -64,18 +64,6 @@
         <div class="cart-total-section border border-[var(--color-gray-300)] rounded-lg p-6 bg-[var(--color-white)] shadow-lg w-full md:sticky md:top-24 self-start flex flex-col">
           <h2 class="text-lg xs:text-xl font-semibold text-[var(--color-black)] mb-6 text-center md:text-left">Cart Total</h2>
           
-          <div class="mb-6">
-            <div class="flex flex-col sm:flex-row gap-2">
-              <input type="text" id="couponCode" placeholder="Enter coupon code" class="w-full sm:flex-1 p-2 border border-[var(--color-gray-300)] rounded-lg text-sm focus:outline-none focus:border-[var(--color-red-500)] transition-all duration-300" <%= appliedCoupon ? 'disabled' : '' %> value="<%= appliedCoupon || '' %>">
-              <% if (appliedCoupon) { %>
-                <button id="removeCoupon" class="w-full sm:w-auto p-2 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 text-sm font-medium">Remove Coupon</button>
-              <% } else { %>
-                <button id="applyCoupon" class="w-full sm:w-auto p-2 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 text-sm font-medium">Apply Coupon</button>
-              <% } %>
-            </div>
-            <p id="couponMessage" class="text-xs text-[var(--color-gray-600)] mt-2 hidden"></p>
-          </div>
-
           <div class="space-y-4 flex-grow">
             <div class="flex justify-between items-center py-3 border-t border-[var(--color-gray-200)]">
               <span class="text-[var(--color-gray-600)] text-xs xs:text-sm sm:text-base">Subtotal:</span>
@@ -89,12 +77,6 @@
               <span class="text-[var(--color-gray-600)] text-xs xs:text-sm sm:text-base">Tax (<%= shippingSettings && shippingSettings.taxRate !== undefined ? shippingSettings.taxRate : 0 %>%):</span>
               <span id="cartTax" class="font-medium text-[var(--color-black)] text-xs xs:text-sm sm:text-base">Rs <%= tax || '0.00' %></span>
             </div>
-            <% if (appliedCoupon) { %>
-              <div class="flex justify-between items-center py-3 border-t border-[var(--color-gray-200)]">
-                <span class="text-[var(--color-gray-600)] text-xs xs:text-sm sm:text-base">Discount:</span>
-                <span id="cartDiscount" class="font-medium text-[var(--color-black)] text-xs xs:text-sm sm:text-base">Rs <%= cart && cart.discount !== undefined ? cart.discount.toFixed(2) : '0.00' %></span>
-              </div>
-            <% } %>
             <div class="flex justify-between items-center py-3 border-t border-[var(--color-gray-200)]">
               <span class="text-[var(--color-gray-600)] text-xs xs:text-sm sm:text-base">Total:</span>
               <span id="cartTotal" class="font-medium text-[var(--color-black)] text-xs xs:text-sm sm:text-base">Rs <%= totalAmount || '0.00' %></span>
@@ -106,92 +88,6 @@
     </div>
   </div>
 </main>
-
-<script>
-  document.getElementById('applyCoupon')?.addEventListener('click', async () => {
-    const couponCode = document.getElementById('couponCode').value;
-    const messageElement = document.getElementById('couponMessage');
-    const subtotalElement = document.getElementById('cartSubtotal');
-    const shippingElement = document.getElementById('cartShipping');
-    const taxElement = document.getElementById('cartTax');
-    const totalElement = document.getElementById('cartTotal');
-  
-    try {
-      const response = await fetch('/user/cart/apply-coupon', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ couponCode })
-      });
-  
-      const data = await response.json();
-  
-      if (data.success) {
-        messageElement.textContent = data.message;
-        messageElement.classList.remove('hidden', 'text-[var(--color-red-500)]');
-        messageElement.classList.add('text-[var(--color-green-500)]');
-        
-        subtotalElement.textContent = `Rs ${data.cart.subtotal || '0.00'}`;
-        shippingElement.textContent = `Rs ${data.cart.shipping || '0.00'}`;
-        taxElement.textContent = `Rs ${data.cart.tax || '0.00'}`;
-        totalElement.textContent = `Rs ${data.cart.total || '0.00'}`;
-        
-        window.location.reload();
-      } else {
-        messageElement.textContent = data.message;
-        messageElement.classList.remove('hidden', 'text-[var(--color-green-500)]');
-        messageElement.classList.add('text-[var(--color-red-500)]');
-      }
-  
-      setTimeout(() => messageElement.classList.add('hidden'), 5000);
-    } catch (error) {
-      console.error('Frontend error applying coupon:', error);
-      messageElement.textContent = 'Error applying coupon: ' + error.message;
-      messageElement.classList.remove('hidden', 'text-[var(--color-green-500)]');
-      messageElement.classList.add('text-[var(--color-red-500)]');
-    }
-  });
-  
-  document.getElementById('removeCoupon')?.addEventListener('click', async () => {
-    const messageElement = document.getElementById('couponMessage');
-    const subtotalElement = document.getElementById('cartSubtotal');
-    const shippingElement = document.getElementById('cartShipping');
-    const taxElement = document.getElementById('cartTax');
-    const totalElement = document.getElementById('cartTotal');
-  
-    try {
-      const response = await fetch('/user/cart/remove-coupon', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-  
-      const data = await response.json();
-  
-      if (data.success) {
-        messageElement.textContent = data.message;
-        messageElement.classList.remove('hidden', 'text-[var(--color-red-500)]');
-        messageElement.classList.add('text-[var(--color-green-500)]');
-        
-        subtotalElement.textContent = `Rs ${data.cart.subtotal || '0.00'}`;
-        shippingElement.textContent = `Rs ${data.cart.shipping || '0.00'}`;
-        taxElement.textContent = `Rs ${data.cart.tax || '0.00'}`;
-        totalElement.textContent = `Rs ${data.cart.total || '0.00'}`;
-        
-        window.location.reload();
-      } else {
-        messageElement.textContent = data.message;
-        messageElement.classList.remove('hidden', 'text-[var(--color-green-500)]');
-        messageElement.classList.add('text-[var(--color-red-500)]');
-      }
-  
-      setTimeout(() => messageElement.classList.add('hidden'), 5000);
-    } catch (error) {
-      console.error('Frontend error removing coupon:', error);
-      messageElement.textContent = 'Error removing coupon: ' + error.message;
-      messageElement.classList.remove('hidden', 'text-[var(--color-green-500)]');
-      messageElement.classList.add('text-[var(--color-red-500)]');
-    }
-  });
-</script>
 
 <%- include('../shared/footer') %>
 <script type="module" src="/js/updateCart.js"></script>

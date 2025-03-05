@@ -23,10 +23,6 @@ router.put("/update-contact", authenticateUser, adminAuth, adminController.updat
 router.get("/setting", authenticateUser, adminAuth, adminController.renderSettings);
 
 
-router.get("/coupon-code",authenticateUser,adminAuth, adminController.getCouponPage);
-router.get('/coupons', authenticateUser,adminAuth, adminController.getCoupons);
-router.post('/coupons/create', authenticateUser,adminAuth, adminController.createCoupon);
-router.delete('/coupons/delete/:id', authenticateUser,adminAuth, adminController.deleteCoupon);
 
 
 router.get("/payment",authenticateUser,adminAuth, adminController.renderPayment);

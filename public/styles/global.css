@@ -972,6 +972,10 @@ body {
   margin-top: 5rem;
 }
 
+.mt-28 {
+  margin-top: 7rem;
+}
+
 .mt-3 {
   margin-top: 0.75rem;
 }
@@ -2556,10 +2560,6 @@ body {
   color: var(--color-white);
 }
 
-.focus\:border-\[var\(--color-red-500\)\]:focus {
-  border-color: var(--color-red-500);
-}
-
 .focus\:outline-none:focus {
   outline: 2px solid transparent;
   outline-offset: 2px;
@@ -2753,10 +2753,6 @@ body {
     width: auto;
   }
 
-  .sm\:flex-1 {
-    flex: 1 1 0%;
-  }
-
   .sm\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -2783,29 +2779,6 @@ body {
   .sm\:text-lg {
     font-size: 1.125rem;
     line-height: 1.75rem;
-  }
-
-  @media (max-width: 912px) {
-    /* Base cart item adjustments */
-
-    /* Image and remove button container */
-
-    /* Product details section */
-
-    /* Quantity and subtotal section */
-
-    /* Image size (smaller to prevent overlap) */
-
-    /* Quantity input width */
-
-    /* Ensure text doesn’t overflow */
-
-    .cart-item .sm\:flex-1 {
-      overflow-wrap: break-word;
-      word-break: break-word;
-    }
-
-    /* Center subtotal text */
   }
 }
 
