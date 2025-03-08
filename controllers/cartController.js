@@ -274,3 +274,32 @@ exports.processCheckout = async (req, res) => {
         });
     }
 };
+
+
+exports.renderOrderConfirmation = async (req, res) => {
+    if (!req.user?.userId) return res.status(401).render("auth/login", { error: "Please log in to view your order confirmation." });
+
+    try {
+        const order = await Order.findOne({ user: req.user.userId }).sort({ createdAt: -1 }).populate("items.product");
+        if (!order) {
+            return res.status(404).render("order-confirmation", {
+                user: req.user,
+                order: null,
+                errorMessage: "No recent order found."
+            });
+        }
+
+        res.render("order-confirmation", {
+            user: req.user,
+            order,
+            errorMessage: null
+        });
+    } catch (error) {
+        console.error("❌ Order Confirmation Error:", error.message);
+        res.status(500).render("order-confirmation", {
+            user: req.user || null,
+            order: null,
+            errorMessage: "Server error. Please try again."
+        });
+    }
+};

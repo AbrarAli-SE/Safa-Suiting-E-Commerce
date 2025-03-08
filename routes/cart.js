@@ -19,6 +19,9 @@ router.get('/checkout',authenticateUser, cartController.checkoutCart);
 router.post('/checkout',authenticateUser, cartController.processCheckout);
 
 
+router.get('/order-confirmation',authenticateUser, cartController.renderOrderConfirmation);
+
+
 
 // router.get("/checkout", authenticateUser,  cartController.renderCheckout);
 
