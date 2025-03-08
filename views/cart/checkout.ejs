@@ -15,7 +15,7 @@
             name="firstName" 
             required 
             class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
-          <div id="firstNameError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">First name is required.</div>
+          <div id="firstNameError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
         </div>
 
         <!-- Street Address -->
@@ -27,7 +27,7 @@
             name="streetAddress" 
             required 
             class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
-          <div id="streetAddressError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">Street address is required.</div>
+          <div id="streetAddressError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
         </div>
 
         <!-- Apartment/Floor (Optional) -->
@@ -50,7 +50,7 @@
             name="townCity" 
             required 
             class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
-          <div id="townCityError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">Town/City is required.</div>
+          <div id="townCityError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
         </div>
 
         <!-- Phone Number -->
@@ -62,7 +62,7 @@
             name="phoneNumber" 
             required 
             class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
-          <div id="phoneNumberError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">Phone number is required.</div>
+          <div id="phoneNumberError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
         </div>
 
         <!-- Email Address -->
@@ -74,7 +74,7 @@
             name="emailAddress" 
             required 
             class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] text-[var(--color-black)] transition-all duration-300 shadow-sm hover:shadow-md" />
-          <div id="emailAddressError" class="text-[var(--color-red-500)] text-sm mt-1 hidden">Valid email address is required.</div>
+          <div id="emailAddressError" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
         </div>
 
         <!-- Save Info Checkbox -->
@@ -99,9 +99,9 @@
             <div class="flex items-center justify-between py-4 border-b border-[var(--color-gray-200)]">
               <div class="flex items-center gap-4">
                 <img src="<%= item.product.image %>" alt="<%= item.product.name %>" class="w-12 h-12 object-cover rounded">
-                <span class="text-[var(--color-black)]"><%= item.product.name %></span>
+                <span class="text-[var(--color-black)]"><%= item.product.name %> (x<%= item.quantity || 1 %>)</span>
               </div>
-              <span class="font-medium text-[var(--color-black)]">Rs <%= (item.price * (item.quantity || 1)) %></span>
+              <span class="font-medium text-[var(--color-black)]">Rs <%= (item.price * (item.quantity || 1)).toFixed(2) %></span>
             </div>
           <% }) %>
 
@@ -109,57 +109,35 @@
           <div class="space-y-3 py-4">
             <div class="flex justify-between">
               <span class="text-[var(--color-gray-600)]">Subtotal:</span>
-              <span class="font-medium text-[var(--color-black)]">Rs <%= cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0) %></span>
+              <span class="font-medium text-[var(--color-black)]">Rs <%= subtotal %></span>
             </div>
             <div class="flex justify-between">
               <span class="text-[var(--color-gray-600)]">Shipping:</span>
-              <span class="font-medium text-[var(--color-black)]">Free</span>
+              <span class="font-medium text-[var(--color-black)]">Rs <%= shipping %></span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-[var(--color-gray-600)]">Tax:</span>
+              <span class="font-medium text-[var(--color-black)]">Rs <%= tax %></span>
             </div>
             <div class="flex justify-between pt-3 border-t border-[var(--color-gray-200)]">
               <span class="text-[var(--color-gray-600)]">Total:</span>
-              <span class="font-medium text-[var(--color-black)]">Rs <%= cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0) %></span>
+              <span class="font-medium text-[var(--color-black)]">Rs <%= totalAmount %></span>
             </div>
           </div>
 
-          <!-- Payment Methods -->
+          <!-- Payment Method -->
           <div class="space-y-4 py-4 border-t border-[var(--color-gray-200)]">
-            <div class="flex items-center gap-3">
-              <input 
-                type="radio" 
-                id="bank" 
-                name="payment" 
-                value="bank" 
-                class="w-4 h-4 text-[var(--color-red-500)] border-[var(--color-gray-300)] focus:ring-[var(--color-red-500)]" />
-              <label for="bank" class="flex items-center gap-2 text-[var(--color-black)]">
-                Bank
-                <div class="flex gap-2">
-                  <img src="/visa.png" alt="Visa" class="h-6">
-                  <img src="/mastercard.png" alt="Mastercard" class="h-6">
-                  <img src="/bkash.png" alt="bKash" class="h-6">
-                </div>
-              </label>
-            </div>
             <div class="flex items-center gap-3">
               <input 
                 type="radio" 
                 id="cash" 
                 name="payment" 
                 value="cash" 
-                class="w-4 h-4 text-[var(--color-red-500)] border-[var(--color-gray-300)] focus:ring-[var(--color-red-500)]" />
+                class="w-4 h-4 text-[var(--color-red-500)] border-[var(--color-gray-300)] focus:ring-[var(--color-red-500)]" 
+                checked 
+                readonly />
               <label for="cash" class="text-[var(--color-black)]">Cash on Delivery</label>
             </div>
-          </div>
-
-          <!-- Coupon -->
-          <div class="flex gap-4 py-4">
-            <input 
-              type="text" 
-              placeholder="Coupon Code" 
-              class="flex-1 p-3 bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-md focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)] transition-all duration-300" />
-            <button 
-              class="px-6 py-3 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg">
-              Apply Coupon
-            </button>
           </div>
 
           <!-- Place Order Button -->

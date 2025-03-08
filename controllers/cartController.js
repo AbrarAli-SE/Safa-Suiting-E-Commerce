@@ -3,6 +3,7 @@ const User = require("../models/User");
 const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const ShippingSettings = require('../models/Shipping');
+const Order = require("../models/Order");
 
 exports.addToCart = async (req, res) => {
     const { productId } = req.body;
@@ -170,3 +171,106 @@ async function updateCartTotals(cart) {
     cart.tax = cart.totalPrice * (shippingSettings.taxRate / 100);
     cart.finalTotal = cart.totalPrice + cart.shipping + cart.tax;
 }
+
+
+
+exports.checkoutCart = async (req, res) => {
+    if (!req.user?.userId) return res.status(401).render("auth/login", { error: "Please log in to checkout." });
+
+    try {
+        const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
+        const shippingSettings = await ShippingSettings.findOne() || { shippingOption: 'free', shippingRate: 0, taxRate: 0 };
+
+        if (!cart?.items?.length) {
+            return res.redirect("/user/cart");
+        }
+
+        const subtotal = cart.totalPrice;
+        const shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
+        const tax = subtotal * (shippingSettings.taxRate / 100);
+        const totalAmount = subtotal + shipping + tax;
+
+        res.render("cart/checkout", {
+            user: req.user,
+            cart: cart.items,
+            subtotal: subtotal.toFixed(2),
+            shipping: shipping.toFixed(2),
+            tax: tax.toFixed(2),
+            totalAmount: totalAmount.toFixed(2),
+            shippingSettings,
+            errorMessage: null
+        });
+    } catch (error) {
+        console.error("❌ Checkout Page Error:", error.message);
+        res.status(500).render("cart/checkout", {
+            user: req.user || null,
+            cart: [],
+            subtotal: 0,
+            shipping: 0,
+            tax: 0,
+            totalAmount: 0,
+            shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
+            errorMessage: "Server error. Please try again."
+        });
+    }
+};
+
+exports.processCheckout = async (req, res) => {
+    if (!req.user?.userId) return res.status(401).json({ success: false, message: "Please log in to checkout." });
+
+    try {
+        const { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress, saveInfo } = req.body;
+        const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
+        const shippingSettings = await ShippingSettings.findOne() || { shippingOption: 'free', shippingRate: 0, taxRate: 0 };
+
+        if (!cart?.items?.length) {
+            return res.status(400).json({ success: false, message: "Cart is empty." });
+        }
+
+        const subtotal = cart.totalPrice;
+        const shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
+        const tax = subtotal * (shippingSettings.taxRate / 100);
+        const totalAmount = subtotal + shipping + tax;
+
+        // Create new order
+        const order = new Order({
+            user: req.user.userId,
+            items: cart.items.map(item => ({
+                product: item.product._id,
+                name: item.product.name,
+                price: item.price,
+                quantity: item.quantity
+            })),
+            billingInfo: { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress },
+            paymentMethod: 'cash',
+            subtotal,
+            shipping,
+            tax,
+            totalAmount
+        });
+
+        // Save billing info to user if requested
+        if (saveInfo) {
+            const user = await User.findById(req.user.userId);
+            user.billingInfo = { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress };
+            await user.save();
+        }
+
+        await order.save();
+        await Cart.deleteOne({ user: req.user.userId });
+
+        res.redirect("/order-confirmation");
+    } catch (error) {
+        console.error("Process Checkout Error:", error);
+        res.status(500).render("cart/checkout", {
+            user: req.user || null,
+            cart: [],
+            subtotal: 0,
+            shipping: 0,
+            tax: 0,
+            totalAmount: 0,
+            shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
+            errorMessage: "Server error. Please try again."
+        });
+    }
+};

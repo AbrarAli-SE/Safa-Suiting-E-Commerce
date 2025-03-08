@@ -1,4 +1,3 @@
-// models/User.js
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
@@ -14,7 +13,7 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: false, // Changed to false to support Google OAuth users
+      required: true, // Changed to false to support Google OAuth users
     },
     role: {
       type: String,
@@ -36,6 +35,14 @@ const userSchema = new mongoose.Schema(
     lastActive: {
       type: Date,
       default: null, // Updated when user logs in or performs actions
+    },
+    billingInfo: {
+      firstName: { type: String },
+      streetAddress: { type: String },
+      apartment: { type: String },
+      townCity: { type: String },
+      phoneNumber: { type: String },
+      emailAddress: { type: String }
     }
   },
   { timestamps: true } // Adds createdAt & updatedAt
