@@ -6,7 +6,6 @@ const shippingSettingsSchema = new mongoose.Schema({
     taxRate: { type: Number, default: 0, min: 0, required: true },
 }, { 
     timestamps: true,
-    collection: 'ShippingSettings' // Explicitly specify the collection name
 });
 
 module.exports = mongoose.model('ShippingSettings', shippingSettingsSchema);
