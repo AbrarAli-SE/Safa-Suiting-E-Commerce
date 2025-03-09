@@ -103,7 +103,7 @@ app.use('/user', userRoutes);
 // app.use("/api", productRoutes); // Prefix API routes with '/api'
 app.use("/user/wishlist", wishlistRoutes); // ✅ Wishlist Routes
 app.use("/user/cart", cartRoutes); // ✅ Cart Routes
-app.use("/user/order", orderRoutes); // ✅ Cart Routes
+app.use("/user/orders", orderRoutes); // ✅ Cart Routes
 // ✅ Ensures `/pages/contact` and `/pages/about` are accessible for all users
 app.use("/pages", pageRoutes);
 app.use('/admin', adminRoutes);
@@ -111,9 +111,6 @@ app.use('/admin/product', productRoutes);
 // ✅ Routes
 
 
-// app.get("/admin", verifyToken, (req, res) => {
-//   res.render("admin/intro");
-// });
 
   // 404 error handling
   app.use((req, res, next) => {

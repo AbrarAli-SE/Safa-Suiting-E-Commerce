@@ -4,6 +4,13 @@
   <div class="max-w-7xl mx-auto">
     <h1 class="text-3xl font-bold text-[var(--color-black)] mb-6 text-center">Your Orders</h1>
 
+    <!-- Cancellation Policy Note -->
+    <div class="bg-[var(--color-gray-50)] p-4 rounded-lg mb-6 text-center text-[var(--color-gray-600)] border border-[var(--color-red-500)]">
+      <p class="text-sm">
+        <strong>Note:</strong> You can cancel your order within 5 hours of placing it or until a tracking ID is assigned, whichever comes first.
+      </p>
+    </div>
+
     <% if (errorMessage) { %>
       <p class="text-[var(--color-red-500)] text-lg mb-6 text-center"><%= errorMessage %></p>
     <% } else if (orders.length > 0) { %>
@@ -44,9 +51,63 @@
                 <p class="text-[var(--color-gray-600)]">Phone: <%= order.billingInfo.phoneNumber %></p>
                 <p class="text-[var(--color-gray-600)]">Email: <%= order.billingInfo.emailAddress %></p>
                 <p class="text-[var(--color-gray-600)]">Payment Method: <%= order.paymentMethod %></p>
+                <p class="text-[var(--color-gray-600)]">Status: <%= order.status %></p>
+              </div>
+
+              <!-- Cancellation Timer and Button -->
+              <div class="mt-4 flex items-center justify-between" id="cancel-section-<%= order.orderId %>">
+                <% 
+                  const orderTime = new Date(order.createdAt).getTime();
+                  const fiveHoursLater = orderTime + (5 * 60 * 60 * 1000);
+                  const now = Date.now();
+                  const timeLeft = fiveHoursLater - now;
+                %>
+                <% if (timeLeft > 0 && order.status === 'pending') { %>
+                  <div>
+                    <span class="text-[var(--color-gray-600)]">Time to cancel: </span>
+                    <span id="timer-<%= order.orderId %>" class="text-[var(--color-red-500)] font-medium"></span>
+                  </div>
+                  <button 
+                    id="cancel-btn-<%= order.orderId %>"
+                    class="btn-red px-4 py-2 text-sm"
+                    onclick="cancelOrder('<%= order.orderId %>')"
+                  >
+                    Cancel Order
+                  </button>
+                <% } %>
               </div>
             </div>
           </div>
+
+          <!-- Timer Script for Each Order -->
+          <% if (timeLeft > 0 && order.status === 'pending') { %>
+            <script>
+              (function() {
+                const orderId = '<%= order.orderId %>';
+                const endTime = <%= fiveHoursLater %>;
+                const timerElement = document.getElementById(`timer-${orderId}`);
+                const cancelSection = document.getElementById(`cancel-section-${orderId}`);
+
+                function updateTimer() {
+                  const now = Date.now();
+                  const timeLeft = endTime - now;
+
+                  if (timeLeft <= 0) {
+                    cancelSection.innerHTML = '<p class="text-[var(--color-gray-600)]">Cancellation period has expired.</p>';
+                    return;
+                  }
+
+                  const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                  timerElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
+                }
+
+                updateTimer();
+                setInterval(updateTimer, 1000);
+              })();
+            </script>
+          <% } %>
         <% }) %>
       </div>
     <% } else { %>
@@ -54,9 +115,38 @@
     <% } %>
 
     <div class="text-center mt-8">
+      <a href="/user/orders/cancelled-orders" class="btn-red inline-block mr-4">View Cancelled Orders</a>
       <a href="/" class="btn-red inline-block">Continue Shopping</a>
     </div>
   </div>
 </main>
 
 <%- include('../shared/footer') %>
+
+<script>
+  function cancelOrder(orderId) {
+    if (confirm(`Are you sure you want to cancel order ${orderId}?`)) {
+      fetch(`/user/orders/orders/cancel/${orderId}`, { // Updated to match /user/orders
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' }
+      })
+      .then(response => {
+        console.log(`Response status for ${orderId}: ${response.status}`);
+        return response.json();
+      })
+      .then(data => {
+        console.log('Response data:', data);
+        if (data.success) {
+          alert('Order cancelled successfully!');
+          location.reload();
+        } else {
+          alert(data.message || 'Failed to cancel order.');
+        }
+      })
+      .catch(error => {
+        console.error('Error cancelling order:', error);
+        alert('An error occurred while cancelling the order.');
+      });
+    }
+  }
+</script>

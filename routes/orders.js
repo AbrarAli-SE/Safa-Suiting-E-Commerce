@@ -1,9 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const orderController = require("../controllers/orderController"); // ✅ Fix Typo
-const {authenticateUser , verifyUser } = require("../middleware/authMiddleware");
+const { authenticateUser, verifyUser } = require("../middleware/authMiddleware");
+const orderController = require("../controllers/orderController");
 
-// Orders History Route
-router.get("/orders", authenticateUser,verifyUser, orderController.renderOrders);
+// Order Routes
+router.get("/orders", authenticateUser, verifyUser, orderController.renderOrders);
+router.delete("/orders/cancel/:orderId", authenticateUser, verifyUser, orderController.cancelOrder);
+router.get("/cancelled-orders", authenticateUser, verifyUser, orderController.renderCancelledOrders);
 
 module.exports = router;
