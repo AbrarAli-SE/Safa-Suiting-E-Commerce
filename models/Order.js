@@ -6,6 +6,11 @@ const orderSchema = new mongoose.Schema({
         ref: 'User',
         required: true
     },
+    orderId: {
+        type: String,
+        required: true,
+        unique: true // Ensures no duplicate order IDs
+    },
     items: [{
         product: {
             type: mongoose.Schema.Types.ObjectId,
@@ -45,6 +50,6 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now
     }
-});
+}, { timestamps: true }); // Adds createdAt and updatedAt automatically
 
 module.exports = mongoose.model('Order', orderSchema);

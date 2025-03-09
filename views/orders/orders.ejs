@@ -1,0 +1,62 @@
+<%- include('../shared/header') %>
+
+<main class="container mx-auto px-4 py-12 mt-14">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold text-[var(--color-black)] mb-6 text-center">Your Orders</h1>
+
+    <% if (errorMessage) { %>
+      <p class="text-[var(--color-red-500)] text-lg mb-6 text-center"><%= errorMessage %></p>
+    <% } else if (orders.length > 0) { %>
+      <div class="space-y-6">
+        <% orders.forEach(order => { %>
+          <div class="bg-[var(--color-gray-50)] p-6 rounded-lg card-shadow border-l-4 border-[var(--color-red-500)]">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl font-semibold text-[var(--color-red-500)]">Order ID = <%= order.orderId %></h2>
+              <span class="text-[var(--color-gray-600)] text-sm"><%= new Date(order.createdAt).toLocaleDateString() %></span>
+            </div>
+            <div class="space-y-4">
+              <% order.items.forEach(item => { %>
+                <div class="flex justify-between py-2 border-b border-[var(--color-gray-200)]">
+                  <span class="text-[var(--color-black)]"><%= item.name %> (x<%= item.quantity %>)</span>
+                  <span class="font-medium text-[var(--color-black)]">Rs <%= (item.price * item.quantity).toFixed(2) %></span>
+                </div>
+              <% }) %>
+              <div class="space-y-2 pt-4">
+                <div class="flex justify-between">
+                  <span class="text-[var(--color-gray-600)]">Subtotal:</span>
+                  <span class="font-medium text-[var(--color-black)]">Rs <%= order.subtotal.toFixed(2) %></span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--color-gray-600)]">Shipping:</span>
+                  <span class="font-medium text-[var(--color-black)]">Rs <%= order.shipping.toFixed(2) %></span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-[var(--color-gray-600)]">Tax:</span>
+                  <span class="font-medium text-[var(--color-black)]">Rs <%= order.tax.toFixed(2) %></span>
+                </div>
+                <div class="flex justify-between pt-2 border-t border-[var(--color-gray-200)]">
+                  <span class="text-[var(--color-gray-600)]">Total:</span>
+                  <span class="font-medium text-[var(--color-red-500)]">Rs <%= order.totalAmount.toFixed(2) %></span>
+                </div>
+              </div>
+              <div class="mt-4">
+                <p class="text-[var(--color-gray-600)]">Billing Address: <%= order.billingInfo.streetAddress %>, <%= order.billingInfo.townCity %></p>
+                <p class="text-[var(--color-gray-600)]">Phone: <%= order.billingInfo.phoneNumber %></p>
+                <p class="text-[var(--color-gray-600)]">Email: <%= order.billingInfo.emailAddress %></p>
+                <p class="text-[var(--color-gray-600)]">Payment Method: <%= order.paymentMethod %></p>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <p class="text-[var(--color-gray-600)] text-lg text-center">You have no orders yet.</p>
+    <% } %>
+
+    <div class="text-center mt-8">
+      <a href="/" class="btn-red inline-block">Continue Shopping</a>
+    </div>
+  </div>
+</main>
+
+<%- include('../shared/footer') %>

@@ -1567,6 +1567,10 @@ body {
   border-top-width: 1px;
 }
 
+.border-l-4 {
+  border-left-width: 4px;
+}
+
 .border-dashed {
   border-style: dashed;
 }
@@ -2321,6 +2325,18 @@ body {
 
 .p-root-5 {
   padding: var(--spacing-5);
+}
+
+.btn-red {
+  background-color: var(--color-red-500);
+  color: var(--color-white);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: 0.5rem;
+  transition: background-color 0.3s ease;
+}
+
+.btn-red:hover {
+  background-color: var(--color-red-700);
 }
 
 .card-shadow {

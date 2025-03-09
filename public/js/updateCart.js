@@ -1,4 +1,4 @@
-import { removeFromCart, updateCartQuantity } from './localStorage-cart.js';
+import { removeFromCart, updateCartQuantity, clearCart } from './localStorage-cart.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
     try {
@@ -12,6 +12,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         const cartShipping = document.getElementById('cartShipping');
         const cartTax = document.getElementById('cartTax');
         const cartTotal = document.getElementById('cartTotal');
+
+        // Check if we're on the order confirmation page
+        if (window.location.pathname === '/user/cart/order-confirmation') {
+            clearCart(); // Clear localStorage cart on order confirmation
+            return; // Exit early since this is not the cart page
+        }
 
         if (!cartItems.length && !updateCartButton && !cartSubtotal) return console.warn("No cart elements found.");
 

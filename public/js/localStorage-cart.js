@@ -1,5 +1,3 @@
-// public/js/localStorage-cart.js
-
 function getCart() {
   try {
     return JSON.parse(localStorage.getItem("cart")) || [];
@@ -14,6 +12,16 @@ function setCart(cart) {
     localStorage.setItem("cart", JSON.stringify(cart));
   } catch (error) {
     console.error("Error setting cart in localStorage:", error);
+  }
+}
+
+function clearCart() {
+  try {
+    localStorage.removeItem("cart");
+    console.log("Cart cleared from localStorage.");
+    updateCartQuantity(); // Update UI to reflect empty cart
+  } catch (error) {
+    console.error("Error clearing cart from localStorage:", error);
   }
 }
 
@@ -66,7 +74,7 @@ async function updateCartQuantity() {
     if (cartIcon) {
       const cartQuantity = cartIcon.querySelector("#js-cart-quantity");
       if (cartQuantity) {
-        const cartQuantityValue = cart.reduce((sum, item) => sum + item.quantity , 0);
+        const cartQuantityValue = cart.reduce((sum, item) => sum + item.quantity, 0);
         cartQuantity.textContent = cartQuantityValue > 0 ? cartQuantityValue : '';
         console.log("Cart quantity updated to:", cartQuantityValue);
       } else {
@@ -81,4 +89,4 @@ async function updateCartQuantity() {
   }
 }
 
-export { getCart, setCart, addToCart, removeFromCart, updateCartQuantity };
+export { getCart, setCart, addToCart, removeFromCart, updateCartQuantity, clearCart };

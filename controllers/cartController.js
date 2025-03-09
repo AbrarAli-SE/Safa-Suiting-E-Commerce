@@ -4,6 +4,14 @@ const Cart = require("../models/Cart");
 const Product = require("../models/Product");
 const ShippingSettings = require('../models/Shipping');
 const Order = require("../models/Order");
+const sendEmail = require("../utils/emailConfig"); // Import your email utility
+
+
+// Generate a random 6-digit order ID
+function generateOrderId() {
+    const randomNum = Math.floor(100000 + Math.random() * 900000); // 6-digit random number
+    return `ORD-${randomNum}`;
+}
 
 exports.addToCart = async (req, res) => {
     const { productId } = req.body;
@@ -215,9 +223,59 @@ exports.checkoutCart = async (req, res) => {
     }
 };
 
-exports.processCheckout = async (req, res) => {
-    if (!req.user?.userId) return res.status(401).json({ success: false, message: "Please log in to checkout." });
 
+
+
+
+// Helper function to format order details as HTML for email
+function generateOrderEmail(order) {
+    const itemsHtml = order.items.map(item => `
+        <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.name}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;">${item.quantity}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;">Rs ${item.price.toFixed(2)}</td>
+            <td style="padding: 8px; border-bottom: 1px solid #ddd;">Rs ${(item.price * item.quantity).toFixed(2)}</td>
+        </tr>
+    `).join('');
+
+    return `
+        <html>
+        <body style="font-family: Arial, sans-serif; color: #333;">
+            <h2 style="color: #ff0000;">Order Confirmation - ${order.orderId}</h2>
+            <p>Thank you for your order! Below are the details:</p>
+            <h3>Order Details</h3>
+            <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                <thead>
+                    <tr style="background-color: #f9fafb;">
+                        <th style="padding: 8px; text-align: left; border-bottom: 2px solid #ddd;">Item</th>
+                        <th style="padding: 8px; text-align: left; border-bottom: 2px solid #ddd;">Quantity</th>
+                        <th style="padding: 8px; text-align: left; border-bottom: 2px solid #ddd;">Price</th>
+                        <th style="padding: 8px; text-align: left; border-bottom: 2px solid #ddd;">Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${itemsHtml}
+                </tbody>
+            </table>
+            <h3>Totals</h3>
+            <p>Subtotal: Rs ${order.subtotal.toFixed(2)}</p>
+            <p>Shipping: Rs ${order.shipping.toFixed(2)}</p>
+            <p>Tax: Rs ${order.tax.toFixed(2)}</p>
+            <p><strong>Total: Rs ${order.totalAmount.toFixed(2)}</strong></p>
+            <h3>Billing Information</h3>
+            <p>${order.billingInfo.firstName}</p>
+            <p>${order.billingInfo.streetAddress}${order.billingInfo.apartment ? ', ' + order.billingInfo.apartment : ''}</p>
+            <p>${order.billingInfo.townCity}</p>
+            <p>Phone: ${order.billingInfo.phoneNumber}</p>
+            <p>Email: ${order.billingInfo.emailAddress}</p>
+            <p>Payment Method: ${order.paymentMethod}</p>
+            <p style="margin-top: 20px;">We’ll notify you once your order is processed. Thank you for shopping with us!</p>
+        </body>
+        </html>
+    `;
+}
+
+exports.processCheckout = async (req, res) => {
     try {
         const { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress, saveInfo } = req.body;
         const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
@@ -232,9 +290,17 @@ exports.processCheckout = async (req, res) => {
         const tax = subtotal * (shippingSettings.taxRate / 100);
         const totalAmount = subtotal + shipping + tax;
 
-        // Create new order
+        // Generate unique order ID
+        let orderId = generateOrderId();
+        let existingOrder = await Order.findOne({ orderId });
+        while (existingOrder) {
+            orderId = generateOrderId();
+            existingOrder = await Order.findOne({ orderId });
+        }
+
         const order = new Order({
             user: req.user.userId,
+            orderId,
             items: cart.items.map(item => ({
                 product: item.product._id,
                 name: item.product.name,
@@ -246,10 +312,10 @@ exports.processCheckout = async (req, res) => {
             subtotal,
             shipping,
             tax,
-            totalAmount
+            totalAmount,
+            status: 'pending'
         });
 
-        // Save billing info to user if requested
         if (saveInfo) {
             const user = await User.findById(req.user.userId);
             user.billingInfo = { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress };
@@ -259,7 +325,15 @@ exports.processCheckout = async (req, res) => {
         await order.save();
         await Cart.deleteOne({ user: req.user.userId });
 
-        res.redirect("/order-confirmation");
+        // Send email confirmation
+        const emailHtml = generateOrderEmail(order);
+        await sendEmail(
+            order.billingInfo.emailAddress,
+            `Order Confirmation - ${order.orderId}`,
+            emailHtml
+        );
+
+        res.redirect("/user/cart/order-confirmation");
     } catch (error) {
         console.error("Process Checkout Error:", error);
         res.status(500).render("cart/checkout", {
@@ -274,6 +348,7 @@ exports.processCheckout = async (req, res) => {
         });
     }
 };
+
 
 
 exports.renderOrderConfirmation = async (req, res) => {

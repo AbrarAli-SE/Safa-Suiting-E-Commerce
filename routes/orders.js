@@ -3,8 +3,7 @@ const router = express.Router();
 const orderController = require("../controllers/orderController"); // ✅ Fix Typo
 const {authenticateUser , verifyUser } = require("../middleware/authMiddleware");
 
-// ✅ Ensure Callback Functions Exist
-router.get("/cancel-order", authenticateUser, verifyUser, orderController.renderUserCancel);
-router.get("/user-order", authenticateUser, verifyUser, orderController.renderCartOrder);
+// Orders History Route
+router.get("/orders", authenticateUser,verifyUser, orderController.renderOrders);
 
 module.exports = router;
