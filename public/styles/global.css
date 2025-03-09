@@ -900,10 +900,6 @@ body {
   margin-bottom: 2rem;
 }
 
-.ml-0 {
-  margin-left: 0px;
-}
-
 .ml-1 {
   margin-left: 0.25rem;
 }
@@ -986,10 +982,6 @@ body {
 
 .mt-8 {
   margin-top: 2rem;
-}
-
-.mt-9 {
-  margin-top: 2.25rem;
 }
 
 .mt-\[110px\] {
@@ -1120,10 +1112,6 @@ body {
   min-height: 100vh;
 }
 
-.w-1\/12 {
-  width: 8.333333%;
-}
-
 .w-1\/5 {
   width: 20%;
 }
@@ -1226,10 +1214,6 @@ body {
 
 .max-w-\[90vw\] {
   max-width: 90vw;
-}
-
-.max-w-lg {
-  max-width: 32rem;
 }
 
 .max-w-md {
@@ -1595,6 +1579,10 @@ body {
   border-color: var(--color-gray-300);
 }
 
+.border-\[var\(--color-gray-500\)\] {
+  border-color: var(--color-gray-500);
+}
+
 .border-\[var\(--color-gray-600\)\] {
   border-color: var(--color-gray-600);
 }
@@ -1620,10 +1608,6 @@ body {
   border-color: rgb(252 165 165 / var(--tw-border-opacity, 1));
 }
 
-.border-\[var\(--color-gray-500\)\] {
-  border-color: var(--color-gray-500);
-}
-
 .bg-\[var\(--color-black\)\] {
   background-color: var(--color-black);
 }
@@ -1634,10 +1618,6 @@ body {
 
 .bg-\[var\(--color-gray-100\)\] {
   background-color: var(--color-gray-100);
-}
-
-.bg-\[var\(--color-gray-200\)\] {
-  background-color: var(--color-gray-200);
 }
 
 .bg-\[var\(--color-gray-50\)\] {
@@ -2503,10 +2483,6 @@ body {
   background-color: var(--color-gray-100);
 }
 
-.hover\:bg-\[var\(--color-gray-300\)\]:hover {
-  background-color: var(--color-gray-300);
-}
-
 .hover\:bg-\[var\(--color-red-100\)\]:hover {
   background-color: var(--color-red-100);
 }
@@ -2522,10 +2498,6 @@ body {
 .hover\:bg-red-600:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(220 38 38 / var(--tw-bg-opacity, 1));
-}
-
-.hover\:text-\[var\(--color-black\)\]:hover {
-  color: var(--color-black);
 }
 
 .hover\:text-\[var\(--color-blue-700\)\]:hover {
@@ -2733,16 +2705,8 @@ body {
     margin-bottom: 2rem;
   }
 
-  .sm\:ml-20 {
-    margin-left: 5rem;
-  }
-
   .sm\:ml-auto {
     margin-left: auto;
-  }
-
-  .sm\:mt-7 {
-    margin-top: 1.75rem;
   }
 
   .sm\:mt-\[4\.5rem\] {
@@ -2792,11 +2756,6 @@ body {
   .sm\:px-6 {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
-  }
-
-  .sm\:px-8 {
-    padding-left: 2rem;
-    padding-right: 2rem;
   }
 
   .sm\:text-base {
@@ -2995,10 +2954,6 @@ body {
 
   .lg\:mb-16 {
     margin-bottom: 4rem;
-  }
-
-  .lg\:ml-64 {
-    margin-left: 16rem;
   }
 
   .lg\:w-1\/3 {

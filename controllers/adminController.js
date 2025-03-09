@@ -5,6 +5,7 @@ const Contact = require("../models/Contact");
 const ShippingSettings = require('../models/Shipping'); //
 const sendEmail = require('../utils/emailConfig');
 const ContactInfo = require("../models/info");
+const CancelledOrder = require("../models/CancelledOrder");
 const bcrypt = require("bcryptjs");
 const Carousel = require("../models/Carousel");
 const { uploadCarousel } = require("../config/multer-config");
@@ -98,7 +99,7 @@ exports.renderCoursel = async (req, res) => {
 
 exports.renderContacts = async (req, res) => {
   try {
-    let page = parseInt(req.query.page) || 1;
+    const page = parseInt(req.query.page) || 1;
     const limit = 10; // Contacts per page
     const skip = (page - 1) * limit;
 
@@ -187,14 +188,82 @@ exports.renderTrackId = async(req, res) =>{
 }
 
 
-exports.renderCancelOrder = async(req, res) =>{
-    try {
-        res.render("orders/order-history");
-    } catch (error) {
-        console.error("❌ Cancel Order Error:", error);
-        res.status(500).send("Server error");
-    }
-}
+exports.renderAdminCancelledOrders = async (req, res) => {
+  try {
+      const page = parseInt(req.query.page) || 1;
+      const limit = 10; // Orders per page
+      const skip = (page - 1) * limit;
+
+      const totalOrders = await CancelledOrder.countDocuments();
+      const cancelledOrders = await CancelledOrder.find()
+          .sort({ cancelledAt: -1 }) // Newest first
+          .skip(skip)
+          .limit(limit)
+          .populate("items.product")
+          .populate("user", "email");
+
+      if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+          res.status(200).json({
+              cancelledOrders,
+              currentPage: page,
+              totalPages: Math.ceil(totalOrders / limit),
+          });
+      } else {
+          res.render("orders/order-history", {
+              user: req.user,
+              cancelledOrders: [], // Empty initially, populated via AJAX
+              currentPage: 1,
+              totalPages: 1,
+          });
+      }
+  } catch (error) {
+      console.error("❌ Error fetching cancelled orders:", error);
+      if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+          res.status(500).json({ error: "Server error" });
+      } else {
+          res.status(500).send("Server error");
+      }
+  }
+};
+
+
+exports.deleteCancelledOrder = async (req, res) => {
+  try {
+      const { orderId, page } = req.body;
+
+      if (!orderId) {
+          return res.status(400).json({ error: "Invalid order ID." });
+      }
+
+      const cancelledOrder = await CancelledOrder.findOne({ orderId });
+      if (!cancelledOrder) {
+          return res.status(404).json({ error: "Cancelled order not found." });
+      }
+
+      await CancelledOrder.deleteOne({ orderId });
+
+      // Fetch updated cancelled order list
+      const limit = 10;
+      const skip = (page - 1) * limit;
+      const totalOrders = await CancelledOrder.countDocuments();
+      const cancelledOrders = await CancelledOrder.find()
+          .sort({ cancelledAt: -1 })
+          .skip(skip)
+          .limit(limit)
+          .populate("items.product")
+          .populate("user", "email");
+
+      res.status(200).json({
+          message: "Cancelled order deleted successfully!",
+          cancelledOrders,
+          currentPage: page,
+          totalPages: Math.ceil(totalOrders / limit),
+      });
+  } catch (error) {
+      console.error("❌ Cancelled Order Deletion Error:", error);
+      res.status(500).json({ error: "Server error. Please try again." });
+  }
+};
 
 exports.renderAnalytical = async(req, res) =>{
     try {

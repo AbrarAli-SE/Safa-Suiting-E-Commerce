@@ -70,10 +70,34 @@
                   <button 
                     id="cancel-btn-<%= order.orderId %>"
                     class="btn-red px-4 py-2 text-sm"
-                    onclick="cancelOrder('<%= order.orderId %>')"
+                    onclick="showCancelReason('<%= order.orderId %>')"
                   >
                     Cancel Order
                   </button>
+                  <!-- Cancellation Reason Input (Hidden Initially) -->
+                  <div id="reason-section-<%= order.orderId %>" class="hidden mt-4">
+                    <label for="cancel-reason-<%= order.orderId %>" class="text-[var(--color-gray-600)]">Reason for cancellation:</label>
+                    <input 
+                      type="text" 
+                      id="cancel-reason-<%= order.orderId %>" 
+                      class="w-full p-2 border border-[var(--color-gray-200)] rounded-lg mt-2" 
+                      placeholder="Enter your reason here"
+                    >
+                    <div class="mt-2 flex justify-between">
+                      <button 
+                        class="btn-red px-4 py-2 text-sm" 
+                        onclick="submitCancel('<%= order.orderId %>')"
+                      >
+                        Submit Cancellation
+                      </button>
+                      <button 
+                        class="btn-gray px-4 py-2 text-sm" 
+                        onclick="hideCancelReason('<%= order.orderId %>')"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
                 <% } %>
               </div>
             </div>
@@ -124,11 +148,32 @@
 <%- include('../shared/footer') %>
 
 <script>
-  function cancelOrder(orderId) {
+  // Show cancellation reason input
+  function showCancelReason(orderId) {
+    document.getElementById(`cancel-btn-${orderId}`).classList.add('hidden');
+    document.getElementById(`reason-section-${orderId}`).classList.remove('hidden');
+  }
+
+  // Hide cancellation reason input
+  function hideCancelReason(orderId) {
+    document.getElementById(`cancel-btn-${orderId}`).classList.remove('hidden');
+    document.getElementById(`reason-section-${orderId}`).classList.add('hidden');
+    document.getElementById(`cancel-reason-${orderId}`).value = ''; // Clear input
+  }
+
+  // Submit cancellation with reason
+  function submitCancel(orderId) {
+    const reason = document.getElementById(`cancel-reason-${orderId}`).value.trim();
+    if (!reason) {
+      alert('Please provide a reason for cancellation.');
+      return;
+    }
+
     if (confirm(`Are you sure you want to cancel order ${orderId}?`)) {
-      fetch(`/user/orders/orders/cancel/${orderId}`, { // Updated to match /user/orders
+      fetch(`/user/orders/orders/cancel/${orderId}`, {
         method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ reason }) // Send reason in the request body
       })
       .then(response => {
         console.log(`Response status for ${orderId}: ${response.status}`);
@@ -150,3 +195,16 @@
     }
   }
 </script>
+
+<style>
+  .hidden {
+    display: none;
+  }
+  .btn-gray {
+    background-color: var(--color-gray-500);
+    color: white;
+  }
+  .btn-gray:hover {
+    background-color: var(--color-gray-600);
+  }
+</style>

@@ -47,6 +47,10 @@ const cancelledOrderSchema = new mongoose.Schema({
     originalCreatedAt: {
         type: Date,
         required: true
+    },
+    cancellationReason: {
+        type: String,
+        required: true // Optional: make it required if you want to enforce a reason
     }
 }, { timestamps: true });
 

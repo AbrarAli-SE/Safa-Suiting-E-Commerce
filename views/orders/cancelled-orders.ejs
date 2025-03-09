@@ -45,6 +45,7 @@
                 <p class="text-[var(--color-gray-600)]">Email: <%= order.billingInfo.emailAddress %></p>
                 <p class="text-[var(--color-gray-600)]">Payment Method: <%= order.paymentMethod %></p>
                 <p class="text-[var(--color-gray-600)]">Originally Placed: <%= new Date(order.originalCreatedAt).toLocaleDateString() %></p>
+                <p class="text-[var(--color-gray-600)]">Cancellation Reason: <%= order.cancellationReason %></p>
               </div>
             </div>
           </div>

@@ -24,7 +24,9 @@ exports.renderOrders = async (req, res) => {
 exports.cancelOrder = async (req, res) => {
     try {
         const { orderId } = req.params;
-        console.log(`Cancel request - orderId: ${orderId}, userId: ${req.user.userId}`);
+        const { reason } = req.body; // Get reason from request body
+        console.log(`Cancel request - orderId: ${orderId}, userId: ${req.user.userId}, reason: ${reason}`);
+        
         const order = await Order.findOne({ orderId, user: req.user.userId });
 
         if (!order) {
@@ -42,7 +44,7 @@ exports.cancelOrder = async (req, res) => {
             return res.status(400).json({ success: false, message: "Order cannot be cancelled after 5 hours or if it’s no longer pending." });
         }
 
-        // Create a cancelled order record
+        // Create a cancelled order record with reason
         const cancelledOrder = new CancelledOrder({
             user: order.user,
             orderId: order.orderId,
@@ -53,7 +55,8 @@ exports.cancelOrder = async (req, res) => {
             shipping: order.shipping,
             tax: order.tax,
             totalAmount: order.totalAmount,
-            originalCreatedAt: order.createdAt
+            originalCreatedAt: order.createdAt,
+            cancellationReason: reason // Add reason to CancelledOrder
         });
 
         await cancelledOrder.save();
@@ -69,18 +72,21 @@ exports.cancelOrder = async (req, res) => {
 
 exports.renderCancelledOrders = async (req, res) => {
     try {
+        console.log(`Fetching cancelled orders for user: ${req.user.userId}`);
         const cancelledOrders = await CancelledOrder.find({ user: req.user.userId })
             .sort({ cancelledAt: -1 })
             .populate("items.product");
 
-        res.render("/orders/cancelled-orders", {
+        console.log(`Found ${cancelledOrders.length} cancelled orders`);
+        res.render("orders/cancelled-orders", {
             user: req.user,
             cancelledOrders,
             errorMessage: null
         });
     } catch (error) {
         console.error("❌ Cancelled Orders Page Error:", error.message);
-        res.status(500).render("/orders/cancelled-orders", {
+        console.error("Full error:", error);
+        res.status(500).render("orders/cancelled-orders", {
             user: req.user || null,
             cancelledOrders: [],
             errorMessage: "Server error. Please try again."
