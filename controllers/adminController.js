@@ -6,6 +6,8 @@ const ShippingSettings = require('../models/Shipping'); //
 const sendEmail = require('../utils/emailConfig');
 const ContactInfo = require("../models/info");
 const CancelledOrder = require("../models/CancelledOrder");
+// Assuming you have an Order model
+const Order = require('../models/Order'); // Adjust the path to your Order model
 const bcrypt = require("bcryptjs");
 const Carousel = require("../models/Carousel");
 const { uploadCarousel } = require("../config/multer-config");
@@ -157,6 +159,7 @@ exports.deleteContact = async (req, res) => {
       .skip(skip)
       .limit(limit);
 
+    
     res.status(200).json({
       message: "Contact deleted successfully!",
       contacts,
@@ -187,6 +190,136 @@ exports.renderTrackId = async(req, res) =>{
     }
 }
 
+exports.renderAdminOrders = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const filter = req.query.filter || '';
+
+    let query = {};
+    if (filter) {
+      query.status = filter;
+    }
+
+    const totalOrders = await Order.countDocuments(query);
+    const orders = await Order.find(query)
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit)
+      .populate('items.product')
+      .populate('user', 'email');
+
+    // Updated to include orderId instead of just _id
+    const formattedOrders = orders.map(order => ({
+      orderId: order.orderId, // Use the custom orderId
+      customerName: order.billingInfo.firstName,
+      totalPrice: order.totalAmount,
+      trackingId: order.trackingId || '',
+      status: order.status
+    }));
+
+    if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+      res.status(200).json({
+        orders: formattedOrders,
+        currentPage: page,
+        totalPages: Math.ceil(totalOrders / limit),
+      });
+    } else {
+      res.render("admin/orders", {
+        user: req.user,
+        orders: [],
+        currentPage: 1,
+        totalPages: 1,
+      });
+    }
+  } catch (error) {
+    console.error("❌ Error fetching orders:", error);
+    if (req.headers["x-requested-with"] === "XMLHttpRequest") {
+      res.status(500).json({ error: "Server error" });
+    } else {
+      res.status(500).send("Server error");
+    }
+  }
+};
+
+// Keep the assignTrackingId using orderId as well
+
+exports.assignTrackingId = async (req, res) => {
+  try {
+    const { orderId, trackingId } = req.body;
+
+    if (!orderId || !trackingId) {
+      return res.status(400).json({
+        error: "Order ID and Tracking ID are required"
+      });
+    }
+
+    const order = await Order.findOne({ orderId: orderId });
+    if (!order) {
+      return res.status(404).json({
+        error: "Order not found"
+      });
+    }
+
+    // Check if order already has a tracking ID or is already shipped
+    if (order.trackingId && order.status === "Shipped") {
+      return res.status(400).json({
+        error: `Order ${order.orderId} already has tracking ID ${order.trackingId}. Cannot reassign tracking ID.`
+      });
+    }
+
+    // Update order details
+    order.trackingId = trackingId;
+    order.status = "Shipped";
+    order.updatedAt = new Date();
+
+    await order.save();
+
+    // Prepare and send email notification
+    const trackingUrl = `https://www.tcsexpress.com/?trackingnumber=${trackingId}`;
+    const emailSubject = `Your Order ${order.orderId} Has Been Shipped`;
+    const emailHtml = `
+      <h2>Order Shipment Notification</h2>
+      <p>Dear ${order.billingInfo.firstName},</p>
+      <p>Your order <strong>${order.orderId}</strong> has been shipped!</p>
+      <p><strong>Tracking ID:</strong> ${trackingId}</p>
+      <p>You can track your order using the following link:</p>
+      <p><a href="${trackingUrl}" target="_blank">Track Your Order on TCS Express</a></p>
+      <p>Total Amount: $${order.totalAmount.toFixed(2)}</p>
+      <p>Thank you for shopping with us!</p>
+      <p>Best regards,<br>Your Company Name</p>
+    `;
+
+    try {
+      await sendEmail(
+        order.billingInfo.emailAddress,
+        emailSubject,
+        emailHtml
+      );
+    } catch (emailError) {
+      console.error("Email sending failed, but order was updated:", emailError);
+    }
+
+    res.status(200).json({
+      message: "Tracking ID assigned successfully and notification email sent",
+      order: {
+        orderId: order.orderId,
+        customerName: order.billingInfo.firstName,
+        totalPrice: order.totalAmount,
+        trackingId: order.trackingId,
+        status: order.status
+      }
+    });
+  } catch (error) {
+    console.error("❌ Error assigning tracking ID:", error);
+    res.status(500).json({
+      error: "Server error while assigning tracking ID"
+    });
+  }
+};
+
+// ... (renderAdminOrders remains unchanged)
 
 exports.renderAdminCancelledOrders = async (req, res) => {
   try {

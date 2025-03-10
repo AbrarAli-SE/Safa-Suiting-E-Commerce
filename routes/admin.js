@@ -30,6 +30,9 @@ router.get("/payment",authenticateUser,adminAuth, adminController.renderPayment)
 
 router.get("/assign-id",authenticateUser,adminAuth, adminController.renderTrackId);
 
+router.get('/orders', authenticateUser,adminAuth, adminController.renderAdminOrders);
+router.put('/orders/assign-tracking',authenticateUser,adminAuth, adminController.assignTrackingId);
+
 
 router.get("/cancel-order",authenticateUser,adminAuth, adminController.renderAdminCancelledOrders);
 router.delete("/cancel-order/delete",authenticateUser,adminAuth, adminController.deleteCancelledOrder);

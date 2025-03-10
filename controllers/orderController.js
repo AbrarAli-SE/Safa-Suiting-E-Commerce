@@ -6,7 +6,7 @@ exports.renderOrders = async (req, res) => {
             .sort({ createdAt: -1 })
             .populate("items.product");
 
-        res.render("orders/orders", { // Assuming orders.ejs is directly in views/, not views/orders/
+        res.render("orders/orders", {
             user: req.user,
             orders,
             errorMessage: null

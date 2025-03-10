@@ -11,131 +11,151 @@
       </p>
     </div>
 
+    <!-- Search Bar -->
+    <div class="mb-6 flex justify-center">
+      <div class="relative w-full max-w-md">
+        <input 
+          type="text" 
+          id="order-search" 
+          class="w-full p-3 pl-10 border border-[var(--color-gray-200)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)]" 
+           
+          placeholder="Enter Order ID (e.g., ORD-123456)"
+          oninput="filterOrders()"
+        >
+        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--color-gray-500)]">
+          <i class="bi bi-search"></i>
+        </span>
+      </div>
+    </div>
+
+    <!-- Messages and Order List -->
     <% if (errorMessage) { %>
       <p class="text-[var(--color-red-500)] text-lg mb-6 text-center"><%= errorMessage %></p>
-    <% } else if (orders.length > 0) { %>
-      <div class="space-y-6">
-        <% orders.forEach(order => { %>
-          <div class="bg-[var(--color-gray-50)] p-6 rounded-lg card-shadow border-l-4 border-[var(--color-red-500)]">
-            <div class="flex justify-between items-center mb-4">
-              <h2 class="text-xl font-semibold text-[var(--color-red-500)]">Order ID = <%= order.orderId %></h2>
-              <span class="text-[var(--color-gray-600)] text-sm"><%= new Date(order.createdAt).toLocaleDateString() %></span>
-            </div>
-            <div class="space-y-4">
-              <% order.items.forEach(item => { %>
-                <div class="flex justify-between py-2 border-b border-[var(--color-gray-200)]">
-                  <span class="text-[var(--color-black)]"><%= item.name %> (x<%= item.quantity %>)</span>
-                  <span class="font-medium text-[var(--color-black)]">Rs <%= (item.price * item.quantity).toFixed(2) %></span>
-                </div>
-              <% }) %>
-              <div class="space-y-2 pt-4">
-                <div class="flex justify-between">
-                  <span class="text-[var(--color-gray-600)]">Subtotal:</span>
-                  <span class="font-medium text-[var(--color-black)]">Rs <%= order.subtotal.toFixed(2) %></span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--color-gray-600)]">Shipping:</span>
-                  <span class="font-medium text-[var(--color-black)]">Rs <%= order.shipping.toFixed(2) %></span>
-                </div>
-                <div class="flex justify-between">
-                  <span class="text-[var(--color-gray-600)]">Tax:</span>
-                  <span class="font-medium text-[var(--color-black)]">Rs <%= order.tax.toFixed(2) %></span>
-                </div>
-                <div class="flex justify-between pt-2 border-t border-[var(--color-gray-200)]">
-                  <span class="text-[var(--color-gray-600)]">Total:</span>
-                  <span class="font-medium text-[var(--color-red-500)]">Rs <%= order.totalAmount.toFixed(2) %></span>
-                </div>
+    <% } else { %>
+      <div id="order-container">
+        <p id="initial-message" class="text-[var(--color-gray-600)] text-lg text-center">Please enter an order ID to view your orders.</p>
+        <p id="no-order-message" class="text-[var(--color-red-500)] text-lg text-center hidden">No order found or invalid order ID.</p>
+        <div class="space-y-6 hidden" id="order-list">
+          <% orders.forEach(order => { %>
+            <div class="order-card bg-[var(--color-gray-50)] p-6 rounded-lg card-shadow border-l-4 border-[var(--color-red-500)]" data-order-id="<%= order.orderId %>">
+              <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-semibold text-[var(--color-red-500)]">Order ID = <%= order.orderId %></h2>
+                <span class="text-[var(--color-gray-600)] text-sm"><%= new Date(order.createdAt).toLocaleDateString() %></span>
               </div>
-              <div class="mt-4">
-                <p class="text-[var(--color-gray-600)]">Billing Address: <%= order.billingInfo.streetAddress %>, <%= order.billingInfo.townCity %></p>
-                <p class="text-[var(--color-gray-600)]">Phone: <%= order.billingInfo.phoneNumber %></p>
-                <p class="text-[var(--color-gray-600)]">Email: <%= order.billingInfo.emailAddress %></p>
-                <p class="text-[var(--color-gray-600)]">Payment Method: <%= order.paymentMethod %></p>
-                <p class="text-[var(--color-gray-600)]">Status: <%= order.status %></p>
-              </div>
-
-              <!-- Cancellation Timer and Button -->
-              <div class="mt-4 flex items-center justify-between" id="cancel-section-<%= order.orderId %>">
-                <% 
-                  const orderTime = new Date(order.createdAt).getTime();
-                  const fiveHoursLater = orderTime + (5 * 60 * 60 * 1000);
-                  const now = Date.now();
-                  const timeLeft = fiveHoursLater - now;
-                %>
-                <% if (timeLeft > 0 && order.status === 'pending') { %>
-                  <div>
-                    <span class="text-[var(--color-gray-600)]">Time to cancel: </span>
-                    <span id="timer-<%= order.orderId %>" class="text-[var(--color-red-500)] font-medium"></span>
+              <div class="space-y-4">
+                <% order.items.forEach(item => { %>
+                  <div class="flex justify-between py-2 border-b border-[var(--color-gray-200)]">
+                    <span class="text-[var(--color-black)]"><%= item.name %> (x<%= item.quantity %>)</span>
+                    <span class="font-medium text-[var(--color-black)]">Rs <%= (item.price * item.quantity).toFixed(2) %></span>
                   </div>
-                  <button 
-                    id="cancel-btn-<%= order.orderId %>"
-                    class="btn-red px-4 py-2 text-sm"
-                    onclick="showCancelReason('<%= order.orderId %>')"
-                  >
-                    Cancel Order
-                  </button>
-                  <!-- Cancellation Reason Input (Hidden Initially) -->
-                  <div id="reason-section-<%= order.orderId %>" class="hidden mt-4">
-                    <label for="cancel-reason-<%= order.orderId %>" class="text-[var(--color-gray-600)]">Reason for cancellation:</label>
-                    <input 
-                      type="text" 
-                      id="cancel-reason-<%= order.orderId %>" 
-                      class="w-full p-2 border border-[var(--color-gray-200)] rounded-lg mt-2" 
-                      placeholder="Enter your reason here"
-                    >
-                    <div class="mt-2 flex justify-between">
-                      <button 
-                        class="btn-red px-4 py-2 text-sm" 
-                        onclick="submitCancel('<%= order.orderId %>')"
-                      >
-                        Submit Cancellation
-                      </button>
-                      <button 
-                        class="btn-gray px-4 py-2 text-sm" 
-                        onclick="hideCancelReason('<%= order.orderId %>')"
-                      >
-                        Cancel
-                      </button>
+                <% }) %>
+                <div class="space-y-2 pt-4">
+                  <div class="flex justify-between">
+                    <span class="text-[var(--color-gray-600)]">Subtotal:</span>
+                    <span class="font-medium text-[var(--color-black)]">Rs <%= order.subtotal.toFixed(2) %></span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-[var(--color-gray-600)]">Shipping:</span>
+                    <span class="font-medium text-[var(--color-black)]">Rs <%= order.shipping.toFixed(2) %></span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-[var(--color-gray-600)]">Tax:</span>
+                    <span class="font-medium text-[var(--color-black)]">Rs <%= order.tax.toFixed(2) %></span>
+                  </div>
+                  <div class="flex justify-between pt-2 border-t border-[var(--color-gray-200)]">
+                    <span class="text-[var(--color-gray-600)]">Total:</span>
+                    <span class="font-medium text-[var(--color-red-500)]">Rs <%= order.totalAmount.toFixed(2) %></span>
+                  </div>
+                </div>
+                <div class="mt-4">
+                  <p class="text-[var(--color-gray-600)]">Billing Address: <%= order.billingInfo.streetAddress %>, <%= order.billingInfo.townCity %></p>
+                  <p class="text-[var(--color-gray-600)]">Phone: <%= order.billingInfo.phoneNumber %></p>
+                  <p class="text-[var(--color-gray-600)]">Email: <%= order.billingInfo.emailAddress %></p>
+                  <p class="text-[var(--color-gray-600)]">Payment Method: <%= order.paymentMethod %></p>
+                  <p class="text-[var(--color-gray-600)]">Status: <%= order.status %></p>
+                </div>
+
+                <!-- Cancellation Timer and Button -->
+                <div class="mt-4 flex items-center justify-between" id="cancel-section-<%= order.orderId %>">
+                  <% 
+                    const orderTime = new Date(order.createdAt).getTime();
+                    const fiveHoursLater = orderTime + (5 * 60 * 60 * 1000);
+                    const now = Date.now();
+                    const timeLeft = fiveHoursLater - now;
+                  %>
+                  <% if (timeLeft > 0 && order.status === 'pending') { %>
+                    <div>
+                      <span class="text-[var(--color-gray-600)]">Time to cancel: </span>
+                      <span id="timer-<%= order.orderId %>" class="text-[var(--color-red-500)] font-medium"></span>
                     </div>
-                  </div>
-                <% } %>
+                    <button 
+                      id="cancel-btn-<%= order.orderId %>"
+                      class="btn-red px-4 py-2 text-sm"
+                      onclick="showCancelReason('<%= order.orderId %>')"
+                    >
+                      Cancel Order
+                    </button>
+                    <!-- Cancellation Reason Input (Hidden Initially) -->
+                    <div id="reason-section-<%= order.orderId %>" class="hidden mt-4">
+                      <label for="cancel-reason-<%= order.orderId %>" class="text-[var(--color-gray-600)]">Reason for cancellation:</label>
+                      <input 
+                        type="text" 
+                        id="cancel-reason-<%= order.orderId %>" 
+                        class="w-full p-2 border border-[var(--color-gray-200)] rounded-lg mt-2" 
+                        placeholder="Enter your reason here"
+                      >
+                      <div class="mt-2 flex justify-between">
+                        <button 
+                          class="btn-red px-4 py-2 text-sm" 
+                          onclick="submitCancel('<%= order.orderId %>')"
+                        >
+                          Submit Cancellation
+                        </button>
+                        <button 
+                          class="btn-gray px-4 py-2 text-sm" 
+                          onclick="hideCancelReason('<%= order.orderId %>')"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
               </div>
             </div>
-          </div>
 
-          <!-- Timer Script for Each Order -->
-          <% if (timeLeft > 0 && order.status === 'pending') { %>
-            <script>
-              (function() {
-                const orderId = '<%= order.orderId %>';
-                const endTime = <%= fiveHoursLater %>;
-                const timerElement = document.getElementById(`timer-${orderId}`);
-                const cancelSection = document.getElementById(`cancel-section-${orderId}`);
+            <!-- Timer Script for Each Order -->
+            <% if (timeLeft > 0 && order.status === 'pending') { %>
+              <script>
+                (function() {
+                  const orderId = '<%= order.orderId %>';
+                  const endTime = <%= fiveHoursLater %>;
+                  const timerElement = document.getElementById(`timer-${orderId}`);
+                  const cancelSection = document.getElementById(`cancel-section-${orderId}`);
 
-                function updateTimer() {
-                  const now = Date.now();
-                  const timeLeft = endTime - now;
+                  function updateTimer() {
+                    const now = Date.now();
+                    const timeLeft = endTime - now;
 
-                  if (timeLeft <= 0) {
-                    cancelSection.innerHTML = '<p class="text-[var(--color-gray-600)]">Cancellation period has expired.</p>';
-                    return;
+                    if (timeLeft <= 0) {
+                      cancelSection.innerHTML = '<p class="text-[var(--color-gray-600)]">Cancellation period has expired.</p>';
+                      return;
+                    }
+
+                    const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                    timerElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
                   }
 
-                  const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-                  const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-                  const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-                  timerElement.textContent = `${hours}h ${minutes}m ${seconds}s`;
-                }
-
-                updateTimer();
-                setInterval(updateTimer, 1000);
-              })();
-            </script>
-          <% } %>
-        <% }) %>
+                  updateTimer();
+                  setInterval(updateTimer, 1000);
+                })();
+              </script>
+            <% } %>
+          <% }) %>
+        </div>
       </div>
-    <% } else { %>
-      <p class="text-[var(--color-gray-600)] text-lg text-center">You have no orders yet.</p>
     <% } %>
 
     <div class="text-center mt-8">
@@ -194,6 +214,42 @@
       });
     }
   }
+
+  // Filter orders based on search input
+  function filterOrders() {
+    const searchInput = document.getElementById('order-search').value.toLowerCase();
+    const orderList = document.getElementById('order-list');
+    const orderCards = document.querySelectorAll('.order-card');
+    const initialMessage = document.getElementById('initial-message');
+    const noOrderMessage = document.getElementById('no-order-message');
+    let hasVisibleOrders = false;
+
+    
+
+    // Filter orders
+    orderCards.forEach(card => {
+      const orderId = card.getAttribute('data-order-id').toLowerCase();
+      if (orderId === searchInput) { // Exact match only
+        card.classList.remove('hidden');
+        hasVisibleOrders = true;
+      } else {
+        card.classList.add('hidden');
+      }
+    });
+
+    // Show appropriate message
+    if (hasVisibleOrders) {
+      initialMessage.classList.add('hidden');
+      noOrderMessage.classList.add('hidden');
+      orderList.classList.remove('hidden');
+    } else {
+      initialMessage.classList.add('hidden');
+      noOrderMessage.classList.remove('hidden');
+      orderList.classList.add('hidden');
+    }
+  }
+
+  
 </script>
 
 <style>
@@ -206,5 +262,8 @@
   }
   .btn-gray:hover {
     background-color: var(--color-gray-600);
+  }
+  .card-shadow {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 </style>

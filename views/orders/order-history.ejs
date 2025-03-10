@@ -91,7 +91,7 @@
             try {
               const row = `
                 <tr class="border-t border-[var(--color-gray-200)] cancelled-order-row" data-order-id="${order.orderId || 'N/A'}">
-                  <td class="px-4 py-2">${order.orderId || 'N/A'}</td>
+                  <td class="px-4 py-[1rem]">${order.orderId || 'N/A'}</td>
                   <td class="px-4 py-2">${order.user?.email || 'Unknown'}</td>
                   <td class="px-4 py-2">Rs ${order.totalAmount?.toFixed(2) || '0.00'}</td>
                   <td class="px-4 py-2">${order.cancelledAt ? new Date(order.cancelledAt).toLocaleDateString() : 'N/A'}</td>

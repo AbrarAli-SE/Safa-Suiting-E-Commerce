@@ -1660,6 +1660,10 @@ body {
   background-color: var(--color-yellow-100);
 }
 
+.bg-\[var\(--color-yellow-50\)\] {
+  background-color: var(--color-yellow-50);
+}
+
 .bg-black {
   background-color: var(--color-black);
 }
@@ -1838,6 +1842,16 @@ body {
 }
 
 .py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.py-\[1\.5rem\] {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+
+.py-\[1rem\] {
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
