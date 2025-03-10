@@ -227,6 +227,133 @@ exports.checkoutCart = async (req, res) => {
 
 
 
+exports.processCheckout = async (req, res) => {
+    try {
+      const { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress, saveInfo } = req.body;
+      const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
+      const shippingSettings = await ShippingSettings.findOne() || { shippingOption: 'free', shippingRate: 0, taxRate: 0 };
+  
+      if (!cart?.items?.length) {
+        return res.status(400).json({ success: false, message: "Cart is empty." });
+      }
+  
+      // Check product availability and prepare items
+      const items = cart.items.map(item => ({
+        product: item.product._id,
+        name: item.product.name,
+        price: item.price,
+        quantity: item.quantity
+      }));
+  
+      // Verify stock availability
+      for (const item of items) {
+        const product = await Product.findById(item.product);
+        if (!product) {
+          throw new Error(`Product ${item.product} not found`);
+        }
+        if (product.quantity < item.quantity) {
+          throw new Error(`Insufficient quantity for ${product.name}. Available: ${product.quantity}`);
+        }
+      }
+  
+      const subtotal = cart.totalPrice;
+      const shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
+      const tax = subtotal * (shippingSettings.taxRate / 100);
+      const totalAmount = subtotal + shipping + tax;
+  
+      // Generate unique order ID
+      let orderId = generateOrderId();
+      let existingOrder = await Order.findOne({ orderId });
+      while (existingOrder) {
+        orderId = generateOrderId();
+        existingOrder = await Order.findOne({ orderId });
+      }
+  
+      const order = new Order({
+        user: req.user.userId,
+        orderId,
+        items,
+        billingInfo: { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress },
+        paymentMethod: 'cash',
+        subtotal,
+        shipping,
+        tax,
+        totalAmount,
+        status: 'pending'
+      });
+  
+      // Decrease product quantities
+      for (const item of items) {
+        const product = await Product.findById(item.product);
+        product.quantity -= item.quantity;
+        await product.save();
+      }
+  
+      if (saveInfo) {
+        const user = await User.findById(req.user.userId);
+        user.billingInfo = { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress };
+        await user.save();
+      }
+  
+      await order.save();
+      await Cart.deleteOne({ user: req.user.userId });
+  
+      // Send email confirmation
+      const emailHtml = generateOrderEmail(order);
+      await sendEmail(
+        order.billingInfo.emailAddress,
+        `Order Confirmation - ${order.orderId}`,
+        emailHtml
+      );
+  
+      res.redirect("/user/cart/order-confirmation");
+    } catch (error) {
+      console.error("Process Checkout Error:", error);
+      res.status(500).render("cart/checkout", {
+        user: req.user || null,
+        cart: [],
+        subtotal: 0,
+        shipping: 0,
+        tax: 0,
+        totalAmount: 0,
+        shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
+        errorMessage: error.message || "Server error. Please try again."
+      });
+    }
+  };
+
+
+
+exports.renderOrderConfirmation = async (req, res) => {
+    if (!req.user?.userId) return res.status(401).render("auth/login", { error: "Please log in to view your order confirmation." });
+
+    try {
+        const order = await Order.findOne({ user: req.user.userId }).sort({ createdAt: -1 }).populate("items.product");
+        if (!order) {
+            return res.status(404).render("order-confirmation", {
+                user: req.user,
+                order: null,
+                errorMessage: "No recent order found."
+            });
+        }
+
+        res.render("order-confirmation", {
+            user: req.user,
+            order,
+            errorMessage: null
+        });
+    } catch (error) {
+        console.error("❌ Order Confirmation Error:", error.message);
+        res.status(500).render("order-confirmation", {
+            user: req.user || null,
+            order: null,
+            errorMessage: "Server error. Please try again."
+        });
+    }
+};
+
+
+
 // Helper function to format order details as HTML for email
 function generateOrderEmail(order) {
     const itemsHtml = order.items.map(item => `
@@ -274,107 +401,3 @@ function generateOrderEmail(order) {
         </html>
     `;
 }
-
-exports.processCheckout = async (req, res) => {
-    try {
-        const { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress, saveInfo } = req.body;
-        const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
-        const shippingSettings = await ShippingSettings.findOne() || { shippingOption: 'free', shippingRate: 0, taxRate: 0 };
-
-        if (!cart?.items?.length) {
-            return res.status(400).json({ success: false, message: "Cart is empty." });
-        }
-
-        const subtotal = cart.totalPrice;
-        const shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
-        const tax = subtotal * (shippingSettings.taxRate / 100);
-        const totalAmount = subtotal + shipping + tax;
-
-        // Generate unique order ID
-        let orderId = generateOrderId();
-        let existingOrder = await Order.findOne({ orderId });
-        while (existingOrder) {
-            orderId = generateOrderId();
-            existingOrder = await Order.findOne({ orderId });
-        }
-
-        const order = new Order({
-            user: req.user.userId,
-            orderId,
-            items: cart.items.map(item => ({
-                product: item.product._id,
-                name: item.product.name,
-                price: item.price,
-                quantity: item.quantity
-            })),
-            billingInfo: { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress },
-            paymentMethod: 'cash',
-            subtotal,
-            shipping,
-            tax,
-            totalAmount,
-            status: 'pending'
-        });
-
-        if (saveInfo) {
-            const user = await User.findById(req.user.userId);
-            user.billingInfo = { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress };
-            await user.save();
-        }
-
-        await order.save();
-        await Cart.deleteOne({ user: req.user.userId });
-
-        // Send email confirmation
-        const emailHtml = generateOrderEmail(order);
-        await sendEmail(
-            order.billingInfo.emailAddress,
-            `Order Confirmation - ${order.orderId}`,
-            emailHtml
-        );
-
-        res.redirect("/user/cart/order-confirmation");
-    } catch (error) {
-        console.error("Process Checkout Error:", error);
-        res.status(500).render("cart/checkout", {
-            user: req.user || null,
-            cart: [],
-            subtotal: 0,
-            shipping: 0,
-            tax: 0,
-            totalAmount: 0,
-            shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
-            errorMessage: "Server error. Please try again."
-        });
-    }
-};
-
-
-
-exports.renderOrderConfirmation = async (req, res) => {
-    if (!req.user?.userId) return res.status(401).render("auth/login", { error: "Please log in to view your order confirmation." });
-
-    try {
-        const order = await Order.findOne({ user: req.user.userId }).sort({ createdAt: -1 }).populate("items.product");
-        if (!order) {
-            return res.status(404).render("order-confirmation", {
-                user: req.user,
-                order: null,
-                errorMessage: "No recent order found."
-            });
-        }
-
-        res.render("order-confirmation", {
-            user: req.user,
-            order,
-            errorMessage: null
-        });
-    } catch (error) {
-        console.error("❌ Order Confirmation Error:", error.message);
-        res.status(500).render("order-confirmation", {
-            user: req.user || null,
-            order: null,
-            errorMessage: "Server error. Please try again."
-        });
-    }
-};
