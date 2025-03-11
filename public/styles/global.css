@@ -1608,15 +1608,6 @@ body {
   border-color: rgb(252 165 165 / var(--tw-border-opacity, 1));
 }
 
-.border-black {
-  border-color: var(--color-black);
-}
-
-.border-gray-300 {
-  --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
-}
-
 .bg-\[var\(--color-black\)\] {
   background-color: var(--color-black);
 }
@@ -2092,14 +2083,6 @@ body {
   color: rgb(234 179 8 / var(--tw-text-opacity, 1));
 }
 
-.text-black {
-  color: var(--color-black);
-}
-
-.text-red-500 {
-  color: var(--color-red-500);
-}
-
 .line-through {
   text-decoration-line: line-through;
 }
@@ -2460,10 +2443,6 @@ body {
   background-color: transparent;
 }
 
-.group:hover .group-hover\:bg-red-500 {
-  background-color: var(--color-red-500);
-}
-
 .group:hover .group-hover\:px-2 {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -2474,14 +2453,6 @@ body {
 }
 
 .group:hover .group-hover\:text-\[var\(--color-white\)\] {
-  color: var(--color-white);
-}
-
-.group:hover .group-hover\:text-red-500 {
-  color: var(--color-red-500);
-}
-
-.group:hover .group-hover\:text-white {
   color: var(--color-white);
 }
 
@@ -2525,6 +2496,10 @@ body {
   background-color: var(--color-red-500);
 }
 
+.hover\:bg-\[var\(--color-red-600\)\]:hover {
+  background-color: var(--color-red-600);
+}
+
 .hover\:bg-\[var\(--color-red-700\)\]:hover {
   background-color: var(--color-red-700);
 }
@@ -2556,10 +2531,6 @@ body {
 
 .hover\:text-\[var\(--color-white\)\]:hover {
   color: var(--color-white);
-}
-
-.hover\:text-red-500:hover {
-  color: var(--color-red-500);
 }
 
 .hover\:underline:hover {
@@ -2616,10 +2587,6 @@ body {
 }
 
 .focus\:ring-\[var\(--color-red-500\)\]:focus {
-  --tw-ring-color: var(--color-red-500);
-}
-
-.focus\:ring-red-500:focus {
   --tw-ring-color: var(--color-red-500);
 }
 
@@ -2779,12 +2746,20 @@ body {
     width: 8rem;
   }
 
+  .sm\:w-48 {
+    width: 12rem;
+  }
+
   .sm\:w-64 {
     width: 16rem;
   }
 
   .sm\:w-auto {
     width: auto;
+  }
+
+  .sm\:grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
   .sm\:grid-cols-2 {
@@ -3004,6 +2979,10 @@ body {
 
   .lg\:w-2\/3 {
     width: 66.666667%;
+  }
+
+  .lg\:grid-cols-1 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
   }
 
   .lg\:grid-cols-2 {

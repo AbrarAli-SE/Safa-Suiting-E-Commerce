@@ -10,10 +10,8 @@ const authenticateUser = async (req, res, next) => {
   if (token) {
     try {
       const decoded = jwt.verify(token, secretKey);
-      console.log("Decoded Token:", decoded);
       req.user = decoded;
     } catch (err) {
-      console.error("Token Verification Error:", err.message);
       req.user = null;
     }
   } else {
