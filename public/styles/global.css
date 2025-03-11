@@ -1280,6 +1280,10 @@ body {
   cursor: pointer;
 }
 
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
 .resize-none {
   resize: none;
 }
@@ -1684,6 +1688,10 @@ body {
 
 .bg-white {
   background-color: var(--color-white);
+}
+
+.bg-\[var\(--color-gray-400\)\] {
+  background-color: var(--color-gray-400);
 }
 
 .bg-opacity-50 {
@@ -2496,10 +2504,6 @@ body {
   background-color: var(--color-red-500);
 }
 
-.hover\:bg-\[var\(--color-red-600\)\]:hover {
-  background-color: var(--color-red-600);
-}
-
 .hover\:bg-\[var\(--color-red-700\)\]:hover {
   background-color: var(--color-red-700);
 }
@@ -2744,10 +2748,6 @@ body {
 
   .sm\:w-32 {
     width: 8rem;
-  }
-
-  .sm\:w-48 {
-    width: 12rem;
   }
 
   .sm\:w-64 {

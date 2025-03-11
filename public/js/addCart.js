@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Initial cart quantity update
     await updateCartQuantity();
 
-    // Handle Quick View button clicks
+        // Handle Quick View button clicks
     const quickViewButtons = document.querySelectorAll(".quick-view-btn");
     if (quickViewButtons.length === 0) {
       console.warn("No quick view buttons found, skipping setup.");
@@ -24,22 +24,27 @@ document.addEventListener("DOMContentLoaded", async function () {
         button.addEventListener("click", function () {
           try {
             const productId = this.dataset.productId;
+            const quantity = this.dataset.quantity; // Get quantity from quick-view-btn
             const modal = document.getElementById("quickViewModal");
             const addToCartModalBtn = modal.querySelector(".add-to-cart-btn-modal");
-      
+
             if (!productId) {
               console.error("Product ID not found in quick view button data.");
               return;
             }
-      
+
+            // Set product ID and quantity on the modal's Add to Cart button
             addToCartModalBtn.dataset.productId = productId;
-      
+            addToCartModalBtn.dataset.quantity = quantity; // Pass quantity to modal button
+
+            // Populate modal content
             document.getElementById("modalProductName").textContent = this.dataset.name || "Unknown Product";
             document.getElementById("modalProductImage").src = this.dataset.image || "";
             document.getElementById("modalProductPrice").textContent = `Rs ${this.dataset.price || '0'}`;
             document.getElementById("modalProductOldPrice").textContent = `Rs ${this.dataset.discountprice || '0'}`;
             document.getElementById("modalProductDesc").textContent = this.dataset.description || "No description available.";
-      
+
+            // Show modal
             modal.classList.remove("opacity-0", "pointer-events-none");
             modal.classList.add("opacity-100", "pointer-events-auto");
             modal.querySelector('.bg-\\[var\\(--color-white\\)\\]').classList.remove('scale-95');
@@ -87,11 +92,18 @@ document.addEventListener("DOMContentLoaded", async function () {
         button.addEventListener("click", async function () {
           try {
             const productId = this.dataset.productId;
+            const quantity = parseInt(this.dataset.quantity, 10); // Get quantity from data attribute
             console.log("Adding productId from product card:", productId);
 
             if (!productId) {
               console.error("Product ID not found in add-to-cart button data.");
               showMessage("Error: Product ID is missing.");
+              return;
+            }
+
+            // Check if product is out of stock
+            if (quantity === 0) {
+              showMessage("This product is out of stock!");
               return;
             }
 
@@ -131,11 +143,18 @@ document.addEventListener("DOMContentLoaded", async function () {
       addToCartModalBtn.addEventListener("click", async function () {
         try {
           const productId = this.dataset.productId;
+          const quantity = parseInt(this.dataset.quantity, 10);
           console.log("Adding productId from Quick View:", productId);
 
           if (!productId) {
             console.error("Product ID not found in Quick View modal button data.");
             showMessage("Error: Product ID is missing.");
+            return;
+          }
+
+           // Check if product is out of stock
+           if (quantity === 0) {
+            showMessage("This product is out of stock!");
             return;
           }
 

@@ -23,7 +23,6 @@ const productSchema = new mongoose.Schema(
     quantity: {
       type: Number,
       required: true,
-      min: 1, // ✅ Ensure at least 1 item in stock
     },
     category: {
       type: String,
@@ -36,7 +35,7 @@ const productSchema = new mongoose.Schema(
       trim: true,
     },
     image: {
-      type: String, // ✅ Cloudinary URL or local path for product image
+      type: String, 
       required: true,
     },
     keywords: [

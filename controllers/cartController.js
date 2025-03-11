@@ -188,6 +188,7 @@ exports.checkoutCart = async (req, res) => {
     try {
         const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
         const shippingSettings = await ShippingSettings.findOne() || { shippingOption: 'free', shippingRate: 0, taxRate: 0 };
+        const user = await User.findById(req.user.userId);
 
         if (!cart?.items?.length) {
             return res.redirect("/user/cart");
@@ -206,6 +207,7 @@ exports.checkoutCart = async (req, res) => {
             tax: tax.toFixed(2),
             totalAmount: totalAmount.toFixed(2),
             shippingSettings,
+            billingInfo: user.billingInfo || {}, // Pass saved billing info
             errorMessage: null
         });
     } catch (error) {
@@ -218,6 +220,7 @@ exports.checkoutCart = async (req, res) => {
             tax: 0,
             totalAmount: 0,
             shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
+            billingInfo: {},
             errorMessage: "Server error. Please try again."
         });
     }
