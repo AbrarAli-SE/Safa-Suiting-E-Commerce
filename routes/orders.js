@@ -4,7 +4,7 @@ const { authenticateUser, verifyUser } = require("../middleware/authMiddleware")
 const orderController = require("../controllers/orderController");
 
 // Order Routes
-router.get("/orders", authenticateUser, verifyUser, orderController.renderOrders);
+router.get("/active-orders", authenticateUser, verifyUser, orderController.renderOrders);
 router.delete("/orders/cancel/:orderId", authenticateUser, verifyUser, orderController.cancelOrder);
 router.get("/cancelled-orders", authenticateUser, verifyUser, orderController.renderCancelledOrders);
 

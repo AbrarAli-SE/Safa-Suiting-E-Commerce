@@ -16,7 +16,7 @@ const fs = require("fs");
   const wishlistRoutes = require("./routes/wishlist"); // ✅ Import Wishlist Routes
   const cartRoutes = require("./routes/cart"); // ✅ Import Cart Routes
   const productRoutes = require("./routes/product"); // ✅ Import Cart Routes
-  const orderRoutes = require("./routes/orders"); // ✅ Import Cart Routes
+  const orderRoutes = require("./routes/orders"); // Adjust path
   const ContactInfo = require("./models/info"); // Adjust path as needed
   const {authenticateUser} = require("./middleware/authMiddleware");
   
@@ -103,7 +103,7 @@ app.use('/user', userRoutes);
 // app.use("/api", productRoutes); // Prefix API routes with '/api'
 app.use("/user/wishlist", wishlistRoutes); // ✅ Wishlist Routes
 app.use("/user/cart", cartRoutes); // ✅ Cart Routes
-app.use("/user/orders", orderRoutes); // ✅ Cart Routes
+app.use("/user/orders", orderRoutes); // Mount order routes
 // ✅ Ensures `/pages/contact` and `/pages/about` are accessible for all users
 app.use("/pages", pageRoutes);
 app.use('/admin', adminRoutes);
