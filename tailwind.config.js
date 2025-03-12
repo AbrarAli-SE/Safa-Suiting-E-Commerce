@@ -11,7 +11,7 @@ module.exports = {
         'sm': '640px',
         'smd': '685px',
         'md': '768px',
-        'tablet': '912px', // Custom tablet breakpoint
+        'tablet': '912px',
         'lg': '1024px',
         'xlg': '1050px',
         'xl': '1280px',
@@ -20,9 +20,11 @@ module.exports = {
       colors: {
         black: 'var(--color-black)',
         white: 'var(--color-white)',
+        'red-50': 'var(--color-red-50)',  // Added for bg-red-50
         'red-500': 'var(--color-red-500)',
         'red-700': 'var(--color-red-700)',
         'gray-50': 'var(--color-gray-50)',
+        'gray-300': 'var(--color-gray-300)', // Added for border-gray-300
         'gray-400': 'var(--color-gray-400)',
         'gray-500': 'var(--color-gray-500)',
         'gray-600': 'var(--color-gray-600)',
@@ -42,7 +44,7 @@ module.exports = {
   },
   plugins: [
     require('tailwind-scrollbar'),
-    require('tailwindcss-animate'),
+    require('tailwindcss-animate'), // Already included, ensures animations work
     function ({ addBase, addUtilities }) {
       addBase({
         ':root': {
@@ -53,9 +55,11 @@ module.exports = {
           '--spacing-5': '1.25rem',
           '--color-black': '#000000',
           '--color-white': '#ffffff',
+          '--color-red-50': '#fef2f2',  // Added for bg-red-50
           '--color-red-500': '#ff0000',
           '--color-red-700': '#cc0000',
           '--color-gray-50': '#f9fafb',
+          '--color-gray-300': '#d1d5db', // Added for border-gray-300
           '--color-gray-400': '#9ca3af',
           '--color-gray-500': '#6b7280',
           '--color-gray-600': '#4b5563',

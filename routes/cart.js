@@ -9,6 +9,7 @@ router.get("/", authenticateUser, cartController.renderCart);
 // Add to Cart Route
 router.post("/add", authenticateUser, cartController.addToCart);
 
+
 // Update Cart Route
 router.put("/update", authenticateUser, cartController.updateCart);
 

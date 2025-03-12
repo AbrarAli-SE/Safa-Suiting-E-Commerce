@@ -155,6 +155,7 @@ document.addEventListener("DOMContentLoaded", async function () {
            // Check if product is out of stock
            if (quantity === 0) {
             showMessage("This product is out of stock!");
+            closeQuickView(); // Auto-close modal on success
             return;
           }
 
@@ -177,6 +178,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             console.error("Server error adding to cart from quick view:", data.message);
             if (data.message === "Please log in to add items to your cart." || data.success === "false") {
               showMessage("Please log in first to add items to your cart");
+              closeQuickView(); // Auto-close modal on success
             } else {
               showMessage(data.message || "Failed to add item to cart");
             }

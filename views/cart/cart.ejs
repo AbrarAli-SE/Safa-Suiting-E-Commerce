@@ -30,6 +30,9 @@
                                         <div class="flex-1 text-center xs:text-left mt-2 xs:mt-0">
                                             <h3 class="font-semibold text-[var(--color-black)] text-sm xs:text-base sm:text-lg"><%= item.product.name || 'Unknown Product' %></h3>
                                             <span class="text-[var(--color-gray-600)] text-xs xs:text-sm">Price: <span class="price" data-price="<%= item.price || 0 %>">Rs <%= (item.price || 0).toFixed(2) %></span></span>
+                                            <% if (item.product.quantity !== undefined) { %>
+                                                <span class="text-[var(--color-gray-600)] text-xs xs:text-sm"> (Stock: <%= item.product.quantity -1 %>)</span>
+                                              <% } %>
                                         </div>
                                     </div>
                                     <div class="flex flex-col xs:flex-row items-center gap-4 mt-4 xs:mt-0 w-full xs:w-auto justify-center xs:justify-end quantity-section">
@@ -80,3 +83,4 @@
 </main>
 <%- include('../shared/footer') %>
 <script type="module" src="/js/updateCart.js"></script>
+
