@@ -1280,10 +1280,6 @@ body {
   cursor: pointer;
 }
 
-.cursor-not-allowed {
-  cursor: not-allowed;
-}
-
 .resize-none {
   resize: none;
 }
@@ -1688,10 +1684,6 @@ body {
 
 .bg-white {
   background-color: var(--color-white);
-}
-
-.bg-\[var\(--color-gray-400\)\] {
-  background-color: var(--color-gray-400);
 }
 
 .bg-opacity-50 {

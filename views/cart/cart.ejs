@@ -19,26 +19,46 @@
                     <div class="cart-items-container space-y-4 max-h-[28rem] overflow-y-auto scrollbar-hide">
                         <% cart.forEach(item => { %>
                             <% if (item && item.product) { %>
-                                <div class="bg-[var(--color-white)] shadow-lg rounded-lg p-4 flex flex-col xs:flex-row items-start justify-between border-[var(--color-gray-300)] cart-item transition-all duration-300 hover:shadow-xl" data-item-id="<%= item._id %>">
+                                <div class="bg-[var(--color-white)] shadow-lg rounded-lg p-4 flex flex-col xs:flex-row items-start justify-between border-[var(--color-gray-300)] cart-item transition-all duration-300 hover:shadow-xl" 
+                                     data-item-id="<%= item._id %>" 
+                                     data-available-quantity="<%= item.product.quantity %>">
                                     <div class="flex flex-col xs:flex-row items-center gap-4 w-full">
                                         <div class="flex items-center gap-4 w-full xs:w-auto justify-center xs:justify-start">
                                             <button class="remove-item hidden xs:block p-2 bg-[var(--color-red-50)] text-[var(--color-red-500)] rounded-full hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300" data-item-id="<%= item._id %>">
                                                 <i class="bi bi-trash text-lg"></i>
                                             </button>
-                                            <img src="<%= item.product.image || '/default-image.jpg' %>" alt="<%= item.product.name || 'Unknown Product' %>" class="w-16 h-16 xs:w-20 xs:h-20 sm:w-24 sm:h-24 object-cover rounded flex-shrink-0">
+                                            <img src="<%= item.product.image || '/default-image.jpg' %>" 
+                                                 alt="<%= item.product.name || 'Unknown Product' %>" 
+                                                 class="w-16 h-16 xs:w-20 xs:h-20 sm:w-24 sm:h-24 object-cover rounded flex-shrink-0">
                                         </div>
                                         <div class="flex-1 text-center xs:text-left mt-2 xs:mt-0">
-                                            <h3 class="font-semibold text-[var(--color-black)] text-sm xs:text-base sm:text-lg"><%= item.product.name || 'Unknown Product' %></h3>
-                                            <span class="text-[var(--color-gray-600)] text-xs xs:text-sm">Price: <span class="price" data-price="<%= item.price || 0 %>">Rs <%= (item.price || 0).toFixed(2) %></span></span>
+                                            <h3 class="font-semibold text-[var(--color-black)] text-sm xs:text-base sm:text-lg">
+                                                <%= item.product.name || 'Unknown Product' %>
+                                            </h3>
+                                            <span class="text-[var(--color-gray-600)] text-xs xs:text-sm">
+                                                Price: <span class="price" data-price="<%= item.price || 0 %>">Rs <%= (item.price || 0).toFixed(2) %></span>
+                                            </span>
+                                            <p class="text-[var(--color-gray-600)] text-xs xs:text-sm mt-1">
+                                                Available: <span class="stock-info"><%= item.product.quantity %></span> in stock
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="flex flex-col xs:flex-row items-center gap-4 mt-4 xs:mt-0 w-full xs:w-auto justify-center xs:justify-end quantity-section">
-                                        <div class="flex items-center border border-[var(--color-gray-300)] rounded-md overflow-hidden w-24 xs:w-28 sm:w-32">
-                                            <button class="quantity-decrease w-8 h-8 flex items-center justify-center text-[var(--color-gray-600)] hover:text-[var(--color-red-500)] hover:bg-[var(--color-gray-100)] transition-all duration-300" data-item-id="<%= item._id %>">-</button>
-                                            <input type="number" class="quantity-value w-8 xs:w-12 px-2 py-2 text-center bg-[var(--color-gray-50)] text-[var(--color-black)] text-xs xs:text-sm" data-item-id="<%= item._id %>" value="<%= item.quantity || 1 %>" min="1" readonly>
-                                            <button class="quantity-increase w-8 h-8 flex items-center justify-center text-[var(--color-gray-600)] hover:text-[var(--color-red-500)] hover:bg-[var(--color-gray-100)] transition-all duration-300" data-item-id="<%= item._id %>">+</button>
+                                        <div class="flex items-center border border-[var(--color-gray-300)] rounded-md overflow-hidden w-24 xs:w-28 sm:w-32 relative">
+                                            <button class="quantity-decrease w-8 h-8 flex items-center justify-center text-[var(--color-gray-600)] hover:text-[var(--color-red-500)] hover:bg-[var(--color-gray-100)] transition-all duration-300" 
+                                                    data-item-id="<%= item._id %>">-</button>
+                                            <input type="number" 
+                                                   class="quantity-value w-8 xs:w-12 px-2 py-2 text-center bg-[var(--color-gray-50)] text-[var(--color-black)] text-xs xs:text-sm" 
+                                                   data-item-id="<%= item._id %>" 
+                                                   value="<%= item.quantity || 1 %>" 
+                                                   min="1" 
+                                                   readonly>
+                                            <button class="quantity-increase w-8 h-8 flex items-center justify-center text-[var(--color-gray-600)] hover:text-[var(--color-red-500)] hover:bg-[var(--color-gray-100)] transition-all duration-300" 
+                                                    data-item-id="<%= item._id %>">+</button>
                                         </div>
-                                        <span class="font-semibold text-[var(--color-black)] subtotal text-xs xs:text-sm sm:text-base min-w-[60px] xs:min-w-[80px] text-center xs:text-right">Rs <%= ((item.price || 0) * (item.quantity || 1)).toFixed(2) %></span>
+                                        <span class="font-semibold text-[var(--color-black)] subtotal text-xs xs:text-sm sm:text-base min-w-[60px] xs:min-w-[80px] text-center xs:text-right">
+                                            Rs <%= ((item.price || 0) * (item.quantity || 1)).toFixed(2) %>
+                                        </span>
                                     </div>
                                 </div>
                             <% } %>

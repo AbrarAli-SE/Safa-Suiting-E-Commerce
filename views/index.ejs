@@ -83,7 +83,8 @@
                   class="quick-view-btn p-2 bg-[var(--color-white)] text-[var(--color-red-500)] rounded-full shadow hover:bg-[var(--color-red-500)] hover:text-[var(--color-white)] transition-all duration-300"
                   data-name="<%= product.name %>" data-image="<%= product.image %>" data-price="<%= product.price %>"
                   data-discountprice="<%= product.discountPrice %>" data-description="<%= product.description || 'No description available.' %>"
-                  data-product-id="<%= product._id %>">
+                  data-product-id="<%= product._id %>"
+                  data-quantity="<%= product.quantity %>">
                   <i class="bi bi-eye"></i>
                 </button>
                 <!-- Inside the product card loop -->
