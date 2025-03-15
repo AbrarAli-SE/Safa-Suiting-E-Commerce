@@ -171,7 +171,7 @@
                     <option value="user" ${user.role === "user" ? "selected" : ""}>User</option>
                     <option value="admin" ${user.role === "admin" ? "selected" : ""}>Admin</option>
                   </select>
-                  <button class="update-role-btn ml-2 text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-user-id="${user._id}"><i class="bi bi-pencil-square"></i></button>
+                  <button class="update-role-btn ml-2 text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-user-id="${user._id}"><i class="bi bi-arrow-repeat"></i></button>
                 </td>
                 <td class="px-4 py-2">${user.lastActive ? new Date(user.lastActive).toLocaleString() : 'N/A'}</td>
                 <td class="px-4 py-2 flex items-center gap-3">

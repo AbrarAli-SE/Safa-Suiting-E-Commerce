@@ -26,6 +26,14 @@ router.get("/setting", authenticateUser, adminAuth, adminController.renderSettin
 
 
 router.get("/payment",authenticateUser,adminAuth, adminController.renderPayment);
+// Get payments (AJAX)
+router.get('/payments', authenticateUser, adminAuth, adminController.getPayments);
+
+// Toggle payment received status (AJAX)
+router.put('/payments/toggle-received', authenticateUser, adminAuth, adminController.toggleReceived);
+
+// Delete payment (AJAX)
+router.delete('/payments/delete', authenticateUser, adminAuth, adminController.deletePayment);
 
 
 router.get("/assign-id",authenticateUser,adminAuth, adminController.renderTrackId);
@@ -40,7 +48,7 @@ router.get("/cancel-order",authenticateUser,adminAuth, adminController.renderAdm
 router.delete("/cancel-order/delete",authenticateUser,adminAuth, adminController.deleteCancelledOrder);
 
 
-router.get("/analytical",authenticateUser,adminAuth, adminController.renderAnalytical);
+router.get('/analytics', authenticateUser, adminAuth, adminController.renderAnalytics);
 
 
 

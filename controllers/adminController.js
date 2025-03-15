@@ -8,6 +8,7 @@ const ContactInfo = require("../models/info");
 const CancelledOrder = require("../models/CancelledOrder");
 // Assuming you have an Order model
 const Order = require('../models/Order'); // Adjust the path to your Order model
+const Payment = require('../models/Payment');
 const bcrypt = require("bcryptjs");
 const Carousel = require("../models/Carousel");
 const { uploadCarousel } = require("../config/multer-config");
@@ -172,14 +173,126 @@ exports.deleteContact = async (req, res) => {
   }
 };
 
-exports.renderPayment = async(req, res) =>{
-    try {
-        res.render("admin/payment");
-    } catch (error) {
-        console.error("❌ Payment Error:", error);
-        res.status(500).send("Server error");
+exports.renderPayment = async (req, res) => {
+  try {
+    res.render("admin/payment");
+  } catch (error) {
+    console.error("❌ Payment Render Error:", error);
+    res.status(500).send("Server error");
+  }
+};
+
+// Get all payments with pagination
+exports.getPayments = async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
+
+    const totalPayments = await Payment.countDocuments();
+    const payments = await Payment.find()
+      .populate('order', 'orderId billingInfo.firstName totalAmount')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      payments: payments.map(payment => ({
+        _id: payment._id,
+        orderId: payment.order.orderId,
+        customerName: payment.order.billingInfo.firstName,
+        amount: payment.order.totalAmount,
+        received: payment.status === 'Received'
+      })),
+      currentPage: page,
+      totalPages: Math.ceil(totalPayments / limit)
+    });
+  } catch (error) {
+    console.error('Error fetching payments:', error);
+    res.status(500).json({ error: 'Server error while fetching payments' });
+  }
+};
+
+// Update payment status
+exports.toggleReceived = async (req, res) => {
+  try {
+    const { paymentId, received, page } = req.body;
+
+    const payment = await Payment.findById(paymentId);
+    if (!payment) {
+      return res.status(404).json({ error: 'Payment not found' });
     }
-}
+
+    payment.status = received ? 'Received' : 'Pending';
+    payment.updatedAt = Date.now();
+    await payment.save();
+
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const totalPayments = await Payment.countDocuments();
+    const payments = await Payment.find()
+      .populate('order', 'orderId billingInfo.firstName totalAmount')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      message: `Payment status updated to ${received ? 'Received' : 'Pending'}`,
+      payments: payments.map(payment => ({
+        _id: payment._id,
+        orderId: payment.order.orderId,
+        customerName: payment.order.billingInfo.firstName,
+        amount: payment.order.totalAmount,
+        received: payment.status === 'Received'
+      })),
+      currentPage: page,
+      totalPages: Math.ceil(totalPayments / limit)
+    });
+  } catch (error) {
+    console.error('Error updating payment status:', error);
+    res.status(500).json({ error: 'Server error while updating payment status' });
+  }
+};
+
+// Delete payment
+exports.deletePayment = async (req, res) => {
+  try {
+    const { paymentId, page } = req.body;
+
+    const payment = await Payment.findByIdAndDelete(paymentId);
+    if (!payment) {
+      return res.status(404).json({ error: 'Payment not found' });
+    }
+
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const totalPayments = await Payment.countDocuments();
+    const payments = await Payment.find()
+      .populate('order', 'orderId billingInfo.firstName totalAmount')
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    res.json({
+      message: 'Payment deleted successfully',
+      payments: payments.map(payment => ({
+        _id: payment._id,
+        orderId: payment.order.orderId,
+        customerName: payment.order.billingInfo.firstName,
+        amount: payment.order.totalAmount,
+        received: payment.status === 'Received'
+      })),
+      currentPage: page,
+      totalPages: Math.ceil(totalPayments / limit)
+    });
+  } catch (error) {
+    console.error('Error deleting payment:', error);
+    res.status(500).json({ error: 'Server error while deleting payment' });
+  }
+};
+
+
+
 
 exports.renderTrackId = async(req, res) =>{
     try {
@@ -466,14 +579,115 @@ exports.deleteCancelledOrder = async (req, res) => {
   }
 };
 
-exports.renderAnalytical = async(req, res) =>{
-    try {
-        res.render("admin/analytical");
-    } catch (error) {
-        console.error("❌ Cancel Order Error:", error);
-        res.status(500).send("Server error");
-    }
-}
+
+
+
+
+exports.renderAnalytics = async (req, res) => {
+  console.log('Entering renderAnalytics'); // Confirm entry
+  try {
+    console.log('Fetching orders');
+    const orders = await Order.find();
+    console.log('Orders fetched:', orders.length);
+
+    console.log('Calculating total revenue');
+    const totalRevenue = orders.reduce((sum, order) => sum + (order.totalAmount || 0), 0);
+    console.log('Total revenue:', totalRevenue);
+
+    const totalOrders = orders.length;
+    console.log('Total orders:', totalOrders);
+
+    console.log('Counting new customers');
+    const thirtyDaysAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000);
+    const newCustomers = await User.countDocuments({ createdAt: { $gte: thirtyDaysAgo } });
+    console.log('New customers:', newCustomers);
+
+    console.log('Calculating products sold');
+    const productsSold = orders.reduce((sum, order) => sum + order.items.reduce((itemSum, item) => itemSum + (item.quantity || 0), 0), 0);
+    console.log('Products sold:', productsSold);
+
+    console.log('Running order analytics aggregation');
+    const orderAnalytics = await Order.aggregate([
+      { $match: { createdAt: { $exists: true, $type: "date" } } },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          incoming: { $sum: 1 },
+          outgoing: { $sum: { $cond: [{ $eq: ["$status", "Shipped"] }, 1, 0] } }
+        }
+      },
+      { $sort: { "_id": 1 } }
+    ]);
+    console.log('Order analytics:', orderAnalytics);
+
+    console.log('Running revenue analytics aggregation');
+    const revenueAnalytics = await Order.aggregate([
+      { $match: { createdAt: { $exists: true, $type: "date" } } },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          revenue: { $sum: "$totalAmount" }
+        }
+      },
+      { $sort: { "_id": 1 } }
+    ]);
+    console.log('Revenue analytics:', revenueAnalytics);
+
+    console.log('Running category analytics aggregation');
+    const categoryAnalytics = await Order.aggregate([
+      { $unwind: "$items" },
+      {
+        $lookup: {
+          from: "products",
+          localField: "items.product",
+          foreignField: "_id",
+          as: "productInfo"
+        }
+      },
+      { $unwind: "$productInfo" },
+      {
+        $group: {
+          _id: "$productInfo.category",
+          count: { $sum: "$items.quantity" }
+        }
+      },
+      { $sort: { "count": -1 } }
+    ]);
+    console.log('Category analytics:', categoryAnalytics);
+
+    console.log('Running growth analytics aggregation');
+    const growthAnalytics = await User.aggregate([
+      { $match: { createdAt: { $exists: true, $type: "date" } } },
+      {
+        $group: {
+          _id: { $month: "$createdAt" },
+          count: { $sum: 1 }
+        }
+      },
+      { $sort: { "_id": 1 } }
+    ]);
+    console.log('Growth analytics:', growthAnalytics);
+
+    console.log('Rendering analytics page');
+    res.render("admin/analytics", {
+      totalRevenue,
+      totalOrders,
+      newCustomers,
+      productsSold,
+      orderAnalytics,
+      revenueAnalytics,
+      categoryAnalytics,
+      growthAnalytics
+    });
+  } catch (error) {
+    console.error('❌ Analytics Error:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    res.status(500).render("admin/analytics", { error: `Server error while fetching analytics: ${error.message}` });
+  }
+};
 
 exports.renderManageUsers = async (req, res) => {
   try {
@@ -594,12 +808,17 @@ exports.renderUserDetails = async (req, res) => {
     const wishlist = await Wishlist.findOne({ user: userId });
     const wishlistCount = wishlist ? wishlist.items.length : 0;
 
+    // Fetch orders
+    const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
+
     res.render("admin/user-details", {
       user: {
         ...user._doc,
         cartCount,
         cartTotalPrice,
         wishlistCount,
+        billingInfo: user.billingInfo || {}, // Include billing info
+        orders // Include orders
       },
       error: null,
     });
