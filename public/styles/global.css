@@ -567,9 +567,11 @@ video {
   --spacing-5: 1.25rem;
   --color-black: #000000;
   --color-white: #ffffff;
+  --color-red-50: #fef2f2;
   --color-red-500: #ff0000;
   --color-red-700: #cc0000;
   --color-gray-50: #f9fafb;
+  --color-gray-300: #d1d5db;
   --color-gray-400: #9ca3af;
   --color-gray-500: #6b7280;
   --color-gray-600: #4b5563;
@@ -1670,8 +1672,7 @@ body {
 }
 
 .bg-red-50 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 242 242 / var(--tw-bg-opacity, 1));
+  background-color: var(--color-red-50);
 }
 
 .bg-red-500 {
@@ -2597,8 +2598,7 @@ body {
 }
 
 .dark\:text-gray-300:is(.dark *) {
-  --tw-text-opacity: 1;
-  color: rgb(209 213 219 / var(--tw-text-opacity, 1));
+  color: var(--color-gray-300);
 }
 
 .dark\:text-gray-400:is(.dark *) {
