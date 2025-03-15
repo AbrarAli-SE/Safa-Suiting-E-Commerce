@@ -110,36 +110,74 @@ exports.renderCart = async (req, res) => {
 exports.updateCart = async (req, res) => {
     const { updatedItems } = req.body;
     if (!req.user) return res.status(401).json({ success: false, message: "Please log in to update your cart." });
-
+  
     try {
-        const user = await User.findById(req.user.userId);
-        if (user) {
-            user.lastActive = new Date();
-            await user.save();
-        }
-
-        const cart = await Cart.findOne({ user: req.user.userId });
-        if (!cart) return res.status(404).json({ success: false, message: "Cart not found." });
-
-        updatedItems.forEach(updatedItem => {
-            const item = cart.items.find(item => item._id.toString() === updatedItem.itemId);
-            if (item) item.quantity = Math.max(1, parseInt(updatedItem.quantity));
+      // Update user's lastActive
+      const user = await User.findById(req.user.userId);
+      if (user) {
+        user.lastActive = new Date();
+        await user.save();
+      }
+  
+      const cart = await Cart.findOne({ user: req.user.userId }).populate('items.product');
+      if (!cart) return res.status(404).json({ success: false, message: "Cart not found." });
+  
+      const updatedCartItems = cart.items.map(item => {
+        const updatedItem = updatedItems.find(i => i.itemId === item._id.toString());
+        const requestedQuantity = updatedItem ? Math.max(1, parseInt(updatedItem.quantity)) : item.quantity;
+        const availableQuantity = item.product.quantity;
+  
+        return {
+          _id: item._id,
+          product: item.product._id,
+          name: item.name || item.product.name,
+          img: item.img || item.product.image,
+          price: item.price || item.product.price,
+          quantity: requestedQuantity,
+          availableQuantity: availableQuantity
+        };
+      });
+  
+      const stockIssues = updatedCartItems.filter(item => item.quantity > item.availableQuantity);
+      if (stockIssues.length > 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Some items exceed available stock",
+          cart: { items: updatedCartItems },
+          stockIssues: stockIssues.map(item => ({
+            itemId: item._id,
+            requested: item.quantity,
+            available: item.availableQuantity
+          }))
         });
-
-        await updateCartTotals(cart);
-        await cart.save();
-        return res.json({ 
-            success: true, 
-            cart: cart.toObject(),
-            shipping: cart.shipping,
-            tax: cart.tax,
-            totalAmount: cart.finalTotal
-        });
+      }
+  
+      cart.items = updatedCartItems.map(item => ({
+        product: item.product,
+        name: item.name,
+        img: item.img,
+        price: item.price,
+        quantity: item.quantity
+      }));
+  
+      await updateCartTotals(cart);
+      await cart.save();
+  
+      const cartResponse = cart.toObject();
+      cartResponse.items = updatedCartItems; // Include availableQuantity in success response too
+  
+      return res.json({
+        success: true,
+        cart: cartResponse,
+        shipping: cart.shipping,
+        tax: cart.tax,
+        totalAmount: cart.finalTotal
+      });
     } catch (error) {
-        console.error("Update Cart Error:", error);
-        return res.status(500).json({ success: false, message: "Server error. Please try again." });
+      console.error("Update Cart Error:", error);
+      return res.status(500).json({ success: false, message: "Server error. Please try again." });
     }
-};
+  };
 
 
 exports.deleteItem = async (req, res) => {

@@ -124,29 +124,6 @@
   .card-shadow {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
-
-.highlight-blink {
-  animation: blink 5s ease-in-out forwards;
-}
-
-@keyframes blink {
-  0% {
-    background-color: transparent;
-    border-color: var(--color-gray-300); /* Match your default border */
-  }
-  10% {
-    background-color: rgba(239, 68, 68, 0.1); /* Light red (bg-red-50 equivalent) */
-    border-color: #ef4444; /* Red-500 */
-  }
-  90% {
-    background-color: rgba(239, 68, 68, 0.1);
-    border-color: #ef4444;
-  }
-  100% {
-    background-color: transparent;
-    border-color: var(--color-gray-300);
-  }
-}
 </style>
 
 
@@ -232,4 +209,3 @@
 
 
     <script type="module" src="/js/localStorage-cart.js"></script>
-
