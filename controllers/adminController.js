@@ -319,6 +319,74 @@ exports.assignTrackingId = async (req, res) => {
   }
 };
 
+
+// Get Order Details (New)
+exports.getOrderDetails = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    const order = await Order.findOne({ orderId })
+      .populate('items.product', 'name price image') // Populate product details including image
+      .populate('user', 'email');
+
+    if (!order) {
+      return res.status(404).json({
+        error: "Order not found"
+      });
+    }
+
+    // Format the response to include necessary details
+    const formattedOrder = {
+      orderId: order.orderId,
+      customerName: order.billingInfo.firstName,
+      totalPrice: order.totalAmount,
+      trackingId: order.trackingId || 'Not Assigned',
+      status: order.status,
+      items: order.items.map(item => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: item.price, // Price from order item, not product (in case of discounts)
+        image: item.product.image // Assuming image is a URL stored in the product
+      })),
+      billingInfo: {
+        streetAddress: order.billingInfo.streetAddress,
+        townCity: order.billingInfo.townCity,
+        phoneNumber: order.billingInfo.phoneNumber,
+        emailAddress: order.billingInfo.emailAddress
+      },
+      paymentMethod: order.paymentMethod,
+      createdAt: order.createdAt
+    };
+
+    res.status(200).json(formattedOrder);
+  } catch (error) {
+    console.error("❌ Error fetching order details:", error);
+    res.status(500).json({ error: "Server error fetching order details" });
+  }
+};
+
+// Delete Order (New)
+exports.deleteOrder = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    const order = await Order.findOneAndDelete({ orderId });
+    if (!order) {
+      return res.status(404).json({
+        error: "Order not found"
+      });
+    }
+
+    res.status(200).json({
+      message: "Order deleted successfully"
+    });
+  } catch (error) {
+    console.error("❌ Error deleting order:", error);
+    res.status(500).json({
+      error: "Server error deleting order"
+    });
+  }
+};
 // ... (renderAdminOrders remains unchanged)
 
 exports.renderAdminCancelledOrders = async (req, res) => {

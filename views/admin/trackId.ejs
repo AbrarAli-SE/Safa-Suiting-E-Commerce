@@ -14,69 +14,83 @@
   <!-- Main Content -->
   <div id="mainContent" class="p-root-5 w-full transition-filter duration-300 ease-in-out">
     <div class="pt-16">
-    <div class="max-w-7xl mx-auto">
-      <!-- Search and Status Filter Section -->
-      <div class="mb-6 flex flex-col sm:flex-row items-center gap-4">
-        <div class="flex items-center gap-4 w-full sm:w-auto">
-          <select 
-            id="statusFilter" 
-            class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-auto">
-            <option value="">Filter by Status</option>
-            <option value="Pending">Pending</option>
-            <option value="Shipped">Shipped</option>
-          </select>
+      <div class="max-w-7xl mx-auto">
+        <!-- Search and Status Filter Section -->
+        <div class="mb-6 flex flex-col sm:flex-row items-center gap-4">
+          <div class="flex items-center gap-4 w-full sm:w-auto">
+            <select 
+              id="statusFilter" 
+              class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-auto">
+              <option value="">Filter by Status</option>
+              <option value="pending">Pending</option>
+              <option value="Shipped">Shipped</option>
+            </select>
+          </div>
         </div>
-      </div>
 
-      <!-- Order Tracking Section -->
-      <div class="mb-6 flex flex-col sm:flex-row items-center gap-4">
-        <input 
-          type="text" 
-          id="orderId" 
-          placeholder="Enter Order ID" 
-          class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-64" />
-        <input 
-          type="text" 
-          id="trackingId" 
-          placeholder="Enter Tracking ID" 
-          class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-64" />
-        <button 
-          id="assignTrackingBtn" 
-          class="px-6 py-2 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg w-full sm:w-auto">
-          Assign ID
-        </button>
-      </div>
-
-      <!-- Messages -->
-      <div id="message-container" class="mb-6"></div>
-
-      <!-- Orders Table -->
-      <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg">
-        <h2 class="text-xl font-semibold text-[var(--color-black)] mb-4">Orders List</h2>
-        <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-[var(--color-gray-400)] scrollbar-track-[var(--color-gray-100)]">
-          <table class="min-w-full table-fixed" id="ordersTable">
-            <thead class="bg-[var(--color-gray-50)] text-[var(--color-gray-700)]">
-              <tr>
-                <th class="px-4 py-3 text-left w-1/5">Order ID</th>
-                <th class="px-4 py-3 text-left w-1/5">Customer Name</th>
-                <th class="px-4 py-3 text-left w-1/5">Total Price</th>
-                <th class="px-4 py-3 text-left w-1/5">Tracking ID</th>
-                <th class="px-4 py-3 text-left w-1/5">Status</th>
-              </tr>
-            </thead>
-            <tbody class="text-[var(--color-gray-700)]" id="ordersList">
-              <!-- Populated via AJAX -->
-            </tbody>
-          </table>
-          <p id="noResults" class="text-center text-[var(--color-red-500)] font-semibold hidden mt-4">No orders found</p>
+        <!-- Order Tracking Section -->
+        <div class="mb-6 flex flex-col sm:flex-row items-center gap-4">
+          <input 
+            type="text" 
+            id="orderId" 
+            placeholder="Enter Order ID" 
+            class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-64" />
+          <input 
+            type="text" 
+            id="trackingId" 
+            placeholder="Enter Tracking ID" 
+            class="px-4 py-2 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none transition-all duration-300 shadow-sm hover:shadow-md w-full sm:w-64" />
+          <button 
+            id="assignTrackingBtn" 
+            class="px-6 py-2 bg-[var(--color-red-500)] text-[var(--color-white)] font-semibold rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300 shadow-md hover:shadow-lg w-full sm:w-auto">
+            Assign ID
+          </button>
         </div>
-      </div>
 
-      <!-- Pagination Controls -->
-      <div class="flex justify-center mt-6">
-        <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
+        <!-- Messages -->
+        <div id="message-container" class="mb-6"></div>
+
+        <!-- Orders Table -->
+        <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg">
+          <h2 class="text-xl font-semibold text-[var(--color-black)] mb-4">Orders List</h2>
+          <div class="overflow-x-auto scrollbar-thin scrollbar-thumb-[var(--color-gray-400)] scrollbar-track-[var(--color-gray-100)]">
+            <table class="min-w-full table-fixed" id="ordersTable">
+              <thead class="bg-[var(--color-gray-50)] text-[var(--color-gray-700)]">
+                <tr>
+                  <th class="px-4 py-3 text-left w-1/6">Order ID</th>
+                  <th class="px-4 py-3 text-left w-1/6">Customer Name</th>
+                  <th class="px-4 py-3 text-left w-1/6">Total Price</th>
+                  <th class="px-4 py-3 text-left w-1/6">Tracking ID</th>
+                  <th class="px-4 py-3 text-left w-1/6">Status</th>
+                  <th class="px-4 py-3 text-left w-1/6">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="text-[var(--color-gray-700)]" id="ordersList">
+                <!-- Populated via AJAX -->
+              </tbody>
+            </table>
+            <p id="noResults" class="text-center text-[var(--color-red-500)] font-semibold hidden mt-4">No orders found</p>
+          </div>
+        </div>
+
+        <!-- Pagination Controls -->
+        <div class="flex justify-center mt-6">
+          <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
+        </div>
       </div>
     </div>
+  </div>
+
+  <!-- Order Details Modal -->
+  <div id="orderModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold text-[var(--color-black)]">Order Details</h2>
+        <button id="closeModal" class="text-[var(--color-gray-500)] hover:text-[var(--color-gray-700)]">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div id="orderDetailsContent"></div>
     </div>
   </div>
 
@@ -91,6 +105,9 @@
       const orderIdInput = document.getElementById("orderId");
       const trackingIdInput = document.getElementById("trackingId");
       const assignTrackingBtn = document.getElementById("assignTrackingBtn");
+      const orderModal = document.getElementById("orderModal");
+      const closeModal = document.getElementById("closeModal");
+      const orderDetailsContent = document.getElementById("orderDetailsContent");
       let currentPage = 1;
 
       // Fetch initial orders
@@ -127,7 +144,6 @@
             trackingIdInput.value = "";
             fetchOrders(currentPage); // Refresh the order list
           } else {
-            // Improved error handling for specific cases
             showMessage(result.error || "An error occurred while assigning tracking ID.", "error");
           }
         } catch (error) {
@@ -174,33 +190,118 @@
       function updateOrdersTable(orders) {
         ordersList.innerHTML = "";
         if (!orders || orders.length === 0) {
-          ordersList.innerHTML = '<tr><td colspan="5" class="text-center text-[var(--color-red-500)] font-semibold py-4">No orders found.</td></tr>';
+          ordersList.innerHTML = '<tr><td colspan="6" class="text-center text-[var(--color-red-500)] font-semibold py-4">No orders found.</td></tr>';
           noResults.classList.remove("hidden");
         } else {
           orders.forEach(order => {
             const row = `
-              <tr class="border-t border-[var(--color-gray-200)] hover:bg-[var(--color-gray-100)] cursor-pointer" data-order-id="${order.orderId}" data-status="${order.status}">
+              <tr class="border-t border-[var(--color-gray-200)] hover:bg-[var(--color-gray-100)]" data-order-id="${order.orderId}" data-status="${order.status}">
                 <td class="px-4 py-2">${order.orderId}</td>
                 <td class="px-4 py-2">${order.customerName}</td>
                 <td class="px-4 py-2">$${order.totalPrice.toFixed(2)}</td>
                 <td class="px-4 py-2">${order.trackingId || 'None'}</td>
-                <td class="px-4 py-2 ${order.status === 'Shipped' ? 'text-[var(--color-green-500)]' : 'text-[var(--color-yellow-500)]'}">${order.status}</td>
+                <td class="px-4 py-2 capitalize ${order.status === 'Shipped' ? 'text-[var(--color-green-500)]' : 'text-[var(--color-yellow-500)]'}">${order.status}</td>
+                <td class="px-4 py-2 flex gap-2">
+                  <button class="view-btn text-[var(--color-blue-500)] hover:text-[var(--color-blue-700)]" data-order-id="${order.orderId}" title="View Details">
+                    <i class="bi bi-eye"></i>
+                  </button>
+                  <button class="delete-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)]" data-order-id="${order.orderId}" title="Delete Order">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
               </tr>`;
             ordersList.insertAdjacentHTML("beforeend", row);
           });
           noResults.classList.add("hidden");
 
-          // Add click event listeners to all rows
-          const rows = ordersList.querySelectorAll("tr");
-          rows.forEach(row => {
-            row.addEventListener("click", function() {
+          // Add event listeners for action buttons
+          document.querySelectorAll(".view-btn").forEach(btn => {
+            btn.addEventListener("click", async function() {
               const orderId = this.getAttribute("data-order-id");
-              orderIdInput.value = orderId;
-              trackingIdInput.value = ""; // Clear tracking ID input
+              await fetchOrderDetails(orderId);
+              orderModal.classList.remove("hidden");
+            });
+          });
+
+          document.querySelectorAll(".delete-btn").forEach(btn => {
+            btn.addEventListener("click", async function() {
+              const orderId = this.getAttribute("data-order-id");
+              if (confirm(`Are you sure you want to delete order ${orderId}?`)) {
+                await deleteOrder(orderId);
+              }
             });
           });
         }
       }
+
+      async function fetchOrderDetails(orderId) {
+  try {
+    const response = await fetch(`/admin/orders/${orderId}`, {
+      headers: { "X-Requested-With": "XMLHttpRequest" },
+    });
+    const order = await response.json();
+    if (response.ok) {
+      orderDetailsContent.innerHTML = `
+        <p><strong>Order ID:</strong> ${order.orderId}</p>
+        <p><strong>Customer Name:</strong> ${order.customerName}</p>
+        <p><strong>Total Price:</strong> Rs. ${order.totalPrice.toFixed(2)}</p>
+        <p><strong>Tracking ID:</strong> ${order.trackingId}</p>
+        <p><strong>Status:</strong> ${order.status}</p>
+        <p><strong>Billing Address:</strong> ${order.billingInfo.streetAddress}, ${order.billingInfo.townCity}</p>
+        <p><strong>Phone:</strong> ${order.billingInfo.phoneNumber}</p>
+        <p><strong>Email:</strong> ${order.billingInfo.emailAddress}</p>
+        <p><strong>Payment Method:</strong> ${order.paymentMethod}</p>
+        <p><strong>Order Date:</strong> ${new Date(order.createdAt).toLocaleDateString()}</p>
+        <div class="mt-4">
+          <h3 class="text-lg font-semibold">Items:</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-2">
+            ${order.items.map(item => `
+              <div class="flex flex-col items-center bg-[var(--color-gray-50)] p-4 rounded-lg shadow-sm">
+                <img src="${item.image}" alt="${item.name}" class="w-20 h-20 object-cover rounded mb-2">
+                <div class="text-center">
+                  <p><strong>${item.name}</strong></p>
+                  <p>Quantity: ${item.quantity}</p>
+                  <p>Price: Rs. ${item.price.toFixed(2)}</p>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    } else {
+      orderDetailsContent.innerHTML = `<p class="text-[var(--color-red-500)]">Error loading order details.</p>`;
+    }
+  } catch (error) {
+    console.error("❌ Fetch Order Details Error:", error);
+    orderDetailsContent.innerHTML = `<p class="text-[var(--color-red-500)]">Network error. Please try again.</p>`;
+  }
+}
+
+      // Delete order
+      async function deleteOrder(orderId) {
+        try {
+          const response = await fetch(`/admin/orders/${orderId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+          });
+          const result = await response.json();
+
+          if (response.ok) {
+            showMessage("Order deleted successfully.", "success");
+            fetchOrders(currentPage); // Refresh the list
+          } else {
+            showMessage(result.error || "Error deleting order.", "error");
+          }
+        } catch (error) {
+          console.error("❌ Delete Order Error:", error);
+          showMessage("Network error. Please try again.", "error");
+        }
+      }
+
+      // Close modal
+      closeModal.addEventListener("click", () => {
+        orderModal.classList.add("hidden");
+      });
 
       // Update pagination
       function updatePagination(currentPage, totalPages) {

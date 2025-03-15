@@ -32,6 +32,8 @@ router.get("/assign-id",authenticateUser,adminAuth, adminController.renderTrackI
 
 router.get('/orders', authenticateUser,adminAuth, adminController.renderAdminOrders);
 router.put('/orders/assign-tracking',authenticateUser,adminAuth, adminController.assignTrackingId);
+router.get('/orders/:orderId', authenticateUser,adminAuth, adminController.getOrderDetails);
+router.delete('/orders/:orderId', authenticateUser,adminAuth, adminController.deleteOrder);
 
 
 router.get("/cancel-order",authenticateUser,adminAuth, adminController.renderAdminCancelledOrders);

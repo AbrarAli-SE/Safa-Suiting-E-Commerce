@@ -76,6 +76,15 @@
                   <p class="text-[var(--color-gray-600)]">Email: <%= order.billingInfo.emailAddress %></p>
                   <p class="text-[var(--color-gray-600)]">Payment Method: <%= order.paymentMethod %></p>
                   <p class="text-[var(--color-gray-600)]">Status: <%= order.status %></p>
+                  <p class="text-[var(--color-gray-600)]">
+                    Tracking ID: 
+                    <span class="font-medium <%= order.trackingId ? 'text-[var(--color-red-500)]' : 'text-[var(--color-gray-600)]' %>">
+                      <%= order.trackingId || 'Not Assigned' %>
+                    </span>
+                    <% if (order.trackingId) { %>
+                      <a href="https://www.tcsexpress.com/track/<%= order.trackingId %>" target="_blank" class="text-[var(--color-red-500)] underline ml-2">Track Order</a>
+                    <% } %>
+                  </p>
                 </div>
 
                 <!-- Cancellation Timer and Button -->
