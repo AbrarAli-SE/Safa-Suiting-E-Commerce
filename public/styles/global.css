@@ -902,6 +902,18 @@ body {
   margin-bottom: 2rem;
 }
 
+.mb-root-2 {
+  margin-bottom: var(--spacing-2);
+}
+
+.mb-root-3 {
+  margin-bottom: var(--spacing-3);
+}
+
+.mb-root-4 {
+  margin-bottom: var(--spacing-4);
+}
+
 .ml-1 {
   margin-left: 0.25rem;
 }
@@ -992,6 +1004,14 @@ body {
 
 .mt-auto {
   margin-top: auto;
+}
+
+.mt-root-4 {
+  margin-top: var(--spacing-4);
+}
+
+.mt-root-2 {
+  margin-top: var(--spacing-2);
 }
 
 .block {
@@ -1232,6 +1252,10 @@ body {
 
 .max-w-\[90vw\] {
   max-width: 90vw;
+}
+
+.max-w-lg {
+  max-width: 32rem;
 }
 
 .max-w-md {
@@ -1532,6 +1556,11 @@ body {
   border-radius: 0.75rem;
 }
 
+.rounded-b-lg {
+  border-bottom-right-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+}
+
 .rounded-l-lg {
   border-top-left-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
@@ -1577,6 +1606,10 @@ body {
 
 .border-t {
   border-top-width: 1px;
+}
+
+.border-t-4 {
+  border-top-width: 4px;
 }
 
 .border-dashed {
@@ -1635,9 +1668,17 @@ body {
   border-color: var(--color-red-700);
 }
 
+.border-gray-300 {
+  border-color: var(--color-gray-300);
+}
+
 .border-red-300 {
   --tw-border-opacity: 1;
   border-color: rgb(252 165 165 / var(--tw-border-opacity, 1));
+}
+
+.border-red-500 {
+  border-color: var(--color-red-500);
 }
 
 .bg-\[var\(--color-black\)\] {
@@ -1703,6 +1744,10 @@ body {
 .bg-gray-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(229 231 235 / var(--tw-bg-opacity, 1));
+}
+
+.bg-gray-50 {
+  background-color: var(--color-gray-50);
 }
 
 .bg-red-50 {
@@ -1807,6 +1852,10 @@ body {
 
 .p-8 {
   padding: 2rem;
+}
+
+.p-root-2 {
+  padding: var(--spacing-2);
 }
 
 .p-root-3 {
@@ -1935,12 +1984,20 @@ body {
   padding-top: 1.5rem;
 }
 
+.pt-root-3 {
+  padding-top: var(--spacing-3);
+}
+
 .text-left {
   text-align: left;
 }
 
 .text-center {
   text-align: center;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .font-sans {
@@ -2104,8 +2161,16 @@ body {
   color: var(--color-yellow-800);
 }
 
+.text-black {
+  color: var(--color-black);
+}
+
 .text-gray-500 {
   color: var(--color-gray-500);
+}
+
+.text-gray-600 {
+  color: var(--color-gray-600);
 }
 
 .text-gray-900 {
@@ -2115,6 +2180,10 @@ body {
 .text-green-500 {
   --tw-text-opacity: 1;
   color: rgb(34 197 94 / var(--tw-text-opacity, 1));
+}
+
+.text-red-500 {
+  color: var(--color-red-500);
 }
 
 .text-red-600 {
@@ -2359,6 +2428,10 @@ body {
 
 .ease-in-out {
   animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.p-root-2 {
+  padding: var(--spacing-2);
 }
 
 .p-root-3 {

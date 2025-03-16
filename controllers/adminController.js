@@ -182,8 +182,7 @@ exports.renderPayment = async (req, res) => {
   }
 };
 
-// Get all payments with pagination
-// Get all payments with pagination
+
 exports.getPayments = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
