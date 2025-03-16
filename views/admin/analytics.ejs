@@ -58,15 +58,103 @@
     </div>
   </div>
 
-  <!-- Pass Data to JavaScript -->
-  <script>
-    const analyticsData = {
-      orderAnalytics: <%- JSON.stringify(orderAnalytics) %>,
-      revenueAnalytics: <%- JSON.stringify(revenueAnalytics) %>,
-      categoryAnalytics: <%- JSON.stringify(categoryAnalytics) %>,
-      growthAnalytics: <%- JSON.stringify(growthAnalytics) %>
-    };
-  </script>
-  <script src="/js/adminjs.js"></script>
+ <!-- Pass Data to JavaScript and Prepare Chart Data -->
+<script>
+  const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+  const analyticsData = {
+    orderAnalytics: <%- JSON.stringify(orderAnalytics) %>,
+    revenueAnalytics: <%- JSON.stringify(revenueAnalytics) %>,
+    categoryAnalytics: <%- JSON.stringify(categoryAnalytics) %>,
+    growthAnalytics: <%- JSON.stringify(growthAnalytics) %>
+  };
+
+  // Fallback if data is empty
+  const fallbackAnalytics = {
+    orderAnalytics: [],
+    revenueAnalytics: [],
+    categoryAnalytics: [],
+    growthAnalytics: []
+  };
+
+  const safeAnalyticsData = {
+    orderAnalytics: analyticsData.orderAnalytics.length ? analyticsData.orderAnalytics : fallbackAnalytics.orderAnalytics,
+    revenueAnalytics: analyticsData.revenueAnalytics.length ? analyticsData.revenueAnalytics : fallbackAnalytics.revenueAnalytics,
+    categoryAnalytics: analyticsData.categoryAnalytics.length ? analyticsData.categoryAnalytics : fallbackAnalytics.categoryAnalytics,
+    growthAnalytics: analyticsData.growthAnalytics.length ? analyticsData.growthAnalytics : fallbackAnalytics.growthAnalytics
+  };
+
+  // Prepare Order Data
+  const orderData = {
+    labels: safeAnalyticsData.orderAnalytics.map(item => months[item._id - 1] || 'Unknown'),
+    datasets: [{
+      label: 'Incoming Orders',
+      data: safeAnalyticsData.orderAnalytics.map(item => item.incoming || 0),
+      backgroundColor: '#FF0000',
+      borderColor: '#000000',
+      borderWidth: 2,
+      fill: true,
+      pointBackgroundColor: '#000000',
+      pointBorderColor: '#FFFFFF',
+      pointRadius: 5
+    }, {
+      label: 'Outgoing Orders',
+      data: safeAnalyticsData.orderAnalytics.map(item => item.outgoing || 0),
+      backgroundColor: '#000000',
+      borderColor: '#FF0000',
+      borderWidth: 2,
+      fill: true,
+      pointBackgroundColor: '#FF0000',
+      pointBorderColor: '#FFFFFF',
+      pointRadius: 5
+    }]
+  };
+
+  // Prepare Revenue Data
+  const revenueData = {
+    labels: safeAnalyticsData.revenueAnalytics.map(item => months[item._id - 1] || 'Unknown'),
+    datasets: [{
+      label: 'Revenue',
+      data: safeAnalyticsData.revenueAnalytics.map(item => item.revenue || 0),
+      backgroundColor: '#FF0000',
+      borderColor: '#000000',
+      borderWidth: 2,
+      fill: true,
+      pointBackgroundColor: '#000000',
+      pointBorderColor: '#FFFFFF',
+      pointRadius: 5
+    }]
+  };
+
+  // Prepare Category Data
+  const categoryData = {
+    labels: safeAnalyticsData.categoryAnalytics.map(item => item._id || 'Unknown'),
+    datasets: [{
+      label: 'Products Sold',
+      data: safeAnalyticsData.categoryAnalytics.map(item => item.count || 0),
+      backgroundColor: safeAnalyticsData.categoryAnalytics.map((_, index) => index % 2 === 0 ? '#FF0000' : '#000000'),
+      borderColor: safeAnalyticsData.categoryAnalytics.map((_, index) => index % 2 === 0 ? '#000000' : '#FF0000'),
+      borderWidth: 2,
+      barThickness: 20
+    }]
+  };
+
+  // Prepare Growth Data
+  const growthData = {
+    labels: safeAnalyticsData.growthAnalytics.map(item => months[item._id - 1] || 'Unknown'),
+    datasets: [{
+      label: 'Customer Growth',
+      data: safeAnalyticsData.growthAnalytics.map(item => item.count || 0),
+      backgroundColor: '#000000',
+      borderColor: '#FF0000',
+      borderWidth: 2,
+      fill: true,
+      pointBackgroundColor: '#FF0000',
+      pointBorderColor: '#FFFFFF',
+      pointRadius: 5
+    }]
+  };
+</script>
+<script src="/js/adminjs.js"></script>
 </body>
 </html>

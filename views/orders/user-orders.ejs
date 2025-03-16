@@ -1,9 +1,6 @@
 <%- include('../shared/header') %>
 
-
 <main class="container mx-auto px-4 py-12 mt-14">
-
-
   <div class="max-w-7xl mx-auto">
     <h1 class="text-3xl font-bold text-[var(--color-black)] mb-6 text-center">Your Orders</h1>
 
@@ -21,9 +18,7 @@
           type="text" 
           id="order-search" 
           class="w-full p-3 pl-10 border border-[var(--color-gray-200)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--color-red-500)]" 
-           
           placeholder="Enter Order ID (e.g., ORD-123456)"
-          oninput="filterOrders()"
         >
         <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--color-gray-500)]">
           <i class="bi bi-search"></i>
@@ -103,7 +98,7 @@
                     <button 
                       id="cancel-btn-<%= order.orderId %>"
                       class="btn-red px-4 py-2 text-sm"
-                      onclick="showCancelReason('<%= order.orderId %>')"
+                      data-order-id="<%= order.orderId %>"
                     >
                       Cancel Order
                     </button>
@@ -119,13 +114,13 @@
                       <div class="mt-2 flex justify-between">
                         <button 
                           class="btn-red px-4 py-2 text-sm" 
-                          onclick="submitCancel('<%= order.orderId %>')"
+                          data-order-id="<%= order.orderId %>"
                         >
                           Submit Cancellation
                         </button>
                         <button 
                           class="btn-gray px-4 py-2 text-sm" 
-                          onclick="hideCancelReason('<%= order.orderId %>')"
+                          data-order-id="<%= order.orderId %>"
                         >
                           Cancel
                         </button>
@@ -170,6 +165,18 @@
       </div>
     <% } %>
 
+    <!-- Cancellation Modal -->
+    <div id="cancel-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center">
+      <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg max-w-md w-full">
+        <h2 class="text-xl font-semibold text-[var(--color-black)] mb-4">Confirm Cancellation</h2>
+        <p class="text-[var(--color-gray-600)] mb-4">Are you sure you want to cancel order <span id="modal-order-id" class="font-medium text-[var(--color-red-500)]"></span>?</p>
+        <div class="flex justify-end space-x-4">
+          <button id="modal-cancel-btn" class="btn-gray px-4 py-2 text-sm">No</button>
+          <button id="modal-confirm-btn" class="btn-red px-4 py-2 text-sm">Yes</button>
+        </div>
+      </div>
+    </div>
+
     <div class="text-center mt-8">
       <a href="/user/orders/cancelled-orders" class="btn-red inline-block mr-4">View Cancelled Orders</a>
       <a href="/" class="btn-red inline-block">Continue Shopping</a>
@@ -179,90 +186,4 @@
 
 <%- include('../shared/footer') %>
 
-<script>
-  // Show cancellation reason input
-  function showCancelReason(orderId) {
-    document.getElementById(`cancel-btn-${orderId}`).classList.add('hidden');
-    document.getElementById(`reason-section-${orderId}`).classList.remove('hidden');
-  }
-
-  // Hide cancellation reason input
-  function hideCancelReason(orderId) {
-    document.getElementById(`cancel-btn-${orderId}`).classList.remove('hidden');
-    document.getElementById(`reason-section-${orderId}`).classList.add('hidden');
-    document.getElementById(`cancel-reason-${orderId}`).value = ''; // Clear input
-  }
-
-  // Submit cancellation with reason
-  function submitCancel(orderId) {
-    const reason = document.getElementById(`cancel-reason-${orderId}`).value.trim();
-    if (!reason) {
-      alert('Please provide a reason for cancellation.');
-      return;
-    }
-
-    if (confirm(`Are you sure you want to cancel order ${orderId}?`)) {
-      fetch(`/user/orders/orders/cancel/${orderId}`, {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ reason }) // Send reason in the request body
-      })
-      .then(response => {
-        console.log(`Response status for ${orderId}: ${response.status}`);
-        return response.json();
-      })
-      .then(data => {
-        console.log('Response data:', data);
-        if (data.success) {
-          alert('Order cancelled successfully!');
-          location.reload();
-        } else {
-          alert(data.message || 'Failed to cancel order.');
-        }
-      })
-      .catch(error => {
-        console.error('Error cancelling order:', error);
-        alert('An error occurred while cancelling the order.');
-      });
-    }
-  }
-
-  // Filter orders based on search input
-  function filterOrders() {
-    const searchInput = document.getElementById('order-search').value.toLowerCase();
-    const orderList = document.getElementById('order-list');
-    const orderCards = document.querySelectorAll('.order-card');
-    const initialMessage = document.getElementById('initial-message');
-    const noOrderMessage = document.getElementById('no-order-message');
-    let hasVisibleOrders = false;
-
-    
-
-    // Filter orders
-    orderCards.forEach(card => {
-      const orderId = card.getAttribute('data-order-id').toLowerCase();
-      if (orderId === searchInput) { // Exact match only
-        card.classList.remove('hidden');
-        hasVisibleOrders = true;
-      } else {
-        card.classList.add('hidden');
-      }
-    });
-
-    // Show appropriate message
-    if (hasVisibleOrders) {
-      initialMessage.classList.add('hidden');
-      noOrderMessage.classList.add('hidden');
-      orderList.classList.remove('hidden');
-    } else {
-      initialMessage.classList.add('hidden');
-      noOrderMessage.classList.remove('hidden');
-      orderList.classList.add('hidden');
-    }
-  }
-
-  
-</script>
-
-
-
+<script type="module" src="/js/userOrder.js"></script>

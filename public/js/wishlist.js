@@ -120,7 +120,7 @@ document.addEventListener("DOMContentLoaded", async function () {
           await addToWishlist(productId);
           updateAllButtonsForProduct(productId, true);
           await updateWishlistQuantity();
-          alert("Item added to wishlist!"); // Kept alert for success
+          // Removed alert("Item added to wishlist!");
         } else {
           console.error("Server error adding to wishlist:", data.message);
           if (data.message === "Please log in to add items to your wishlist." || data.success === "false") {

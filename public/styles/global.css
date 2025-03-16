@@ -1238,6 +1238,10 @@ body {
   max-width: 28rem;
 }
 
+.max-w-sm {
+  max-width: 24rem;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -1627,6 +1631,10 @@ body {
   border-color: var(--color-red-500);
 }
 
+.border-\[var\(--color-red-700\)\] {
+  border-color: var(--color-red-700);
+}
+
 .border-red-300 {
   --tw-border-opacity: 1;
   border-color: rgb(252 165 165 / var(--tw-border-opacity, 1));
@@ -1642,6 +1650,10 @@ body {
 
 .bg-\[var\(--color-gray-100\)\] {
   background-color: var(--color-gray-100);
+}
+
+.bg-\[var\(--color-gray-300\)\] {
+  background-color: var(--color-gray-300);
 }
 
 .bg-\[var\(--color-gray-50\)\] {
@@ -2197,8 +2209,9 @@ body {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-.outline {
-  outline-style: solid;
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
 }
 
 .blur-sm {
@@ -2534,6 +2547,10 @@ body {
 
 .hover\:bg-\[var\(--color-gray-100\)\]:hover {
   background-color: var(--color-gray-100);
+}
+
+.hover\:bg-\[var\(--color-gray-400\)\]:hover {
+  background-color: var(--color-gray-400);
 }
 
 .hover\:bg-\[var\(--color-gray-50\)\]:hover {

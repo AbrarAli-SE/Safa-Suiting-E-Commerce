@@ -274,100 +274,95 @@ exports.checkoutCart = async (req, res) => {
 
 
 
-
-
-
 exports.processCheckout = async (req, res) => {
-  try {
-    const { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress, saveInfo } = req.body;
-    const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
-    const shippingSettings = await ShippingSettings.findOne() || { shippingOption: 'free', shippingRate: 0, taxRate: 0 };
-
-    if (!cart?.items?.length) {
-      return res.status(400).json({ success: false, message: "Cart is empty." });
+    try {
+      const { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress, saveInfo } = req.body;
+      const cart = await Cart.findOne({ user: req.user.userId }).populate("items.product");
+      const shippingSettings = await ShippingSettings.findOne() || { shippingOption: 'free', shippingRate: 0, taxRate: 0 };
+  
+      if (!cart?.items?.length) {
+        return res.status(400).json({ success: false, message: "Cart is empty." });
+      }
+  
+      const items = cart.items.map(item => ({
+        product: item.product._id,
+        name: item.product.name,
+        price: item.price,
+        quantity: item.quantity
+      }));
+  
+      for (const item of items) {
+        const product = await Product.findById(item.product);
+        if (!product) throw new Error(`Product ${item.product} not found`);
+        if (product.quantity < item.quantity) throw new Error(`Insufficient quantity for ${product.name}. Available: ${product.quantity}`);
+      }
+  
+      const subtotal = cart.totalPrice;
+      const shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
+      const tax = subtotal * (shippingSettings.taxRate / 100);
+      const totalAmount = subtotal + shipping + tax;
+  
+      let orderId = generateOrderId();
+      let existingOrder = await Order.findOne({ orderId });
+      while (existingOrder) {
+        orderId = generateOrderId();
+        existingOrder = await Order.findOne({ orderId });
+      }
+  
+      const order = new Order({
+        user: req.user.userId,
+        orderId,
+        items,
+        billingInfo: { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress },
+        paymentMethod: 'cash',
+        subtotal,
+        shipping,
+        tax,
+        totalAmount,
+        status: 'pending'
+      });
+  
+      await order.save();
+  
+      const payment = new Payment({
+        order: order._id,
+        status: order.paymentMethod === 'cash' ? 'Pending' : 'Received'
+      });
+      await payment.save();
+  
+      for (const item of items) {
+        const product = await Product.findById(item.product);
+        product.quantity -= item.quantity;
+        await product.save();
+      }
+  
+      if (saveInfo) {
+        const user = await User.findById(req.user.userId);
+        user.billingInfo = { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress };
+        await user.save();
+      }
+  
+      await Cart.deleteOne({ user: req.user.userId });
+  
+      const emailHtml = generateOrderEmail(order);
+      await sendEmail(order.billingInfo.emailAddress, `Order Confirmation - ${order.orderId}`, emailHtml);
+  
+      // Redirect with a query parameter to indicate order success
+      res.redirect(`/user/cart/order-confirmation?orderSuccess=true`);
+    } catch (error) {
+      console.error("Process Checkout Error:", error);
+      res.status(500).render("cart/checkout", {
+        user: req.user || null,
+        cart: [],
+        subtotal: 0,
+        shipping: 0,
+        tax: 0,
+        totalAmount: 0,
+        shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
+        errorMessage: error.message || "Server error. Please try again."
+      });
     }
-
-    const items = cart.items.map(item => ({
-      product: item.product._id,
-      name: item.product.name,
-      price: item.price,
-      quantity: item.quantity
-    }));
-
-    for (const item of items) {
-      const product = await Product.findById(item.product);
-      if (!product) throw new Error(`Product ${item.product} not found`);
-      if (product.quantity < item.quantity) throw new Error(`Insufficient quantity for ${product.name}. Available: ${product.quantity}`);
-    }
-
-    const subtotal = cart.totalPrice;
-    const shipping = shippingSettings.shippingOption === 'rate' ? shippingSettings.shippingRate : 0;
-    const tax = subtotal * (shippingSettings.taxRate / 100);
-    const totalAmount = subtotal + shipping + tax;
-
-    let orderId = generateOrderId();
-    let existingOrder = await Order.findOne({ orderId });
-    while (existingOrder) {
-      orderId = generateOrderId();
-      existingOrder = await Order.findOne({ orderId });
-    }
-
-    const order = new Order({
-      user: req.user.userId,
-      orderId,
-      items,
-      billingInfo: { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress },
-      paymentMethod: 'cash', // Assuming 'cash' means COD here
-      subtotal,
-      shipping,
-      tax,
-      totalAmount,
-      status: 'pending'
-    });
-
-    await order.save();
-
-    // Create Payment document
-    const payment = new Payment({
-      order: order._id,
-      status: order.paymentMethod === 'cash' ? 'Pending' : 'Received' // COD = Pending, others = Received
-    });
-    await payment.save();
-
-    // Update product quantities
-    for (const item of items) {
-      const product = await Product.findById(item.product);
-      product.quantity -= item.quantity;
-      await product.save();
-    }
-
-    // Save billing info if requested
-    if (saveInfo) {
-      const user = await User.findById(req.user.userId);
-      user.billingInfo = { firstName, streetAddress, apartment, townCity, phoneNumber, emailAddress };
-      await user.save();
-    }
-
-    await Cart.deleteOne({ user: req.user.userId });
-
-    const emailHtml = generateOrderEmail(order);
-    await sendEmail(order.billingInfo.emailAddress, `Order Confirmation - ${order.orderId}`, emailHtml);
-
-    res.redirect("/user/cart/order-confirmation");
-  } catch (error) {
-    console.error("Process Checkout Error:", error);
-    res.status(500).render("cart/checkout", {
-      user: req.user || null,
-      cart: [],
-      subtotal: 0,
-      shipping: 0,
-      tax: 0,
-      totalAmount: 0,
-      shippingSettings: { shippingOption: 'free', shippingRate: 0, taxRate: 0 },
-      errorMessage: error.message || "Server error. Please try again."
-    });
-  }
-};
+  };
 
 
 // controllers/cartController.js

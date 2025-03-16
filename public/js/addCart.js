@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Initial cart quantity update
     await updateCartQuantity();
 
-        // Handle Quick View button clicks
+    // Handle Quick View button clicks
     const quickViewButtons = document.querySelectorAll(".quick-view-btn");
     if (quickViewButtons.length === 0) {
       console.warn("No quick view buttons found, skipping setup.");
@@ -93,7 +93,6 @@ document.addEventListener("DOMContentLoaded", async function () {
           try {
             const productId = this.dataset.productId;
             const quantity = parseInt(this.dataset.quantity, 10); // Get quantity from data attribute
-            console.log("Adding productId from product card:", productId);
 
             if (!productId) {
               console.error("Product ID not found in add-to-cart button data.");
@@ -117,10 +116,8 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (data.success) {
               const price = data.cart.items.find(item => item.product.toString() === productId)?.price || 0;
-              console.log("Server response for product card:", data);
               await addToCart(productId, 1, price);
               await updateCartQuantity();
-              alert("Item added to cart!");
             } else {
               console.error("Server error adding to cart from product card:", data.message);
               if (data.message === "Please log in to add items to your cart." || data.success === "false") {
@@ -144,7 +141,6 @@ document.addEventListener("DOMContentLoaded", async function () {
         try {
           const productId = this.dataset.productId;
           const quantity = parseInt(this.dataset.quantity, 10);
-          console.log("Adding productId from Quick View:", productId);
 
           if (!productId) {
             console.error("Product ID not found in Quick View modal button data.");
@@ -152,8 +148,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             return;
           }
 
-           // Check if product is out of stock
-           if (quantity === 0) {
+          // Check if product is out of stock
+          if (quantity === 0) {
             showMessage("This product is out of stock!");
             closeQuickView(); // Auto-close modal on success
             return;
@@ -169,11 +165,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
           if (data.success) {
             const price = data.cart.items.find(item => item.product.toString() === productId)?.price || 0;
-            console.log("Server response for Quick View:", data);
             await addToCart(productId, 1, price);
             await updateCartQuantity();
             closeQuickView(); // Auto-close modal on success
-            alert("Item added to cart!");
           } else {
             console.error("Server error adding to cart from quick view:", data.message);
             if (data.message === "Please log in to add items to your cart." || data.success === "false") {

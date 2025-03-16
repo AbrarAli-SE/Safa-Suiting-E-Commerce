@@ -1,69 +1,113 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const checkoutForm = document.getElementById('checkoutForm');
-  if (!checkoutForm) return console.warn("Checkout form not found.");
+// checkoutValidation.js
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('checkoutForm');
+    const fields = [
+        {
+            id: 'firstName',
+            errorId: 'firstNameError',
+            validate: (value) => value.trim().length >= 2,
+            message: 'First name must be at least 2 characters long'
+        },
+        {
+            id: 'streetAddress',
+            errorId: 'streetAddressError',
+            validate: (value) => value.trim().length >= 5,
+            message: 'Street address must be at least 5 characters long'
+        },
+        {
+            id: 'apartment',
+            errorId: 'apartmentError',
+            validate: (value) => true, // Optional field, always valid
+            message: ''
+        },
+        {
+            id: 'townCity',
+            errorId: 'townCityError',
+            validate: (value) => value.trim().length >= 2,
+            message: 'Town/City must be at least 2 characters long'
+        },
+        {
+            id: 'phoneNumber',
+            errorId: 'phoneNumberError',
+            validate: (value) => /^\d{10}$/.test(value.replace(/\D/g, '')),
+            message: 'Please enter a valid 10-digit phone number'
+        },
+        {
+            id: 'emailAddress',
+            errorId: 'emailAddressError',
+            validate: (value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value),
+            message: 'Please enter a valid email address'
+        }
+    ];
 
-  const fields = {
-      firstName: document.getElementById('firstName'),
-      streetAddress: document.getElementById('streetAddress'),
-      townCity: document.getElementById('townCity'),
-      phoneNumber: document.getElementById('phoneNumber'),
-      emailAddress: document.getElementById('emailAddress')
-  };
+    // Function to validate a single field
+    const validateField = (field, input) => {
+        const value = input.value;
+        const errorElement = document.getElementById(field.errorId);
+        
+        // Don't show error if field is empty
+        if (!value.trim()) {
+            errorElement.classList.add('hidden');
+            errorElement.textContent = '';
+            input.classList.remove('border-[var(--color-red-500)]');
+            return true;
+        }
 
-  function showError(fieldId, message) {
-      const errorField = document.getElementById(`${fieldId}Error`);
-      errorField.textContent = message;
-      errorField.classList.remove('hidden');
-  }
+        // Validate non-empty field
+        const isValid = field.validate(value);
+        if (!isValid) {
+            errorElement.textContent = field.message;
+            errorElement.classList.remove('hidden');
+            input.classList.add('border-[var(--color-red-500)]');
+        } else {
+            errorElement.classList.add('hidden');
+            errorElement.textContent = '';
+            input.classList.remove('border-[var(--color-red-500)]');
+        }
+        return isValid;
+    };
 
-  function hideError(fieldId) {
-      document.getElementById(`${fieldId}Error`).classList.add('hidden');
-  }
+    // Add event listeners for real-time validation
+    fields.forEach(field => {
+        const input = document.getElementById(field.id);
+        if (input) {
+            input.addEventListener('input', () => {
+                validateField(field, input);
+            });
 
-  function validateField(fieldId, value) {
-      const trimmedValue = value.trim();
-      switch (fieldId) {
-          case 'firstName':
-          case 'streetAddress':
-          case 'townCity':
-              return trimmedValue.length > 0;
-          case 'phoneNumber':
-              return trimmedValue.match(/^\d{10,}$/); // At least 10 digits
-          case 'emailAddress':
-              return trimmedValue.match(/^\S+@\S+\.\S+$/); // Basic email validation
-          default:
-              return true;
-      }
-  }
+            // Also validate on blur
+            input.addEventListener('blur', () => {
+                validateField(field, input);
+            });
+        }
+    });
 
-  // Live validation on input
-  Object.entries(fields).forEach(([fieldId, field]) => {
-      field.addEventListener('input', () => {
-          const value = field.value;
-          if (!validateField(fieldId, value)) {
-              showError(fieldId, `${fieldId.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())} is invalid.`);
-          } else {
-              hideError(fieldId);
-          }
-      });
-  });
+    // Form submission handler
+    form.addEventListener('submit', (e) => {
+        let isValid = true;
+        
+        // Check all required fields
+        fields.forEach(field => {
+            const input = document.getElementById(field.id);
+            // Skip validation for optional fields (apartment)
+            if (field.id === 'apartment') return;
 
-  // Form submission validation
-  checkoutForm.addEventListener('submit', (event) => {
-      let isValid = true;
+            if (!validateField(field, input)) {
+                isValid = false;
+            }
+            
+            // Additional check for empty required fields
+            if (!input.value.trim() && field.id !== 'apartment') {
+                const errorElement = document.getElementById(field.errorId);
+                errorElement.textContent = 'This field is required';
+                errorElement.classList.remove('hidden');
+                input.classList.add('border-[var(--color-red-500)]');
+                isValid = false;
+            }
+        });
 
-      Object.entries(fields).forEach(([fieldId, field]) => {
-          const value = field.value;
-          if (!validateField(fieldId, value)) {
-              showError(fieldId, `${fieldId.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())} is invalid.`);
-              isValid = false;
-          } else {
-              hideError(fieldId);
-          }
-      });
-
-      if (!isValid) {
-          event.preventDefault();
-      }
-  });
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
 });

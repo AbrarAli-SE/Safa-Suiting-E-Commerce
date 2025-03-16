@@ -7,7 +7,7 @@ const sendEmail = require('../utils/emailConfig');
 const ContactInfo = require("../models/info");
 const CancelledOrder = require("../models/CancelledOrder");
 // Assuming you have an Order model
-const Order = require('../models/Order'); // Adjust the path to your Order model
+const Order = require('../models/Order'); 
 const Payment = require('../models/Payment');
 const bcrypt = require("bcryptjs");
 const Carousel = require("../models/Carousel");
@@ -183,27 +183,48 @@ exports.renderPayment = async (req, res) => {
 };
 
 // Get all payments with pagination
+// Get all payments with pagination
 exports.getPayments = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = 10;
     const skip = (page - 1) * limit;
 
-    const totalPayments = await Payment.countDocuments();
-    const payments = await Payment.find()
-      .populate('order', 'orderId billingInfo.firstName totalAmount')
+    // Only count payments with valid order references
+    const totalPayments = await Payment.countDocuments({ order: { $exists: true, $ne: null } });
+    const payments = await Payment.find({ order: { $exists: true, $ne: null } })
+      .populate({
+        path: 'order',
+        select: 'orderId billingInfo.firstName totalAmount',
+      })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
+    // Filter out any payments where population failed (just in case)
+    const validPayments = payments.filter(payment => payment.order && payment.order.orderId);
+
+    if (validPayments.length === 0 && totalPayments > 0 && page > 1) {
+      // If no valid payments on this page but there are payments, redirect to last valid page
+      const lastPage = Math.ceil(totalPayments / limit);
+      return res.json({
+        payments: [],
+        currentPage: lastPage,
+        totalPages: Math.ceil(totalPayments / limit),
+        redirect: true
+      });
+    }
+
+    const paymentData = validPayments.map(payment => ({
+      _id: payment._id,
+      orderId: payment.order.orderId,
+      customerName: payment.order.billingInfo?.firstName || 'Unknown',
+      amount: payment.order.totalAmount || 0,
+      received: payment.status === 'Received'
+    }));
+
     res.json({
-      payments: payments.map(payment => ({
-        _id: payment._id,
-        orderId: payment.order.orderId,
-        customerName: payment.order.billingInfo.firstName,
-        amount: payment.order.totalAmount,
-        received: payment.status === 'Received'
-      })),
+      payments: paymentData,
       currentPage: page,
       totalPages: Math.ceil(totalPayments / limit)
     });
@@ -218,9 +239,9 @@ exports.toggleReceived = async (req, res) => {
   try {
     const { paymentId, received, page } = req.body;
 
-    const payment = await Payment.findById(paymentId);
-    if (!payment) {
-      return res.status(404).json({ error: 'Payment not found' });
+    const payment = await Payment.findById(paymentId).populate('order');
+    if (!payment || !payment.order) {
+      return res.status(404).json({ error: 'Payment or associated order not found' });
     }
 
     payment.status = received ? 'Received' : 'Pending';
@@ -229,22 +250,29 @@ exports.toggleReceived = async (req, res) => {
 
     const limit = 10;
     const skip = (page - 1) * limit;
-    const totalPayments = await Payment.countDocuments();
-    const payments = await Payment.find()
-      .populate('order', 'orderId billingInfo.firstName totalAmount')
+    const totalPayments = await Payment.countDocuments({ order: { $exists: true, $ne: null } });
+    const payments = await Payment.find({ order: { $exists: true, $ne: null } })
+      .populate({
+        path: 'order',
+        select: 'orderId billingInfo.firstName totalAmount',
+      })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
+    const validPayments = payments.filter(payment => payment.order && payment.order.orderId);
+
+    const paymentData = validPayments.map(payment => ({
+      _id: payment._id,
+      orderId: payment.order.orderId,
+      customerName: payment.order.billingInfo?.firstName || 'Unknown',
+      amount: payment.order.totalAmount || 0,
+      received: payment.status === 'Received'
+    }));
+
     res.json({
       message: `Payment status updated to ${received ? 'Received' : 'Pending'}`,
-      payments: payments.map(payment => ({
-        _id: payment._id,
-        orderId: payment.order.orderId,
-        customerName: payment.order.billingInfo.firstName,
-        amount: payment.order.totalAmount,
-        received: payment.status === 'Received'
-      })),
+      payments: paymentData,
       currentPage: page,
       totalPages: Math.ceil(totalPayments / limit)
     });
@@ -259,31 +287,44 @@ exports.deletePayment = async (req, res) => {
   try {
     const { paymentId, page } = req.body;
 
-    const payment = await Payment.findByIdAndDelete(paymentId);
-    if (!payment) {
-      return res.status(404).json({ error: 'Payment not found' });
+    const payment = await Payment.findById(paymentId).populate('order');
+    if (!payment || !payment.order) {
+      return res.status(404).json({ error: 'Payment or associated order not found' });
     }
+
+    await Payment.findByIdAndDelete(paymentId);
 
     const limit = 10;
     const skip = (page - 1) * limit;
-    const totalPayments = await Payment.countDocuments();
-    const payments = await Payment.find()
-      .populate('order', 'orderId billingInfo.firstName totalAmount')
+    const totalPayments = await Payment.countDocuments({ order: { $exists: true, $ne: null } });
+    const payments = await Payment.find({ order: { $exists: true, $ne: null } })
+      .populate({
+        path: 'order',
+        select: 'orderId billingInfo.firstName totalAmount',
+      })
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
+    const validPayments = payments.filter(payment => payment.order && payment.order.orderId);
+
+    // Adjust page if necessary after deletion
+    const totalPages = Math.ceil(totalPayments / limit);
+    const adjustedPage = page > totalPages ? totalPages : page;
+
+    const paymentData = validPayments.map(payment => ({
+      _id: payment._id,
+      orderId: payment.order.orderId,
+      customerName: payment.order.billingInfo?.firstName || 'Unknown',
+      amount: payment.order.totalAmount || 0,
+      received: payment.status === 'Received'
+    }));
+
     res.json({
       message: 'Payment deleted successfully',
-      payments: payments.map(payment => ({
-        _id: payment._id,
-        orderId: payment.order.orderId,
-        customerName: payment.order.billingInfo.firstName,
-        amount: payment.order.totalAmount,
-        received: payment.status === 'Received'
-      })),
-      currentPage: page,
-      totalPages: Math.ceil(totalPayments / limit)
+      payments: paymentData,
+      currentPage: adjustedPage,
+      totalPages: totalPages
     });
   } catch (error) {
     console.error('Error deleting payment:', error);

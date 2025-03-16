@@ -99,6 +99,7 @@
                   rows="5" 
                   class="w-full p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-lg focus:ring-2 focus:ring-[var(--color-red-500)] focus:outline-none resize-none transition-all duration-300 shadow-sm hover:shadow-md" 
                   required></textarea>
+                <div id="descriptionError" class="text-[var(--color-red-500)] text-sm hidden"></div>
               </div>
             </div>
 
@@ -175,100 +176,7 @@
     </div>
   </div>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const form = document.getElementById("product-form");
-      const messageContainer = document.getElementById("message-container");
-      const imageInput = document.getElementById("image");
-      const imagePreview = document.getElementById("image-preview");
-      const previewText = document.getElementById("preview-text");
-      const categorySelect = document.getElementById("category");
-      const addCategoryBtn = document.getElementById("addCategoryBtn");
-      const newCategoryInput = document.getElementById("newCategory");
-
-      // Image Preview
-      imageInput.addEventListener("change", function (event) {
-        const file = event.target.files[0];
-        if (file) {
-          const reader = new FileReader();
-          reader.onload = function (e) {
-            imagePreview.src = e.target.result;
-            imagePreview.classList.remove("hidden");
-            previewText.classList.add("hidden");
-          };
-          reader.readAsDataURL(file);
-        }
-      });
-
-      // Dynamic Category Addition
-      addCategoryBtn.addEventListener("click", function () {
-        newCategoryInput.classList.toggle("hidden");
-        if (!newCategoryInput.classList.contains("hidden")) {
-          newCategoryInput.focus();
-        }
-      });
-
-      newCategoryInput.addEventListener("keypress", function (e) {
-        if (e.key === "Enter" && this.value.trim() !== "") {
-          const newCategory = this.value.trim();
-          if (!Array.from(categorySelect.options).some(opt => opt.value === newCategory)) {
-            const option = document.createElement("option");
-            option.value = newCategory;
-            option.textContent = newCategory;
-            categorySelect.appendChild(option);
-          }
-          categorySelect.value = newCategory; // Set the selected value
-          this.classList.add("hidden");
-          // Keep the value in newCategory input for form submission
-        }
-      });
-
-      // Ensure newCategory is sent with form even if not hidden
-      form.addEventListener("submit", async function (e) {
-        e.preventDefault();
-
-        const formData = new FormData(form);
-
-        // If newCategory was entered, ensure it’s prioritized
-        const newCategoryValue = newCategoryInput.value.trim();
-        if (newCategoryValue !== "") {
-          formData.set("category", newCategoryValue); // Override category with newCategory
-        }
-
-        try {
-          const response = await fetch("/admin/product/product/add", {
-            method: "POST",
-            body: formData,
-          });
-
-          const result = await response.json();
-          messageContainer.innerHTML = "";
-
-          if (response.ok) {
-            showMessage(result.message, "success");
-            form.reset();
-            imagePreview.classList.add("hidden");
-            previewText.classList.remove("hidden");
-            newCategoryInput.classList.add("hidden");
-            newCategoryInput.value = ""; // Clear after successful submission
-          } else {
-            showMessage(result.error || "An error occurred.", "error");
-          }
-        } catch (error) {
-          console.error("❌ AJAX Error:", error);
-          showMessage("Network error. Please try again.", "error");
-        }
-      });
-
-      function showMessage(text, type) {
-        const div = document.createElement("div");
-        div.className = `bg-[var(--color-${type === "success" ? "green" : "red"}-100)] text-[var(--color-${type === "success" ? "green" : "red"}-700)] border border-[var(--color-${type === "success" ? "green" : "red"}-400)] p-3 rounded-lg`;
-        div.textContent = text;
-        messageContainer.appendChild(div);
-        setTimeout(() => div.remove(), 5000);
-      }
-    });
-  </script>
+  <script type="module" src="/js/productManagement.js"></script>
   <script src="/js/adminjs.js"></script>
 </body>
 </html>

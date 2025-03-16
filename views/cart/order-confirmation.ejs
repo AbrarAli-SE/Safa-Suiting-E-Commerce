@@ -15,6 +15,10 @@
               <span class="text-[var(--color-black)]"><%= item.name %> (x<%= item.quantity %>)</span>
               <span class="font-medium text-[var(--color-black)]">Rs <%= (item.price * item.quantity).toFixed(2) %></span>
             </div>
+             <div class="flex justify-between py-2 border-b border-[var(--color-red-700)]">
+              <span class="text-[var(--color-black)]">Order Id  </span> <span class="text-[var(--color-red-500)]"><%= order.orderId %></span>
+             
+            </div>
           <% }) %>
           <div class="space-y-2 pt-4">
             <div class="flex justify-between">

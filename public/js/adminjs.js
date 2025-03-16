@@ -1,77 +1,3 @@
-// Chart.js Initialization with Hex Codes (Red and Black Combination)
-const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-// Prepare Order Data
-const orderData = {
-  labels: analyticsData.orderAnalytics.map(item => months[item._id - 1]),
-  datasets: [{
-    label: 'Incoming Orders',
-    data: analyticsData.orderAnalytics.map(item => item.incoming),
-    backgroundColor: '#FF0000', // Red fill
-    borderColor: '#000000', // Black outline
-    borderWidth: 2,
-    fill: true,
-    pointBackgroundColor: '#000000', // Black points
-    pointBorderColor: '#FFFFFF', // White point border
-    pointRadius: 5
-  }, {
-    label: 'Outgoing Orders',
-    data: analyticsData.orderAnalytics.map(item => item.outgoing),
-    backgroundColor: '#000000', // Black fill
-    borderColor: '#FF0000', // Red outline
-    borderWidth: 2,
-    fill: true,
-    pointBackgroundColor: '#FF0000', // Red points
-    pointBorderColor: '#FFFFFF', // White point border
-    pointRadius: 5
-  }]
-};
-
-// Prepare Revenue Data
-const revenueData = {
-  labels: analyticsData.revenueAnalytics.map(item => months[item._id - 1]),
-  datasets: [{
-    label: 'Revenue',
-    data: analyticsData.revenueAnalytics.map(item => item.revenue),
-    backgroundColor: '#FF0000', // Red fill
-    borderColor: '#000000', // Black outline
-    borderWidth: 2,
-    fill: true,
-    pointBackgroundColor: '#000000', // Black points
-    pointBorderColor: '#FFFFFF', // White point border
-    pointRadius: 5
-  }]
-};
-
-// Prepare Category Data
-const categoryData = {
-  labels: analyticsData.categoryAnalytics.map(item => item._id || 'Unknown'),
-  datasets: [{
-    label: 'Products Sold',
-    data: analyticsData.categoryAnalytics.map(item => item.count),
-    backgroundColor: analyticsData.categoryAnalytics.map((_, index) => index % 2 === 0 ? '#FF0000' : '#000000'), // Alternating red and black
-    borderColor: analyticsData.categoryAnalytics.map((_, index) => index % 2 === 0 ? '#000000' : '#FF0000'), // Alternating black and red outlines
-    borderWidth: 2,
-    barThickness: 20 // Adjust bar width for better visibility
-  }]
-};
-
-// Prepare Growth Data
-const growthData = {
-  labels: analyticsData.growthAnalytics.map(item => months[item._id - 1]),
-  datasets: [{
-    label: 'Customer Growth',
-    data: analyticsData.growthAnalytics.map(item => item.count),
-    backgroundColor: '#000000', // Black fill
-    borderColor: '#FF0000', // Red outline
-    borderWidth: 2,
-    fill: true,
-    pointBackgroundColor: '#FF0000', // Red points
-    pointBorderColor: '#FFFFFF', // White point border
-    pointRadius: 5
-  }]
-};
-
 // Common Chart Options with Gray Axes and Labels
 const commonOptions = {
   responsive: true,
@@ -81,10 +7,8 @@ const commonOptions = {
     tooltip: {
       callbacks: { 
         label: function (context) {
-          // Get the raw value
           let value = context.raw;
-          // Format as integer (no decimals) with commas
-          let formattedValue = Math.round(value).toLocaleString('en-PK'); // Pakistani English formatting
+          let formattedValue = Math.round(value).toLocaleString('en-PK');
           return context.dataset.label + ': ' + 
             (context.dataset.label.includes('Revenue') ? 'PKR ' + formattedValue : formattedValue + ' Items');
         },
@@ -160,12 +84,10 @@ overlay.addEventListener('click', () => {
 
 const links = document.querySelectorAll(".active-link");
 
-  // Highlight active link based on current URL
-  const currentPath = window.location.pathname;
-  links.forEach(link => {
-    if (link.getAttribute("href") === currentPath) {
-      link.classList.add("bg-[var(--color-red-500)]", "text-[var(--color-white)]");
-    } else {
-      link.classList.remove("bg-[var(--color-red-500)]", "text-[var(--color-white)]");
-    }
-  });
+links.forEach(link => {
+  if (link.getAttribute("href") === window.location.pathname) {
+    link.classList.add("bg-[var(--color-red-500)]", "text-[var(--color-white)]");
+  } else {
+    link.classList.remove("bg-[var(--color-red-500)]", "text-[var(--color-white)]");
+  }
+});

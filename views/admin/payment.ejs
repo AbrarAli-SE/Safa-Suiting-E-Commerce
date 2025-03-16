@@ -6,6 +6,20 @@
   <title>Admin - Payment Management</title>
   <link rel="stylesheet" href="/styles/global.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    /* Modal Styles for Delete Confirmation */
+    #deleteModal {
+      transition: opacity 0.3s ease-in-out;
+    }
+    #deleteModal.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    #deleteModal.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
 </head>
 
 <body class="bg-[var(--color-gray-50)] text-[var(--color-black)] h-screen overflow-x-hidden relative font-sans">
@@ -46,211 +60,23 @@
         <div class="flex justify-center mt-6">
           <nav id="pagination" aria-label="Pagination" class="inline-flex -space-x-px rounded-md shadow-sm"></nav>
         </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div id="deleteModal" class="hidden fixed inset-0 bg-[var(--color-black)] bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-[var(--color-white)] p-6 rounded-lg shadow-lg max-w-sm w-full">
+            <h3 class="text-lg font-semibold text-[var(--color-black)] mb-4">Confirm Deletion</h3>
+            <p class="text-[var(--color-gray-700)] mb-6">Are you sure you want to delete this payment?</p>
+            <div class="flex justify-end gap-4">
+              <button id="cancelDelete" class="px-4 py-2 bg-[var(--color-gray-300)] text-[var(--color-black)] rounded-lg hover:bg-[var(--color-gray-400)] transition-all duration-300">Cancel</button>
+              <button id="confirmDelete" class="px-4 py-2 bg-[var(--color-red-500)] text-[var(--color-white)] rounded-lg hover:bg-[var(--color-red-700)] transition-all duration-300">OK</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
+  <script type="module" src="/js/paymentManagement.js"></script>
   <script type="module" src="/js/adminjs.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const paymentsList = document.getElementById("paymentsList");
-      const noResults = document.getElementById("noResults");
-      const pagination = document.getElementById("pagination");
-      const messageContainer = document.getElementById("message-container");
-      let currentPage = 1;
-
-      // Fetch initial payments
-      fetchPayments(currentPage);
-
-      // Event listeners for update and delete buttons
-      paymentsList.addEventListener("click", async function (e) {
-        const updateButton = e.target.closest(".update-status-btn");
-        const deleteButton = e.target.closest(".delete-payment-btn");
-
-        if (updateButton) {
-          const paymentId = updateButton.dataset.paymentId;
-          const select = paymentsList.querySelector(`select[data-payment-id="${paymentId}"]`);
-          const received = select.value === "Received";
-
-          try {
-            const response = await fetch("/admin/payments/toggle-received", {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ paymentId, received, page: currentPage }),
-            });
-
-            const result = await response.json();
-            messageContainer.innerHTML = "";
-
-            if (response.ok) {
-              showMessage(result.message, "success");
-              updatePaymentsTable(result.payments);
-              updatePagination(result.currentPage, result.totalPages);
-              currentPage = result.currentPage;
-            } else {
-              showMessage(result.error || "An error occurred.", "error");
-            }
-          } catch (error) {
-            console.error("❌ AJAX Update Status Error:", error);
-            showMessage("Network error. Please try again.", "error");
-          }
-        }
-
-        if (deleteButton) {
-          if (!confirm("Are you sure you want to delete this payment?")) return;
-
-          const paymentId = deleteButton.dataset.paymentId;
-
-          try {
-            const response = await fetch("/admin/payments/delete", {
-              method: "DELETE",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ paymentId, page: currentPage }),
-            });
-
-            const result = await response.json();
-            messageContainer.innerHTML = "";
-
-            if (response.ok) {
-              showMessage(result.message, "success");
-              updatePaymentsTable(result.payments);
-              updatePagination(result.currentPage, result.totalPages);
-              currentPage = result.currentPage;
-            } else {
-              showMessage(result.error || "An error occurred.", "error");
-            }
-          } catch (error) {
-            console.error("❌ AJAX Delete Error:", error);
-            showMessage("Network error. Please try again.", "error");
-          }
-        }
-      });
-
-      // AJAX Pagination
-      pagination.addEventListener("click", async function (e) {
-        const target = e.target.closest(".page-link");
-        if (!target) return;
-
-        e.preventDefault();
-        const page = parseInt(target.dataset.page);
-        fetchPayments(page);
-      });
-
-      // Fetch payments function
-      async function fetchPayments(page) {
-        try {
-          const response = await fetch(`/admin/payments?page=${page}`, {
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-          });
-
-          const result = await response.json();
-
-          if (response.ok) {
-            updatePaymentsTable(result.payments);
-            updatePagination(result.currentPage, result.totalPages);
-            currentPage = result.currentPage;
-          } else {
-            console.error("❌ Fetch Payments Error:", result.error);
-            showMessage("Error fetching payments.", "error");
-          }
-        } catch (error) {
-          console.error("❌ AJAX Fetch Error:", error);
-          showMessage("Network error. Please try again.", "error");
-        }
-      }
-
-      // Update payments table
-      function updatePaymentsTable(payments) {
-        paymentsList.innerHTML = "";
-        if (!payments || payments.length === 0) {
-          paymentsList.innerHTML = '<tr><td colspan="6" class="text-center text-[var(--color-red-500)] font-semibold py-4">No payments found.</td></tr>';
-          noResults.classList.remove("hidden");
-        } else {
-          payments.forEach((payment, index) => {
-            const row = `
-              <tr class="border-t border-[var(--color-gray-200)]" data-payment-id="${payment._id}">
-                <td class="px-4 py-2">${(currentPage - 1) * 10 + index + 1}</td>
-                <td class="px-4 py-2">${payment.orderId}</td>
-                <td class="px-4 py-2">${payment.customerName}</td>
-                <td class="px-4 py-2">$${payment.amount.toFixed(2)}</td>
-                <td class="px-4 py-2 flex items-center gap-2">
-                  <select class="status-dropdown w-24 p-1 border rounded text-[var(--color-gray-700)] focus:outline-none focus:ring-2 focus:ring-[var(--color-blue-500)]" data-payment-id="${payment._id}">
-                    <option value="Received" ${payment.received ? 'selected' : ''}>Received</option>
-                    <option value="Pending" ${!payment.received ? 'selected' : ''}>Pending</option>
-                  </select>
-                  <button class="update-status-btn text-[var(--color-blue-500)] hover:text-[var(--color-blue-700)] transition-colors duration-300" data-payment-id="${payment._id}" title="Update Status">
-                    <i class="bi bi-arrow-repeat"></i>
-                  </button>
-                </td>
-                <td class="px-4 py-2">
-                  <button class="delete-payment-btn text-[var(--color-red-500)] hover:text-[var(--color-red-700)] transition-colors duration-300" data-payment-id="${payment._id}" title="Delete Payment">
-                    <i class="bi bi-trash"></i>
-                  </button>
-                </td>
-              </tr>`;
-            paymentsList.insertAdjacentHTML("beforeend", row);
-          });
-          noResults.classList.add("hidden");
-        }
-      }
-
-      // Update pagination
-      function updatePagination(currentPage, totalPages) {
-        const maxVisiblePages = 5;
-        let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
-        let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
-        if (endPage - startPage + 1 < maxVisiblePages) {
-          startPage = Math.max(1, endPage - maxVisiblePages + 1);
-        }
-
-        pagination.innerHTML = '';
-
-        // Previous Button
-        const prevButton = document.createElement('a');
-        prevButton.href = '#';
-        prevButton.className = 'page-link flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-l-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
-        prevButton.innerHTML = '<span class="sr-only">Previous</span><i class="bi bi-arrow-bar-left"></i>';
-        prevButton.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (currentPage > 1) fetchPayments(currentPage - 1);
-        });
-        pagination.appendChild(prevButton);
-
-        // Page Numbers
-        for (let i = startPage; i <= endPage; i++) {
-          const pageLink = document.createElement('a');
-          pageLink.href = '#';
-          pageLink.className = `page-link flex items-center justify-center px-3 h-8 leading-tight border border-[var(--color-gray-300)] transition-all duration-300 ${i === currentPage ? 'text-[var(--color-red-500)] bg-[var(--color-red-50)] hover:bg-[var(--color-red-100)] hover:text-[var(--color-red-700)]' : 'text-[var(--color-gray-500)] bg-[var(--color-white)] hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)]'}`;
-          pageLink.textContent = i;
-          pageLink.dataset.page = i;
-          pageLink.addEventListener('click', (e) => {
-            e.preventDefault();
-            fetchPayments(i);
-          });
-          pagination.appendChild(pageLink);
-        }
-
-        // Next Button
-        const nextButton = document.createElement('a');
-        nextButton.href = '#';
-        nextButton.className = 'page-link flex items-center justify-center px-3 h-8 leading-tight text-[var(--color-gray-500)] bg-[var(--color-white)] border border-[var(--color-gray-300)] rounded-r-lg hover:bg-[var(--color-gray-100)] hover:text-[var(--color-gray-700)] transition-all duration-300';
-        nextButton.innerHTML = '<span class="sr-only">Next</span><i class="bi bi-arrow-bar-right"></i>';
-        nextButton.addEventListener('click', (e) => {
-          e.preventDefault();
-          if (currentPage < totalPages) fetchPayments(currentPage + 1);
-        });
-        pagination.appendChild(nextButton);
-      }
-
-      // Show message helper
-      function showMessage(text, type) {
-        const div = document.createElement("div");
-        div.className = `p-4 rounded-md text-center font-medium ${type === "success" ? "bg-[var(--color-green-100)] text-[var(--color-green-500)]" : "bg-[var(--color-red-100)] text-[var(--color-red-500)]"}`;
-        div.textContent = text;
-        messageContainer.appendChild(div);
-        setTimeout(() => div.remove(), 5000);
-      }
-    });
-  </script>
 </body>
 </html>
