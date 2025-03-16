@@ -2,36 +2,35 @@ const User = require("../models/User");
 const Wishlist = require("../models/Wishlist");
 const Product = require("../models/Product");
 
+// Add a product to the user's wishlist
 exports.addToWishlist = async (req, res) => {
     const { productId } = req.body;
 
-    // Check if user is authenticated
+    // Check if the user is authenticated
     if (!req.user) {
         return res.status(401).json({ success: false, message: "Please log in to add items to your wishlist." });
     }
 
     try {
-        // Update lastActive for authenticated user
+        // Update the user's last active timestamp
         const user = await User.findById(req.user.userId);
         if (user) {
             user.lastActive = new Date();
             await user.save();
         }
 
-        // Find the product by ID
+        // Verify the product exists
         const product = await Product.findById(productId);
         if (!product) {
             return res.status(404).json({ success: false, message: "Product not found." });
         }
 
-        // Find the user's wishlist
+        // Fetch or create the user's wishlist
         let wishlist = await Wishlist.findOne({ user: req.user.userId });
-
-        // If the wishlist does not exist, create a new one
         if (!wishlist) {
             wishlist = new Wishlist({
                 user: req.user.userId,
-                items: []
+                items: [] // Initialize with an empty array
             });
         }
 
@@ -39,8 +38,10 @@ exports.addToWishlist = async (req, res) => {
         const existingItemIndex = wishlist.items.findIndex(item => item.product.toString() === productId);
 
         if (existingItemIndex !== -1) {
+            // Product already exists, return current wishlist
             return res.json({ success: true, message: "Product is already in wishlist.", wishlist });
         } else {
+            // Add the product to the wishlist
             wishlist.items.push({
                 product: product._id,
             });
@@ -48,84 +49,87 @@ exports.addToWishlist = async (req, res) => {
             return res.json({ success: true, message: "Product added to wishlist.", wishlist });
         }
     } catch (error) {
+        // Log error for debugging and return a server error response
         console.error("❌ Add to Wishlist Error:", error);
         return res.status(500).json({ success: false, message: "Server error. Try again." });
     }
 };
 
-
-
+// Remove a product from the user's wishlist
 exports.removeFromWishlist = async (req, res) => {
     const { productId } = req.body;
 
-    // Check if user is authenticated
+    // Check if the user is authenticated
     if (!req.user) {
         return res.status(401).json({ success: false, message: "Please log in to remove items from your wishlist." });
     }
 
     try {
-        // Update lastActive for authenticated user
+        // Update the user's last active timestamp
         const user = await User.findById(req.user.userId);
         if (user) {
             user.lastActive = new Date();
             await user.save();
         }
 
-        // Find the wishlist
+        // Fetch the user's wishlist
         const wishlist = await Wishlist.findOne({ user: req.user.userId });
         if (!wishlist) {
             return res.status(404).json({ success: false, message: "Wishlist not found." });
         }
 
-        // Find the index of the item to remove
+        // Find the index of the product in the wishlist
         const itemIndex = wishlist.items.findIndex(item => item.product.toString() === productId);
 
         if (itemIndex === -1) {
+            // Product not found in wishlist
             return res.status(404).json({ success: false, message: "Product not found in wishlist." });
         }
 
-        // Remove the item from the wishlist
+        // Remove the product from the wishlist
         wishlist.items.splice(itemIndex, 1);
         await wishlist.save();
 
+        // Respond with success message and updated wishlist
         return res.json({ success: true, message: "Product removed from wishlist.", wishlist });
-
     } catch (error) {
+        // Log error for debugging and return a server error response
         console.error("❌ Remove from Wishlist Error:", error);
         return res.status(500).json({ success: false, message: "Server error. Try again." });
     }
 };
 
+// Render the user's wishlist page
 exports.renderWishlist = async (req, res) => {
-    // Check if user is authenticated
+    // Check if the user is authenticated
     if (!req.user) {
         return res.status(401).render("auth/login", { error: "Please log in to view your wishlist." });
     }
 
     try {
-        // Find the wishlist with populated product details
+        // Fetch the user's wishlist with populated product details
         const wishlist = await Wishlist.findOne({ user: req.user.userId }).populate('items.product');
 
-        // If the wishlist does not exist or is empty
+        // Handle case where wishlist is empty or doesn't exist
         if (!wishlist || wishlist.items.length === 0) {
             return res.render("user/wishlist", { 
                 user: req.user,
-                wishlist: [] 
+                wishlist: [] // Render with an empty list
             });
         }
 
-        // Render the wishlist page with data
+        // Render the wishlist page with populated items
         return res.render("user/wishlist", { 
             user: req.user,
-            wishlist: wishlist.items 
+            wishlist: wishlist.items // Pass wishlist items to the template
         });
-
     } catch (error) {
+        // Log error for debugging and render with an error message
         console.error("❌ Render Wishlist Error:", error);
         return res.status(500).render("user/wishlist", { 
             user: req.user,
-            wishlist: [], 
-            errorMessage: "Server error. Try again." 
+            wishlist: [], // Empty list as fallback
+            errorMessage: "Server error. Try again." // Inform user of the issue
         });
     }
 };

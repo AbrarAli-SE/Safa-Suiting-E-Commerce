@@ -6,7 +6,7 @@ const { secretKey } = require("../config/jwtConfig");
 
 const authenticateUser = async (req, res, next) => {
   const token = req.cookies.authToken;
-  // console.log("Auth Token from Cookie:", token);
+  
   if (token) {
     try {
       const decoded = jwt.verify(token, secretKey);
@@ -15,7 +15,7 @@ const authenticateUser = async (req, res, next) => {
       req.user = null;
     }
   } else {
-    // console.log("No Token Found in Cookies");
+    
     req.user = null;
   }
   next();

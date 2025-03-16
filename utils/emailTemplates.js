@@ -1,4 +1,3 @@
-// helpers/emailTemplates.js
 
 // 1. OTP Email Template
 function generateOtpEmail({ name, newOtp }) {
@@ -17,7 +16,7 @@ function generateOtpEmail({ name, newOtp }) {
             <p class="text-[var(--color-gray-600)] mb-root-2">Hello ${name},</p>
             <p class="text-[var(--color-gray-600)] mb-root-4">Use the following OTP to complete your action. It’s valid for 10 minutes.</p>
             <div class="bg-[var(--color-gray-50)] p-root-3 rounded-lg text-center mb-root-4">
-              <p class="text-2xl font-bold text-[var(--color-red-500)]">${newOtp}</p>
+              <p class="text-2xl font-bold color-red-500">${newOtp}</p>
             </div>
             <p class="text-[var(--color-gray-600)]">If you didn’t request this, please secure your account immediately.</p>
           </div>
@@ -28,7 +27,7 @@ function generateOtpEmail({ name, newOtp }) {
   }
   
   // 2. New Password Email Template
-  function generateNewPasswordEmail({ name, newPassword, loginUrl = 'https://example.com/login' }) {
+  function generateNewPasswordEmail({ name, newPassword }) {
     return `
       <!DOCTYPE html>
       <html lang="en">
@@ -44,7 +43,6 @@ function generateOtpEmail({ name, newOtp }) {
             <p class="text-[var(--color-gray-600)] mb-root-2">Hello ${name},</p>
             <p class="text-[var(--color-gray-600)] mb-root-4">Your new password has been generated. Please use it to log in and change it as soon as possible.</p>
             <p class="text-[var(--color-black)] font-semibold">New Password: <span class="text-[var(--color-red-500)] bg-[var(--color-red-50)] px-3 py-1 rounded">${newPassword}</span></p>
-            <a href="${loginUrl}" target="_blank" class="btn-red inline-block mt-root-4">Log In Now</a>
             <p class="text-[var(--color-gray-600)] mt-root-4">If you didn’t request this, please contact support.</p>
           </div>
         </div>
@@ -154,10 +152,45 @@ function generateOtpEmail({ name, newOtp }) {
     `;
   }
   
+
+  function generateContactReplyEmail({ name, originalMessage, replyMessage }) {
+    return `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Response to Your Inquiry</title>
+      </head>
+      <body class="bg-[var(--color-gray-50)] text-[var(--color-black)] font-sans">
+        <div class="max-w-lg mx-auto p-root-5">
+          <div class="bg-[var(--color-white)] card-shadow rounded-lg p-root-4 border-t-4 border-[var(--color-red-500)]">
+            <h1 class="text-xl font-bold text-[var(--color-black)] mb-root-3">Response to Your Inquiry</h1>
+            <p class="text-[var(--color-gray-600)] mb-root-2">Hello ${name},</p>
+            <p class="text-[var(--color-gray-600)] mb-root-4">Thank you for reaching out to us. Below is your original message and our response:</p>
+            <div class="bg-[var(--color-gray-50)] p-root-3 rounded-lg mb-root-4">
+              <p class="text-[var(--color-gray-600)] font-semibold">Your Message:</p>
+              <blockquote class="text-[var(--color-gray-600)] italic">${originalMessage}</blockquote>
+            </div>
+            <div class="bg-[var(--color-red-50)] p-root-3 rounded-lg mb-root-4">
+              <p class="text-[var(--color-black)] font-semibold">Our Response:</p>
+              <p class="text-[var(--color-gray-600)]">${replyMessage}</p>
+            </div>
+            <p class="text-[var(--color-gray-600)]">If you have any further questions, feel free to contact us!</p>
+            <p class="text-[var(--color-gray-600)] mt-root-2">Best regards,<br>The Admin Team</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+}
+
+
   // Export all templates
   module.exports = {
     generateOtpEmail,
     generateNewPasswordEmail,
     generateShipmentEmail,
-    generateOrderConfirmationEmail
+    generateOrderConfirmationEmail,
+    generateContactReplyEmail
   };

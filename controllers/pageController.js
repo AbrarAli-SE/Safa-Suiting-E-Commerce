@@ -1,139 +1,135 @@
 const Contact = require("../models/Contact");
 const ContactInfo = require("../models/info");
 
-// ✅ Render About Page
+// Render the About page with contact information
 exports.renderAboutPage = async (req, res) => {
     try {
-      // Fetch the contact details from the database
-      const contactInfo = await ContactInfo.findOne({}).lean(); // Use lean() for plain JS object
-  
-      // Provide default values if contactInfo is null
-      const contactData = contactInfo || {
-        phoneNumber: "Not set",
-        supportEmail: "Not set",
-        aboutUs: "Information not available yet."
-      };
-  
-      // Pass user and contact details to the EJS template
-      res.render("pages/about", { 
-        user: req.user || null, 
-        contactInfo: {
-          phoneNumber: contactData.phoneNumber,
-          supportEmail: contactData.supportEmail,
-          aboutUs: contactData.aboutUs
-        }
-      });
+        // Fetch the contact details from the database for display
+        const contactInfo = await ContactInfo.findOne({}).lean(); // Use lean() for plain JS object
+
+        // Set fallback values if no contact info exists in the database
+        const contactData = contactInfo || {
+            phoneNumber: "Not set",
+            supportEmail: "Not set",
+            aboutUs: "Information not available yet."
+        };
+
+        // Render the About page with user data and contact details
+        res.render("pages/about", { 
+            user: req.user || null, // Pass authenticated user or null if not logged in
+            contactInfo: {
+                phoneNumber: contactData.phoneNumber,
+                supportEmail: contactData.supportEmail,
+                aboutUs: contactData.aboutUs
+            }
+        });
     } catch (error) {
-      console.error("❌ About Page Error:", error);
-      res.status(500).send("Server error");
+        // Log error for debugging and return a server error response
+        console.error("❌ About Page Error:", error);
+        res.status(500).send("Server error");
     }
-  };
+};
 
-// ✅ Render Contact Page
-
-
+// Render the Contact page with contact information
 exports.renderContactPage = async (req, res) => {
     try {
-        // Fetch the contact data (you can adjust the query as per your requirements)
+        // Fetch contact information from the database
         const contactInfo = await ContactInfo.findOne({}).lean();
-        // Provide default values if contactInfo is null
-      const contactData = contactInfo || {
-        customerEmail: "Not set",
-        supportEmail: "Not set",
-        phoneNumber: "Not set"
-      };
 
-        // Render the page and pass the data
+        // Provide default values if no contact info is found
+        const contactData = contactInfo || {
+            customerEmail: "Not set",
+            supportEmail: "Not set",
+            phoneNumber: "Not set"
+        };
+
+        // Render the Contact page with user data and contact details
         res.render("pages/contact", { 
-            user: req.user || null, 
-            successMessage: null, 
-            errorMessage: null, 
+            user: req.user || null, // Pass authenticated user or null if not logged in
+            successMessage: null, // Initial state: no success message
+            errorMessage: null, // Initial state: no error message
             contactInfo: {
                 customerEmail: contactData.customerEmail,
                 supportEmail: contactData.supportEmail,
                 phoneNumber: contactData.phoneNumber
-              }
+            }
         });
     } catch (error) {
+        // Log error for debugging and return a server error response
         console.error("❌ Contact Page Error:", error);
         res.status(500).send("Server error");
     }
 };
 
-
-// ✅ Handle Contact Form Submission
+// Handle submission of the contact form
 exports.handleContactForm = async (req, res) => {
     try {
-        const { name, email,phone, message } = req.body;
+        const { name, email, phone, message } = req.body;
 
+        // Validate that all required fields are provided
         if (!name || !email || !phone || !message) {
             return res.render("pages/contact", { 
                 user: req.user || null,
-                errorMessage: "All fields are required.",
+                errorMessage: "All fields are required.", // Notify user of missing fields
                 successMessage: null
             });
         }
 
-         // ✅ Save contact form data to the database
-         await Contact.create({ name, email, phone, message});
+        // Save the contact form submission to the database
+        await Contact.create({ name, email, phone, message });
 
-        // ✅ Simulate email sending (Replace this with your email service)
-        console.log(`📧 Contact Form Submission: Name: ${name}, Email: ${email}, Message: ${message}`);
-
+        // Render the Contact page with a success message
         return res.render("pages/contact", { 
             user: req.user || null,
-            successMessage: "Your message has been sent successfully!",
+            successMessage: "Your message has been sent successfully!", // Confirm submission
             errorMessage: null
         });
-
     } catch (error) {
+        // Log error for debugging and render the page with an error message
         console.error("❌ Contact Form Error:", error);
         res.render("pages/contact", { 
             user: req.user || null,
-            errorMessage: "Server error. Please try again.",
+            errorMessage: "Server error. Please try again.", // Inform user of failure
             successMessage: null
         });
     }
 };
 
-
-
+// Render the Policy page with support email
 exports.renderPolicyPage = async (req, res) => {
-  try {
-      // Fetch the contact data (you can adjust the query as per your requirements)
-      const contactInfo = await ContactInfo.findOne({}).lean();
-      // Provide default values if contactInfo is null
-    const contactData = contactInfo || {
-     
-      supportEmail: "Not set"
-    };
+    try {
+        // Fetch contact information from the database
+        const contactInfo = await ContactInfo.findOne({}).lean();
 
-      // Render the page and pass the data
-      res.render("pages/policy", { 
-          user: req.user || null, 
-           
-          contactInfo: {
+        // Provide default value for support email if no contact info exists
+        const contactData = contactInfo || {
+            supportEmail: "Not set"
+        };
 
-              supportEmail: contactData.supportEmail,
-
+        // Render the Policy page with user data and support email
+        res.render("pages/policy", { 
+            user: req.user || null, // Pass authenticated user or null if not logged in
+            contactInfo: {
+                supportEmail: contactData.supportEmail
             }
-      });
-  } catch (error) {
-      console.error("❌ Contact Page Error:", error);
-      res.status(500).send("Server error");
-  }
+        });
+    } catch (error) {
+        // Log error for debugging and return a server error response
+        console.error("❌ Contact Page Error:", error);
+        res.status(500).send("Server error");
+    }
 };
 
-
-exports.renderFaqPage =  (req, res) => {
-  try {
-      // Render the page and pass the data
-      res.render("pages/faq", { 
-          user: req.user || null, 
-           
-      });
-  } catch (error) {
-      console.error("❌ Contact Page Error:", error);
-      res.status(500).send("Server error");
-  }
+// Render the FAQ page
+exports.renderFaqPage = (req, res) => {
+    try {
+        // Render the FAQ page with user data (no additional data required)
+        res.render("pages/faq", { 
+            user: req.user || null // Pass authenticated user or null if not logged in
+        });
+    } catch (error) {
+        // Log error for debugging and return a server error response
+        console.error("❌ Contact Page Error:", error);
+        res.status(500).send("Server error");
+    }
 };

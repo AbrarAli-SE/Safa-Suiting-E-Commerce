@@ -19,7 +19,6 @@ async function sendEmail(to, subject, html) {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log(`Email sent to ${to}`);
     } 
     catch (error) {
         console.error('Error sending email:', error);
@@ -27,4 +26,4 @@ async function sendEmail(to, subject, html) {
     }
 }
 
-module.exports = sendEmail; // Export the function directly
+module.exports = sendEmail; 

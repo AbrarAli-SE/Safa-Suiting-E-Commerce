@@ -105,7 +105,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <tr class="border-t border-[var(--color-gray-200)] hover:bg-[var(--color-gray-100)]" data-order-id="${order.orderId}" data-status="${order.status}">
               <td class="px-4 py-2">${order.orderId}</td>
               <td class="px-4 py-2">${order.customerName}</td>
-              <td class="px-4 py-2">$${order.totalPrice.toFixed(2)}</td>
+              <td class="px-4 py-2">Rs. ${order.totalPrice.toFixed(2)}</td>
               <td class="px-4 py-2">${order.trackingId || 'None'}</td>
               <td class="px-4 py-2 capitalize ${order.status === 'Shipped' ? 'text-[var(--color-green-500)]' : 'text-[var(--color-yellow-500)]'}">${order.status}</td>
               <td class="px-4 py-2 flex gap-2">
