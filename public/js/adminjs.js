@@ -1,10 +1,12 @@
-
 // Chart.js Initialization with Hex Codes (Red and Black Combination)
+const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+// Prepare Order Data
 const orderData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: analyticsData.orderAnalytics.map(item => months[item._id - 1]),
   datasets: [{
     label: 'Incoming Orders',
-    data: [120, 150, 200, 250, 300, 350, 400],
+    data: analyticsData.orderAnalytics.map(item => item.incoming),
     backgroundColor: '#FF0000', // Red fill
     borderColor: '#000000', // Black outline
     borderWidth: 2,
@@ -14,7 +16,7 @@ const orderData = {
     pointRadius: 5
   }, {
     label: 'Outgoing Orders',
-    data: [50, 70, 100, 120, 150, 180, 200],
+    data: analyticsData.orderAnalytics.map(item => item.outgoing),
     backgroundColor: '#000000', // Black fill
     borderColor: '#FF0000', // Red outline
     borderWidth: 2,
@@ -25,11 +27,12 @@ const orderData = {
   }]
 };
 
+// Prepare Revenue Data
 const revenueData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: analyticsData.revenueAnalytics.map(item => months[item._id - 1]),
   datasets: [{
     label: 'Revenue',
-    data: [1000, 2000, 2500, 3000, 3500, 4000, 4500],
+    data: analyticsData.revenueAnalytics.map(item => item.revenue),
     backgroundColor: '#FF0000', // Red fill
     borderColor: '#000000', // Black outline
     borderWidth: 2,
@@ -40,23 +43,25 @@ const revenueData = {
   }]
 };
 
+// Prepare Category Data
 const categoryData = {
-  labels: ['Electronics', 'Clothing', 'Accessories', 'Footwear', 'Home'],
+  labels: analyticsData.categoryAnalytics.map(item => item._id || 'Unknown'),
   datasets: [{
     label: 'Products Sold',
-    data: [300, 450, 100, 150, 200],
-    backgroundColor: ['#FF0000', '#000000', '#FF0000', '#000000', '#FF0000'], // Alternating red and black
-    borderColor: ['#000000', '#FF0000', '#000000', '#FF0000', '#000000'], // Alternating black and red outlines
+    data: analyticsData.categoryAnalytics.map(item => item.count),
+    backgroundColor: analyticsData.categoryAnalytics.map((_, index) => index % 2 === 0 ? '#FF0000' : '#000000'), // Alternating red and black
+    borderColor: analyticsData.categoryAnalytics.map((_, index) => index % 2 === 0 ? '#000000' : '#FF0000'), // Alternating black and red outlines
     borderWidth: 2,
     barThickness: 20 // Adjust bar width for better visibility
   }]
 };
 
+// Prepare Growth Data
 const growthData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: analyticsData.growthAnalytics.map(item => months[item._id - 1]),
   datasets: [{
     label: 'Customer Growth',
-    data: [100, 200, 300, 400, 500, 600, 700],
+    data: analyticsData.growthAnalytics.map(item => item.count),
     backgroundColor: '#000000', // Black fill
     borderColor: '#FF0000', // Red outline
     borderWidth: 2,
@@ -71,12 +76,17 @@ const growthData = {
 const commonOptions = {
   responsive: true,
   plugins: {
-    legend: { position: 'top', display: true, labels: { color: '#6B7280' } }, // Gray (#6B7280, matches var(--color-gray-500))
+    legend: { position: 'top', display: true, labels: { color: '#6B7280' } }, // Gray (#6B7280)
     title: { display: true, text: '', color: '#FF0000' }, // Red title (handled by HTML h2)
     tooltip: {
       callbacks: { 
-        label: function (context) { 
-          return context.dataset.label + ': ' + context.raw + (context.dataset.label.includes('Revenue') ? '$' : ' Items'); 
+        label: function (context) {
+          // Get the raw value
+          let value = context.raw;
+          // Format as integer (no decimals) with commas
+          let formattedValue = Math.round(value).toLocaleString('en-PK'); // Pakistani English formatting
+          return context.dataset.label + ': ' + 
+            (context.dataset.label.includes('Revenue') ? 'PKR ' + formattedValue : formattedValue + ' Items');
         },
         labelColor: function (context) {
           return { borderColor: '#6B7280', backgroundColor: '#FFFFFF' }; // Gray and white for tooltip

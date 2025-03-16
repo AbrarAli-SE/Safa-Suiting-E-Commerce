@@ -581,8 +581,6 @@ exports.deleteCancelledOrder = async (req, res) => {
 
 
 
-
-
 exports.renderAnalytics = async (req, res) => {
   console.log('Entering renderAnalytics'); // Confirm entry
   try {
