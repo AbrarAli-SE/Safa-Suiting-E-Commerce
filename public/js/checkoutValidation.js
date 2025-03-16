@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             id: 'phoneNumber',
             errorId: 'phoneNumberError',
-            validate: (value) => /^\d{10}$/.test(value.replace(/\D/g, '')),
+            validate: (value) => /^\d{11}$/.test(value.replace(/\D/g, '')),
             message: 'Please enter a valid 10-digit phone number'
         },
         {

@@ -1,15 +1,28 @@
 
 <%- include('./shared/header') %>
-
 <% if (carouselSlides && carouselSlides.length > 0) { %>
-  <!-- Hero Carousel Section - Design 3 -->
-  <section class="relative w-full h-[90vh] mt-16 overflow-hidden carousel-design-3 sm:h-[87vh] sm:mt-[4.5rem]">
+  <!-- Hero Carousel Section - Triangular Geometric Design -->
+  <section class="relative w-full h-[90vh] mt-16 overflow-hidden carousel-design-triangular sm:h-[87vh] sm:mt-[4.5rem]">
     <div class="swiper thumbnail-carousel">
       <div class="swiper-wrapper">
         <% carouselSlides.forEach((slide) => { %>
           <div class="swiper-slide">
-            <div class="relative w-full h-[90vh] md:h-[87vh]">
-              <img src="<%= slide.image %>" class="w-full h-full object-cover" alt="Carousel Slide">
+            <div class="relative w-full h-[90vh] md:h-[87vh] flex justify-center items-center">
+              <!-- Triangular Composition -->
+              <div class="triangle-container">
+                <!-- Left Triangle -->
+                <div class="triangle triangle-left">
+                  <img src="<%= slide.image %>" class="w-full h-full object-cover" alt="Carousel Slide Left">
+                </div>
+                <!-- Center Triangle (Largest) -->
+                <div class="triangle triangle-center">
+                  <img src="<%= slide.image %>" class="w-full h-full object-cover" alt="Carousel Slide Center">
+                </div>
+                <!-- Right Triangle -->
+                <div class="triangle triangle-right">
+                  <img src="<%= slide.image %>" class="w-full h-full object-cover" alt="Carousel Slide Right">
+                </div>
+              </div>
             </div>
           </div>
         <% }) %>
@@ -17,7 +30,7 @@
       <!-- Thumbnail Pagination -->
       <div class="absolute bottom-10 left-1/2 -translate-x-1/2 flex space-x-4 z-20">
         <% carouselSlides.forEach((slide, index) => { %>
-          <div class="swiper-thumbnail w-16 h-16 rounded-full overflow-hidden cursor-pointer border-2 border-[var(--color-red-500)]" data-slide="<%= index %>">
+          <div class="swiper-thumbnail w-16 h-16 rounded-full overflow-hidden cursor-pointer border-2 border-[var(--color-red-500)] transition-all duration-300" data-slide="<%= index %>">
             <img src="<%= slide.image %>" class="w-full h-full object-cover" alt="Thumbnail">
           </div>
         <% }) %>
@@ -25,7 +38,86 @@
     </div>
   </section>
 <% } %>
+<style>
+  .carousel-design-triangular {
+    position: relative;
+  }
 
+  .triangle-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .triangle {
+    position: absolute;
+    overflow: hidden;
+  }
+
+  /* Left Triangle */
+  .triangle-left {
+    width: 30%;
+    height: 60%;
+    clip-path: polygon(0% 0%, 100% 50%, 0% 100%);
+    left: 20%;
+    transform: translateX(-50%);
+  }
+
+  /* Center Triangle (Largest) */
+  .triangle-center {
+    width: 50%;
+    height: 80%;
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    z-index: 1;
+  }
+
+  /* Right Triangle */
+  .triangle-right {
+    width: 30%;
+    height: 60%;
+    clip-path: polygon(100% 0%, 0% 50%, 100% 100%);
+    right: 20%;
+    transform: translateX(50%);
+  }
+
+  .triangle img {
+    position: absolute;
+    width: 200%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Adjust image positioning within each triangle */
+  .triangle-left img {
+    left: -50%;
+  }
+
+  .triangle-center img {
+    left: 0;
+  }
+
+  .triangle-right img {
+    right: -50%;
+  }
+
+  .swiper-thumbnail {
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  .swiper-thumbnail:hover {
+    transform: scale(1.1);
+    border-color: var(--color-red-500);
+  }
+
+  .swiper-thumbnail.active {
+    border-width: 4px;
+    transform: scale(1.2);
+  }
+</style>
 
 
 

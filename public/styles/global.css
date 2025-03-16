@@ -651,76 +651,6 @@ body {
   }
 }
 
-/* Admin panel Side bar */
-
-/* Nav Link underline Effect */
-
-.nav-link {
-  position: relative;
-  cursor: pointer;
-  color: var(--color-black);
-  transition-property: all;
-  transition-duration: 150ms;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.nav-link:hover {
-  color: var(--color-black);
-}
-
-.nav-link:is(.dark *) {
-  color: var(--color-white);
-}
-
-/* Pseudo-elements for underline */
-
-.nav-link::before,
-  .nav-link::after {
-  content: "";
-  position: absolute;
-  background-color: black;
-  height: 1px;
-  width: 0;
-  transition: width 0.1s ease-in;
-  bottom: 0;
-}
-
-/* Dark mode underline (white for dark mode) */
-
-.dark .nav-link::before,
-  .dark .nav-link::after {
-  background-color: white !important;
-}
-
-.nav-link::before {
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.nav-link::after {
-  right: 50%;
-  transform: translateX(50%);
-}
-
-/* Hover effect */
-
-.nav-link:hover::before,
-  .nav-link:hover::after {
-  width: 100%;
-}
-
-/* Active link underline effect */
-
-.nav-link.active::before,
-  .nav-link.active::after {
-  width: 100%;
-}
-
-.swiper-pagination .swiper-pagination-bullet-active {
-  background-color: red !important;
-}
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -1224,6 +1154,10 @@ body {
 
 .max-w-\[90vw\] {
   max-width: 90vw;
+}
+
+.max-w-full {
+  max-width: 100%;
 }
 
 .max-w-md {
