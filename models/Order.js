@@ -17,7 +17,12 @@ const orderSchema = new mongoose.Schema({
     phoneNumber: String,
     emailAddress: String
   },
-  paymentMethod: String,
+  paymentIntentId: { type: String }, // For Stripe payment intent
+  paymentMethod: { 
+    type: String, 
+    enum: ['cash', 'stripe'],
+    default: 'cash' 
+  },
   subtotal: Number,
   shipping: Number,
   tax: Number,

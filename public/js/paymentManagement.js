@@ -1,4 +1,3 @@
-// public/js/paymentManagement.js
 document.addEventListener("DOMContentLoaded", function () {
   const paymentsList = document.getElementById("paymentsList");
   const noResults = document.getElementById("noResults");
@@ -10,10 +9,8 @@ document.addEventListener("DOMContentLoaded", function () {
   let currentPage = 1;
   let pendingDelete = { paymentId: null };
 
-  // Fetch initial payments
   fetchPayments(currentPage);
 
-  // Event listeners for update and delete buttons
   paymentsList.addEventListener("click", async function (e) {
     const updateButton = e.target.closest(".update-status-btn");
     const deleteButton = e.target.closest(".delete-payment-btn");
@@ -54,7 +51,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Handle Delete Confirmation
   confirmDeleteBtn.addEventListener('click', async () => {
     try {
       const { paymentId } = pendingDelete;
@@ -85,12 +81,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // Handle Cancel
   cancelDeleteBtn.addEventListener('click', () => {
     hideDeleteModal();
   });
 
-  // AJAX Pagination
   pagination.addEventListener("click", async function (e) {
     const target = e.target.closest(".page-link");
     if (!target) return;
@@ -100,7 +94,6 @@ document.addEventListener("DOMContentLoaded", function () {
     fetchPayments(page);
   });
 
-  // Fetch payments function
   async function fetchPayments(page) {
     try {
       const response = await fetch(`/admin/payments?page=${page}`, {
@@ -114,7 +107,7 @@ document.addEventListener("DOMContentLoaded", function () {
         updatePagination(result.currentPage, result.totalPages);
         currentPage = result.currentPage;
         if (result.redirect) {
-          fetchPayments(result.currentPage); // Redirect to last valid page if needed
+          fetchPayments(result.currentPage);
         }
       } else {
         console.error("❌ Fetch Payments Error:", result.error);
@@ -126,11 +119,10 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Update payments table
   function updatePaymentsTable(payments) {
     paymentsList.innerHTML = "";
     if (!payments || payments.length === 0) {
-      paymentsList.innerHTML = '<tr><td colspan="6" class="text-center text-[var(--color-red-500)] font-semibold py-4">No payments found.</td></tr>';
+      paymentsList.innerHTML = '<tr><td colspan="7" class="text-center text-[var(--color-red-500)] font-semibold py-4">No payments found.</td></tr>';
       noResults.classList.remove("hidden");
     } else {
       payments.forEach((payment, index) => {
@@ -140,6 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
             <td class="px-4 py-2">${payment.orderId}</td>
             <td class="px-4 py-2">${payment.customerName}</td>
             <td class="px-4 py-2">Rs. ${payment.amount.toFixed(2)}</td>
+            <td class="px-4 py-2">${payment.paymentIntentId || 'N/A'}</td> <!-- Display paymentIntentId or N/A -->
             <td class="px-4 py-2 flex items-center gap-2">
               <select class="status-dropdown w-24 p-1 border rounded text-[var(--color-gray-700)] focus:outline-none focus:ring-2 focus:ring-[var(--color-blue-500)]" data-payment-id="${payment._id}">
                 <option value="Received" ${payment.received ? 'selected' : ''}>Received</option>
@@ -161,7 +154,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // Update pagination (unchanged)
   function updatePagination(currentPage, totalPages) {
     const maxVisiblePages = 5;
     let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
@@ -206,7 +198,6 @@ document.addEventListener("DOMContentLoaded", function () {
     pagination.appendChild(nextButton);
   }
 
-  // Show message helper (unchanged)
   function showMessage(text, type) {
     const div = document.createElement("div");
     div.className = `p-4 rounded-md text-center font-medium ${type === "success" ? "bg-[var(--color-green-100)] text-[var(--color-green-500)]" : "bg-[var(--color-red-100)] text-[var(--color-red-500)]"}`;
@@ -215,7 +206,6 @@ document.addEventListener("DOMContentLoaded", function () {
     setTimeout(() => div.remove(), 5000);
   }
 
-  // Show/Hide Delete Modal (unchanged)
   function showDeleteModal() {
     deleteModal.classList.remove('hidden');
     deleteModal.classList.add('visible');

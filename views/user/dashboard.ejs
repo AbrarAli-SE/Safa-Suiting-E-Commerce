@@ -7,22 +7,17 @@
     <nav class="fixed top-[60px] left-0 w-full bg-[var(--color-white)] border-b border-[var(--color-red-500)] shadow-md z-40">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-center items-center gap-6 md:gap-8">
         <div class="flex items-center space-x-6 md:space-x-8">
-          <a href="/user/dashboard" class="text-[var(--color-black)] font-semibold hover:text-[var(--color-red-500)] transition-colors duration-300 flex items-center group relative">
-            <i class="bi bi-person text-xl md:text-lg md:mr-2"></i>
-            <span class="hidden md:inline">Profile Settings</span>
-            <span class="absolute hidden group-hover:block bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-[var(--color-black)] text-[var(--color-white)] text-xs rounded-md whitespace-nowrap pointer-events-none transition-opacity duration-200 opacity-0 group-hover:opacity-100 tooltip">Profile Settings</span>
-          </a>
-          <a href="/user/orders/active-orders" class="text-[var(--color-black)] font-semibold hover:text-[var(--color-red-500)] transition-colors duration-300 flex items-center group relative">
+          <a href="/user/orders/active-orders" title="active-Orders" class="text-[var(--color-black)] font-semibold hover:text-[var(--color-red-500)] transition-colors duration-300 flex items-center group relative">
             <i class="bi bi-bag text-xl md:text-lg md:mr-2"></i>
             <span class="hidden md:inline">My Orders</span>
             <span class="absolute hidden group-hover:block bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-[var(--color-black)] text-[var(--color-white)] text-xs rounded-md whitespace-nowrap pointer-events-none transition-opacity duration-200 opacity-0 group-hover:opacity-100 tooltip">My Orders</span>
           </a>
-          <a href="/user/orders/cancelled-orders" class="text-[var(--color-black)] font-semibold hover:text-[var(--color-red-500)] transition-colors duration-300 flex items-center group relative">
+          <a href="/user/orders/cancelled-orders"title="cancel-Orders" class="text-[var(--color-black)] font-semibold hover:text-[var(--color-red-500)] transition-colors duration-300 flex items-center group relative">
             <i class="bi bi-x-circle text-xl md:text-lg md:mr-2"></i>
             <span class="hidden md:inline">Cancellations</span>
             <span class="absolute hidden group-hover:block bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-[var(--color-black)] text-[var(--color-white)] text-xs rounded-md whitespace-nowrap pointer-events-none transition-opacity duration-200 opacity-0 group-hover:opacity-100 tooltip">Cancellations</span>
           </a>
-          <a href="/auth/logout" class="text-[var(--color-black)] font-semibold hover:text-[var(--color-red-500)] transition-colors duration-300 flex items-center group relative">
+          <a href="/auth/logout" title="logout" class="text-[var(--color-black)] font-semibold hover:text-[var(--color-red-500)] transition-colors duration-300 flex items-center group relative">
             <i class="bi bi-box-arrow-right text-xl md:text-lg md:mr-2"></i>
             <span class="hidden md:inline">Logout</span>
             <span class="absolute hidden group-hover:block bottom-full mb-2 left-1/2 transform -translate-x-1/2 px-3 py-1 bg-[var(--color-black)] text-[var(--color-white)] text-xs rounded-md whitespace-nowrap pointer-events-none transition-opacity duration-200 opacity-0 group-hover:opacity-100 tooltip">Logout</span>

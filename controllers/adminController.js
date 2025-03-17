@@ -175,166 +175,170 @@ exports.deleteContact = async (req, res) => {
     }
 };
 
+
+
 // Render payment admin page
 exports.renderPayment = async (req, res) => {
-    try {
-        res.render("admin/payment");
-    } catch (error) {
-        console.error("❌ Payment Render Error:", error);
-        res.status(500).send("Server error");
-    }
+  try {
+    res.render("admin/payment");
+  } catch (error) {
+    console.error("❌ Payment Render Error:", error);
+    res.status(500).send("Server error");
+  }
 };
 
 // Fetch payments with pagination
 exports.getPayments = async (req, res) => {
-    try {
-        const page = parseInt(req.query.page) || 1;
-        const limit = 10;
-        const skip = (page - 1) * limit;
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const limit = 10;
+    const skip = (page - 1) * limit;
 
-        // Fetch valid payments with order details
-        const totalPayments = await Payment.countDocuments({ order: { $exists: true, $ne: null } });
-        const payments = await Payment.find({ order: { $exists: true, $ne: null } })
-            .populate({
-                path: 'order',
-                select: 'orderId billingInfo.firstName totalAmount',
-            })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
+    const totalPayments = await Payment.countDocuments({ order: { $exists: true, $ne: null } });
+    const payments = await Payment.find({ order: { $exists: true, $ne: null } })
+      .populate({
+        path: 'order',
+        select: 'orderId billingInfo.firstName totalAmount paymentIntentId', // Add paymentIntentId
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
 
-        const validPayments = payments.filter(payment => payment.order && payment.order.orderId);
+    const validPayments = payments.filter(payment => payment.order && payment.order.orderId);
 
-        // Adjust page if no valid payments on current page
-        if (validPayments.length === 0 && totalPayments > 0 && page > 1) {
-            const lastPage = Math.ceil(totalPayments / limit);
-            return res.json({
-                payments: [],
-                currentPage: lastPage,
-                totalPages: lastPage,
-                redirect: true
-            });
-        }
-
-        // Format payment data for response
-        const paymentData = validPayments.map(payment => ({
-            _id: payment._id,
-            orderId: payment.order.orderId,
-            customerName: payment.order.billingInfo?.firstName || 'Unknown',
-            amount: payment.order.totalAmount || 0,
-            received: payment.status === 'Received'
-        }));
-
-        res.json({
-            payments: paymentData,
-            currentPage: page,
-            totalPages: Math.ceil(totalPayments / limit)
-        });
-    } catch (error) {
-        console.error('Error fetching payments:', error);
-        res.status(500).json({ error: 'Server error while fetching payments' });
+    if (validPayments.length === 0 && totalPayments > 0 && page > 1) {
+      const lastPage = Math.ceil(totalPayments / limit);
+      return res.json({
+        payments: [],
+        currentPage: lastPage,
+        totalPages: lastPage,
+        redirect: true
+      });
     }
+
+    const paymentData = validPayments.map(payment => ({
+      _id: payment._id,
+      orderId: payment.order.orderId,
+      customerName: payment.order.billingInfo?.firstName || 'Unknown',
+      amount: payment.order.totalAmount || 0,
+      received: payment.status === 'Received',
+      paymentIntentId: payment.order.paymentIntentId || null // Include paymentIntentId
+    }));
+
+    res.json({
+      payments: paymentData,
+      currentPage: page,
+      totalPages: Math.ceil(totalPayments / limit)
+    });
+  } catch (error) {
+    console.error('Error fetching payments:', error);
+    res.status(500).json({ error: 'Server error while fetching payments' });
+  }
 };
 
 // Toggle payment received status
 exports.toggleReceived = async (req, res) => {
-    try {
-        const { paymentId, received, page } = req.body;
+  try {
+    const { paymentId, received, page } = req.body;
 
-        const payment = await Payment.findById(paymentId).populate('order');
-        if (!payment || !payment.order) {
-            return res.status(404).json({ error: 'Payment or associated order not found' });
-        }
-
-        // Update payment status
-        payment.status = received ? 'Received' : 'Pending';
-        payment.updatedAt = Date.now();
-        await payment.save();
-
-        // Fetch updated payment list
-        const limit = 10;
-        const skip = (page - 1) * limit;
-        const totalPayments = await Payment.countDocuments({ order: { $exists: true, $ne: null } });
-        const payments = await Payment.find({ order: { $exists: true, $ne: null } })
-            .populate({
-                path: 'order',
-                select: 'orderId billingInfo.firstName totalAmount',
-            })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
-
-        const validPayments = payments.filter(payment => payment.order && payment.order.orderId);
-
-        const paymentData = validPayments.map(payment => ({
-            _id: payment._id,
-            orderId: payment.order.orderId,
-            customerName: payment.order.billingInfo?.firstName || 'Unknown',
-            amount: payment.order.totalAmount || 0,
-            received: payment.status === 'Received'
-        }));
-
-        res.json({
-            message: `Payment status updated to ${received ? 'Received' : 'Pending'}`,
-            payments: paymentData,
-            currentPage: page,
-            totalPages: Math.ceil(totalPayments / limit)
-        });
-    } catch (error) {
-        console.error('Error updating payment status:', error);
-        res.status(500).json({ error: 'Server error while updating payment status' });
+    const payment = await Payment.findById(paymentId).populate({
+      path: 'order',
+      select: 'orderId billingInfo.firstName totalAmount paymentIntentId' // Add paymentIntentId
+    });
+    if (!payment || !payment.order) {
+      return res.status(404).json({ error: 'Payment or associated order not found' });
     }
+
+    payment.status = received ? 'Received' : 'Pending';
+    payment.updatedAt = Date.now();
+    await payment.save();
+
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const totalPayments = await Payment.countDocuments({ order: { $exists: true, $ne: null } });
+    const payments = await Payment.find({ order: { $exists: true, $ne: null } })
+      .populate({
+        path: 'order',
+        select: 'orderId billingInfo.firstName totalAmount paymentIntentId', // Add paymentIntentId
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const validPayments = payments.filter(payment => payment.order && payment.order.orderId);
+
+    const paymentData = validPayments.map(payment => ({
+      _id: payment._id,
+      orderId: payment.order.orderId,
+      customerName: payment.order.billingInfo?.firstName || 'Unknown',
+      amount: payment.order.totalAmount || 0,
+      received: payment.status === 'Received',
+      paymentIntentId: payment.order.paymentIntentId || null // Include paymentIntentId
+    }));
+
+    res.json({
+      message: `Payment status updated to ${received ? 'Received' : 'Pending'}`,
+      payments: paymentData,
+      currentPage: page,
+      totalPages: Math.ceil(totalPayments / limit)
+    });
+  } catch (error) {
+    console.error('Error updating payment status:', error);
+    res.status(500).json({ error: 'Server error while updating payment status' });
+  }
 };
 
 // Delete a payment
 exports.deletePayment = async (req, res) => {
-    try {
-        const { paymentId, page } = req.body;
+  try {
+    const { paymentId, page } = req.body;
 
-        const payment = await Payment.findById(paymentId).populate('order');
-        if (!payment || !payment.order) {
-            return res.status(404).json({ error: 'Payment or associated order not found' });
-        }
-
-        await Payment.findByIdAndDelete(paymentId);
-
-        // Fetch updated payment list with page adjustment
-        const limit = 10;
-        const skip = (page - 1) * limit;
-        const totalPayments = await Payment.countDocuments({ order: { $exists: true, $ne: null } });
-        const payments = await Payment.find({ order: { $exists: true, $ne: null } })
-            .populate({
-                path: 'order',
-                select: 'orderId billingInfo.firstName totalAmount',
-            })
-            .sort({ createdAt: -1 })
-            .skip(skip)
-            .limit(limit);
-
-        const validPayments = payments.filter(payment => payment.order && payment.order.orderId);
-        const totalPages = Math.ceil(totalPayments / limit);
-        const adjustedPage = page > totalPages ? totalPages : page;
-
-        const paymentData = validPayments.map(payment => ({
-            _id: payment._id,
-            orderId: payment.order.orderId,
-            customerName: payment.order.billingInfo?.firstName || 'Unknown',
-            amount: payment.order.totalAmount || 0,
-            received: payment.status === 'Received'
-        }));
-
-        res.json({
-            message: 'Payment deleted successfully',
-            payments: paymentData,
-            currentPage: adjustedPage,
-            totalPages: totalPages
-        });
-    } catch (error) {
-        console.error('Error deleting payment:', error);
-        res.status(500).json({ error: 'Server error while deleting payment' });
+    const payment = await Payment.findById(paymentId).populate({
+      path: 'order',
+      select: 'orderId billingInfo.firstName totalAmount paymentIntentId' // Add paymentIntentId
+    });
+    if (!payment || !payment.order) {
+      return res.status(404).json({ error: 'Payment or associated order not found' });
     }
-};
 
+    await Payment.findByIdAndDelete(paymentId);
+
+    const limit = 10;
+    const skip = (page - 1) * limit;
+    const totalPayments = await Payment.countDocuments({ order: { $exists: true, $ne: null } });
+    const payments = await Payment.find({ order: { $exists: true, $ne: null } })
+      .populate({
+        path: 'order',
+        select: 'orderId billingInfo.firstName totalAmount paymentIntentId', // Add paymentIntentId
+      })
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const validPayments = payments.filter(payment => payment.order && payment.order.orderId);
+    const totalPages = Math.ceil(totalPayments / limit);
+    const adjustedPage = page > totalPages ? totalPages : page;
+
+    const paymentData = validPayments.map(payment => ({
+      _id: payment._id,
+      orderId: payment.order.orderId,
+      customerName: payment.order.billingInfo?.firstName || 'Unknown',
+      amount: payment.order.totalAmount || 0,
+      received: payment.status === 'Received',
+      paymentIntentId: payment.order.paymentIntentId || null // Include paymentIntentId
+    }));
+
+    res.json({
+      message: 'Payment deleted successfully',
+      payments: paymentData,
+      currentPage: adjustedPage,
+      totalPages: totalPages
+    });
+  } catch (error) {
+    console.error('Error deleting payment:', error);
+    res.status(500).json({ error: 'Server error while deleting payment' });
+  }
+};
 // Render track ID admin page
 exports.renderTrackId = async (req, res) => {
     try {

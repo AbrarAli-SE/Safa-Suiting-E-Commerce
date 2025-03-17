@@ -25,4 +25,6 @@ router.post("/checkout", authenticateUser, cartController.processCheckout);
 // Order Confirmation Route
 router.get("/order-confirmation", authenticateUser, cartController.renderOrderConfirmation);
 
+router.post('/create-payment-intent', authenticateUser, cartController.createPaymentIntent);
+
 module.exports = router;

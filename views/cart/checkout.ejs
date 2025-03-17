@@ -127,11 +127,12 @@
             </div>
             <div class="flex justify-between pt-3 border-t border-[var(--color-gray-200)]">
               <span class="text-[var(--color-gray-600)]">Total:</span>
-              <span class="font-medium text-[var(--color-black)]">Rs <%= totalAmount %></span>
+              <span class="font-medium text-[var(--color-black)] total-amount">Rs <%= totalAmount %></span>
             </div>
           </div>
 
          <!-- Payment Method -->
+                <!-- Inside Order Summary section -->
         <div class="space-y-6 py-6 border-t border-[var(--color-gray-200)]">
           <div class="flex items-center gap-4">
             <input 
@@ -140,13 +141,26 @@
               name="payment" 
               value="cash" 
               class="w-5 h-5 accent-red-500 border-[var(--color-gray-300)] focus:ring-red-500 focus:ring-2 cursor-pointer transition-colors duration-200" 
-              checked  />
-            <label 
-              for="cash" 
-              class="text-[var(--color-black)] font-medium hover:text-[var(--color-gray-800)] cursor-pointer select-none">
+              checked />
+            <label for="cash" class="text-[var(--color-black)] font-medium hover:text-[var(--color-gray-800)] cursor-pointer select-none">
               Cash on Delivery
             </label>
           </div>
+          <div class="flex items-center gap-4">
+            <input 
+              type="radio" 
+              id="stripe" 
+              name="payment" 
+              value="stripe" 
+              class="w-5 h-5 accent-red-500 border-[var(--color-gray-300)] focus:ring-red-500 focus:ring-2 cursor-pointer transition-colors duration-200" />
+            <label for="stripe" class="text-[var(--color-black)] font-medium hover:text-[var(--color-gray-800)] cursor-pointer select-none">
+              Pay with Card (Stripe)
+            </label>
+          </div>
+
+          <!-- Stripe Card Input (hidden by default) -->
+          <div id="card-element" class="hidden mt-4 p-3 bg-[var(--color-gray-50)] border border-[var(--color-gray-300)] rounded-md"></div>
+          <div id="card-errors" class="text-[var(--color-red-500)] text-sm mt-1 hidden"></div>
         </div>
 
           <!-- Place Order Button -->
@@ -161,6 +175,18 @@
     </div>
   </div>
 </main>
+
+<!-- Load Stripe.js -->
+<script src="https://js.stripe.com/v3/"></script>
+
+<!-- Pass Stripe public key to client-side -->
+<script>
+  window.stripePublicKey = '<%= process.env.STRIPE_PUBLIC_KEY %>';
+</script>
+
+<!-- Load Stripe config and checkout scripts as modules -->
+<script type="module" src="/js/stripeConfig.js"></script>
+<script type="module" src="/js/checkout.js"></script>
 
 <script src="/js/checkoutValidation.js"></script>
 

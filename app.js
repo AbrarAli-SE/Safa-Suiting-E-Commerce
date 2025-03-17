@@ -19,6 +19,7 @@ const productRoutes = require("./routes/product"); // Product management routes
 const orderRoutes = require("./routes/orders"); // Order-related routes
 const ContactInfo = require("./models/info"); // Contact information model
 const { authenticateUser } = require("./middleware/authMiddleware"); // Authentication middleware
+const authRoutes = require('./routes/auth'); // Authentication routes
 
 // Initialize Express application
 const app = express();
@@ -36,14 +37,8 @@ app.use(session({
     saveUninitialized: false // Don't create session until something is stored
 }));
 
-// Connect to the database
-dbConfig();
-
 // Log HTTP requests in development mode for debugging
 app.use(morgan('dev'));
-
-// Import authentication routes
-const authRoutes = require('./routes/auth');
 
 // Set EJS as the templating engine
 app.set('view engine', 'ejs');
@@ -72,9 +67,7 @@ app.use((req, res, next) => {
 // Middleware to fetch contact information for all routes
 app.use(async (req, res, next) => {
     try {
-        // Fetch contact info from the database
         const contactInfo = await ContactInfo.findOne({}).lean();
-        // Set contact info in res.locals with defaults if none exists
         res.locals.contactInfo = contactInfo || {
             phoneNumber: "Not set",
             supportEmail: "Not set",
@@ -82,7 +75,6 @@ app.use(async (req, res, next) => {
         };
         next();
     } catch (error) {
-        // Log error and set default contact info on failure
         console.error("❌ Middleware Error fetching contactInfo:", error);
         res.locals.contactInfo = {
             phoneNumber: "Not set",
@@ -115,9 +107,25 @@ app.use((req, res, next) => {
 app.use((error, req, res, next) => {
     error.status = error.status || 500; // Default to 500 if no status is set
     res.status(error.status);
-    // Render the 404-Error page with error details
     res.render('404-Error', { error });
 });
 
-// Start the server on port 3000
-app.listen(3000, () => console.log('🚀 Server running on port 3000'));
+// Function to start the server after database connection
+const startServer = async () => {
+    try {
+        // Connect to the database
+        await dbConfig();
+        console.log('✅ Database connected successfully');
+
+        // Start the server only after DB connection is established
+        app.listen(3000, () => {
+            console.log('🚀 Server running on port 3000');
+        });
+    } catch (error) {
+        console.error('❌ Failed to connect to the database:', error);
+        process.exit(1); // Exit the process with failure code if DB connection fails
+    }
+};
+
+// Start the server with DB connection
+startServer();
